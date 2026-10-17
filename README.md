@@ -46,7 +46,7 @@ distinguishing devices in a role that CMOS at this node struggles to fill.
 - **Not in scope**: line coding (8b/10b, 64b/66b) and any protocol layer —
   the block moves raw bits and proves them with PRBS.
 
-## Target specification (DRAFT — engineering to ratify, see issue #1)
+## Target specification (DRAFT — engineering to ratify, see issue #2)
 
 | Parameter | Target | Fallback | Stretch |
 |---|---|---|---|
@@ -78,6 +78,13 @@ sim/           testbenches + PVT corner results (ngspice), link-level eye studie
 layout/        GDS + DRC/LVS reports, including the pad cells
 measurements/  silicon characterization (empty until tape-out)
 ```
+
+## Reproduce
+
+Each recorded result appends the exact command that reproduces it here.
+
+Repo checks (JSON validity, README links, signoff record): `npm run check:ci`
+(runs `scripts/check-ci.sh`; klt is pinned in `scripts/klt-pin.env`).
 
 ## License
 

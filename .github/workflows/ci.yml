@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      # klt is pinned in scripts/klt-pin.env; the committed signoff record
+      # embeds its build fields, so it is only byte-stable under that pin.
+      - name: JSON validity
+        run: scripts/check-ci.sh json
+      - name: README relative links
+        run: scripts/check-ci.sh links
+      - name: Harness self-test
+        run: scripts/check-ci.sh harness
+      - name: Signoff drift
+        run: scripts/check-ci.sh signoff
