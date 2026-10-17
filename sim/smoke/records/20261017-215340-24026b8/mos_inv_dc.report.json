@@ -1,0 +1,634 @@
+{
+  "schema_version": 3,
+  "netlist": {
+    "path": "sim/smoke/mos_inv.sp",
+    "scope": "repo"
+  },
+  "status": "error",
+  "corner_count": 5,
+  "passed": 0,
+  "failed": 0,
+  "errored": 5,
+  "inconclusive": 0,
+  "diagnostic_counts": {
+    "by_code": {
+      "batch_job_failed": 5
+    },
+    "by_severity": {
+      "error": 5
+    },
+    "corners_with_diagnostics": 5
+  },
+  "metrics": {
+    "sim__corner__count": 5,
+    "sim__corner__passed_count": 0,
+    "sim__corner__failed_count": 0,
+    "sim__corner__errored_count": 5,
+    "sim__corner__inconclusive_count": 0
+  },
+  "environment": {
+    "engine": "ngspice",
+    "engine_version": null,
+    "ngspice_binary": null,
+    "engine_build": {
+      "version_banner": "******\n** ngspice-42 : Circuit level simulation program\n** Compiled with KLU Direct Linear Solver\n** The U. C. Berkeley CAD Group\n** Copyright 1985-1994, Regents of the University of California.\n** Copyright 2001-2023, The ngspice team.\n** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html\n** Please file your bug-reports at http://ngspice.sourceforge.net/bugrep.html\n** Creation Date: Sun Mar 31 20:15:14 UTC 2024\n******",
+      "binary_sha256": "820658317b0b54035208da41936fd6871ce924036e5ea4113a4168b821b7fc45",
+      "probe": "ok",
+      "reason": null
+    },
+    "models_lib": {
+      "path": null,
+      "scope": "absent"
+    },
+    "models_lib_sha256": null,
+    "models_lib_sha256_scope": "client",
+    "netlist_sha256": "9cc2d0fa7e99bcb2a3ec8acb195adb3368af9af47140917f1bb8b2bde5fd9eb8",
+    "netlist_closure": [
+      {
+        "path": "sim/smoke/mos_inv.sp",
+        "scope": "repo",
+        "sha256": "9cc2d0fa7e99bcb2a3ec8acb195adb3368af9af47140917f1bb8b2bde5fd9eb8"
+      }
+    ],
+    "netlist_identity": "sha256:c357db7a88b22094ef06305d3029dc8cca0e0af3d5319859ad9d80d2972397b7",
+    "osdi_preload": [
+      {
+        "name": "psp103.osdi",
+        "path": ".cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.tech/ngspice/osdi/psp103.osdi",
+        "scope": "repo",
+        "sha256": "2e4299c4683997e26469410dc1ab36b02ced924b1ac0972d6c4eae360e1fc796"
+      },
+      {
+        "name": "psp103_nqs.osdi",
+        "path": ".cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.tech/ngspice/osdi/psp103_nqs.osdi",
+        "scope": "repo",
+        "sha256": "839b164483205601c09032951f6c41d3580f15e506dc40a7202950d3afbdfc7d"
+      },
+      {
+        "name": "r3_cmc.osdi",
+        "path": ".cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.tech/ngspice/osdi/r3_cmc.osdi",
+        "scope": "repo",
+        "sha256": "4fead17bc2e9cbfe3df6f106e9dbd6f2cdcd48c002af9c56c2ca0b0712fce350"
+      },
+      {
+        "name": "mosvar.osdi",
+        "path": ".cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.tech/ngspice/osdi/mosvar.osdi",
+        "scope": "repo",
+        "sha256": "25e64a374ab523dbfeb7ffed75dcb8b086ee10f06120a9074bd68b92d7b0fb41"
+      }
+    ],
+    "corner_section_libs": [
+      {
+        "name": "cornerMOSlv.lib",
+        "path": ".cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.tech/ngspice/models/cornerMOSlv.lib",
+        "scope": "repo",
+        "sha256": "03d505847c880d233b341be115a1e5460edf4d8e9b3e8a7df791a52fa4455d67"
+      }
+    ],
+    "staged_model_inputs": [
+      {
+        "name": "cornerMOSlv.lib",
+        "field": "models.lib",
+        "kind": "library",
+        "sha256": "07f15f24b990ab9eff8e1000457ad180a5199b48fc17217ac3572bdcdfbf5f72",
+        "rewritten": true,
+        "source_sha256": "03d505847c880d233b341be115a1e5460edf4d8e9b3e8a7df791a52fa4455d67"
+      },
+      {
+        "name": "psp103.osdi",
+        "field": "options.osdi_preload[0]",
+        "kind": "osdi",
+        "sha256": "2e4299c4683997e26469410dc1ab36b02ced924b1ac0972d6c4eae360e1fc796",
+        "rewritten": false,
+        "source_sha256": "2e4299c4683997e26469410dc1ab36b02ced924b1ac0972d6c4eae360e1fc796"
+      },
+      {
+        "name": "psp103_nqs.osdi",
+        "field": "options.osdi_preload[1]",
+        "kind": "osdi",
+        "sha256": "839b164483205601c09032951f6c41d3580f15e506dc40a7202950d3afbdfc7d",
+        "rewritten": false,
+        "source_sha256": "839b164483205601c09032951f6c41d3580f15e506dc40a7202950d3afbdfc7d"
+      },
+      {
+        "name": "r3_cmc.osdi",
+        "field": "options.osdi_preload[2]",
+        "kind": "osdi",
+        "sha256": "4fead17bc2e9cbfe3df6f106e9dbd6f2cdcd48c002af9c56c2ca0b0712fce350",
+        "rewritten": false,
+        "source_sha256": "4fead17bc2e9cbfe3df6f106e9dbd6f2cdcd48c002af9c56c2ca0b0712fce350"
+      },
+      {
+        "name": "mosvar.osdi",
+        "field": "options.osdi_preload[3]",
+        "kind": "osdi",
+        "sha256": "25e64a374ab523dbfeb7ffed75dcb8b086ee10f06120a9074bd68b92d7b0fb41",
+        "rewritten": false,
+        "source_sha256": "25e64a374ab523dbfeb7ffed75dcb8b086ee10f06120a9074bd68b92d7b0fb41"
+      },
+      {
+        "name": "sg13g2_moslv_mod.lib",
+        "field": "models.lib",
+        "kind": "dependency",
+        "sha256": "0aa1a5630a7c8fb8ae896c57c475954ff5885c4831311f8cd9c9e64d6cbb8332",
+        "rewritten": true,
+        "source_sha256": "124c48af28aee8f4788170b50dbb4d798e7d830c6bb37516f749e16f676fa9db"
+      },
+      {
+        "name": "sg13g2_moslv_mismatch.lib",
+        "field": "models.lib",
+        "kind": "dependency",
+        "sha256": "2d3251e2d42eadb0f8af152a4915fdc60a68bceb95a2d17a52f90cfb34b7e63e",
+        "rewritten": false,
+        "source_sha256": "2d3251e2d42eadb0f8af152a4915fdc60a68bceb95a2d17a52f90cfb34b7e63e"
+      },
+      {
+        "name": "sg13g2_moslv_mod_mismatch.lib",
+        "field": "models.lib",
+        "kind": "dependency",
+        "sha256": "28f681005831113ad5377f1b867d8869b78f329a7f52aa821ff56aa1e648b68b",
+        "rewritten": true,
+        "source_sha256": "67672ffa1f224294a90270f687d11b804a24dbf268071c5cd98923ab1b3e2f84"
+      },
+      {
+        "name": "sg13g2_moslv_stat.lib",
+        "field": "models.lib",
+        "kind": "dependency",
+        "sha256": "7f4cf8df714e327348ba3975a2630e9d7dd7ae1a7a88817df4890e82745f0f52",
+        "rewritten": false,
+        "source_sha256": "7f4cf8df714e327348ba3975a2630e9d7dd7ae1a7a88817df4890e82745f0f52"
+      },
+      {
+        "name": "sg13g2_moslv_parm.lib",
+        "field": "models.lib",
+        "kind": "dependency",
+        "sha256": "cbf10b8453a18bb70b8ad0d6e40faa0937338e699b5460947a94900db6c92a6e",
+        "rewritten": false,
+        "source_sha256": "cbf10b8453a18bb70b8ad0d6e40faa0937338e699b5460947a94900db6c92a6e"
+      }
+    ],
+    "remote": {
+      "provider": "aws-batch-fleet",
+      "job_id": "klt-sim-931eea654dac",
+      "bucket": "2am-batch-jobs-221082181346",
+      "region": "us-east-1",
+      "instance_id": "i-0f1054506a49c6df5",
+      "instance_type": "m7i.4xlarge",
+      "availability_zone": "us-east-1b",
+      "ami_id": "ami-0e0bec04ad8e81877",
+      "lifecycle": "spot",
+      "spot": true,
+      "state": "failed",
+      "exit_code": "2",
+      "concurrency": "1",
+      "physical_cores": "8",
+      "elapsed_seconds": 4,
+      "client_submitted_at": "2026-10-17T21:57:02.262085Z",
+      "client_launched_at": "2026-10-17T21:57:28.474515Z",
+      "client_status_terminal_at": "2026-10-17T21:58:00.005806Z",
+      "client_collected_at": null,
+      "runner_klt_version": null,
+      "client_klt_version": "0.7.1.dev1771+g267ea83a0510",
+      "runner_compatibility": "unknown",
+      "runner_request_features": {
+        "required": [
+          "corners.process[].sections[]",
+          "options.osdi_preload"
+        ],
+        "missing": null,
+        "status": "unknown"
+      },
+      "runner_compatibility_warning": "the fleet runner's klt version could not be established; request options newer than the runner may have been ignored",
+      "worker_environment": {
+        "capture": "absent",
+        "simulator": null,
+        "pdk": null,
+        "cpu_model": null,
+        "omp_num_threads": null,
+        "image_manifest": null,
+        "model_inputs": null,
+        "diagnostics": [],
+        "pdk_stamp_comparison": {
+          "status": "not_comparable"
+        },
+        "engine_build_comparison": {
+          "status": "not_comparable"
+        }
+      },
+      "runner_model_inputs": null,
+      "job_ceiling": {
+        "basis": "conservative_serial_bound",
+        "unit_count": 5,
+        "per_unit_timeout_s": 900,
+        "overhead_s": 120.0,
+        "job_bound_s": 4620.0,
+        "max_job_seconds": 3600.0,
+        "max_job_seconds_source": "fleet_config",
+        "exceeds_ceiling": true,
+        "check": "warn",
+        "max_units_per_job": 3,
+        "recommended_hosts": 2,
+        "warning": "batch job bound 4620s (options.timeout_s 900s x 5 units + 120s; a conservative fully-serial upper bound, not a runtime estimate) exceeds the fleet's whole-job ceiling of 3600s (max_job_seconds from fleet_config); a job still running at the ceiling is killed and every unit is reported batch_job_timeout. Set request.remote.hosts to at least 2 to run one job per shard of at most 3 units, each within the ceiling"
+      }
+    },
+    "engine_host": "worker",
+    "client_ngspice_binary": "/usr/bin/ngspice",
+    "backend": {
+      "resolved": "batch",
+      "source": "env",
+      "requested": "batch"
+    }
+  },
+  "coverage": {
+    "corners_simulated": 5,
+    "measurements_declared": 3,
+    "measurements_with_limits": 2,
+    "unrecognized_limit_keys": [],
+    "schema_version": 1,
+    "known": true,
+    "checked": [],
+    "skipped": [
+      {
+        "id": "limit:[0,\"tt/novdd/27C\",\"voh\",\"min\"]",
+        "reason": "unavailable_measurement"
+      },
+      {
+        "id": "limit:[0,\"tt/novdd/27C\",\"vol\",\"max\"]",
+        "reason": "unavailable_measurement"
+      },
+      {
+        "id": "limit:[1,\"ff/novdd/27C\",\"voh\",\"min\"]",
+        "reason": "unavailable_measurement"
+      },
+      {
+        "id": "limit:[1,\"ff/novdd/27C\",\"vol\",\"max\"]",
+        "reason": "unavailable_measurement"
+      },
+      {
+        "id": "limit:[2,\"ss/novdd/27C\",\"voh\",\"min\"]",
+        "reason": "unavailable_measurement"
+      },
+      {
+        "id": "limit:[2,\"ss/novdd/27C\",\"vol\",\"max\"]",
+        "reason": "unavailable_measurement"
+      },
+      {
+        "id": "limit:[3,\"fs/novdd/27C\",\"voh\",\"min\"]",
+        "reason": "unavailable_measurement"
+      },
+      {
+        "id": "limit:[3,\"fs/novdd/27C\",\"vol\",\"max\"]",
+        "reason": "unavailable_measurement"
+      },
+      {
+        "id": "limit:[4,\"sf/novdd/27C\",\"voh\",\"min\"]",
+        "reason": "unavailable_measurement"
+      },
+      {
+        "id": "limit:[4,\"sf/novdd/27C\",\"vol\",\"max\"]",
+        "reason": "unavailable_measurement"
+      },
+      {
+        "id": "measurement:[0,\"tt/novdd/27C\",\"vm\"]/observation",
+        "reason": "unavailable_measurement"
+      },
+      {
+        "id": "measurement:[1,\"ff/novdd/27C\",\"vm\"]/observation",
+        "reason": "unavailable_measurement"
+      },
+      {
+        "id": "measurement:[2,\"ss/novdd/27C\",\"vm\"]/observation",
+        "reason": "unavailable_measurement"
+      },
+      {
+        "id": "measurement:[3,\"fs/novdd/27C\",\"vm\"]/observation",
+        "reason": "unavailable_measurement"
+      },
+      {
+        "id": "measurement:[4,\"sf/novdd/27C\",\"vm\"]/observation",
+        "reason": "unavailable_measurement"
+      }
+    ],
+    "inapplicable": [
+      {
+        "id": "measurement:[0,\"tt/novdd/27C\",\"vm\"]/limits",
+        "reason": "characterization_without_limits"
+      },
+      {
+        "id": "measurement:[1,\"ff/novdd/27C\",\"vm\"]/limits",
+        "reason": "characterization_without_limits"
+      },
+      {
+        "id": "measurement:[2,\"ss/novdd/27C\",\"vm\"]/limits",
+        "reason": "characterization_without_limits"
+      },
+      {
+        "id": "measurement:[3,\"fs/novdd/27C\",\"vm\"]/limits",
+        "reason": "characterization_without_limits"
+      },
+      {
+        "id": "measurement:[4,\"sf/novdd/27C\",\"vm\"]/limits",
+        "reason": "characterization_without_limits"
+      }
+    ],
+    "unknown": [],
+    "nothing_checked": true,
+    "nothing_checked_reasons": [
+      "characterization_without_limits",
+      "unavailable_measurement"
+    ]
+  },
+  "provenance": {
+    "klt_version": "0.7.1.dev1771+g267ea83a0510",
+    "klayout_version": "0.30.12",
+    "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+        "search root: ~/share/pdk"
+      ]
+    },
+    "deck": null,
+    "input": {
+      "content_hash": "sha256:9cc2d0fa7e99bcb2a3ec8acb195adb3368af9af47140917f1bb8b2bde5fd9eb8",
+      "role": "netlist"
+    }
+  },
+  "measurements": [
+    {
+      "name": "voh",
+      "unit": "V",
+      "limits": {
+        "min": 1.1
+      },
+      "status": "error",
+      "worst_case": {
+        "corner_id": "tt/novdd/27C",
+        "value": null,
+        "margin": null
+      }
+    },
+    {
+      "name": "vol",
+      "unit": "V",
+      "limits": {
+        "max": 0.1
+      },
+      "status": "error",
+      "worst_case": {
+        "corner_id": "tt/novdd/27C",
+        "value": null,
+        "margin": null
+      }
+    },
+    {
+      "name": "vm",
+      "unit": "V",
+      "limits": null,
+      "status": "error",
+      "worst_case": {
+        "corner_id": "tt/novdd/27C",
+        "value": null,
+        "margin": null
+      }
+    }
+  ],
+  "corners": [
+    {
+      "corner_id": "tt/novdd/27C",
+      "process": "tt",
+      "supply_v": {},
+      "temperature_c": 27,
+      "status": "error",
+      "runtime_s": 0.0,
+      "engine_exit_code": null,
+      "engine_killed_by_signal": null,
+      "measurements": [
+        {
+          "name": "voh",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        },
+        {
+          "name": "vol",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        },
+        {
+          "name": "vm",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        }
+      ],
+      "diagnostics": [
+        {
+          "severity": "error",
+          "code": "batch_job_failed",
+          "message": "batch job klt-sim-931eea654dac finished 'failed' without a usable report: job command exited 2 [output recovery: collected outputs hold no report.json (/tmp/klt-batch-outputs-7dqghr1b/report.json) -- the job command never wrote its report; collected outputs hold no stderr.log -- see harness.log under the job's S3 prefix] [engine log unavailable: no ngspice.log/xyce.log in the collected outputs (engine logs are retrieved only when artifacts are kept)]"
+        }
+      ],
+      "artifacts": {
+        "log": null,
+        "raw": null,
+        "waveform": null,
+        "deck": null
+      },
+      "monte_carlo": null
+    },
+    {
+      "corner_id": "ff/novdd/27C",
+      "process": "ff",
+      "supply_v": {},
+      "temperature_c": 27,
+      "status": "error",
+      "runtime_s": 0.0,
+      "engine_exit_code": null,
+      "engine_killed_by_signal": null,
+      "measurements": [
+        {
+          "name": "voh",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        },
+        {
+          "name": "vol",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        },
+        {
+          "name": "vm",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        }
+      ],
+      "diagnostics": [
+        {
+          "severity": "error",
+          "code": "batch_job_failed",
+          "message": "batch job klt-sim-931eea654dac finished 'failed' without a usable report: job command exited 2 [output recovery: collected outputs hold no report.json (/tmp/klt-batch-outputs-7dqghr1b/report.json) -- the job command never wrote its report; collected outputs hold no stderr.log -- see harness.log under the job's S3 prefix] [engine log unavailable: no ngspice.log/xyce.log in the collected outputs (engine logs are retrieved only when artifacts are kept)]"
+        }
+      ],
+      "artifacts": {
+        "log": null,
+        "raw": null,
+        "waveform": null,
+        "deck": null
+      },
+      "monte_carlo": null
+    },
+    {
+      "corner_id": "ss/novdd/27C",
+      "process": "ss",
+      "supply_v": {},
+      "temperature_c": 27,
+      "status": "error",
+      "runtime_s": 0.0,
+      "engine_exit_code": null,
+      "engine_killed_by_signal": null,
+      "measurements": [
+        {
+          "name": "voh",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        },
+        {
+          "name": "vol",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        },
+        {
+          "name": "vm",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        }
+      ],
+      "diagnostics": [
+        {
+          "severity": "error",
+          "code": "batch_job_failed",
+          "message": "batch job klt-sim-931eea654dac finished 'failed' without a usable report: job command exited 2 [output recovery: collected outputs hold no report.json (/tmp/klt-batch-outputs-7dqghr1b/report.json) -- the job command never wrote its report; collected outputs hold no stderr.log -- see harness.log under the job's S3 prefix] [engine log unavailable: no ngspice.log/xyce.log in the collected outputs (engine logs are retrieved only when artifacts are kept)]"
+        }
+      ],
+      "artifacts": {
+        "log": null,
+        "raw": null,
+        "waveform": null,
+        "deck": null
+      },
+      "monte_carlo": null
+    },
+    {
+      "corner_id": "fs/novdd/27C",
+      "process": "fs",
+      "supply_v": {},
+      "temperature_c": 27,
+      "status": "error",
+      "runtime_s": 0.0,
+      "engine_exit_code": null,
+      "engine_killed_by_signal": null,
+      "measurements": [
+        {
+          "name": "voh",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        },
+        {
+          "name": "vol",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        },
+        {
+          "name": "vm",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        }
+      ],
+      "diagnostics": [
+        {
+          "severity": "error",
+          "code": "batch_job_failed",
+          "message": "batch job klt-sim-931eea654dac finished 'failed' without a usable report: job command exited 2 [output recovery: collected outputs hold no report.json (/tmp/klt-batch-outputs-7dqghr1b/report.json) -- the job command never wrote its report; collected outputs hold no stderr.log -- see harness.log under the job's S3 prefix] [engine log unavailable: no ngspice.log/xyce.log in the collected outputs (engine logs are retrieved only when artifacts are kept)]"
+        }
+      ],
+      "artifacts": {
+        "log": null,
+        "raw": null,
+        "waveform": null,
+        "deck": null
+      },
+      "monte_carlo": null
+    },
+    {
+      "corner_id": "sf/novdd/27C",
+      "process": "sf",
+      "supply_v": {},
+      "temperature_c": 27,
+      "status": "error",
+      "runtime_s": 0.0,
+      "engine_exit_code": null,
+      "engine_killed_by_signal": null,
+      "measurements": [
+        {
+          "name": "voh",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        },
+        {
+          "name": "vol",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        },
+        {
+          "name": "vm",
+          "value": null,
+          "unit": "V",
+          "status": "error",
+          "margin": null
+        }
+      ],
+      "diagnostics": [
+        {
+          "severity": "error",
+          "code": "batch_job_failed",
+          "message": "batch job klt-sim-931eea654dac finished 'failed' without a usable report: job command exited 2 [output recovery: collected outputs hold no report.json (/tmp/klt-batch-outputs-7dqghr1b/report.json) -- the job command never wrote its report; collected outputs hold no stderr.log -- see harness.log under the job's S3 prefix] [engine log unavailable: no ngspice.log/xyce.log in the collected outputs (engine logs are retrieved only when artifacts are kept)]"
+        }
+      ],
+      "artifacts": {
+        "log": null,
+        "raw": null,
+        "waveform": null,
+        "deck": null
+      },
+      "monte_carlo": null
+    }
+  ]
+}

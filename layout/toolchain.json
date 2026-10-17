@@ -1,0 +1,10 @@
+{
+  "_comment": "klayout-tools (klt) pin for the layout/ and sim/ flows. scripts/setup-env.sh installs this exact commit into the repo-local .venv (never a host-wide tool). Append-only history: record later bumps as new entries in 'history', never edit an earlier one.",
+  "klt_install": "git+https://github.com/2AMLogic/klayout-tools@267ea83a0510bcb61d2956058095201c0f481ff7",
+  "klt_last_verified_commit": "267ea83a0510bcb61d2956058095201c0f481ff7",
+  "klt_required_commands": ["sim", "netlist", "pdk"],
+  "klayout_package_min": "0.30",
+  "history": [
+    "Issue #3: initial pin at klayout-tools main 267ea83 (merge of PR #3774), the commit whose docs/cli/sim.md the smoke request was written against."
+  ]
+}

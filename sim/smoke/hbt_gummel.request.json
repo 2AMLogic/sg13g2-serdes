@@ -1,0 +1,66 @@
+{
+  "engine": "ngspice",
+  "netlist": "hbt_gummel.sp",
+  "models": {
+    "pdk": "ihp-sg13g2",
+    "lib": "libs.tech/ngspice/models/cornerMOSlv.lib"
+  },
+  "corners": {
+    "process": [
+      {
+        "name": "hbt_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          }
+        ]
+      },
+      {
+        "name": "hbt_bcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_bcs"
+          }
+        ]
+      },
+      {
+        "name": "hbt_wcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_wcs"
+          }
+        ]
+      }
+    ],
+    "temperature_c": [
+      27
+    ]
+  },
+  "analysis": {
+    "kind": "dc",
+    "args": "Vb 0.5 1.0 0.01"
+  },
+  "measurements": [
+    {
+      "name": "ic_at_0p8v",
+      "unit": "A",
+      "spice": ".meas dc ic_at_0p8v find par('-i(vc)') at=0.8",
+      "limits": {
+        "min": 0
+      }
+    },
+    {
+      "name": "ib_at_0p8v",
+      "unit": "A",
+      "spice": ".meas dc ib_at_0p8v find par('i(vb)') at=0.8"
+    }
+  ],
+  "options": {
+    "stage_model_inputs": true,
+    "timeout_s": 900,
+    "keep_artifacts": false
+  }
+}

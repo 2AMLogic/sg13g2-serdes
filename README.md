@@ -76,6 +76,28 @@ layout/        GDS + DRC/LVS reports, including the pad cells
 measurements/  silicon characterization (empty until tape-out)
 ```
 
+## Bring-up (reproduce the toolchain)
+
+```
+scripts/setup-env.sh        # fetch + sha256-verify the PDK, build the OSDI models,
+                            # fetch the pinned sim harness, install the pinned klt into .venv
+source scripts/env.sh       # PDK_ROOT / PDK / PATH for this shell
+sim/smoke/run_smoke.sh      # smoke grid through `klt sim`; writes sim/smoke/records/<id>/
+scripts/setup-env.sh --check   # re-verify everything, no network
+```
+
+Everything lands in repo-local, gitignored paths (`.cache/`, `.venv/`,
+`sim/harness/`); nothing is installed on the host. Any checksum mismatch aborts
+with exit 4. Pins: `sim/pdk.json` (PDK v0.3.0), `sim/tools/build-osdi.sh`
+(OpenVAF-Reloaded), `layout/toolchain.json` (`klt` commit), `reuse.lock.json`
+(sim harness from `2AMLogic/sg13g2-stdcells`). Requires `ngspice`, `python3`,
+`curl`, `uv` on `PATH`.
+
+OpenVAF-Reloaded emits OSDI v0.4, which needs ngspice >= 44; a host with an
+older ngspice builds the models but cannot load them, and the multi-corner
+smoke grid is run on the `klt sim` batch fleet instead (see
+`sim/smoke/records/` for what has actually run).
+
 ## License
 
 Apache License 2.0 — see [LICENSE](LICENSE).
