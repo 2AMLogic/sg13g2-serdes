@@ -1,0 +1,43 @@
+# sg13g2-serdes — agent instructions
+
+Open-source canary block: a single-lane 10 Gb/s-class SerDes on IHP SG13G2,
+a 130 nm SiGe BiCMOS open PDK, designed and verified by AI agents.
+**Mixed-signal** — HBT current-mode logic at the high-speed edge, CMOS logic
+behind it — so both flows apply.
+
+- **PDK**: IHP SG13G2 (open PDK, IHP-GmbH/IHP-Open-PDK). Analog: xschem +
+  ngspice. Digital: cocotb + Icarus, Yosys, OpenROAD. Layout, DRC, and LVS
+  through klayout-tools (`klt`) in both cases. The sibling SG13G2 canaries
+  (`sg13g2-vco`, `sg13g2-pll`, `sg13g2-lna`) have already brought up the
+  device models and the starter DRC/LVS deck; start from their setup, and
+  expect HBT extraction and LVS to be where the deck is thinnest.
+- **The link, not the blocks, is the risk.** Each CML stage can be simulated
+  on its own; a 10 Gb/s link cannot be proven by one transistor-level
+  transient. A credible claim needs a chain: transistor-level PVT results for
+  each stage → behavioural models fitted to those results → a statistical
+  link simulation over the declared channel model → an extrapolated bathtub.
+  Every model in that chain cites the transistor-level record it was fitted
+  to; an eye or BER figure that does not trace back is not evidence. The CDR
+  loop and the high-speed pads (capacitance, ESD, the core-to-pad seam at
+  5 GHz) are where it is most likely to fail. Expect the tools to be weakest
+  there and file accordingly.
+- **Scope discipline.** This repo has no `consumes:` edge. Do not design a
+  PLL or VCO here. Specify the clock this block needs — frequency, phase
+  count, duty-cycle and jitter budget — and compare it against the sibling
+  candidates by name (`sg13g2-vco`'s ratified LC band, `sg13g2-pll`'s band,
+  the LC PLL canary opened alongside this one). If none meets the
+  requirement, say so in the spec and file the requirement on the sibling;
+  a mismatch nobody wrote down is the failure mode `2am/REUSE.md` exists to
+  prevent.
+- **Friction protocol (the canary's job)**: every time klayout-tools is
+  awkward, missing a capability, or wrong for what you need, file an issue at
+  `2AMLogic/klayout-tools` describing the tool gap generically — that tracker
+  is scoped to the tool, so keep design-specific detail out of it and describe
+  the gap, not the design.
+- **Verification is the product**: no claim without a testbench. PVT corners
+  on every recorded analog result; recorded results are append-only evidence.
+  A simulated or extrapolated BER is never called measured.
+- Spec changes go through `spec/` with a decision record; agents do not relax
+  the ratified spec to make results pass.
+- **10 Gb/s is the target.** 5 Gb/s is the fallback and 12.5 Gb/s a stretch.
+  Do not let 12.5 Gb/s requirements drive architecture before 10 Gb/s closes.
