@@ -1,0 +1,9 @@
+{
+  "_comment": "Simulator floors checked by scripts/setup-env.sh. PDK version mirrors sim/pdk.json. The PDK's own versions.txt documents ngspice 43; the smoke run was exercised on the host's ngspice (see sim/smoke/records/). Floors are minimums, not pins.",
+  "pdk_version": "0.3.0",
+  "ngspice_min": "42",
+  "ngspice_osdi_min": "44",
+  "ngspice_osdi_min_note": "OpenVAF-Reloaded emits OSDI v0.4; ngspice 42 reports 'only supports OSDI v0.3'. klt's own osdi_abi_mismatch diagnostic names 44 as the floor. Hosts below it can build the models but must run MOS simulations on the batch fleet (ngspice 46 observed on the fleet worker, see sim/smoke/records/).",
+  "openvaf": "OpenVAF-Reloaded v24.0.1mob (checksum-pinned in sim/tools/build-osdi.sh)",
+  "python_min": "3.10"
+}

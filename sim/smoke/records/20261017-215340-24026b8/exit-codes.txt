@@ -1,0 +1,3 @@
+hbt_gummel exit=0
+mos_inv_dc exit=4
+mixed_tran exit=4
