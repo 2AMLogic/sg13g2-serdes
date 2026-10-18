@@ -5,7 +5,7 @@ reproduce steps.
 
 | Path | What |
 |---|---|
-| `pdk.json` | PDK pin (IHP-Open-PDK v0.3.0, tarball sha256) and OSDI toolchain fact sheet |
+| `pdk.json` | PDK pin (IHP-Open-PDK v0.3.0, tarball sha256) |
 | `toolchain.json` | simulator floors |
 | `tools/build-osdi.sh` | compiles the PDK's Verilog-A sources (PSP103, r3_cmc, mosvar) with a checksum-pinned OpenVAF-Reloaded; exit 5 = built, but the host ngspice cannot load OSDI v0.4 |
 | `smoke/` | toolchain smoke grid: HBT Gummel at every HBT corner section, MOS inverter DC at `tt/ff/ss/fs/sf`, and a mixed MOS+HBT transient. Placeholder devices, not design values |

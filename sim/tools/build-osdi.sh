@@ -34,9 +34,8 @@
 set -euo pipefail
 
 # --------------------------------------------------------------------------
-# Pins. These are the single source of truth; sim/pdk.json's
-# "osdi_toolchain" block restates them as a greppable fact sheet (that file
-# is documentation, not consumed by tooling). Keep the two in sync.
+# Pins. These are the single source of truth; sim/smoke/make_record.py reads
+# OPENVAF_TAG from here when it renders a record's Pins section.
 # --------------------------------------------------------------------------
 OPENVAF_REPO="OpenVAF/OpenVAF-Reloaded"
 OPENVAF_TAG="v24.0.1mob"

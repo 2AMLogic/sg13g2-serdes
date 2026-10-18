@@ -1,8 +1,9 @@
 """Render the committed smoke record (record.md) from the klt sim reports in a
 records/<id>/ directory. Reads only that directory plus sim/pdk.json,
-layout/toolchain.json and the request files; writes record.md beside the reports."""
+sim/tools/build-osdi.sh, layout/toolchain.json and the request files; writes record.md beside the reports."""
 import json
 import pathlib
+import re
 import sys
 
 out = pathlib.Path(sys.argv[1])
@@ -10,6 +11,7 @@ smoke = out.parent.parent
 repo = smoke.parent.parent
 pdk = json.load(open(repo / "sim" / "pdk.json"))
 tool = json.load(open(repo / "layout" / "toolchain.json"))
+openvaf_tag = re.search(r'^OPENVAF_TAG="([^"]+)"', (repo / "sim" / "tools" / "build-osdi.sh").read_text(), re.M).group(1)
 
 lines = [
     f"# Smoke record {out.name}",
@@ -18,7 +20,7 @@ lines = [
     "",
     "## Pins",
     f"- PDK: {pdk['source']} {pdk['release_tag']}, tarball sha256 `{pdk['tarball_sha256']}`",
-    f"- OpenVAF-Reloaded {pdk['osdi_toolchain']['compiler_tag']} (sim/tools/build-osdi.sh)",
+    f"- OpenVAF-Reloaded {openvaf_tag} (sim/tools/build-osdi.sh)",
     f"- klt: `{tool['klt_last_verified_commit']}`",
     "",
     "## Runs",
