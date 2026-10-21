@@ -2,6 +2,10 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-10-21
+
+- **PR #15**: Bump Repo Skills 0.24.3 -> 0.24.7
+
 ### 2026-10-18
 
 - **PR #12**: chore(config): remove unread toolchain.json keys, derive PDK_ROOT from sim/pdk.json
