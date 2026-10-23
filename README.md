@@ -46,18 +46,15 @@ distinguishing devices in a role that CMOS at this node struggles to fill.
 - **Not in scope**: line coding (8b/10b, 64b/66b) and any protocol layer —
   the block moves raw bits and proves them with PRBS.
 
-## Target specification (DRAFT — engineering to ratify, see issue #2)
+## Target specification (PROPOSED — operator to ratify, see issue #2)
 
-| Parameter | Target | Fallback | Stretch |
-|---|---|---|---|
-| Line rate | 10 Gb/s | 5 Gb/s | 12.5 Gb/s |
-| Architecture | half-rate, HBT CML at the high-speed edge | — | quarter-rate RX |
-| Lanes | 1 | — | — |
-| TX | 100 Ω differential, 2-tap FFE | no FFE | 3-tap FFE |
-| RX | CTLE + bang-bang CDR | CTLE only, forwarded clock | DFE first tap |
-| Channel | a ratified loss at Nyquist, as a channel model | short channel | — |
-| Error rate | simulated eye/bathtub extrapolated to 1e-12, PRBS-31 | PRBS-7 | — |
-| Signoff | DRC + LVS clean, pads included | — | — |
+The target specification is in [`spec/`](spec/README.md): the
+[parameter table](spec/target-spec.md) (10 Gb/s target, 5 Gb/s fallback,
+12.5 Gb/s stretch, each with verification and PVT corners), the
+[clock requirement](spec/clock-requirement.md), the
+[channel model](spec/channel/README.md) and the
+[decision records](spec/decisions/). It is a proposal until the operator
+ratifies it by merge.
 
 Every error-rate figure in this repo is simulated or extrapolated until
 silicon exists, and says so.
@@ -78,6 +75,28 @@ sim/           testbenches + PVT corner results (ngspice), link-level eye studie
 layout/        GDS + DRC/LVS reports, including the pad cells
 measurements/  silicon characterization (empty until tape-out)
 ```
+
+## Bring-up (reproduce the toolchain)
+
+```
+scripts/setup-env.sh        # fetch + sha256-verify the PDK, build the OSDI models,
+                            # fetch the pinned sim harness, install the pinned klt into .venv
+source scripts/env.sh       # PDK_ROOT / PDK / PATH for this shell
+sim/smoke/run_smoke.sh      # smoke grid through `klt sim`; writes sim/smoke/records/<id>/
+scripts/setup-env.sh --check   # re-verify everything, no network
+```
+
+Everything lands in repo-local, gitignored paths (`.cache/`, `.venv/`,
+`sim/harness/`); nothing is installed on the host. Any checksum mismatch aborts
+with exit 4. Pins: `sim/pdk.json` (PDK v0.3.0), `sim/tools/build-osdi.sh`
+(OpenVAF-Reloaded), `layout/toolchain.json` (`klt` commit), `reuse.lock.json`
+(sim harness from `2AMLogic/sg13g2-stdcells`). Requires `ngspice`, `python3`,
+`curl`, `uv` on `PATH`.
+
+OpenVAF-Reloaded emits OSDI v0.4, which needs ngspice >= 44; a host with an
+older ngspice builds the models but cannot load them, and the multi-corner
+smoke grid is run on the `klt sim` batch fleet instead (see
+`sim/smoke/records/` for what has actually run).
 
 ## Reproduce
 
