@@ -19,7 +19,7 @@ _None._
 
 `loom:important`; taken before unlabelled work.
 
-_None._
+- **#3**: PDK and simulator bring-up: pin SG13G2, build the OSDI models, smoke-simulate MOS and HBT models
 
 ## Ready
 
@@ -67,7 +67,7 @@ _None._
 |------|-------|
 | Operator merge-risk holds | 0 |
 | Very important | 1 |
-| Important | 0 |
+| Important | 1 |
 | Ready (`loom:issue`) | 1 |
 | In Progress (`loom:building`) | 1 |
 | PRs awaiting review | 0 |
