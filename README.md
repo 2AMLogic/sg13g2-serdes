@@ -98,6 +98,13 @@ older ngspice builds the models but cannot load them, and the multi-corner
 smoke grid is run on the `klt sim` batch fleet instead (see
 `sim/smoke/records/` for what has actually run).
 
+## Reproduce
+
+Each recorded result appends the exact command that reproduces it here.
+
+Repo checks (JSON validity, README links, signoff record): `npm run check:ci`
+(runs `scripts/check-ci.sh`; klt is pinned in `scripts/klt-pin.env`).
+
 ## License
 
 Apache License 2.0 — see [LICENSE](LICENSE).
