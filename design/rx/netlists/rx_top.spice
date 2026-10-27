@@ -1,0 +1,198 @@
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-22/design/rx/rx_top.sch
+.subckt rx_top padp padn vcm ck0 ck180 ck90 ck270 c0 c0b c1 c1b c2 c2b vdd vss d0 d180 e90 e270
+*.iopin padp
+*.iopin padn
+*.iopin vcm
+*.iopin ck0
+*.iopin ck180
+*.iopin ck90
+*.iopin ck270
+*.iopin c0
+*.iopin c0b
+*.iopin c1
+*.iopin c1b
+*.iopin c2
+*.iopin c2b
+*.iopin vdd
+*.iopin vss
+*.iopin d0
+*.iopin d180
+*.iopin e90
+*.iopin e270
+Xpad padp padn vcm vdd vss inp inn rx_term_pad
+Xctle inp inn vcm vdd vss c0 c0b c1 c1b c2 c2b dp dn ctle
+Xclk ck0 ck180 ck90 ck270 vdd vss b0 b180 b90 b270 clk_buf_quad
+Xlat_d0 dp dn b0 b180 vdd vss qp_d0 qn_d0 latch_cml
+Xlvl_d0 qp_d0 qn_d0 vdd vss d0 lvl_cml2cmos
+Xlat_d180 dp dn b180 b0 vdd vss qp_d180 qn_d180 latch_cml
+Xlvl_d180 qp_d180 qn_d180 vdd vss d180 lvl_cml2cmos
+Xlat_e90 dp dn b90 b270 vdd vss qp_e90 qn_e90 latch_cml
+Xlvl_e90 qp_e90 qn_e90 vdd vss e90 lvl_cml2cmos
+Xlat_e270 dp dn b270 b90 vdd vss qp_e270 qn_e270 latch_cml
+Xlvl_e270 qp_e270 qn_e270 vdd vss e270 lvl_cml2cmos
+.ends
+
+* expanding   symbol:  rx_term_pad.sym # of pins=7
+** sym_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-22/design/rx/rx_term_pad.sym
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-22/design/rx/rx_term_pad.sch
+.subckt rx_term_pad padp padn vcm vdd vss inp inn
+*.iopin padp
+*.iopin padn
+*.iopin vcm
+*.iopin vdd
+*.iopin vss
+*.iopin inp
+*.iopin inn
+Rtp padp vcm 50 m=1
+Rtn padn vcm 50 m=1
+Cpad_p padp vss 50f m=1
+Cpad_n padn vss 50f m=1
+XDesd_pu vdd padp vss diodevdd_2kv m=1
+XDesd_pd vdd padp vss diodevss_2kv m=1
+XDesd_nu vdd padn vss diodevdd_2kv m=1
+XDesd_nd vdd padn vss diodevss_2kv m=1
+Rsp padp inp 4 m=1
+Rsn padn inn 4 m=1
+.ends
+
+
+* expanding   symbol:  ctle.sym # of pins=13
+** sym_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-22/design/rx/ctle.sym
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-22/design/rx/ctle.sch
+.subckt ctle inp inn vcm vdd vss c0 c0b c1 c1b c2 c2b outp outn
+*.iopin inp
+*.iopin inn
+*.iopin vcm
+*.iopin vdd
+*.iopin vss
+*.iopin c0
+*.iopin c0b
+*.iopin c1
+*.iopin c1b
+*.iopin c2
+*.iopin c2b
+*.iopin outp
+*.iopin outn
+XQ1 outn inp e1 vss npn13G2 Nx=2
+XQ2 outp inn e2 vss npn13G2 Nx=2
+Rt1a e1 vss 220 m=1
+Rt1b e2 vss 220 m=1
+RLa vdd outn 60 m=1
+RLb vdd outp 60 m=1
+XCca inp hpp cap_cmim w=10u l=10u m=1
+XCcb inn hpn cap_cmim w=10u l=10u m=1
+Rca hpp vcm 2000 m=1
+Rcb hpn vcm 2000 m=1
+XQfa outn hpp efa vss npn13G2 Nx=7
+XQfb outp hpn efb vss npn13G2 Nx=7
+Rfa efa vss 62.86 m=1
+Rfb efb vss 62.86 m=1
+XQa0 ca0 hpp ea0 vss npn13G2 Nx=1
+XQb0 cb0 hpn eb0 vss npn13G2 Nx=1
+Ra0 ea0 vss 440 m=1
+Rb0 eb0 vss 440 m=1
+XSpa0 outn c0 ca0 vss npn13G2 Nx=1
+XSna0 outp c0b ca0 vss npn13G2 Nx=1
+XSpb0 outp c0 cb0 vss npn13G2 Nx=1
+XSnb0 outn c0b cb0 vss npn13G2 Nx=1
+XQa1 ca1 hpp ea1 vss npn13G2 Nx=2
+XQb1 cb1 hpn eb1 vss npn13G2 Nx=2
+Ra1 ea1 vss 220 m=1
+Rb1 eb1 vss 220 m=1
+XSpa1 outn c1 ca1 vss npn13G2 Nx=2
+XSna1 outp c1b ca1 vss npn13G2 Nx=2
+XSpb1 outp c1 cb1 vss npn13G2 Nx=2
+XSnb1 outn c1b cb1 vss npn13G2 Nx=2
+XQa2 ca2 hpp ea2 vss npn13G2 Nx=4
+XQb2 cb2 hpn eb2 vss npn13G2 Nx=4
+Ra2 ea2 vss 110 m=1
+Rb2 eb2 vss 110 m=1
+XSpa2 outn c2 ca2 vss npn13G2 Nx=4
+XSna2 outp c2b ca2 vss npn13G2 Nx=4
+XSpb2 outp c2 cb2 vss npn13G2 Nx=4
+XSnb2 outn c2b cb2 vss npn13G2 Nx=4
+.ends
+
+
+* expanding   symbol:  clk_buf_quad.sym # of pins=10
+** sym_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-22/design/rx/clk_buf_quad.sym
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-22/design/rx/clk_buf_quad.sch
+.subckt clk_buf_quad ck0 ck180 ck90 ck270 vdd vss b0 b180 b90 b270
+*.iopin ck0
+*.iopin ck180
+*.iopin ck90
+*.iopin ck270
+*.iopin vdd
+*.iopin vss
+*.iopin b0
+*.iopin b180
+*.iopin b90
+*.iopin b270
+XQi1a min ck0 ti1 vss npn13G2 Nx=2
+XQi1b mip ck180 ti1 vss npn13G2 Nx=2
+Rti1 ti1 vss 85 m=1
+RLi1a vdd min 100 m=1
+RLi1b vdd mip 100 m=1
+XQi2a b180 min ti2 vss npn13G2 Nx=2
+XQi2b b0 mip ti2 vss npn13G2 Nx=2
+Rti2 ti2 vss 85 m=1
+RLi2a vdd b180 225 m=1
+RLi2b vdd b0 225 m=1
+XQq1a mqn ck90 tq1 vss npn13G2 Nx=2
+XQq1b mqp ck270 tq1 vss npn13G2 Nx=2
+Rtq1 tq1 vss 85 m=1
+RLq1a vdd mqn 100 m=1
+RLq1b vdd mqp 100 m=1
+XQq2a b270 mqn tq2 vss npn13G2 Nx=2
+XQq2b b90 mqp tq2 vss npn13G2 Nx=2
+Rtq2 tq2 vss 85 m=1
+RLq2a vdd b270 225 m=1
+RLq2b vdd b90 225 m=1
+.ends
+
+
+* expanding   symbol:  latch_cml.sym # of pins=8
+** sym_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-22/design/rx/latch_cml.sym
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-22/design/rx/latch_cml.sch
+.subckt latch_cml dp dn clkp clkn vdd vss qp qn
+*.iopin dp
+*.iopin dn
+*.iopin clkp
+*.iopin clkn
+*.iopin vdd
+*.iopin vss
+*.iopin qp
+*.iopin qn
+XQs1 qn dp es vss npn13G2 Nx=2
+XQs2 qp dn es vss npn13G2 Nx=2
+XQh1 qn qp eh vss npn13G2 Nx=2
+XQh2 qp qn eh vss npn13G2 Nx=2
+XQts es clkp ets vss npn13G2 Nx=2
+XQth eh clkn eth vss npn13G2 Nx=2
+Rts ets vss 40 m=1
+Rth eth vss 40 m=1
+RLp vdd qp 100 m=1
+RLn vdd qn 100 m=1
+.ends
+
+
+* expanding   symbol:  lvl_cml2cmos.sym # of pins=5
+** sym_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-22/design/rx/lvl_cml2cmos.sym
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-22/design/rx/lvl_cml2cmos.sch
+.subckt lvl_cml2cmos ip in vdd vss op
+*.iopin ip
+*.iopin in
+*.iopin vdd
+*.iopin vss
+*.iopin op
+XMn1 x ip tl vss sg13_lv_nmos w=4u l=0.13u ng=1 m=1
+XMn2 y in tl vss sg13_lv_nmos w=4u l=0.13u ng=1 m=1
+XMnt tl vdd vss vss sg13_lv_nmos w=2u l=0.5u ng=1 m=1
+XMp1 x x vdd vdd sg13_lv_pmos w=4u l=0.13u ng=1 m=1
+XMp2 y x vdd vdd sg13_lv_pmos w=4u l=0.13u ng=1 m=1
+XMpi1 z y vdd vdd sg13_lv_pmos w=2u l=0.13u ng=1 m=1
+XMni1 z y vss vss sg13_lv_nmos w=1u l=0.13u ng=1 m=1
+XMpi2 op z vdd vdd sg13_lv_pmos w=4u l=0.13u ng=1 m=1
+XMni2 op z vss vss sg13_lv_nmos w=2u l=0.13u ng=1 m=1
+.ends
+

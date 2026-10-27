@@ -1,0 +1,2942 @@
+{
+  "engine": "ngspice",
+  "netlist": "ctle_op.sp",
+  "models": {
+    "pdk": "ihp-sg13g2",
+    "lib": "libs.tech/ngspice/models/cornerHBT.lib"
+  },
+  "corners": {
+    "process": [
+      {
+        "name": "hbt_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_tt"
+          }
+        ]
+      },
+      {
+        "name": "hbt_bcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_ff"
+          }
+        ]
+      },
+      {
+        "name": "hbt_wcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_ss"
+          }
+        ]
+      }
+    ],
+    "temperature_c": [
+      -40,
+      27,
+      125
+    ],
+    "supply_v": {
+      "vdd": [
+        1.08,
+        1.2,
+        1.32
+      ]
+    }
+  },
+  "analysis": {
+    "kind": "dc",
+    "args": "Vdmy 0 1m 1m"
+  },
+  "measurements": [
+    {
+      "name": "ctle_c0_xd0_q1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_q1_vc_max find v(on0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_q1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_q1_vbe_rev_max find v(ctle_c0_xd0_q1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_q2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_q2_vc_max find v(op0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_q2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_q2_vbe_rev_max find v(ctle_c0_xd0_q2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qfa_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qfa_vc_max find v(on0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qfa_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qfa_vbe_rev_max find v(ctle_c0_xd0_qfa_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qfb_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qfb_vc_max find v(op0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qfb_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qfb_vbe_rev_max find v(ctle_c0_xd0_qfb_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qa0_vc_max find v(xd0.ca0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qa0_vbe_rev_max find v(ctle_c0_xd0_qa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qb0_vc_max find v(xd0.cb0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qb0_vbe_rev_max find v(ctle_c0_xd0_qb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_spa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_spa0_vc_max find v(on0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_spa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_spa0_vbe_rev_max find v(ctle_c0_xd0_spa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_sna0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_sna0_vc_max find v(op0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_sna0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_sna0_vbe_rev_max find v(ctle_c0_xd0_sna0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_spb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_spb0_vc_max find v(op0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_spb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_spb0_vbe_rev_max find v(ctle_c0_xd0_spb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_snb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_snb0_vc_max find v(on0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_snb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_snb0_vbe_rev_max find v(ctle_c0_xd0_snb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qa1_vc_max find v(xd0.ca1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qa1_vbe_rev_max find v(ctle_c0_xd0_qa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qb1_vc_max find v(xd0.cb1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qb1_vbe_rev_max find v(ctle_c0_xd0_qb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_spa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_spa1_vc_max find v(on0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_spa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_spa1_vbe_rev_max find v(ctle_c0_xd0_spa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_sna1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_sna1_vc_max find v(op0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_sna1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_sna1_vbe_rev_max find v(ctle_c0_xd0_sna1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_spb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_spb1_vc_max find v(op0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_spb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_spb1_vbe_rev_max find v(ctle_c0_xd0_spb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_snb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_snb1_vc_max find v(on0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_snb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_snb1_vbe_rev_max find v(ctle_c0_xd0_snb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qa2_vc_max find v(xd0.ca2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qa2_vbe_rev_max find v(ctle_c0_xd0_qa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qb2_vc_max find v(xd0.cb2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_qb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_qb2_vbe_rev_max find v(ctle_c0_xd0_qb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_spa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_spa2_vc_max find v(on0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_spa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_spa2_vbe_rev_max find v(ctle_c0_xd0_spa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_sna2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_sna2_vc_max find v(op0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_sna2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_sna2_vbe_rev_max find v(ctle_c0_xd0_sna2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_spb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_spb2_vc_max find v(op0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_spb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_spb2_vbe_rev_max find v(ctle_c0_xd0_spb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_snb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_snb2_vc_max find v(on0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c0_xd0_snb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_xd0_snb2_vbe_rev_max find v(ctle_c0_xd0_snb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c0_outcm",
+      "unit": "V",
+      "spice": ".meas dc ctle_c0_outcm find v(ocm0) at=0"
+    },
+    {
+      "name": "ctle_c1_xd1_q1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_q1_vc_max find v(on1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_q1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_q1_vbe_rev_max find v(ctle_c1_xd1_q1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_q2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_q2_vc_max find v(op1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_q2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_q2_vbe_rev_max find v(ctle_c1_xd1_q2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qfa_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qfa_vc_max find v(on1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qfa_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qfa_vbe_rev_max find v(ctle_c1_xd1_qfa_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qfb_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qfb_vc_max find v(op1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qfb_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qfb_vbe_rev_max find v(ctle_c1_xd1_qfb_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qa0_vc_max find v(xd1.ca0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qa0_vbe_rev_max find v(ctle_c1_xd1_qa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qb0_vc_max find v(xd1.cb0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qb0_vbe_rev_max find v(ctle_c1_xd1_qb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_spa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_spa0_vc_max find v(on1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_spa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_spa0_vbe_rev_max find v(ctle_c1_xd1_spa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_sna0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_sna0_vc_max find v(op1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_sna0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_sna0_vbe_rev_max find v(ctle_c1_xd1_sna0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_spb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_spb0_vc_max find v(op1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_spb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_spb0_vbe_rev_max find v(ctle_c1_xd1_spb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_snb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_snb0_vc_max find v(on1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_snb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_snb0_vbe_rev_max find v(ctle_c1_xd1_snb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qa1_vc_max find v(xd1.ca1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qa1_vbe_rev_max find v(ctle_c1_xd1_qa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qb1_vc_max find v(xd1.cb1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qb1_vbe_rev_max find v(ctle_c1_xd1_qb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_spa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_spa1_vc_max find v(on1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_spa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_spa1_vbe_rev_max find v(ctle_c1_xd1_spa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_sna1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_sna1_vc_max find v(op1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_sna1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_sna1_vbe_rev_max find v(ctle_c1_xd1_sna1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_spb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_spb1_vc_max find v(op1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_spb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_spb1_vbe_rev_max find v(ctle_c1_xd1_spb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_snb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_snb1_vc_max find v(on1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_snb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_snb1_vbe_rev_max find v(ctle_c1_xd1_snb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qa2_vc_max find v(xd1.ca2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qa2_vbe_rev_max find v(ctle_c1_xd1_qa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qb2_vc_max find v(xd1.cb2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_qb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_qb2_vbe_rev_max find v(ctle_c1_xd1_qb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_spa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_spa2_vc_max find v(on1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_spa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_spa2_vbe_rev_max find v(ctle_c1_xd1_spa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_sna2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_sna2_vc_max find v(op1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_sna2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_sna2_vbe_rev_max find v(ctle_c1_xd1_sna2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_spb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_spb2_vc_max find v(op1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_spb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_spb2_vbe_rev_max find v(ctle_c1_xd1_spb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_snb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_snb2_vc_max find v(on1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c1_xd1_snb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_xd1_snb2_vbe_rev_max find v(ctle_c1_xd1_snb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_outcm",
+      "unit": "V",
+      "spice": ".meas dc ctle_c1_outcm find v(ocm1) at=0"
+    },
+    {
+      "name": "ctle_c2_xd2_q1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_q1_vc_max find v(on2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_q1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_q1_vbe_rev_max find v(ctle_c2_xd2_q1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_q2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_q2_vc_max find v(op2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_q2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_q2_vbe_rev_max find v(ctle_c2_xd2_q2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qfa_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qfa_vc_max find v(on2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qfa_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qfa_vbe_rev_max find v(ctle_c2_xd2_qfa_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qfb_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qfb_vc_max find v(op2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qfb_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qfb_vbe_rev_max find v(ctle_c2_xd2_qfb_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qa0_vc_max find v(xd2.ca0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qa0_vbe_rev_max find v(ctle_c2_xd2_qa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qb0_vc_max find v(xd2.cb0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qb0_vbe_rev_max find v(ctle_c2_xd2_qb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_spa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_spa0_vc_max find v(on2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_spa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_spa0_vbe_rev_max find v(ctle_c2_xd2_spa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_sna0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_sna0_vc_max find v(op2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_sna0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_sna0_vbe_rev_max find v(ctle_c2_xd2_sna0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_spb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_spb0_vc_max find v(op2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_spb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_spb0_vbe_rev_max find v(ctle_c2_xd2_spb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_snb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_snb0_vc_max find v(on2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_snb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_snb0_vbe_rev_max find v(ctle_c2_xd2_snb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qa1_vc_max find v(xd2.ca1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qa1_vbe_rev_max find v(ctle_c2_xd2_qa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qb1_vc_max find v(xd2.cb1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qb1_vbe_rev_max find v(ctle_c2_xd2_qb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_spa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_spa1_vc_max find v(on2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_spa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_spa1_vbe_rev_max find v(ctle_c2_xd2_spa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_sna1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_sna1_vc_max find v(op2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_sna1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_sna1_vbe_rev_max find v(ctle_c2_xd2_sna1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_spb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_spb1_vc_max find v(op2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_spb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_spb1_vbe_rev_max find v(ctle_c2_xd2_spb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_snb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_snb1_vc_max find v(on2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_snb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_snb1_vbe_rev_max find v(ctle_c2_xd2_snb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qa2_vc_max find v(xd2.ca2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qa2_vbe_rev_max find v(ctle_c2_xd2_qa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qb2_vc_max find v(xd2.cb2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_qb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_qb2_vbe_rev_max find v(ctle_c2_xd2_qb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_spa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_spa2_vc_max find v(on2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_spa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_spa2_vbe_rev_max find v(ctle_c2_xd2_spa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_sna2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_sna2_vc_max find v(op2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_sna2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_sna2_vbe_rev_max find v(ctle_c2_xd2_sna2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_spb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_spb2_vc_max find v(op2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_spb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_spb2_vbe_rev_max find v(ctle_c2_xd2_spb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_snb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_snb2_vc_max find v(on2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c2_xd2_snb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_xd2_snb2_vbe_rev_max find v(ctle_c2_xd2_snb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c2_outcm",
+      "unit": "V",
+      "spice": ".meas dc ctle_c2_outcm find v(ocm2) at=0"
+    },
+    {
+      "name": "ctle_c3_xd3_q1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_q1_vc_max find v(on3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_q1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_q1_vbe_rev_max find v(ctle_c3_xd3_q1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_q2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_q2_vc_max find v(op3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_q2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_q2_vbe_rev_max find v(ctle_c3_xd3_q2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qfa_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qfa_vc_max find v(on3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qfa_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qfa_vbe_rev_max find v(ctle_c3_xd3_qfa_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qfb_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qfb_vc_max find v(op3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qfb_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qfb_vbe_rev_max find v(ctle_c3_xd3_qfb_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qa0_vc_max find v(xd3.ca0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qa0_vbe_rev_max find v(ctle_c3_xd3_qa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qb0_vc_max find v(xd3.cb0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qb0_vbe_rev_max find v(ctle_c3_xd3_qb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_spa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_spa0_vc_max find v(on3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_spa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_spa0_vbe_rev_max find v(ctle_c3_xd3_spa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_sna0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_sna0_vc_max find v(op3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_sna0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_sna0_vbe_rev_max find v(ctle_c3_xd3_sna0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_spb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_spb0_vc_max find v(op3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_spb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_spb0_vbe_rev_max find v(ctle_c3_xd3_spb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_snb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_snb0_vc_max find v(on3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_snb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_snb0_vbe_rev_max find v(ctle_c3_xd3_snb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qa1_vc_max find v(xd3.ca1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qa1_vbe_rev_max find v(ctle_c3_xd3_qa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qb1_vc_max find v(xd3.cb1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qb1_vbe_rev_max find v(ctle_c3_xd3_qb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_spa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_spa1_vc_max find v(on3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_spa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_spa1_vbe_rev_max find v(ctle_c3_xd3_spa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_sna1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_sna1_vc_max find v(op3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_sna1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_sna1_vbe_rev_max find v(ctle_c3_xd3_sna1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_spb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_spb1_vc_max find v(op3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_spb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_spb1_vbe_rev_max find v(ctle_c3_xd3_spb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_snb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_snb1_vc_max find v(on3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_snb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_snb1_vbe_rev_max find v(ctle_c3_xd3_snb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qa2_vc_max find v(xd3.ca2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qa2_vbe_rev_max find v(ctle_c3_xd3_qa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qb2_vc_max find v(xd3.cb2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_qb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_qb2_vbe_rev_max find v(ctle_c3_xd3_qb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_spa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_spa2_vc_max find v(on3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_spa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_spa2_vbe_rev_max find v(ctle_c3_xd3_spa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_sna2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_sna2_vc_max find v(op3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_sna2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_sna2_vbe_rev_max find v(ctle_c3_xd3_sna2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_spb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_spb2_vc_max find v(op3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_spb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_spb2_vbe_rev_max find v(ctle_c3_xd3_spb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_snb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_snb2_vc_max find v(on3) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c3_xd3_snb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_xd3_snb2_vbe_rev_max find v(ctle_c3_xd3_snb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c3_outcm",
+      "unit": "V",
+      "spice": ".meas dc ctle_c3_outcm find v(ocm3) at=0"
+    },
+    {
+      "name": "ctle_c4_xd4_q1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_q1_vc_max find v(on4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_q1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_q1_vbe_rev_max find v(ctle_c4_xd4_q1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_q2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_q2_vc_max find v(op4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_q2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_q2_vbe_rev_max find v(ctle_c4_xd4_q2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qfa_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qfa_vc_max find v(on4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qfa_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qfa_vbe_rev_max find v(ctle_c4_xd4_qfa_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qfb_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qfb_vc_max find v(op4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qfb_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qfb_vbe_rev_max find v(ctle_c4_xd4_qfb_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qa0_vc_max find v(xd4.ca0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qa0_vbe_rev_max find v(ctle_c4_xd4_qa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qb0_vc_max find v(xd4.cb0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qb0_vbe_rev_max find v(ctle_c4_xd4_qb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_spa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_spa0_vc_max find v(on4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_spa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_spa0_vbe_rev_max find v(ctle_c4_xd4_spa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_sna0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_sna0_vc_max find v(op4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_sna0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_sna0_vbe_rev_max find v(ctle_c4_xd4_sna0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_spb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_spb0_vc_max find v(op4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_spb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_spb0_vbe_rev_max find v(ctle_c4_xd4_spb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_snb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_snb0_vc_max find v(on4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_snb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_snb0_vbe_rev_max find v(ctle_c4_xd4_snb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qa1_vc_max find v(xd4.ca1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qa1_vbe_rev_max find v(ctle_c4_xd4_qa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qb1_vc_max find v(xd4.cb1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qb1_vbe_rev_max find v(ctle_c4_xd4_qb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_spa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_spa1_vc_max find v(on4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_spa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_spa1_vbe_rev_max find v(ctle_c4_xd4_spa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_sna1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_sna1_vc_max find v(op4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_sna1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_sna1_vbe_rev_max find v(ctle_c4_xd4_sna1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_spb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_spb1_vc_max find v(op4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_spb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_spb1_vbe_rev_max find v(ctle_c4_xd4_spb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_snb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_snb1_vc_max find v(on4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_snb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_snb1_vbe_rev_max find v(ctle_c4_xd4_snb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qa2_vc_max find v(xd4.ca2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qa2_vbe_rev_max find v(ctle_c4_xd4_qa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qb2_vc_max find v(xd4.cb2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_qb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_qb2_vbe_rev_max find v(ctle_c4_xd4_qb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_spa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_spa2_vc_max find v(on4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_spa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_spa2_vbe_rev_max find v(ctle_c4_xd4_spa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_sna2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_sna2_vc_max find v(op4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_sna2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_sna2_vbe_rev_max find v(ctle_c4_xd4_sna2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_spb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_spb2_vc_max find v(op4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_spb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_spb2_vbe_rev_max find v(ctle_c4_xd4_spb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_snb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_snb2_vc_max find v(on4) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c4_xd4_snb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_xd4_snb2_vbe_rev_max find v(ctle_c4_xd4_snb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c4_outcm",
+      "unit": "V",
+      "spice": ".meas dc ctle_c4_outcm find v(ocm4) at=0"
+    },
+    {
+      "name": "ctle_c5_xd5_q1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_q1_vc_max find v(on5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_q1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_q1_vbe_rev_max find v(ctle_c5_xd5_q1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_q2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_q2_vc_max find v(op5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_q2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_q2_vbe_rev_max find v(ctle_c5_xd5_q2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qfa_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qfa_vc_max find v(on5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qfa_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qfa_vbe_rev_max find v(ctle_c5_xd5_qfa_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qfb_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qfb_vc_max find v(op5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qfb_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qfb_vbe_rev_max find v(ctle_c5_xd5_qfb_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qa0_vc_max find v(xd5.ca0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qa0_vbe_rev_max find v(ctle_c5_xd5_qa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qb0_vc_max find v(xd5.cb0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qb0_vbe_rev_max find v(ctle_c5_xd5_qb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_spa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_spa0_vc_max find v(on5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_spa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_spa0_vbe_rev_max find v(ctle_c5_xd5_spa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_sna0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_sna0_vc_max find v(op5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_sna0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_sna0_vbe_rev_max find v(ctle_c5_xd5_sna0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_spb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_spb0_vc_max find v(op5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_spb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_spb0_vbe_rev_max find v(ctle_c5_xd5_spb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_snb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_snb0_vc_max find v(on5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_snb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_snb0_vbe_rev_max find v(ctle_c5_xd5_snb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qa1_vc_max find v(xd5.ca1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qa1_vbe_rev_max find v(ctle_c5_xd5_qa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qb1_vc_max find v(xd5.cb1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qb1_vbe_rev_max find v(ctle_c5_xd5_qb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_spa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_spa1_vc_max find v(on5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_spa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_spa1_vbe_rev_max find v(ctle_c5_xd5_spa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_sna1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_sna1_vc_max find v(op5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_sna1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_sna1_vbe_rev_max find v(ctle_c5_xd5_sna1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_spb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_spb1_vc_max find v(op5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_spb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_spb1_vbe_rev_max find v(ctle_c5_xd5_spb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_snb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_snb1_vc_max find v(on5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_snb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_snb1_vbe_rev_max find v(ctle_c5_xd5_snb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qa2_vc_max find v(xd5.ca2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qa2_vbe_rev_max find v(ctle_c5_xd5_qa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qb2_vc_max find v(xd5.cb2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_qb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_qb2_vbe_rev_max find v(ctle_c5_xd5_qb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_spa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_spa2_vc_max find v(on5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_spa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_spa2_vbe_rev_max find v(ctle_c5_xd5_spa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_sna2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_sna2_vc_max find v(op5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_sna2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_sna2_vbe_rev_max find v(ctle_c5_xd5_sna2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_spb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_spb2_vc_max find v(op5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_spb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_spb2_vbe_rev_max find v(ctle_c5_xd5_spb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_snb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_snb2_vc_max find v(on5) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c5_xd5_snb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_xd5_snb2_vbe_rev_max find v(ctle_c5_xd5_snb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c5_outcm",
+      "unit": "V",
+      "spice": ".meas dc ctle_c5_outcm find v(ocm5) at=0"
+    },
+    {
+      "name": "ctle_c6_xd6_q1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_q1_vc_max find v(on6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_q1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_q1_vbe_rev_max find v(ctle_c6_xd6_q1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_q2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_q2_vc_max find v(op6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_q2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_q2_vbe_rev_max find v(ctle_c6_xd6_q2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qfa_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qfa_vc_max find v(on6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qfa_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qfa_vbe_rev_max find v(ctle_c6_xd6_qfa_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qfb_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qfb_vc_max find v(op6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qfb_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qfb_vbe_rev_max find v(ctle_c6_xd6_qfb_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qa0_vc_max find v(xd6.ca0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qa0_vbe_rev_max find v(ctle_c6_xd6_qa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qb0_vc_max find v(xd6.cb0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qb0_vbe_rev_max find v(ctle_c6_xd6_qb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_spa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_spa0_vc_max find v(on6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_spa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_spa0_vbe_rev_max find v(ctle_c6_xd6_spa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_sna0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_sna0_vc_max find v(op6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_sna0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_sna0_vbe_rev_max find v(ctle_c6_xd6_sna0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_spb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_spb0_vc_max find v(op6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_spb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_spb0_vbe_rev_max find v(ctle_c6_xd6_spb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_snb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_snb0_vc_max find v(on6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_snb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_snb0_vbe_rev_max find v(ctle_c6_xd6_snb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qa1_vc_max find v(xd6.ca1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qa1_vbe_rev_max find v(ctle_c6_xd6_qa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qb1_vc_max find v(xd6.cb1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qb1_vbe_rev_max find v(ctle_c6_xd6_qb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_spa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_spa1_vc_max find v(on6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_spa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_spa1_vbe_rev_max find v(ctle_c6_xd6_spa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_sna1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_sna1_vc_max find v(op6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_sna1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_sna1_vbe_rev_max find v(ctle_c6_xd6_sna1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_spb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_spb1_vc_max find v(op6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_spb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_spb1_vbe_rev_max find v(ctle_c6_xd6_spb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_snb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_snb1_vc_max find v(on6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_snb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_snb1_vbe_rev_max find v(ctle_c6_xd6_snb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qa2_vc_max find v(xd6.ca2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qa2_vbe_rev_max find v(ctle_c6_xd6_qa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qb2_vc_max find v(xd6.cb2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_qb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_qb2_vbe_rev_max find v(ctle_c6_xd6_qb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_spa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_spa2_vc_max find v(on6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_spa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_spa2_vbe_rev_max find v(ctle_c6_xd6_spa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_sna2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_sna2_vc_max find v(op6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_sna2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_sna2_vbe_rev_max find v(ctle_c6_xd6_sna2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_spb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_spb2_vc_max find v(op6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_spb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_spb2_vbe_rev_max find v(ctle_c6_xd6_spb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_snb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_snb2_vc_max find v(on6) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c6_xd6_snb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_xd6_snb2_vbe_rev_max find v(ctle_c6_xd6_snb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c6_outcm",
+      "unit": "V",
+      "spice": ".meas dc ctle_c6_outcm find v(ocm6) at=0"
+    },
+    {
+      "name": "ctle_c7_xd7_q1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_q1_vc_max find v(on7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_q1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_q1_vbe_rev_max find v(ctle_c7_xd7_q1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_q2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_q2_vc_max find v(op7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_q2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_q2_vbe_rev_max find v(ctle_c7_xd7_q2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qfa_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qfa_vc_max find v(on7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qfa_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qfa_vbe_rev_max find v(ctle_c7_xd7_qfa_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qfb_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qfb_vc_max find v(op7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qfb_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qfb_vbe_rev_max find v(ctle_c7_xd7_qfb_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qa0_vc_max find v(xd7.ca0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qa0_vbe_rev_max find v(ctle_c7_xd7_qa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qb0_vc_max find v(xd7.cb0) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qb0_vbe_rev_max find v(ctle_c7_xd7_qb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_spa0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_spa0_vc_max find v(on7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_spa0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_spa0_vbe_rev_max find v(ctle_c7_xd7_spa0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_sna0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_sna0_vc_max find v(op7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_sna0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_sna0_vbe_rev_max find v(ctle_c7_xd7_sna0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_spb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_spb0_vc_max find v(op7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_spb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_spb0_vbe_rev_max find v(ctle_c7_xd7_spb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_snb0_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_snb0_vc_max find v(on7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_snb0_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_snb0_vbe_rev_max find v(ctle_c7_xd7_snb0_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qa1_vc_max find v(xd7.ca1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qa1_vbe_rev_max find v(ctle_c7_xd7_qa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qb1_vc_max find v(xd7.cb1) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qb1_vbe_rev_max find v(ctle_c7_xd7_qb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_spa1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_spa1_vc_max find v(on7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_spa1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_spa1_vbe_rev_max find v(ctle_c7_xd7_spa1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_sna1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_sna1_vc_max find v(op7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_sna1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_sna1_vbe_rev_max find v(ctle_c7_xd7_sna1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_spb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_spb1_vc_max find v(op7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_spb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_spb1_vbe_rev_max find v(ctle_c7_xd7_spb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_snb1_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_snb1_vc_max find v(on7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_snb1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_snb1_vbe_rev_max find v(ctle_c7_xd7_snb1_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qa2_vc_max find v(xd7.ca2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qa2_vbe_rev_max find v(ctle_c7_xd7_qa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qb2_vc_max find v(xd7.cb2) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_qb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_qb2_vbe_rev_max find v(ctle_c7_xd7_qb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_spa2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_spa2_vc_max find v(on7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_spa2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_spa2_vbe_rev_max find v(ctle_c7_xd7_spa2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_sna2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_sna2_vc_max find v(op7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_sna2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_sna2_vbe_rev_max find v(ctle_c7_xd7_sna2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_spb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_spb2_vc_max find v(op7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_spb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_spb2_vbe_rev_max find v(ctle_c7_xd7_spb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_snb2_vc_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_snb2_vc_max find v(on7) at=0",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "ctle_c7_xd7_snb2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_xd7_snb2_vbe_rev_max find v(ctle_c7_xd7_snb2_vbe_node) at=0",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c7_outcm",
+      "unit": "V",
+      "spice": ".meas dc ctle_c7_outcm find v(ocm7) at=0"
+    }
+  ],
+  "options": {
+    "stage_model_inputs": true,
+    "timeout_s": 120,
+    "keep_artifacts": false
+  }
+}

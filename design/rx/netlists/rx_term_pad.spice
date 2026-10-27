@@ -1,0 +1,20 @@
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-22/design/rx/rx_term_pad.sch
+.subckt rx_term_pad padp padn vcm vdd vss inp inn
+*.iopin padp
+*.iopin padn
+*.iopin vcm
+*.iopin vdd
+*.iopin vss
+*.iopin inp
+*.iopin inn
+Rtp padp vcm 50 m=1
+Rtn padn vcm 50 m=1
+Cpad_p padp vss 50f m=1
+Cpad_n padn vss 50f m=1
+XDesd_pu vdd padp vss diodevdd_2kv m=1
+XDesd_pd vdd padp vss diodevss_2kv m=1
+XDesd_nu vdd padn vss diodevdd_2kv m=1
+XDesd_nd vdd padn vss diodevss_2kv m=1
+Rsp padp inp 4 m=1
+Rsn padn inn 4 m=1
+.ends

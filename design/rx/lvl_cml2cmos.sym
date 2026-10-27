@@ -1,0 +1,26 @@
+v {xschem version=3.4.6 file_version=1.2
+* lvl_cml2cmos block symbol; see lvl_cml2cmos.sch
+}
+G {}
+K {type=subcircuit
+format="@name @pinlist @symname"
+template="name=X1"}
+V {}
+S {}
+E {}
+L 4 -30 -50 30 -50 {}
+L 4 -30 50 30 50 {}
+L 4 -30 -50 -30 50 {}
+L 4 30 -50 30 50 {}
+B 5 -32.5 -32.5 -27.5 -27.5 {name=ip dir=in}
+T {ip} -25 -34 0 0 0.2 0.2 {}
+B 5 -32.5 -12.5 -27.5 -7.5 {name=in dir=in}
+T {in} -25 -14 0 0 0.2 0.2 {}
+B 5 -32.5 7.5 -27.5 12.5 {name=vdd dir=in}
+T {vdd} -25 6 0 0 0.2 0.2 {}
+B 5 -32.5 27.5 -27.5 32.5 {name=vss dir=in}
+T {vss} -25 26 0 0 0.2 0.2 {}
+B 5 27.5 -32.5 32.5 -27.5 {name=op dir=out}
+T {op} 25 -34 0 1 0.2 0.2 {}
+T {@name} -30 58 0 0 0.25 0.25 {}
+T {lvl_cml2cmos} -25 -65 0 0 0.2 0.2 {}

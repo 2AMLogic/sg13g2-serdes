@@ -1,0 +1,21 @@
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-22/design/rx/latch_cml.sch
+.subckt latch_cml dp dn clkp clkn vdd vss qp qn
+*.iopin dp
+*.iopin dn
+*.iopin clkp
+*.iopin clkn
+*.iopin vdd
+*.iopin vss
+*.iopin qp
+*.iopin qn
+XQs1 qn dp es vss npn13G2 Nx=2
+XQs2 qp dn es vss npn13G2 Nx=2
+XQh1 qn qp eh vss npn13G2 Nx=2
+XQh2 qp qn eh vss npn13G2 Nx=2
+XQts es clkp ets vss npn13G2 Nx=2
+XQth eh clkn eth vss npn13G2 Nx=2
+Rts ets vss 40 m=1
+Rth eth vss 40 m=1
+RLp vdd qp 100 m=1
+RLn vdd qn 100 m=1
+.ends

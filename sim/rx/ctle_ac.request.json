@@ -1,0 +1,206 @@
+{
+  "engine": "ngspice",
+  "netlist": "ctle_ac.sp",
+  "models": {
+    "pdk": "ihp-sg13g2",
+    "lib": "libs.tech/ngspice/models/cornerHBT.lib"
+  },
+  "corners": {
+    "process": [
+      {
+        "name": "hbt_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_tt"
+          }
+        ]
+      },
+      {
+        "name": "hbt_bcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_ff"
+          }
+        ]
+      },
+      {
+        "name": "hbt_wcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_ss"
+          }
+        ]
+      }
+    ],
+    "temperature_c": [
+      -40,
+      27,
+      125
+    ],
+    "supply_v": {
+      "vdd": [
+        1.08,
+        1.2,
+        1.32
+      ]
+    }
+  },
+  "analysis": {
+    "kind": "ac",
+    "args": "lin 300 1e8 3e10"
+  },
+  "measurements": [
+    {
+      "name": "ctle_c0_g0p1g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c0_g0p1g_db find vdb(dif0) at=1e8"
+    },
+    {
+      "name": "ctle_c0_g2p5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c0_g2p5g_db find vdb(dif0) at=2.5e9"
+    },
+    {
+      "name": "ctle_c0_g5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c0_g5g_db find vdb(dif0) at=5e9"
+    },
+    {
+      "name": "ctle_c1_g0p1g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c1_g0p1g_db find vdb(dif1) at=1e8"
+    },
+    {
+      "name": "ctle_c1_g2p5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c1_g2p5g_db find vdb(dif1) at=2.5e9"
+    },
+    {
+      "name": "ctle_c1_g5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c1_g5g_db find vdb(dif1) at=5e9"
+    },
+    {
+      "name": "ctle_c2_g0p1g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c2_g0p1g_db find vdb(dif2) at=1e8"
+    },
+    {
+      "name": "ctle_c2_g2p5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c2_g2p5g_db find vdb(dif2) at=2.5e9"
+    },
+    {
+      "name": "ctle_c2_g5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c2_g5g_db find vdb(dif2) at=5e9"
+    },
+    {
+      "name": "ctle_c3_g0p1g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c3_g0p1g_db find vdb(dif3) at=1e8"
+    },
+    {
+      "name": "ctle_c3_g2p5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c3_g2p5g_db find vdb(dif3) at=2.5e9"
+    },
+    {
+      "name": "ctle_c3_g5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c3_g5g_db find vdb(dif3) at=5e9"
+    },
+    {
+      "name": "ctle_c4_g0p1g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c4_g0p1g_db find vdb(dif4) at=1e8"
+    },
+    {
+      "name": "ctle_c4_g2p5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c4_g2p5g_db find vdb(dif4) at=2.5e9"
+    },
+    {
+      "name": "ctle_c4_g5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c4_g5g_db find vdb(dif4) at=5e9"
+    },
+    {
+      "name": "ctle_c5_g0p1g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c5_g0p1g_db find vdb(dif5) at=1e8"
+    },
+    {
+      "name": "ctle_c5_g2p5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c5_g2p5g_db find vdb(dif5) at=2.5e9"
+    },
+    {
+      "name": "ctle_c5_g5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c5_g5g_db find vdb(dif5) at=5e9"
+    },
+    {
+      "name": "ctle_c6_g0p1g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c6_g0p1g_db find vdb(dif6) at=1e8"
+    },
+    {
+      "name": "ctle_c6_g2p5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c6_g2p5g_db find vdb(dif6) at=2.5e9"
+    },
+    {
+      "name": "ctle_c6_g5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c6_g5g_db find vdb(dif6) at=5e9"
+    },
+    {
+      "name": "ctle_c7_g0p1g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c7_g0p1g_db find vdb(dif7) at=1e8"
+    },
+    {
+      "name": "ctle_c7_g2p5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c7_g2p5g_db find vdb(dif7) at=2.5e9"
+    },
+    {
+      "name": "ctle_c7_g5g_db",
+      "unit": "dB",
+      "spice": ".meas ac ctle_c7_g5g_db find vdb(dif7) at=5e9"
+    }
+  ],
+  "options": {
+    "stage_model_inputs": true,
+    "timeout_s": 120,
+    "keep_artifacts": false
+  }
+}

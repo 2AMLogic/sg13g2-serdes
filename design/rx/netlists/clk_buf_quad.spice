@@ -1,0 +1,33 @@
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-22/design/rx/clk_buf_quad.sch
+.subckt clk_buf_quad ck0 ck180 ck90 ck270 vdd vss b0 b180 b90 b270
+*.iopin ck0
+*.iopin ck180
+*.iopin ck90
+*.iopin ck270
+*.iopin vdd
+*.iopin vss
+*.iopin b0
+*.iopin b180
+*.iopin b90
+*.iopin b270
+XQi1a min ck0 ti1 vss npn13G2 Nx=2
+XQi1b mip ck180 ti1 vss npn13G2 Nx=2
+Rti1 ti1 vss 85 m=1
+RLi1a vdd min 100 m=1
+RLi1b vdd mip 100 m=1
+XQi2a b180 min ti2 vss npn13G2 Nx=2
+XQi2b b0 mip ti2 vss npn13G2 Nx=2
+Rti2 ti2 vss 85 m=1
+RLi2a vdd b180 225 m=1
+RLi2b vdd b0 225 m=1
+XQq1a mqn ck90 tq1 vss npn13G2 Nx=2
+XQq1b mqp ck270 tq1 vss npn13G2 Nx=2
+Rtq1 tq1 vss 85 m=1
+RLq1a vdd mqn 100 m=1
+RLq1b vdd mqp 100 m=1
+XQq2a b270 mqn tq2 vss npn13G2 Nx=2
+XQq2b b90 mqp tq2 vss npn13G2 Nx=2
+Rtq2 tq2 vss 85 m=1
+RLq2a vdd b270 225 m=1
+RLq2b vdd b90 225 m=1
+.ends

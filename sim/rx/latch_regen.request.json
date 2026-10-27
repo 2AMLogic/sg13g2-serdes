@@ -1,0 +1,336 @@
+{
+  "engine": "ngspice",
+  "netlist": "latch_regen.sp",
+  "models": {
+    "pdk": "ihp-sg13g2",
+    "lib": "libs.tech/ngspice/models/cornerHBT.lib"
+  },
+  "corners": {
+    "process": [
+      {
+        "name": "hbt_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_tt"
+          }
+        ]
+      },
+      {
+        "name": "hbt_bcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_ff"
+          }
+        ]
+      },
+      {
+        "name": "hbt_wcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_ss"
+          }
+        ]
+      }
+    ],
+    "temperature_c": [
+      -40,
+      27,
+      125
+    ],
+    "supply_v": {
+      "vdd": [
+        1.08,
+        1.2,
+        1.32
+      ]
+    }
+  },
+  "analysis": {
+    "kind": "tran",
+    "args": "2p 3n"
+  },
+  "measurements": [
+    {
+      "name": "latch_t_regen_up",
+      "unit": "s",
+      "spice": ".meas tran latch_t_regen_up trig v(ck) val=0 fall=1 td=2.35n targ v(q) val=0.25 rise=1 td=2.35n",
+      "limits": {
+        "max": 1e-10
+      }
+    },
+    {
+      "name": "latch_t_regen_dn",
+      "unit": "s",
+      "spice": ".meas tran latch_t_regen_dn trig v(ck) val=0 fall=1 td=2.55n targ v(q) val=-0.25 fall=1 td=2.55n",
+      "limits": {
+        "max": 1e-10
+      }
+    },
+    {
+      "name": "latch_q_max_v",
+      "unit": "V",
+      "spice": ".meas tran latch_q_max_v max v(q) from=2n to=3n"
+    },
+    {
+      "name": "latch_q_min_v",
+      "unit": "V",
+      "spice": ".meas tran latch_q_min_v min v(q) from=2n to=3n"
+    },
+    {
+      "name": "clk_xclk_qi1a_vc_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qi1a_vc_max max v(xclk.min)",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "clk_xclk_qi1a_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qi1a_vbe_rev_max max v(clk_xclk_qi1a_vbe_node)",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "clk_xclk_qi1b_vc_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qi1b_vc_max max v(xclk.mip)",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "clk_xclk_qi1b_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qi1b_vbe_rev_max max v(clk_xclk_qi1b_vbe_node)",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "clk_xclk_qi2a_vc_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qi2a_vc_max max v(b180)",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "clk_xclk_qi2a_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qi2a_vbe_rev_max max v(clk_xclk_qi2a_vbe_node)",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "clk_xclk_qi2b_vc_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qi2b_vc_max max v(b0)",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "clk_xclk_qi2b_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qi2b_vbe_rev_max max v(clk_xclk_qi2b_vbe_node)",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "clk_xclk_qq1a_vc_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qq1a_vc_max max v(xclk.mqn)",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "clk_xclk_qq1a_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qq1a_vbe_rev_max max v(clk_xclk_qq1a_vbe_node)",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "clk_xclk_qq1b_vc_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qq1b_vc_max max v(xclk.mqp)",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "clk_xclk_qq1b_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qq1b_vbe_rev_max max v(clk_xclk_qq1b_vbe_node)",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "clk_xclk_qq2a_vc_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qq2a_vc_max max v(b270)",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "clk_xclk_qq2a_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qq2a_vbe_rev_max max v(clk_xclk_qq2a_vbe_node)",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "clk_xclk_qq2b_vc_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qq2b_vc_max max v(b90)",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "clk_xclk_qq2b_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qq2b_vbe_rev_max max v(clk_xclk_qq2b_vbe_node)",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "latch_xl_qs1_vc_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qs1_vc_max max v(qn)",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "latch_xl_qs1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qs1_vbe_rev_max max v(latch_xl_qs1_vbe_node)",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "latch_xl_qs2_vc_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qs2_vc_max max v(qp)",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "latch_xl_qs2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qs2_vbe_rev_max max v(latch_xl_qs2_vbe_node)",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "latch_xl_qh1_vc_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qh1_vc_max max v(qn)",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "latch_xl_qh1_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qh1_vbe_rev_max max v(latch_xl_qh1_vbe_node)",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "latch_xl_qh2_vc_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qh2_vc_max max v(qp)",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "latch_xl_qh2_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qh2_vbe_rev_max max v(latch_xl_qh2_vbe_node)",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "latch_xl_qts_vc_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qts_vc_max max v(xl.es)",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "latch_xl_qts_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qts_vbe_rev_max max v(latch_xl_qts_vbe_node)",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "latch_xl_qth_vc_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qth_vc_max max v(xl.eh)",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "latch_xl_qth_vbe_rev_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qth_vbe_rev_max max v(latch_xl_qth_vbe_node)",
+      "limits": {
+        "max": 1.0
+      }
+    }
+  ],
+  "options": {
+    "stage_model_inputs": true,
+    "timeout_s": 120,
+    "keep_artifacts": false
+  }
+}
