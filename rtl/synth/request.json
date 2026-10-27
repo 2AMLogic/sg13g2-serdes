@@ -1,0 +1,20 @@
+{
+  "schema": "klt.synthesize.request/1",
+  "engine": "yosys",
+  "sources": [
+    "../serdes_prbs_gen.v",
+    "../serdes_prbs_chk.v",
+    "../serdes_cdr_pd.v",
+    "../serdes_cdr_filter.v",
+    "../serdes_loopback.v",
+    "../serdes_eye_mon.v",
+    "../serdes_ctrl.v",
+    "../serdes_digital_top.v"
+  ],
+  "hdl_toplevel": "serdes_digital_top",
+  "pdk": {
+    "cell_library": "sg13g2_stdcell",
+    "corner": "typ_1p20V_25C"
+  },
+  "constraints": { "clock_period_ns": 1.6 }
+}

@@ -1,0 +1,10 @@
+{
+  "_comment": "Pinned RTL-flow tool versions, as observed on the dispatch worker. rtl/tests/run.sh and scripts/check-synth-fresh.sh refuse to run if a binary on PATH reports a different version. Nothing here is installed by this repo; a missing or different tool is a worker-spec gap (2AMLogic/2am infra/aws/loom-worker/). The klt pin for synthesis stays in layout/toolchain.json.",
+  "yosys": { "version_prefix": "Yosys 0.67+post (git sha1 b8e7da6f40ae8f552c116bf6c359b07c6533e159" },
+  "icarus": { "version_prefix": "Icarus Verilog version 13.0 (stable) (v13_0)" },
+  "cocotb": {
+    "version": "2.0.1",
+    "python": "3.13",
+    "note": "Per-run environment built with uvx (uvx --python <python> --from cocotb==<version>); cocotb 2.0.1 only builds on Python <= 3.13, so the interpreter is pinned. cocotb is not installed on the worker and nothing here installs it host-wide."
+  }
+}
