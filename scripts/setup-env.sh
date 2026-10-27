@@ -131,22 +131,20 @@ done
 
 # ---- klt (layout/toolchain.json): repo-local venv, never a host tool -------
 KLT_INSTALL="$(json_get "${REPO_DIR}/layout/toolchain.json" "d['klt_install']")"
-KLT_SHA="$(json_get "${REPO_DIR}/layout/toolchain.json" "d['klt_last_verified_commit']")"
 if [[ ${CHECK_ONLY} -eq 0 && ! -x "${REPO_DIR}/.venv/bin/klt" ]]; then
   command -v uv >/dev/null 2>&1 || die "'uv' not found on PATH; needed to build the repo-local .venv (not installing it)." 3
   uv venv "${REPO_DIR}/.venv"
   uv pip install --python "${REPO_DIR}/.venv/bin/python" "${KLT_INSTALL}"
 fi
 [[ -x "${REPO_DIR}/.venv/bin/klt" ]] || die ".venv/bin/klt missing -- run scripts/setup-env.sh (without --check)." 3
-KLT_ACTUAL="$(python3 -I - "${REPO_DIR}/.venv" <<'PY'
-import glob, json, sys
-for p in glob.glob(sys.argv[1] + "/lib/python*/site-packages/klayout_tools-*.dist-info/direct_url.json"):
-    print(json.load(open(p)).get("vcs_info", {}).get("commit_id", ""))
-PY
-)"
-[[ "${KLT_ACTUAL}" == "${KLT_SHA}" ]] \
-  || die "klt in .venv is at '${KLT_ACTUAL:-unknown}', pin is ${KLT_SHA}; remove .venv and re-run." 4
-echo "setup-env.sh: klt ${KLT_SHA:0:12} in .venv"
+# A PyPI install has no direct_url.json vcs_info, so verify the pinned version.
+KLT_WANT="${KLT_INSTALL#klayout-tools==}"
+[[ "${KLT_WANT}" != "${KLT_INSTALL}" ]] \
+  || die "layout/toolchain.json klt_install '${KLT_INSTALL}' is not a 'klayout-tools==X.Y.Z' pin." 4
+KLT_ACTUAL="$("${REPO_DIR}/.venv/bin/klt" --version 2>/dev/null || true)"
+[[ "${KLT_ACTUAL}" == "klt ${KLT_WANT}" ]] \
+  || die "klt in .venv reports '${KLT_ACTUAL:-unknown}', pin is 'klt ${KLT_WANT}'; remove .venv and re-run." 4
+echo "setup-env.sh: ${KLT_ACTUAL} in .venv"
 
 echo
 echo "setup-env.sh: OK. Next:  source scripts/env.sh   then   sim/smoke/run_smoke.sh"

@@ -47,6 +47,7 @@ check_harness() {
 check_signoff() {
   local fresh rc=0
   fresh=$(mktemp)
+  uvx --from "klayout-tools==${KLT_VERSION}" klt --version || return 1
   klt_signoff > "$fresh" || rc=$?
   # 0 = all T1 items met; 3 = grader ran clean with unmet items. Anything else is a hard error.
   if [ "$rc" -ne 0 ] && [ "$rc" -ne 3 ]; then
