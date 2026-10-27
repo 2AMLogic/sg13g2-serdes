@@ -1,31 +1,45 @@
-#### Project-local xschem configuration for sg13g2-serdes (issue #21).
-#### Load with:  klt netlist --rcfile design/xschemrc ...
-#### PDK_ROOT comes from the environment (source scripts/env.sh) or falls back to
-#### the repo-local .cache/pdk install made by scripts/setup-env.sh.
+#### Project-local xschem configuration for sg13g2-serdes.
+####
+#### Same shape as the sibling SG13G2 canaries (sg13g2-lna/design/xschemrc):
+#### reset XSCHEM_LIBRARY_PATH to a known baseline, resolve the PDK from
+#### PDK_ROOT/PDK (scripts/env.sh exports both), and add this repo's design
+#### directories so block symbols resolve by bare name. Used by
+#### `klt netlist --rcfile design/xschemrc` (design/check-netlists.sh).
 
 set XSCHEM_LIBRARY_PATH {}
 append XSCHEM_LIBRARY_PATH :${XSCHEM_SHAREDIR}/xschem_library/devices
 
-set REPO_ROOT [file dirname [file dirname [file normalize [info script]]]]
-
-if {[info exists env(PDK)]} { set PDK $env(PDK) } else { set PDK ihp-sg13g2 }
 if {[info exists env(PDK_ROOT)]} {
   set PDK_ROOT $env(PDK_ROOT)
-} else {
-  set PDK_ROOT [lindex [lsort [glob -nocomplain -type d [file join $REPO_ROOT .cache pdk IHP-Open-PDK-*]]] 0]
 }
-set env(PDK_ROOT) $PDK_ROOT
-set env(PDK) $PDK
-set pdk_xschemrc [file join $PDK_ROOT $PDK libs.tech xschem xschemrc]
-if { [file exists $pdk_xschemrc] } {
-  source $pdk_xschemrc
+if {[info exists env(PDK)]} {
+  set PDK $env(PDK)
 } else {
-  puts stderr "xschemrc: $pdk_xschemrc not found; $PDK symbols unavailable."
+  set PDK ihp-sg13g2
 }
 
-# Re-assert generic devices and add this repo's cells last, so sourcing the
-# PDK's xschemrc cannot drop them.
+if { ![info exists PDK_ROOT] || $PDK_ROOT eq {} } {
+    puts stderr "xschemrc: PDK_ROOT is not set; run 'source scripts/env.sh'."
+} else {
+    set env(PDK_ROOT) $PDK_ROOT
+    set env(PDK) $PDK
+    set pdk_xschemrc [file join $PDK_ROOT $PDK libs.tech xschem xschemrc]
+    if { [file exists $pdk_xschemrc] } {
+        source $pdk_xschemrc
+    } else {
+        puts stderr "xschemrc: $pdk_xschemrc not found; $PDK symbols unavailable."
+    }
+}
+
+#### Re-assert the generic devices library and add this repo's block
+#### directories last, so sourcing the PDK's xschemrc cannot drop them.
+set REPO_ROOT [file dirname [file dirname [file normalize [info script]]]]
+
+if { ![info exists XSCHEM_LIBRARY_PATH] } { set XSCHEM_LIBRARY_PATH {} }
 append XSCHEM_LIBRARY_PATH :${XSCHEM_SHAREDIR}/xschem_library/devices
-append XSCHEM_LIBRARY_PATH :[file join $REPO_ROOT design tx]
+foreach d [glob -nocomplain -type d [file join $REPO_ROOT design *]] {
+    append XSCHEM_LIBRARY_PATH :$d
+}
 
+# Start on an empty sheet rather than the PDK's demo top-level.
 set XSCHEM_START_WINDOW {}

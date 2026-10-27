@@ -1,5 +1,5 @@
-** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-21/design/tx/lvl_cml2cmos.sch
-.subckt lvl_cml2cmos vdd vss inp inn out
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-21/design/tx/tx_lvl_cml2cmos.sch
+.subckt tx_lvl_cml2cmos vdd vss inp inn out
 *.iopin vdd
 *.iopin vss
 *.iopin inp

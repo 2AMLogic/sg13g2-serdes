@@ -171,7 +171,7 @@ N 1900 730 1920 730 {}
 C {lab_pin.sym} 1920 730 0 0 {name=l63 lab=padp}
 N 1900 770 1920 770 {}
 C {lab_pin.sym} 1920 770 0 0 {name=l64 lab=padn}
-C {lvl_cml2cmos.sym} 100 1240 0 0 {name=Xlvl}
+C {tx_lvl_cml2cmos.sym} 100 1240 0 0 {name=Xlvl}
 N 100 1170 100 1150 {}
 C {lab_pin.sym} 100 1150 0 0 {name=l65 lab=vdd}
 N 100 1310 100 1330 {}

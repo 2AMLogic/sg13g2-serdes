@@ -182,8 +182,8 @@ cell("driver_ffe",
                 ("outp", "out"), ("outn", "out")],
      _drv)
 
-# --- lvl_cml2cmos
-cell("lvl_cml2cmos",
+# --- tx_lvl_cml2cmos
+cell("tx_lvl_cml2cmos",
      "CML-to-CMOS level conversion at the first divided clock (DR-001 decision 3). "
      "NMOS pair with PMOS mirror load, then an inverter to a rail-swing output. "
      "MOS only: not simulated while OSDI is unavailable (#3).",
@@ -231,7 +231,7 @@ TOP_INSTANCES = [
                                  outp="cp", outn="cn")),
     ("Xpad", "pad_esd", dict(vdd="vdd", vss="vss", cp="cp", cn="cn", padp="padp",
                               padn="padn")),
-    ("Xlvl", "lvl_cml2cmos", dict(vdd="vdd", vss="vss", inp="ckdp", inn="ckdn",
+    ("Xlvl", "tx_lvl_cml2cmos", dict(vdd="vdd", vss="vss", inp="ckdp", inn="ckdn",
                                    out="ckd_cmos")),
 ]
 TOP_PORTS = (P_POWER + [("ckp", "in"), ("ckn", "in"), ("dap", "in"), ("dan", "in"),

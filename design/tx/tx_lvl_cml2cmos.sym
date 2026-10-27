@@ -9,7 +9,7 @@ V {}
 S {}
 E {}
 B 4 -100 -50 100 50 {}
-T {lvl_cml2cmos} 0 -95 0 0 0.3 0.3 {hcenter=true}
+T {tx_lvl_cml2cmos} 0 -95 0 0 0.3 0.3 {hcenter=true}
 L 4 0 -70 0 -50 {}
 T {vdd} 8 -46 0 0 0.2 0.2 {}
 L 4 0 50 0 70 {}

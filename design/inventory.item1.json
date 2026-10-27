@@ -2,8 +2,22 @@
   "schema_version": 1,
   "kind": "t1-attestation-inventory",
   "t1_item": 1,
-  "description": "T1 item 1 (design sources) for the analog partition, TX high-speed path (issue #21). Block kind: mixed-signal; the RX analog partition (#22) and the digital partition (#23) add their entries to this same inventory before the joint attestation. Netlists are staleness-checked with klt netlist --check (needs xschem and the repo PDK: source scripts/env.sh).",
+  "description": "Item-1 design sources for the analog partitions. One file for the whole repo: the RX partition (issue #22) lists design/rx/; the TX partition (issue #21) lists design/tx/; the digital partition adds its entries here too. Netlists are checked with design/check-netlists.sh equivalents (klt netlist --check); they need PDK_ROOT (source scripts/env.sh).",
   "sources": [
+    "design/rx/clk_buf_quad.sch",
+    "design/rx/clk_buf_quad.sym",
+    "design/rx/ctle.sch",
+    "design/rx/ctle.sym",
+    "design/rx/latch_cml.sch",
+    "design/rx/latch_cml.sym",
+    "design/rx/lvl_cml2cmos.sch",
+    "design/rx/lvl_cml2cmos.sym",
+    "design/rx/rx_term_pad.sch",
+    "design/rx/rx_term_pad.sym",
+    "design/rx/rx_top.sch",
+    "design/rx/rx_top.sym",
+    "design/rx/tools/gen_schematics.py",
+    "design/xschemrc",
     "design/tx/bias.sch",
     "design/tx/bias.sym",
     "design/tx/ffe_en.sch",
@@ -14,16 +28,123 @@
     "design/tx/predriver.sym",
     "design/tx/driver_ffe.sch",
     "design/tx/driver_ffe.sym",
-    "design/tx/lvl_cml2cmos.sch",
-    "design/tx/lvl_cml2cmos.sym",
+    "design/tx/tx_lvl_cml2cmos.sch",
+    "design/tx/tx_lvl_cml2cmos.sym",
     "design/tx/pad_esd.sch",
     "design/tx/pad_esd.sym",
     "design/tx/tx_top.sch",
     "design/tx/tx_top.sym",
-    "design/tx/gen_schematics.py",
-    "design/xschemrc"
+    "design/tx/gen_schematics.py"
   ],
   "derived": [
+    {
+      "path": "design/rx/netlists/clk_buf_quad.spice",
+      "generator": "klt netlist",
+      "check": {
+        "argv": [
+          "klt",
+          "netlist",
+          "--rcfile",
+          "design/xschemrc",
+          "--block",
+          "--check",
+          "-o",
+          "design/rx/netlists/clk_buf_quad.spice",
+          "design/rx/clk_buf_quad.sch"
+        ],
+        "local_only": true
+      }
+    },
+    {
+      "path": "design/rx/netlists/ctle.spice",
+      "generator": "klt netlist",
+      "check": {
+        "argv": [
+          "klt",
+          "netlist",
+          "--rcfile",
+          "design/xschemrc",
+          "--block",
+          "--check",
+          "-o",
+          "design/rx/netlists/ctle.spice",
+          "design/rx/ctle.sch"
+        ],
+        "local_only": true
+      }
+    },
+    {
+      "path": "design/rx/netlists/latch_cml.spice",
+      "generator": "klt netlist",
+      "check": {
+        "argv": [
+          "klt",
+          "netlist",
+          "--rcfile",
+          "design/xschemrc",
+          "--block",
+          "--check",
+          "-o",
+          "design/rx/netlists/latch_cml.spice",
+          "design/rx/latch_cml.sch"
+        ],
+        "local_only": true
+      }
+    },
+    {
+      "path": "design/rx/netlists/lvl_cml2cmos.spice",
+      "generator": "klt netlist",
+      "check": {
+        "argv": [
+          "klt",
+          "netlist",
+          "--rcfile",
+          "design/xschemrc",
+          "--block",
+          "--check",
+          "-o",
+          "design/rx/netlists/lvl_cml2cmos.spice",
+          "design/rx/lvl_cml2cmos.sch"
+        ],
+        "local_only": true
+      }
+    },
+    {
+      "path": "design/rx/netlists/rx_term_pad.spice",
+      "generator": "klt netlist",
+      "check": {
+        "argv": [
+          "klt",
+          "netlist",
+          "--rcfile",
+          "design/xschemrc",
+          "--block",
+          "--check",
+          "-o",
+          "design/rx/netlists/rx_term_pad.spice",
+          "design/rx/rx_term_pad.sch"
+        ],
+        "local_only": true
+      }
+    },
+    {
+      "path": "design/rx/netlists/rx_top.spice",
+      "generator": "klt netlist",
+      "check": {
+        "argv": [
+          "klt",
+          "netlist",
+          "--rcfile",
+          "design/xschemrc",
+          "--block",
+          "--check",
+          "-o",
+          "design/rx/netlists/rx_top.spice",
+          "design/rx/rx_top.sch"
+        ],
+        "local_only": true
+      }
+    },
     {
       "path": "design/tx/netlists/bias.spice",
       "generator": "klt netlist --block",
@@ -120,15 +241,15 @@
       }
     },
     {
-      "path": "design/tx/netlists/lvl_cml2cmos.spice",
+      "path": "design/tx/netlists/tx_lvl_cml2cmos.spice",
       "generator": "klt netlist --block",
       "check": {
         "argv": [
           "klt",
           "netlist",
-          "design/tx/lvl_cml2cmos.sch",
+          "design/tx/tx_lvl_cml2cmos.sch",
           "-o",
-          "design/tx/netlists/lvl_cml2cmos.spice",
+          "design/tx/netlists/tx_lvl_cml2cmos.spice",
           "--rcfile",
           "design/xschemrc",
           "--block",

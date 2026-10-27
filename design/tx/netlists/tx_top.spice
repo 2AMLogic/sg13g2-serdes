@@ -28,7 +28,7 @@ Xpre_main vdd vss mp mn vbn pp pn predriver
 Xpre_post vdd vss qp qn vbn rp rn predriver
 Xdrv vdd vss pp pn rp rn vbn vbp0 vbp1 vbp2 cp cn driver_ffe
 Xpad vdd vss cp cn padp padn pad_esd
-Xlvl vdd vss ckdp ckdn ckd_cmos lvl_cml2cmos
+Xlvl vdd vss ckdp ckdn ckd_cmos tx_lvl_cml2cmos
 .ends
 
 * expanding   symbol:  bias.sym # of pins=3
@@ -190,10 +190,10 @@ XXPAD1 padn bondpad size=80u shape=0 padtype=0
 .ends
 
 
-* expanding   symbol:  lvl_cml2cmos.sym # of pins=5
-** sym_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-21/design/tx/lvl_cml2cmos.sym
-** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-21/design/tx/lvl_cml2cmos.sch
-.subckt lvl_cml2cmos vdd vss inp inn out
+* expanding   symbol:  tx_lvl_cml2cmos.sym # of pins=5
+** sym_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-21/design/tx/tx_lvl_cml2cmos.sym
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-21/design/tx/tx_lvl_cml2cmos.sch
+.subckt tx_lvl_cml2cmos vdd vss inp inn out
 *.iopin vdd
 *.iopin vss
 *.iopin inp

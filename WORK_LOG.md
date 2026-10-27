@@ -2,6 +2,10 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-10-27
+
+- **PR #30**: feat: add CMOS digital-partition RTL, benches and committed gate-level netlist
+
 ### 2026-10-22
 
 - **Issue #14** (closed): Remove unused sim harness import from reuse.lock.json and setup-env.sh
