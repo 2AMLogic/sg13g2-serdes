@@ -1,0 +1,350 @@
+{
+  "engine": "ngspice",
+  "netlist": "ctle_ac.sp",
+  "models": {
+    "pdk": "ihp-sg13g2",
+    "lib": "libs.tech/ngspice/models/cornerHBT.lib"
+  },
+  "corners": {
+    "units": [
+      {
+        "process": {
+          "name": "hbt_typ",
+          "sections": [
+            {
+              "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+              "section": "hbt_typ"
+            },
+            {
+              "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+              "section": "cap_typ"
+            },
+            {
+              "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+              "section": "dio_tt"
+            }
+          ]
+        },
+        "temperature_c": 27,
+        "supply_v": {
+          "vdd": 1.2
+        }
+      },
+      {
+        "process": {
+          "name": "hbt_wcs",
+          "sections": [
+            {
+              "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+              "section": "hbt_wcs"
+            },
+            {
+              "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+              "section": "cap_wcs"
+            },
+            {
+              "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+              "section": "dio_ss"
+            }
+          ]
+        },
+        "temperature_c": 125,
+        "supply_v": {
+          "vdd": 1.08
+        }
+      },
+      {
+        "process": {
+          "name": "hbt_wcs",
+          "sections": [
+            {
+              "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+              "section": "hbt_wcs"
+            },
+            {
+              "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+              "section": "cap_wcs"
+            },
+            {
+              "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+              "section": "dio_ss"
+            }
+          ]
+        },
+        "temperature_c": 27,
+        "supply_v": {
+          "vdd": 1.08
+        }
+      },
+      {
+        "process": {
+          "name": "hbt_wcs",
+          "sections": [
+            {
+              "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+              "section": "hbt_wcs"
+            },
+            {
+              "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+              "section": "cap_wcs"
+            },
+            {
+              "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+              "section": "dio_ss"
+            }
+          ]
+        },
+        "temperature_c": -40,
+        "supply_v": {
+          "vdd": 1.08
+        }
+      },
+      {
+        "process": {
+          "name": "hbt_bcs",
+          "sections": [
+            {
+              "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+              "section": "hbt_bcs"
+            },
+            {
+              "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+              "section": "cap_bcs"
+            },
+            {
+              "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+              "section": "dio_ff"
+            }
+          ]
+        },
+        "temperature_c": -40,
+        "supply_v": {
+          "vdd": 1.32
+        }
+      },
+      {
+        "process": {
+          "name": "hbt_bcs",
+          "sections": [
+            {
+              "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+              "section": "hbt_bcs"
+            },
+            {
+              "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+              "section": "cap_bcs"
+            },
+            {
+              "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+              "section": "dio_ff"
+            }
+          ]
+        },
+        "temperature_c": 27,
+        "supply_v": {
+          "vdd": 1.32
+        }
+      },
+      {
+        "process": {
+          "name": "hbt_bcs",
+          "sections": [
+            {
+              "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+              "section": "hbt_bcs"
+            },
+            {
+              "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+              "section": "cap_bcs"
+            },
+            {
+              "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+              "section": "dio_ff"
+            }
+          ]
+        },
+        "temperature_c": 125,
+        "supply_v": {
+          "vdd": 1.32
+        }
+      }
+    ]
+  },
+  "analysis": {
+    "kind": "ac",
+    "args": "lin 300 1e8 3e10"
+  },
+  "measurements": [
+    {
+      "name": "ctle_c0_g0p1g_db",
+      "unit": "dB",
+      "expr": "db(v(d0)[0])"
+    },
+    {
+      "name": "ctle_c0_g2p5g_db",
+      "unit": "dB",
+      "expr": "db(v(d0)[24])"
+    },
+    {
+      "name": "ctle_c0_g5g_db",
+      "unit": "dB",
+      "expr": "db(v(d0)[49])"
+    },
+    {
+      "name": "ctle_c0_peak5g_db",
+      "unit": "dB",
+      "expr": "ctle_c0_g5g_db - ctle_c0_g0p1g_db",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "ctle_c1_g0p1g_db",
+      "unit": "dB",
+      "expr": "db(v(d1)[0])"
+    },
+    {
+      "name": "ctle_c1_g2p5g_db",
+      "unit": "dB",
+      "expr": "db(v(d1)[24])"
+    },
+    {
+      "name": "ctle_c1_g5g_db",
+      "unit": "dB",
+      "expr": "db(v(d1)[49])"
+    },
+    {
+      "name": "ctle_c1_peak5g_db",
+      "unit": "dB",
+      "expr": "ctle_c1_g5g_db - ctle_c1_g0p1g_db"
+    },
+    {
+      "name": "ctle_c2_g0p1g_db",
+      "unit": "dB",
+      "expr": "db(v(d2)[0])"
+    },
+    {
+      "name": "ctle_c2_g2p5g_db",
+      "unit": "dB",
+      "expr": "db(v(d2)[24])"
+    },
+    {
+      "name": "ctle_c2_g5g_db",
+      "unit": "dB",
+      "expr": "db(v(d2)[49])"
+    },
+    {
+      "name": "ctle_c2_peak5g_db",
+      "unit": "dB",
+      "expr": "ctle_c2_g5g_db - ctle_c2_g0p1g_db"
+    },
+    {
+      "name": "ctle_c3_g0p1g_db",
+      "unit": "dB",
+      "expr": "db(v(d3)[0])"
+    },
+    {
+      "name": "ctle_c3_g2p5g_db",
+      "unit": "dB",
+      "expr": "db(v(d3)[24])"
+    },
+    {
+      "name": "ctle_c3_g5g_db",
+      "unit": "dB",
+      "expr": "db(v(d3)[49])"
+    },
+    {
+      "name": "ctle_c3_peak5g_db",
+      "unit": "dB",
+      "expr": "ctle_c3_g5g_db - ctle_c3_g0p1g_db"
+    },
+    {
+      "name": "ctle_c4_g0p1g_db",
+      "unit": "dB",
+      "expr": "db(v(d4)[0])"
+    },
+    {
+      "name": "ctle_c4_g2p5g_db",
+      "unit": "dB",
+      "expr": "db(v(d4)[24])"
+    },
+    {
+      "name": "ctle_c4_g5g_db",
+      "unit": "dB",
+      "expr": "db(v(d4)[49])"
+    },
+    {
+      "name": "ctle_c4_peak5g_db",
+      "unit": "dB",
+      "expr": "ctle_c4_g5g_db - ctle_c4_g0p1g_db"
+    },
+    {
+      "name": "ctle_c5_g0p1g_db",
+      "unit": "dB",
+      "expr": "db(v(d5)[0])"
+    },
+    {
+      "name": "ctle_c5_g2p5g_db",
+      "unit": "dB",
+      "expr": "db(v(d5)[24])"
+    },
+    {
+      "name": "ctle_c5_g5g_db",
+      "unit": "dB",
+      "expr": "db(v(d5)[49])"
+    },
+    {
+      "name": "ctle_c5_peak5g_db",
+      "unit": "dB",
+      "expr": "ctle_c5_g5g_db - ctle_c5_g0p1g_db"
+    },
+    {
+      "name": "ctle_c6_g0p1g_db",
+      "unit": "dB",
+      "expr": "db(v(d6)[0])"
+    },
+    {
+      "name": "ctle_c6_g2p5g_db",
+      "unit": "dB",
+      "expr": "db(v(d6)[24])"
+    },
+    {
+      "name": "ctle_c6_g5g_db",
+      "unit": "dB",
+      "expr": "db(v(d6)[49])"
+    },
+    {
+      "name": "ctle_c6_peak5g_db",
+      "unit": "dB",
+      "expr": "ctle_c6_g5g_db - ctle_c6_g0p1g_db"
+    },
+    {
+      "name": "ctle_c7_g0p1g_db",
+      "unit": "dB",
+      "expr": "db(v(d7)[0])"
+    },
+    {
+      "name": "ctle_c7_g2p5g_db",
+      "unit": "dB",
+      "expr": "db(v(d7)[24])"
+    },
+    {
+      "name": "ctle_c7_g5g_db",
+      "unit": "dB",
+      "expr": "db(v(d7)[49])"
+    },
+    {
+      "name": "ctle_c7_peak5g_db",
+      "unit": "dB",
+      "expr": "ctle_c7_g5g_db - ctle_c7_g0p1g_db",
+      "limits": {
+        "min": 10.0
+      }
+    }
+  ],
+  "options": {
+    "stage_model_inputs": true,
+    "timeout_s": 900,
+    "keep_artifacts": false
+  }
+}

@@ -1,0 +1,36 @@
+v {xschem version=3.4.6 file_version=1.2
+* clk_buf_quad block symbol; see clk_buf_quad.sch
+}
+G {}
+K {type=subcircuit
+format="@name @pinlist @symname"
+template="name=X1"}
+V {}
+S {}
+E {}
+L 4 -30 -70 30 -70 {}
+L 4 -30 70 30 70 {}
+L 4 -30 -70 -30 70 {}
+L 4 30 -70 30 70 {}
+B 5 -32.5 -52.5 -27.5 -47.5 {name=ck0 dir=in}
+T {ck0} -25 -54 0 0 0.2 0.2 {}
+B 5 -32.5 -32.5 -27.5 -27.5 {name=ck180 dir=in}
+T {ck180} -25 -34 0 0 0.2 0.2 {}
+B 5 -32.5 -12.5 -27.5 -7.5 {name=ck90 dir=in}
+T {ck90} -25 -14 0 0 0.2 0.2 {}
+B 5 -32.5 7.5 -27.5 12.5 {name=ck270 dir=in}
+T {ck270} -25 6 0 0 0.2 0.2 {}
+B 5 -32.5 27.5 -27.5 32.5 {name=vdd dir=in}
+T {vdd} -25 26 0 0 0.2 0.2 {}
+B 5 -32.5 47.5 -27.5 52.5 {name=vss dir=in}
+T {vss} -25 46 0 0 0.2 0.2 {}
+B 5 27.5 -52.5 32.5 -47.5 {name=b0 dir=out}
+T {b0} 25 -54 0 1 0.2 0.2 {}
+B 5 27.5 -32.5 32.5 -27.5 {name=b180 dir=out}
+T {b180} 25 -34 0 1 0.2 0.2 {}
+B 5 27.5 -12.5 32.5 -7.5 {name=b90 dir=out}
+T {b90} 25 -14 0 1 0.2 0.2 {}
+B 5 27.5 7.5 32.5 12.5 {name=b270 dir=out}
+T {b270} 25 6 0 1 0.2 0.2 {}
+T {@name} -30 78 0 0 0.25 0.25 {}
+T {clk_buf_quad} -25 -85 0 0 0.2 0.2 {}
