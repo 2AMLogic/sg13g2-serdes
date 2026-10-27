@@ -57,10 +57,13 @@ class PrbsGen:
 
 
 class PrbsChk:
-    """Mirror of serdes_prbs_chk (see the RTL header for the rule set)."""
+    """Mirror of serdes_prbs_chk (see the RTL header for the rule set).
 
-    def __init__(self, order, lock_run=32, loss_thr=8):
-        self.order, self.lock_run, self.loss_thr = order, lock_run, loss_thr
+    Counters in the RTL run one clock behind word_err; `err` / `bits` here are
+    the settled values after the word has been accumulated."""
+
+    def __init__(self, order, lock_words=4, loss_thr=8):
+        self.order, self.lock_words, self.loss_thr = order, lock_words, loss_thr
         self.clear()
 
     def clear(self):
@@ -69,30 +72,40 @@ class PrbsChk:
 
     def word(self, w):
         n, k = N_K[self.order]
-        h, good, lk = self.h, self.good, self.locked
-        werr = nbits = 0
+        # T[j] j<n: history oldest..newest; T[n+i]: word bit i
+        past = [(self.h >> (n - 1 - j)) & 1 for j in range(n)]
+        rx = [(w >> i) & 1 for i in range(16)]
+        th = past + rx
+        eh = [rx[i] ^ th[i] ^ th[i + k] for i in range(16)]
+        tl = past + [0] * 16
         for i in range(16):
-            r = (w >> i) & 1
-            p = ((h >> (n - 1)) ^ (h >> (n - 1 - k))) & 1
-            e = p ^ r
-            if lk:
-                nbits += 1
-                werr += e
-                h = ((h << 1) | p) & mask(self.order)
+            tl[n + i] = tl[i] ^ tl[i + k]
+        el = [rx[i] ^ tl[n + i] for i in range(16)]
+
+        def hist(t):
+            return sum(t[n + 15 - j] << j for j in range(n))
+
+        h_hunt, h_lock = hist(th), hist(tl)
+        pc = sum(el)
+        lost = self.locked and pc >= self.loss_thr
+        nerr = pc if self.locked else 0
+        was = self.locked
+        if self.locked and not lost:
+            self.h = h_lock
+        else:
+            self.h = h_hunt
+            if lost:
+                self.locked, self.good = False, 0
+            elif not any(eh) and h_hunt != 0:
+                if self.good + 1 >= self.lock_words:
+                    self.locked = True
+                self.good = min(self.good + 1, 15)
             else:
-                h = ((h << 1) | r) & mask(self.order)
-                if e:
-                    good = 0
-                elif good != 255:
-                    good += 1
-                if not e and good >= self.lock_run and h != 0:
-                    lk = True
-        if self.locked and werr >= self.loss_thr:
-            lk, good = False, 0
-        self.h, self.good, self.locked = h, good, lk
-        self.word_err = werr
-        self.err = min(self.err + werr, 0xFFFFFFFF)
-        self.bits = min(self.bits + nbits, 0xFFFFFFFF)
+                self.good = 0
+        self.word_err = nerr
+        self.err = min(self.err + nerr, 0xFFFFFFFF)
+        if was:
+            self.bits = min(self.bits + 16, 0xFFFFFFFF)
 
 
 class CdrPd:

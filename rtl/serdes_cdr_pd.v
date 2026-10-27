@@ -19,26 +19,36 @@ module serdes_cdr_pd (
     output reg  signed [5:0] corr,
     output reg         corr_valid
 );
+    // balanced adder tree: 16 one-bit votes -> 0..16
+    function [4:0] pop16(input [15:0] x);
+        reg [1:0] a0, a1, a2, a3, a4, a5, a6, a7;
+        reg [2:0] b0, b1, b2, b3;
+        reg [3:0] c0, c1;
+        begin
+            a0 = x[0]  + x[1];  a1 = x[2]  + x[3];  a2 = x[4]  + x[5];  a3 = x[6]  + x[7];
+            a4 = x[8]  + x[9];  a5 = x[10] + x[11]; a6 = x[12] + x[13]; a7 = x[14] + x[15];
+            b0 = a0 + a1; b1 = a2 + a3; b2 = a4 + a5; b3 = a6 + a7;
+            c0 = b0 + b1; c1 = b2 + b3;
+            pop16 = c0 + c1;
+        end
+    endfunction
+
     reg         dprev;
-    reg  signed [5:0] c;
-    reg         a, b, t;
-    integer     i;
+    wire [15:0] d_prev_w = {d_word[14:0], dprev};   // bit k = d[k-1]
+    wire [15:0] trans    = d_word ^ d_prev_w;       // A != B
+    wire [15:0] early    = trans & ~(e_word ^ d_prev_w);   // T == A
+    wire [15:0] late     = trans &  (e_word ^ d_prev_w);   // T == B
+    wire  [4:0] n_early  = pop16(early);
+    wire  [4:0] n_late   = pop16(late);
+
     always @(posedge clk) begin
         corr_valid <= 1'b0;
         if (!rst_n) begin
             dprev <= 1'b0; corr <= 6'sd0;
         end else if (en) begin
-            c = 6'sd0;
-            for (i = 0; i < 16; i = i + 1) begin
-                a = (i == 0) ? dprev : d_word[i-1];
-                b = d_word[i];
-                t = e_word[i];
-                if (a != b) begin
-                    if (t == a) c = c + 6'sd1;
-                    else        c = c - 6'sd1;
-                end
-            end
-            corr <= c; corr_valid <= 1'b1; dprev <= d_word[15];
+            corr <= $signed({1'b0, n_early}) - $signed({1'b0, n_late});
+            corr_valid <= 1'b1;
+            dprev <= d_word[15];
         end
     end
 endmodule

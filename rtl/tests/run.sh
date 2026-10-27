@@ -3,6 +3,10 @@
 #
 #   rtl/tests/run.sh            all benches, one after another
 #   rtl/tests/run.sh prbs_gen   one bench (prbs_gen prbs_chk cdr_pd cdr loopback eye ctrl top)
+#   rtl/tests/run.sh top_gl     the top bench against the committed gate-level netlist
+#                               (rtl/synth/, sg13g2_stdcell functional models from the
+#                               repo-local PDK fetch); also part of the default run
+#                               when that PDK is present
 #
 # cocotb is never installed on the host: it is provisioned per run in a
 # throwaway uvx environment at the version pinned in layout/tools.json; iverilog
@@ -28,6 +32,10 @@ run_one() { # name test_module toplevel sources
   echo "== $1"
   (cd "$ROOT/rtl/tests" && "${UV[@]}" python -I runner.py "$2" "$3" "$4")
 }
+pdk_verilog() {
+  local d="${PDK_ROOT:-$ROOT/.cache/pdk/$(jq -r .extracted_dir "$ROOT/sim/pdk.json")}"
+  echo "$d/ihp-sg13g2/libs.ref/sg13g2_stdcell/verilog"
+}
 bench() {
   case "$1" in
     prbs_gen) run_one "$1" test_prbs_gen serdes_prbs_gen serdes_prbs_gen.v ;;
@@ -38,10 +46,17 @@ bench() {
     eye)      run_one "$1" test_eye serdes_eye_mon serdes_eye_mon.v ;;
     ctrl)     run_one "$1" test_ctrl serdes_ctrl serdes_ctrl.v ;;
     top)      run_one "$1" test_top serdes_digital_top serdes_prbs_gen.v,serdes_prbs_chk.v,serdes_cdr_pd.v,serdes_cdr_filter.v,serdes_loopback.v,serdes_eye_mon.v,serdes_ctrl.v,serdes_digital_top.v ;;
+    top_gl)
+      V="$(pdk_verilog)"
+      [ -f "$V/sg13g2_stdcell.v" ] || die "stdcell Verilog models not found at $V (run scripts/setup-env.sh)"
+      BUILD_TAG=_gl RUN_DEFINES=FUNCTIONAL run_one "$1" test_top serdes_digital_top \
+        "$V/sg13g2_udp.v,$V/sg13g2_stdcell.v,$ROOT/rtl/synth/serdes_digital_top_synth.v" ;;
     *) die "unknown bench '$1'" ;;
   esac
 }
 if [ $# -gt 0 ]; then bench "$1"; exit $?; fi
 rc=0
-for b in prbs_gen prbs_chk cdr_pd cdr loopback eye ctrl top; do bench "$b" || rc=1; done
+benches="prbs_gen prbs_chk cdr_pd cdr loopback eye ctrl top"
+[ -f "$(pdk_verilog)/sg13g2_stdcell.v" ] && benches="$benches top_gl"
+for b in $benches; do bench "$b" || rc=1; done
 exit $rc

@@ -19,23 +19,38 @@ async def setup(dut, sel31):
 
 
 class Drv:
+    """Counters run one clock behind the per-word result, so they are compared
+    with the model state from before the word just fed; flush() drains the
+    accumulate stage."""
+
     def __init__(self, dut, order):
         self.d, self.m = dut, ref.PrbsChk(order)
+        self.prev = (0, 0)
+
+    def counters(self):
+        return int(self.d.err_cnt.value), int(self.d.bit_cnt.value)
 
     async def word(self, w):
         """Feed one word; compare all DUT outputs to the model after it."""
         d = self.d
         d.rx_word.value = w
         d.en.value = 1
+        prev = (self.m.err, self.m.bits)
         self.m.word(w)
         await FallingEdge(d.clk)      # state updated at the rising edge
-        d.en.value = 1
-        got = (int(d.locked.value), int(d.err_cnt.value), int(d.bit_cnt.value),
-               int(d.word_err.value))
-        want = (int(self.m.locked), self.m.err, self.m.bits, self.m.word_err)
+        got = (int(d.locked.value), int(d.word_err.value), self.counters())
+        want = (int(self.m.locked), self.m.word_err, prev)
         if got != want:
-            bu.fail("model", f"locked/err/bits/word_err got {got}, want {want}")
+            bu.fail("model", f"locked/word_err/(err,bits) got {got}, want {want}")
         return self.m
+
+    async def flush(self):
+        self.d.en.value = 0
+        await FallingEdge(self.d.clk)
+        want = (self.m.err, self.m.bits)
+        if self.counters() != want:
+            bu.fail("model", f"settled (err,bits) got {self.counters()}, want {want}")
+        self.d.en.value = 1
 
 
 def stream(order, nwords, seed_state=None, errors=(), shift=0):
@@ -55,6 +70,7 @@ async def clean_prbs7_locks(dut):
     c = Drv(dut, 7)
     for w in stream(7, 40):
         m = await c.word(w)
+    await c.flush()
     if not m.locked or m.err != 0 or m.bits == 0:
         bu.fail("lock", f"PRBS-7 clean stream: locked={m.locked} err={m.err} bits={m.bits}")
 
@@ -79,6 +95,7 @@ async def lock_from_arbitrary_seed_and_alignment(dut):
             st = rng.randrange(1, ref.mask(order) + 1)
             for w in stream(order, 50, st, shift=rng.randrange(16)):
                 m = await c.word(w)
+            await c.flush()
             if not m.locked or m.err != 0:
                 bu.fail("lock", f"PRBS-{order} seed {st:#x}: locked={m.locked} err={m.err}")
 
@@ -97,6 +114,7 @@ async def injected_errors_counted_once(dut):
         pos = [p for i, p in enumerate(pos) if i == 0 or p - pos[i - 1] > 40]
         for w in stream(order, nwords, errors=pos):
             m = await c.word(w)
+        await c.flush()
         if m.err != len(pos) or not m.locked:
             bu.fail("count", f"PRBS-{order}: injected {len(pos)}, counted {m.err}, locked={m.locked}")
 
@@ -136,9 +154,11 @@ async def loss_of_lock_and_relock(dut):
         m = await c.word(rng.getrandbits(16))
     if m.locked:
         bu.fail("loss", "lock not dropped under random data")
+    await c.flush()
     err_before = m.err
     for w in stream(7, 60, 0x55):
         m = await c.word(w)
+    await c.flush()
     if not m.locked or m.err != err_before:
         bu.fail("relock", f"relock failed: locked={m.locked} err {m.err} vs {err_before}")
 
@@ -149,6 +169,7 @@ async def clear_and_saturation(dut):
     c = Drv(dut, 7)
     for w in stream(7, 40):
         await c.word(w)
+    await c.flush()
     dut.err_cnt.value = 0xFFFFFFF8
     dut.bit_cnt.value = 0xFFFFFFF8
     c.m.err = c.m.bits = 0xFFFFFFF8
@@ -161,6 +182,7 @@ async def clear_and_saturation(dut):
             bits.append(b)
         bits[0] ^= 1
         await c.word(ref.pack(bits))
+    await c.flush()
     got = (int(dut.err_cnt.value), int(dut.bit_cnt.value))
     if got != (0xFFFFFFFF, 0xFFFFFFFF):
         bu.fail("saturate", f"err/bits {got[0]:#x}/{got[1]:#x}, want both 0xffffffff")
