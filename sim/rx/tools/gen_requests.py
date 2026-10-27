@@ -23,10 +23,10 @@ HBT_LIB = "libs.tech/ngspice/models/cornerHBT.lib"
 CAP_LIB = "libs.tech/ngspice/models/cornerCAP.lib"
 DIO_LIB = "libs.tech/ngspice/models/cornerDIO.lib"
 
-# PVT-edge units (spec "Corner sets", HBT family only; MOS is not simulated):
-# slow-HBT at low supply for hot/nominal/cold, fast-HBT at +10 % supply for
-# cold/nominal/hot, plus nominal. Process names are bundles of the ganged
-# HBT + CAP (+ DIO) sections, ganging being the spec's own proposal.
+# HBT-family PVT grid: 3 HBT corners (ganged with CAP and DIO sections, the
+# spec's own ganging proposal) x 3 supplies x 3 temperatures = 27 points. It is
+# a crossed grid, not `corners.units`: the fleet runner (klt 0.7.0) silently
+# ignores `corners.units` and runs one default corner.
 PROCESS = [
     {"name": "hbt_typ", "sections": [{"lib": HBT_LIB, "section": "hbt_typ"},
                                      {"lib": CAP_LIB, "section": "cap_typ"},
@@ -37,11 +37,6 @@ PROCESS = [
     {"name": "hbt_wcs", "sections": [{"lib": HBT_LIB, "section": "hbt_wcs"},
                                      {"lib": CAP_LIB, "section": "cap_wcs"},
                                      {"lib": DIO_LIB, "section": "dio_ss"}]},
-]
-UNITS = [
-    ("hbt_typ", 27, 1.2),
-    ("hbt_wcs", 125, 1.08), ("hbt_wcs", 27, 1.08), ("hbt_wcs", -40, 1.08),
-    ("hbt_bcs", -40, 1.32), ("hbt_bcs", 27, 1.32), ("hbt_bcs", 125, 1.32),
 ]
 
 VC_MAX = 1.32   # DR-003: no HBT collector node above this
@@ -87,24 +82,25 @@ def stress_exprs(inst, cell, portmap, prefix):
     return out
 
 
-def request(netlist, analysis, measurements, units, extra_options=None):
-    opts = {"stage_model_inputs": True, "timeout_s": 900, "keep_artifacts": False}
+def request(netlist, analysis, measurements, corners, extra_options=None):
+    opts = {"stage_model_inputs": True, "timeout_s": 120, "keep_artifacts": False}
     opts.update(extra_options or {})
     return {
         "engine": "ngspice",
         "netlist": netlist,
         "models": {"pdk": "ihp-sg13g2", "lib": HBT_LIB},
-        "corners": {"units": units},
+        "corners": corners,
         "analysis": analysis,
         "measurements": measurements,
         "options": opts,
     }
 
 
-def unit_list(debug):
-    sel = UNITS[:1] if debug else UNITS
-    procs = {p["name"]: p for p in PROCESS}
-    return [{"process": procs[p], "temperature_c": t, "supply_v": {"vdd": v}} for p, t, v in sel]
+def corner_axes(debug):
+    if debug:
+        return {"process": PROCESS[:1], "temperature_c": [27], "supply_v": {"vdd": [1.2]}}
+    return {"process": PROCESS, "temperature_c": [-40, 27, 125],
+            "supply_v": {"vdd": [1.08, 1.2, 1.32]}}
 
 
 # ---------------------------------------------------------------- CTLE bench
@@ -249,7 +245,7 @@ def main(argv):
     debug = len(argv) > 1 and argv[1] == "--debug"
     out = argv[2] if debug else SIM
     os.makedirs(out, exist_ok=True)
-    units = unit_list(debug)
+    units = corner_axes(debug)
     files = {
         "ctle_ac": (ctle_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, ctle_ac_meas()),
         "ctle_op": (ctle_op_body(), {"kind": "op", "args": ""}, ctle_op_meas()),

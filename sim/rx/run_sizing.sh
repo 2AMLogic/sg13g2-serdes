@@ -3,7 +3,7 @@
 #
 #   source scripts/env.sh && sim/rx/run_sizing.sh
 #
-# Each request is a PVT-edge unit list, so `klt sim` routes it to the batch
+# Each request is a 27-point HBT PVT grid, so `klt sim` routes it to the batch
 # fleet (KLT_SIM_BACKEND=batch). This script never falls back to a local grid:
 # a failed submit is recorded as-is. Records under sim/rx/records/<id>/ are
 # append-only evidence -- never edit or delete an earlier record directory.

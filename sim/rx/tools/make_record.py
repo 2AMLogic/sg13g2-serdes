@@ -36,7 +36,7 @@ L = [f"# RX sizing record {out.name}", "",
      "**Sizing evidence, not a spec result.** Nothing here is measured. `spec/target-spec.md` is PROPOSED;",
      "rows R8-R10, R20 are used as draft targets only. Passives are ideal, the pad capacitance is a",
      "placeholder, the clock source is ideal, the CTLE load is a placeholder 80 fF, and the MOS level",
-     "converter is not simulated. The grid is the HBT-only PVT-edge set (7 units, below).", "",
+     "converter is not simulated. The grid is the HBT-family PVT set: hbt_typ/bcs/wcs x 1.08/1.2/1.32 V x -40/27/125 C (27 points).", "",
      "## Pins",
      f"- PDK: {pdk['source']} {pdk['release_tag']}, tarball sha256 `{pdk['tarball_sha256']}` (sim/pdk.json)",
      f"- klt: `{tool['klt_last_verified_commit']}` (layout/toolchain.json)",
@@ -125,7 +125,7 @@ L += ["", "## Not simulated",
       "- PDK resistors `rsil`/`rppd` (`r3_cmc` OSDI): not simulated; every resistor in design/rx is an ideal `res` for that reason, so resistor corners (`res_*`) are not exercised.",
       "- Pad/ESD capacitance at 5 GHz, SDD11 (R9) and the core-to-pad seam: not simulated beyond the placeholder |Zdiff| above; owned by #24/#28.",
       "- Sampler offset and noise (Monte Carlo, DR-002), CDR, link behaviour, clock duty/quadrature error (R20 +-1 %, +-2 deg) and mismatch: not simulated.",
-      "- Full PVT-full grid (135 points): not run; only the 7-point HBT PVT-edge set. HBT-only `hbt_*` corner sections ganged with `cap_*` and `dio_*`.",
+      "- Full PVT-full grid (135 points): not run; only the 27-point HBT-family grid (MOS corners absent), `hbt_*` sections ganged with `cap_*` and `dio_*`. The spec's 7-point PVT-edge set is a subset of it.",
       "- Unconfirmed: the +-10 % supply tolerance is a proposal (DR-003); temperature -40/27/125 C is a proposal."]
 (out / "record.md").write_text("\n".join(L) + "\n")
 print(f"make_record.py: wrote {out / 'record.md'}")
