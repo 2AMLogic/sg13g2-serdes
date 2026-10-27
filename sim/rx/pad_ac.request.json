@@ -78,14 +78,14 @@
   },
   "measurements": [
     {
-      "name": "zdiff_0p1g_ohm",
-      "unit": "ohm",
-      "expr": "1/mag(i(Vip))[0]"
+      "name": "pad_idiff_0p1g_a",
+      "unit": "A",
+      "spice": ".meas ac pad_idiff_0p1g_a find vm(iz) at=1e8"
     },
     {
-      "name": "zdiff_5g_ohm",
-      "unit": "ohm",
-      "expr": "1/mag(i(Vip))[49]"
+      "name": "pad_idiff_5g_a",
+      "unit": "A",
+      "spice": ".meas ac pad_idiff_5g_a find vm(iz) at=5e9"
     }
   ],
   "options": {

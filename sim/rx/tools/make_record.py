@@ -28,6 +28,16 @@ def val(c, n):
     return None
 
 
+def peak(c, k):
+    hi, lo = val(c, f"ctle_c{k}_g5g_db"), val(c, f"ctle_c{k}_g0p1g_db")
+    return None if hi is None or lo is None else hi - lo
+
+
+def z(c, n):
+    i = val(c, n)
+    return None if not i else 1.0 / i
+
+
 def f(x, spec="{:.2f}", none="n/a"):
     return none if x is None else spec.format(x)
 
@@ -58,12 +68,22 @@ for name in reports:
 ac = reports["ctle_ac"]
 if ac:
     L += ["", "## CTLE AC response per setting (peaking = gain at 5 GHz minus gain at 0.1 GHz, differential, dB)", "",
-          "Code = c2c1c0. First-look comparison with R10: 0-10 dB peaking at 5 GHz in >= 8 steps. `fail` limits are code 0 <= 1 dB and code 7 >= 10 dB.", "",
-          "| corner | " + " | ".join(f"c{k}" for k in range(8)) + " | gain@0.1G c0 / c7 | gain@5G c7 |",
-          "|---|" + "---|" * 10]
+          "Code = c2c1c0. First-look comparison with R10: 0-10 dB peaking at 5 GHz in >= 8 steps (code 0 <= 1 dB, code 7 >= 10 dB, monotonic in between); the `check` column applies that.", "",
+          "| corner | " + " | ".join(f"c{k}" for k in range(8)) + " | gain@0.1G c0 / c7 | gain@5G c7 | check |",
+          "|---|" + "---|" * 11]
     for c in ac["corners"]:
-        row = [f(val(c, f"ctle_c{k}_peak5g_db")) for k in range(8)]
-        L.append(f"| {c['corner_id']} | " + " | ".join(row) + f" | {f(val(c,'ctle_c0_g0p1g_db'))} / {f(val(c,'ctle_c7_g0p1g_db'))} | {f(val(c,'ctle_c7_g5g_db'))} |")
+        pk = [peak(c, k) for k in range(8)]
+        row = [f(x) for x in pk]
+        ok = all(x is not None for x in pk)
+        why = []
+        if ok:
+            if pk[0] > 1.0:
+                why.append("c0 > 1 dB")
+            if pk[7] < 10.0:
+                why.append("c7 < 10 dB")
+            if any(b < a for a, b in zip(pk, pk[1:])):
+                why.append("not monotonic")
+        L.append(f"| {c['corner_id']} | " + " | ".join(row) + f" | {f(val(c,'ctle_c0_g0p1g_db'))} / {f(val(c,'ctle_c7_g0p1g_db'))} | {f(val(c,'ctle_c7_g5g_db'))} | {'no data' if not ok else ('ok' if not why else '; '.join(why))} |")
 op = reports["ctle_op"]
 viol = []
 if op:
@@ -81,7 +101,7 @@ if lr:
           "| corner | t_regen up | t_regen down | q swing (V) |", "|---|---|---|---|"]
     for c in lr["corners"]:
         up, dn = val(c, "latch_t_regen_up"), val(c, "latch_t_regen_dn")
-        L.append(f"| {c['corner_id']} | {f(None if up is None else up*1e12,'{:.1f}')} | {f(None if dn is None else dn*1e12,'{:.1f}')} | {f(val(c,'latch_q_swing_v'))} |")
+        L.append(f"| {c['corner_id']} | {f(None if up is None else up*1e12,'{:.1f}')} | {f(None if dn is None else dn*1e12,'{:.1f}')} | {f(None if val(c,'latch_q_max_v') is None else val(c,'latch_q_max_v')-val(c,'latch_q_min_v'))} |")
     for c in lr["corners"]:
         for m in c["measurements"]:
             if m.get("status") == "fail":
@@ -90,7 +110,7 @@ pad = reports["pad_ac"]
 if pad:
     L += ["", "## Termination + pad first-look |Zdiff| (ohm, placeholder 50 fF pads)", "", "| corner | 0.1 GHz | 5 GHz |", "|---|---|---|"]
     for c in pad["corners"]:
-        L.append(f"| {c['corner_id']} | {f(val(c,'zdiff_0p1g_ohm'),'{:.1f}')} | {f(val(c,'zdiff_5g_ohm'),'{:.1f}')} |")
+        L.append(f"| {c['corner_id']} | {f(z(c,'pad_idiff_0p1g_a'),'{:.1f}')} | {f(z(c,'pad_idiff_5g_a'),'{:.1f}')} |")
 
 L += ["", "## HBT node stress versus DR-003 (collector <= 1.32 V, reverse Vbe <= 1.0 V)", ""]
 worst = {}

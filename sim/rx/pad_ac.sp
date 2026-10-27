@@ -14,3 +14,4 @@ Bkl kl 0 V=v(vdd)-0.25
 Bklb klb 0 V=v(vdd)
 Clp op 0 80f
 Cln on 0 80f
+Hip iz 0 Vip 1

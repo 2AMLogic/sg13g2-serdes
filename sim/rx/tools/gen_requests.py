@@ -60,8 +60,13 @@ def parse_subckt(cell):
     return ports, qs
 
 
-def stress_exprs(inst, cell, portmap, prefix):
-    """expr measurements for max collector V and max reverse Vbe of every HBT."""
+def stress_meas(inst, cell, portmap, prefix, kind):
+    """`.meas` cards for max collector V and max reverse Vbe of every HBT.
+
+    kind "dc": operating-point value via a two-point dummy sweep (`at=0`);
+    kind "tran": maximum over the run. Plain `spice` cards, because the fleet
+    runner's `expr` support is not usable (see sim/rx/README.md).
+    """
     ports, qs = parse_subckt(cell)
 
     def node(n):
@@ -71,15 +76,21 @@ def stress_exprs(inst, cell, portmap, prefix):
             return portmap[n]
         return "%s.%s" % (inst.lower(), n)
 
-    out = []
+    # ngspice limits par() to 99 calls per deck, so differences go through a
+    # B source and the .meas reads that node (also keeps tran and dc alike).
+    lines, out = [], []
     for q, c, b, e in qs:
         base = "%s_%s_%s" % (prefix, inst.lower(), q.lower())
-        out.append({"name": base + "_vc_max", "unit": "V",
-                    "expr": "vecmax(v(%s))" % node(c), "limits": {"max": VC_MAX}})
-        out.append({"name": base + "_vbe_rev_max", "unit": "V",
-                    "expr": "vecmax(v(%s) - v(%s))" % (node(e), node(b)),
-                    "limits": {"max": VBE_REV}})
-    return out
+        vbe = base + "_vbe_node"
+        lines.append("B%s %s 0 V=v(%s)-v(%s)" % (vbe, vbe, node(e), node(b)))
+        for suffix, sig, lim in (("_vc_max", "v(%s)" % node(c), VC_MAX), ("_vbe_rev_max", "v(%s)" % vbe, VBE_REV)):
+            name = base + suffix
+            if kind == "dc":
+                card = ".meas dc %s find %s at=0" % (name, sig)
+            else:
+                card = ".meas tran %s max %s" % (name, sig)
+            out.append({"name": name, "unit": "V", "spice": card, "limits": {"max": lim}})
+    return lines, out
 
 
 def request(netlist, analysis, measurements, corners, extra_options=None):
@@ -125,45 +136,43 @@ def ctle_body():
                  % (c, c, c, c, c, c, c, c, c))
         L.append("Clp%d op%d 0 80f" % (c, c))
         L.append("Cln%d on%d 0 80f" % (c, c))
-        L.append("Bd%d d%d 0 V=v(op%d)-v(on%d)" % (c, c, c, c))
+        L.append("Bd%d dif%d 0 V=v(op%d)-v(on%d)" % (c, c, c, c))
     return "\n".join(L) + "\n"
 
 
 def ctle_ac_meas():
+    """Gains at 0.1, 2.5 and 5 GHz per code. Peaking (5 GHz minus 0.1 GHz) and
+    the R10 comparison are formed in sim/rx/tools/make_record.py."""
     m = []
     for c in range(8):
-        for tag, idx in (("g0p1g", 0), ("g2p5g", 24), ("g5g", 49)):
-            m.append({"name": "ctle_c%d_%s_db" % (c, tag), "unit": "dB",
-                      "expr": "db(v(d%d)[%d])" % (c, idx)})
-        m.append({"name": "ctle_c%d_peak5g_db" % c, "unit": "dB",
-                  "expr": "ctle_c%d_g5g_db - ctle_c%d_g0p1g_db" % (c, c)})
-    # first-look comparison with R10 (0-10 dB peaking at 5 GHz, >= 8 steps)
-    for m_ in m:
-        if m_["name"] == "ctle_c0_peak5g_db":
-            m_["limits"] = {"max": 1.0}
-        if m_["name"] == "ctle_c7_peak5g_db":
-            m_["limits"] = {"min": 10.0}
+        for tag, f in (("g0p1g", "1e8"), ("g2p5g", "2.5e9"), ("g5g", "5e9")):
+            n = "ctle_c%d_%s_db" % (c, tag)
+            m.append({"name": n, "unit": "dB",
+                      "spice": ".meas ac %s find vdb(dif%d) at=%s" % (n, c, f)})
     return m
 
 
-def ctle_op_body():
-    # same circuit; op analysis
+def ctle_op_body(extra=()):
+    # same circuit; operating point read through a two-point dummy dc sweep
     return ctle_body().replace("Vip inp vcm dc 0 ac 0.5", "Vip inp vcm dc 0").replace(
-        "Vin inn vcm dc 0 ac -0.5", "Vin inn vcm dc 0")
+        "Vin inn vcm dc 0 ac -0.5", "Vin inn vcm dc 0") + "Vdmy dmy 0 0\nRdmy dmy 0 1k\n" + "".join(l + "\n" for l in extra)
 
 
 def ctle_op_meas():
-    m = []
+    m, lines = [], []
     for c in range(8):
         pm = {"inp": "inp", "inn": "inn", "vcm": "vcm", "vdd": "vdd", "outp": "op%d" % c,
               "outn": "on%d" % c}
         for k in range(3):
             pm["c%d" % k] = "c%dk%d" % (c, k)
             pm["c%db" % k] = "c%dk%db" % (c, k)
-        m += stress_exprs("Xd%d" % c, "ctle", pm, "ctle_c%d" % c)
+        l_, m_ = stress_meas("Xd%d" % c, "ctle", pm, "ctle_c%d" % c, "dc")
+        lines += l_
+        m += m_
         m.append({"name": "ctle_c%d_outcm" % c, "unit": "V",
-                  "expr": "(v(op%d) + v(on%d))/2" % (c, c)})
-    return m
+                  "spice": ".meas dc ctle_c%d_outcm find v(ocm%d) at=0" % (c, c)})
+        lines.append("Bocm%d ocm%d 0 V=(v(op%d)+v(on%d))/2" % (c, c, c, c))
+    return lines, m
 
 
 # ----------------------------------------------------------- pad/term bench
@@ -182,19 +191,22 @@ def pad_body():
          "Xc inp inn vcm vdd 0 kl klb kl klb kl klb op on ctle",
          "Bkl kl 0 V=v(vdd)-0.25",
          "Bklb klb 0 V=v(vdd)",
-         "Clp op 0 80f", "Cln on 0 80f"]
+         "Clp op 0 80f", "Cln on 0 80f",
+         "Hip iz 0 Vip 1"]
     return "\n".join(L) + "\n"
 
 
 def pad_meas():
+    """Differential drive current for 1 V differential (Hip: 1 ohm
+    transresistance, so vm(iz) is |I| in A); |Zdiff| = 1/|I| in the record."""
     return [
-        {"name": "zdiff_0p1g_ohm", "unit": "ohm", "expr": "1/mag(i(Vip))[0]"},
-        {"name": "zdiff_5g_ohm", "unit": "ohm", "expr": "1/mag(i(Vip))[49]"},
+        {"name": "pad_idiff_0p1g_a", "unit": "A", "spice": ".meas ac pad_idiff_0p1g_a find vm(iz) at=1e8"},
+        {"name": "pad_idiff_5g_a", "unit": "A", "spice": ".meas ac pad_idiff_5g_a find vm(iz) at=5e9"},
     ]
 
 
 # --------------------------------------------------------------- latch bench
-def latch_body():
+def latch_body(extra=()):
     L = ["* Latch + clock-buffer sizing bench (issue #22). Sizing evidence, not a spec result.",
          "* Ideal 5 GHz clock source (the SG13G2 clock candidates do not meet R20, see",
          "* spec/clock-requirement.md): common mode 0.8333 vdd, +-150 mV per phase, ideal",
@@ -213,7 +225,7 @@ def latch_body():
           "Vdn dn dcm pulse(0.01 -0.01 250p 20p 20p 180p 400p)",
           "Xl dp dn b0 b180 vdd 0 qp qn latch_cml",
           "Bck ck 0 V=v(b0)-v(b180)",
-          "Bq q 0 V=v(qp)-v(qn)"]
+          "Bq q 0 V=v(qp)-v(qn)"] + list(extra)
     return "\n".join(L) + "\n"
 
 
@@ -230,15 +242,16 @@ def latch_meas():
         {"name": "latch_t_regen_dn", "unit": "s",
          "spice": ".meas tran latch_t_regen_dn trig v(ck) val=0 fall=1 td=2.55n targ v(q) val=-0.25 fall=1 td=2.55n",
          "limits": {"max": 100e-12}},
-        {"name": "latch_q_swing_v", "unit": "V", "expr": "vecmax(q) - vecmin(q)"},
+        {"name": "latch_q_max_v", "unit": "V", "spice": ".meas tran latch_q_max_v max v(q) from=2n to=3n"},
+        {"name": "latch_q_min_v", "unit": "V", "spice": ".meas tran latch_q_min_v min v(q) from=2n to=3n"},
     ]
     pm_clk = {"ck0": "ck0", "ck180": "ck180", "ck90": "ck90", "ck270": "ck270", "vdd": "vdd",
               "b0": "b0", "b180": "b180", "b90": "b90", "b270": "b270"}
     pm_lat = {"dp": "dp", "dn": "dn", "clkp": "b0", "clkn": "b180", "vdd": "vdd",
               "qp": "qp", "qn": "qn"}
-    m += stress_exprs("Xclk", "clk_buf_quad", pm_clk, "clk")
-    m += stress_exprs("Xl", "latch_cml", pm_lat, "latch")
-    return m
+    l1, m1 = stress_meas("Xclk", "clk_buf_quad", pm_clk, "clk", "tran")
+    l2, m2 = stress_meas("Xl", "latch_cml", pm_lat, "latch", "tran")
+    return l1 + l2, m + m1 + m2
 
 
 def main(argv):
@@ -246,11 +259,13 @@ def main(argv):
     out = argv[2] if debug else SIM
     os.makedirs(out, exist_ok=True)
     units = corner_axes(debug)
+    op_lines, op_meas = ctle_op_meas()
+    lat_lines, lat_meas = latch_meas()
     files = {
         "ctle_ac": (ctle_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, ctle_ac_meas()),
-        "ctle_op": (ctle_op_body(), {"kind": "op", "args": ""}, ctle_op_meas()),
+        "ctle_op": (ctle_op_body(op_lines), {"kind": "dc", "args": "Vdmy 0 1m 1m"}, op_meas),
         "pad_ac": (pad_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, pad_meas()),
-        "latch_regen": (latch_body(), {"kind": "tran", "args": "2p 3n"}, latch_meas()),
+        "latch_regen": (latch_body(lat_lines), {"kind": "tran", "args": "2p 3n"}, lat_meas),
     }
     for name, (body, ana, meas) in files.items():
         rel = os.path.relpath(NET, out)

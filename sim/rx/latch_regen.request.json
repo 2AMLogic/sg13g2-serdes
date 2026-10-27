@@ -94,14 +94,19 @@
       }
     },
     {
-      "name": "latch_q_swing_v",
+      "name": "latch_q_max_v",
       "unit": "V",
-      "expr": "vecmax(q) - vecmin(q)"
+      "spice": ".meas tran latch_q_max_v max v(q) from=2n to=3n"
+    },
+    {
+      "name": "latch_q_min_v",
+      "unit": "V",
+      "spice": ".meas tran latch_q_min_v min v(q) from=2n to=3n"
     },
     {
       "name": "clk_xclk_qi1a_vc_max",
       "unit": "V",
-      "expr": "vecmax(v(xclk.min))",
+      "spice": ".meas tran clk_xclk_qi1a_vc_max max v(xclk.min)",
       "limits": {
         "max": 1.32
       }
@@ -109,7 +114,7 @@
     {
       "name": "clk_xclk_qi1a_vbe_rev_max",
       "unit": "V",
-      "expr": "vecmax(v(xclk.ti1) - v(ck0))",
+      "spice": ".meas tran clk_xclk_qi1a_vbe_rev_max max v(clk_xclk_qi1a_vbe_node)",
       "limits": {
         "max": 1.0
       }
@@ -117,7 +122,7 @@
     {
       "name": "clk_xclk_qi1b_vc_max",
       "unit": "V",
-      "expr": "vecmax(v(xclk.mip))",
+      "spice": ".meas tran clk_xclk_qi1b_vc_max max v(xclk.mip)",
       "limits": {
         "max": 1.32
       }
@@ -125,7 +130,7 @@
     {
       "name": "clk_xclk_qi1b_vbe_rev_max",
       "unit": "V",
-      "expr": "vecmax(v(xclk.ti1) - v(ck180))",
+      "spice": ".meas tran clk_xclk_qi1b_vbe_rev_max max v(clk_xclk_qi1b_vbe_node)",
       "limits": {
         "max": 1.0
       }
@@ -133,7 +138,7 @@
     {
       "name": "clk_xclk_qi2a_vc_max",
       "unit": "V",
-      "expr": "vecmax(v(b180))",
+      "spice": ".meas tran clk_xclk_qi2a_vc_max max v(b180)",
       "limits": {
         "max": 1.32
       }
@@ -141,7 +146,7 @@
     {
       "name": "clk_xclk_qi2a_vbe_rev_max",
       "unit": "V",
-      "expr": "vecmax(v(xclk.ti2) - v(xclk.min))",
+      "spice": ".meas tran clk_xclk_qi2a_vbe_rev_max max v(clk_xclk_qi2a_vbe_node)",
       "limits": {
         "max": 1.0
       }
@@ -149,7 +154,7 @@
     {
       "name": "clk_xclk_qi2b_vc_max",
       "unit": "V",
-      "expr": "vecmax(v(b0))",
+      "spice": ".meas tran clk_xclk_qi2b_vc_max max v(b0)",
       "limits": {
         "max": 1.32
       }
@@ -157,7 +162,7 @@
     {
       "name": "clk_xclk_qi2b_vbe_rev_max",
       "unit": "V",
-      "expr": "vecmax(v(xclk.ti2) - v(xclk.mip))",
+      "spice": ".meas tran clk_xclk_qi2b_vbe_rev_max max v(clk_xclk_qi2b_vbe_node)",
       "limits": {
         "max": 1.0
       }
@@ -165,7 +170,7 @@
     {
       "name": "clk_xclk_qq1a_vc_max",
       "unit": "V",
-      "expr": "vecmax(v(xclk.mqn))",
+      "spice": ".meas tran clk_xclk_qq1a_vc_max max v(xclk.mqn)",
       "limits": {
         "max": 1.32
       }
@@ -173,7 +178,7 @@
     {
       "name": "clk_xclk_qq1a_vbe_rev_max",
       "unit": "V",
-      "expr": "vecmax(v(xclk.tq1) - v(ck90))",
+      "spice": ".meas tran clk_xclk_qq1a_vbe_rev_max max v(clk_xclk_qq1a_vbe_node)",
       "limits": {
         "max": 1.0
       }
@@ -181,7 +186,7 @@
     {
       "name": "clk_xclk_qq1b_vc_max",
       "unit": "V",
-      "expr": "vecmax(v(xclk.mqp))",
+      "spice": ".meas tran clk_xclk_qq1b_vc_max max v(xclk.mqp)",
       "limits": {
         "max": 1.32
       }
@@ -189,7 +194,7 @@
     {
       "name": "clk_xclk_qq1b_vbe_rev_max",
       "unit": "V",
-      "expr": "vecmax(v(xclk.tq1) - v(ck270))",
+      "spice": ".meas tran clk_xclk_qq1b_vbe_rev_max max v(clk_xclk_qq1b_vbe_node)",
       "limits": {
         "max": 1.0
       }
@@ -197,7 +202,7 @@
     {
       "name": "clk_xclk_qq2a_vc_max",
       "unit": "V",
-      "expr": "vecmax(v(b270))",
+      "spice": ".meas tran clk_xclk_qq2a_vc_max max v(b270)",
       "limits": {
         "max": 1.32
       }
@@ -205,7 +210,7 @@
     {
       "name": "clk_xclk_qq2a_vbe_rev_max",
       "unit": "V",
-      "expr": "vecmax(v(xclk.tq2) - v(xclk.mqn))",
+      "spice": ".meas tran clk_xclk_qq2a_vbe_rev_max max v(clk_xclk_qq2a_vbe_node)",
       "limits": {
         "max": 1.0
       }
@@ -213,7 +218,7 @@
     {
       "name": "clk_xclk_qq2b_vc_max",
       "unit": "V",
-      "expr": "vecmax(v(b90))",
+      "spice": ".meas tran clk_xclk_qq2b_vc_max max v(b90)",
       "limits": {
         "max": 1.32
       }
@@ -221,7 +226,7 @@
     {
       "name": "clk_xclk_qq2b_vbe_rev_max",
       "unit": "V",
-      "expr": "vecmax(v(xclk.tq2) - v(xclk.mqp))",
+      "spice": ".meas tran clk_xclk_qq2b_vbe_rev_max max v(clk_xclk_qq2b_vbe_node)",
       "limits": {
         "max": 1.0
       }
@@ -229,7 +234,7 @@
     {
       "name": "latch_xl_qs1_vc_max",
       "unit": "V",
-      "expr": "vecmax(v(qn))",
+      "spice": ".meas tran latch_xl_qs1_vc_max max v(qn)",
       "limits": {
         "max": 1.32
       }
@@ -237,7 +242,7 @@
     {
       "name": "latch_xl_qs1_vbe_rev_max",
       "unit": "V",
-      "expr": "vecmax(v(xl.es) - v(dp))",
+      "spice": ".meas tran latch_xl_qs1_vbe_rev_max max v(latch_xl_qs1_vbe_node)",
       "limits": {
         "max": 1.0
       }
@@ -245,7 +250,7 @@
     {
       "name": "latch_xl_qs2_vc_max",
       "unit": "V",
-      "expr": "vecmax(v(qp))",
+      "spice": ".meas tran latch_xl_qs2_vc_max max v(qp)",
       "limits": {
         "max": 1.32
       }
@@ -253,7 +258,7 @@
     {
       "name": "latch_xl_qs2_vbe_rev_max",
       "unit": "V",
-      "expr": "vecmax(v(xl.es) - v(dn))",
+      "spice": ".meas tran latch_xl_qs2_vbe_rev_max max v(latch_xl_qs2_vbe_node)",
       "limits": {
         "max": 1.0
       }
@@ -261,7 +266,7 @@
     {
       "name": "latch_xl_qh1_vc_max",
       "unit": "V",
-      "expr": "vecmax(v(qn))",
+      "spice": ".meas tran latch_xl_qh1_vc_max max v(qn)",
       "limits": {
         "max": 1.32
       }
@@ -269,7 +274,7 @@
     {
       "name": "latch_xl_qh1_vbe_rev_max",
       "unit": "V",
-      "expr": "vecmax(v(xl.eh) - v(qp))",
+      "spice": ".meas tran latch_xl_qh1_vbe_rev_max max v(latch_xl_qh1_vbe_node)",
       "limits": {
         "max": 1.0
       }
@@ -277,7 +282,7 @@
     {
       "name": "latch_xl_qh2_vc_max",
       "unit": "V",
-      "expr": "vecmax(v(qp))",
+      "spice": ".meas tran latch_xl_qh2_vc_max max v(qp)",
       "limits": {
         "max": 1.32
       }
@@ -285,7 +290,7 @@
     {
       "name": "latch_xl_qh2_vbe_rev_max",
       "unit": "V",
-      "expr": "vecmax(v(xl.eh) - v(qn))",
+      "spice": ".meas tran latch_xl_qh2_vbe_rev_max max v(latch_xl_qh2_vbe_node)",
       "limits": {
         "max": 1.0
       }
@@ -293,7 +298,7 @@
     {
       "name": "latch_xl_qts_vc_max",
       "unit": "V",
-      "expr": "vecmax(v(xl.es))",
+      "spice": ".meas tran latch_xl_qts_vc_max max v(xl.es)",
       "limits": {
         "max": 1.32
       }
@@ -301,7 +306,7 @@
     {
       "name": "latch_xl_qts_vbe_rev_max",
       "unit": "V",
-      "expr": "vecmax(v(xl.ets) - v(b0))",
+      "spice": ".meas tran latch_xl_qts_vbe_rev_max max v(latch_xl_qts_vbe_node)",
       "limits": {
         "max": 1.0
       }
@@ -309,7 +314,7 @@
     {
       "name": "latch_xl_qth_vc_max",
       "unit": "V",
-      "expr": "vecmax(v(xl.eh))",
+      "spice": ".meas tran latch_xl_qth_vc_max max v(xl.eh)",
       "limits": {
         "max": 1.32
       }
@@ -317,7 +322,7 @@
     {
       "name": "latch_xl_qth_vbe_rev_max",
       "unit": "V",
-      "expr": "vecmax(v(xl.eth) - v(b180))",
+      "spice": ".meas tran latch_xl_qth_vbe_rev_max max v(latch_xl_qth_vbe_node)",
       "limits": {
         "max": 1.0
       }
