@@ -1,0 +1,33 @@
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-21/design/tx/driver_ffe.sch
+.subckt driver_ffe vdd vss inp inn pip pin vbn vbp0 vbp1 vbp2 outp outn
+*.iopin vdd
+*.iopin vss
+*.iopin inp
+*.iopin inn
+*.iopin pip
+*.iopin pin
+*.iopin vbn
+*.iopin vbp0
+*.iopin vbp1
+*.iopin vbp2
+*.iopin outp
+*.iopin outn
+XQM1 outn inp em vss npn13G2 Nx=8
+XQM2 outp inn em vss npn13G2 Nx=8
+XQTM em vbn etm vss npn13G2 Nx=8
+XREM etm vss vss rsil w=16u l=18.29u m=1 b=0
+XRT1 vdd outp vss rsil w=16u l=114.3u m=1 b=0
+XRT2 vdd outn vss rsil w=16u l=114.3u m=1 b=0
+XQP0a outp pip ep0 vss npn13G2 Nx=1
+XQP0b outn pin ep0 vss npn13G2 Nx=1
+XQTP0 ep0 vbp0 etp0 vss npn13G2 Nx=1
+XREP0 etp0 vss vss rsil w=4u l=41.14u m=1 b=0
+XQP1a outp pip ep1 vss npn13G2 Nx=1
+XQP1b outn pin ep1 vss npn13G2 Nx=1
+XQTP1 ep1 vbp1 etp1 vss npn13G2 Nx=1
+XREP1 etp1 vss vss rsil w=4u l=41.14u m=1 b=0
+XQP2a outp pip ep2 vss npn13G2 Nx=1
+XQP2b outn pin ep2 vss npn13G2 Nx=1
+XQTP2 ep2 vbp2 etp2 vss npn13G2 Nx=1
+XREP2 etp2 vss vss rsil w=4u l=41.14u m=1 b=0
+.ends

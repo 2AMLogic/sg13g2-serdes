@@ -10,6 +10,7 @@ reproduce steps.
 | `tools/build-osdi.sh` | compiles the PDK's Verilog-A sources (PSP103, r3_cmc, mosvar) with a checksum-pinned OpenVAF-Reloaded; exit 5 = built, but the host ngspice cannot load OSDI v0.4 |
 | `smoke/` | toolchain smoke grid: HBT Gummel at every HBT corner section, MOS inverter DC at `tt/ff/ss/fs/sf`, and a mixed MOS+HBT transient. Placeholder devices, not design values |
 | `smoke/records/<id>/` | append-only run records (reports, `record.md`); never edited after the fact |
+| `tx/` | TX sizing decks, requests and append-only records (issue #21); see `tx/README.md` |
 | `harness/` | fetched by `scripts/setup-env.sh` per `reuse.lock.json` (gitignored, never committed) |
 
 ## HBT models

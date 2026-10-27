@@ -1,0 +1,35 @@
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-21/design/tx/mux2to1_cml.sch
+.subckt mux2to1_cml vdd vss ckp ckn dap dan dbp dbn outp outn
+*.iopin vdd
+*.iopin vss
+*.iopin ckp
+*.iopin ckn
+*.iopin dap
+*.iopin dan
+*.iopin dbp
+*.iopin dbn
+*.iopin outp
+*.iopin outn
+XCca ckp nca cap_cmim w=7u l=7u m=1
+XRfa mida nca vss rppd w=0.5u l=38.46u m=1 b=0
+XMP1a mida nca vdd vdd sg13_lv_pmos w=8u l=0.13u ng=2 m=1
+XMN1a mida nca vss vss sg13_lv_nmos w=4u l=0.13u ng=2 m=1
+XMP2a sqa mida vdd vdd sg13_lv_pmos w=16u l=0.13u ng=4 m=1
+XMN2a sqa mida vss vss sg13_lv_nmos w=8u l=0.13u ng=2 m=1
+XCcb ckn ncb cap_cmim w=7u l=7u m=1
+XRfb midb ncb vss rppd w=0.5u l=38.46u m=1 b=0
+XMP1b midb ncb vdd vdd sg13_lv_pmos w=8u l=0.13u ng=2 m=1
+XMN1b midb ncb vss vss sg13_lv_nmos w=4u l=0.13u ng=2 m=1
+XMP2b sqb midb vdd vdd sg13_lv_pmos w=16u l=0.13u ng=4 m=1
+XMN2b sqb midb vss vss sg13_lv_nmos w=8u l=0.13u ng=2 m=1
+XQa1 outn dap ea vss npn13G2 Nx=2
+XQa2 outp dan ea vss npn13G2 Nx=2
+XMTa ea sqa sa vss sg13_lv_nmos w=20u l=0.13u ng=4 m=1
+XRsa sa vss vss rsil w=8u l=68.57u m=1 b=0
+XQb1 outn dbp eb vss npn13G2 Nx=2
+XQb2 outp dbn eb vss npn13G2 Nx=2
+XMTb eb sqb sb vss sg13_lv_nmos w=20u l=0.13u ng=4 m=1
+XRsb sb vss vss rsil w=8u l=68.57u m=1 b=0
+XRLp vdd outp vss rsil w=8u l=114.3u m=1 b=0
+XRLn vdd outn vss rsil w=8u l=114.3u m=1 b=0
+.ends
