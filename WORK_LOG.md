@@ -4,7 +4,9 @@ Chronological record of merged PRs and closed issues. Maintained by the Guide ro
 
 ### 2026-10-27
 
+- **PR #34**: feat(rx): record the HBT PVT sizing grid for the RX path
 - **PR #30**: feat: add CMOS digital-partition RTL, benches and committed gate-level netlist
+- **Issue #22** (closed): T1 item 1 (design sources, analog): RX termination, CTLE, four CML sampling latches and 5 GHz clock path
 
 ### 2026-10-22
 
