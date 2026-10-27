@@ -32,6 +32,8 @@ Human-approved issues ready for implementation (`loom:issue`).
 Issues currently being built (`loom:building`).
 
 - **#4**: Repo hygiene and CI (T1 item 10): real CI checks, a graded klt signoff manifest, README spec-issue fix
+- **#21**: T1 item 1 (design sources, analog): TX CML final mux, pre-driver, FFE line driver and pad/ESD schematics
+- **#22**: T1 item 1 (design sources, analog): RX termination, CTLE, four CML sampling latches and 5 GHz clock path
 
 ## PRs Awaiting Review
 
@@ -52,6 +54,9 @@ Issues carrying `loom:curated`.
 - **#2**: Draft and ratify the target spec *(curated)*
 - **#3**: PDK and simulator bring-up: pin SG13G2, build the OSDI models, smoke-simulate MOS and HBT models *(curated)*
 - **#4**: Repo hygiene and CI (T1 item 10): real CI checks, a graded klt signoff manifest, README spec-issue fix *(curated)*
+- **#21**: T1 item 1 (design sources, analog): TX CML final mux, pre-driver, FFE line driver and pad/ESD schematics *(curated)*
+- **#22**: T1 item 1 (design sources, analog): RX termination, CTLE, four CML sampling latches and 5 GHz clock path *(curated)*
+- **#23**: T1 item 1 (design sources, digital): serializer/deserializer, PRBS, CDR loop filter RTL plus sg13g2 netlist *(curated)*
 
 ## Proposed (Architect / Hermit)
 
@@ -69,10 +74,10 @@ _None._
 | Very important | 1 |
 | Important | 1 |
 | Ready (`loom:issue`) | 1 |
-| In Progress (`loom:building`) | 1 |
+| In Progress (`loom:building`) | 3 |
 | PRs awaiting review | 0 |
 | Approved PRs awaiting merge | 1 |
-| Curated | 3 |
+| Curated | 6 |
 | Architect / Hermit proposals | 0 |
 | Active epics | 0 |
 <!-- guide:plan-body:end -->
