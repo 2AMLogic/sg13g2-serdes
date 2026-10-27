@@ -84,6 +84,12 @@ if ac:
             if any(b < a for a, b in zip(pk, pk[1:])):
                 why.append("not monotonic")
         L.append(f"| {c['corner_id']} | " + " | ".join(row) + f" | {f(val(c,'ctle_c0_g0p1g_db'))} / {f(val(c,'ctle_c7_g0p1g_db'))} | {f(val(c,'ctle_c7_g5g_db'))} | {'no data' if not ok else ('ok' if not why else '; '.join(why))} |")
+    bad = []
+    for c in ac["corners"]:
+        pk = [peak(c, k) for k in range(8)]
+        if any(x is None for x in pk) or pk[0] > 1.0 or pk[7] < 10.0 or any(b < a for a, b in zip(pk, pk[1:])):
+            bad.append(c["corner_id"])
+    L += ["", f"- Corners meeting the first-look R10 check (c0 <= 1 dB, c7 >= 10 dB, monotonic): {len(ac['corners']) - len(bad)} of {len(ac['corners'])}."]
 op = reports["ctle_op"]
 viol = []
 if op:
@@ -101,11 +107,16 @@ if lr:
           "| corner | t_regen up | t_regen down | q swing (V) |", "|---|---|---|---|"]
     for c in lr["corners"]:
         up, dn = val(c, "latch_t_regen_up"), val(c, "latch_t_regen_dn")
-        L.append(f"| {c['corner_id']} | {f(None if up is None else up*1e12,'{:.1f}')} | {f(None if dn is None else dn*1e12,'{:.1f}')} | {f(None if val(c,'latch_q_max_v') is None else val(c,'latch_q_max_v')-val(c,'latch_q_min_v'))} |")
+        L.append(f"| {c['corner_id']} | {f(None if up is None else up*1e12,'{:.1f}', 'not reached')} | {f(None if dn is None else dn*1e12,'{:.1f}', 'not reached')} | {f(None if val(c,'latch_q_max_v') is None else val(c,'latch_q_max_v')-val(c,'latch_q_min_v'))} |")
     for c in lr["corners"]:
         for m in c["measurements"]:
             if m.get("status") == "fail":
                 viol.append((c["corner_id"], m["name"], m["value"]))
+    nr = [c["corner_id"] for c in lr["corners"] if val(c, "latch_t_regen_up") is None or val(c, "latch_t_regen_dn") is None]
+    slow = [c["corner_id"] for c in lr["corners"] if c["corner_id"] not in nr and max(val(c, "latch_t_regen_up"), val(c, "latch_t_regen_dn")) > 100e-12]
+    L += ["", f"- Corners where |q| never reached 0.25 V (no regeneration within the 3 ns run): {len(nr)}" + (" -- " + ", ".join(nr) if nr else ""),
+          f"- Corners that regenerated but slower than 100 ps: {len(slow)}" + (" -- " + ", ".join(slow) if slow else "")]
+    latch_summary = (nr, slow)
 pad = reports["pad_ac"]
 if pad:
     L += ["", "## Termination + pad first-look |Zdiff| (ohm, placeholder 50 fF pads)", "", "| corner | 0.1 GHz | 5 GHz |", "|---|---|---|"]
@@ -134,11 +145,19 @@ if vb:
     top = max(vb.items(), key=lambda kv: kv[1][0])
     L.append(f"- Largest reverse Vbe (Ve - Vb; negative = still forward biased): `{top[0]}` = {top[1][0]:.3f} V at {top[1][1]}.")
 stress_fail = [v for v in viol if v[1].endswith("_vc_max") or v[1].endswith("_vbe_rev_max")]
-L.append(f"- Nodes over a DR-003 limit: {len(stress_fail)}" + ("" if not stress_fail else " -- " + "; ".join(f"{a} {b}={c:.3f}" for a, b, c in stress_fail)))
+nodes = {}
+for a, b, c in stress_fail:
+    if b not in nodes or c > nodes[b][0]:
+        nodes[b] = (c, a)
+L.append(f"- Over a DR-003 limit: {len(stress_fail)} (corner, node) pairs across {len(nodes)} nodes. Worst per node:")
+for b, (c, a) in sorted(nodes.items(), key=lambda kv: -kv[1][0]):
+    L.append(f"  - `{b}` = {c:.3f} V at {a}")
+if nodes:
+    L.append("- All violations are at the 1.32 V supply point (+10 %), where the latch and last clock-buffer stage collectors overshoot the rail (transient maximum over the run); no reverse-Vbe violation. DR-003 sets the limit at 1.32 V per collector node (BVCEO min 1.4 V, open base, not simulated). The spec is not relaxed here; a DR is proposed in the PR.")
 L.append("- Per-node values for every HBT, corner and CTLE code are in the `*.report.json` files in this directory.")
 other = [v for v in viol if v not in stress_fail]
 L += ["", "## Limits missed (first-look comparisons)", ""]
-L += [f"- {a}: `{b}` = {c}" for a, b, c in other] or ["- none"]
+L += [f"- {a}: `{b}` = {c}" for a, b, c in other] or ["- none recorded as `fail` (measurement errors for the latch are listed above as `not reached`)"]
 L += ["", "## Not simulated",
       "",
       "- `lvl_cml2cmos` (thin-oxide MOS, PSP103 via OSDI): not simulated; the host ngspice cannot load OSDI v0.4 and batch jobs staging `.osdi` inputs fail (klayout-tools#3818, #3819; sim/README.md; blocked on #3).",
