@@ -32,7 +32,6 @@ Human-approved issues ready for implementation (`loom:issue`).
 
 Issues currently being built (`loom:building`).
 
-- **#4**: Repo hygiene and CI (T1 item 10): real CI checks, a graded klt signoff manifest, README spec-issue fix
 - **#21**: T1 item 1 (design sources, analog): TX CML final mux, pre-driver, FFE line driver and pad/ESD schematics
 - **#31**: Replace always-green package.json check stubs with the repo's real checks
 - **#32**: Digital partition: demonstrate or re-budget 625 MHz timing (no gate-level STA yet)
@@ -47,7 +46,6 @@ PRs waiting on Judge (`loom:review-requested`).
 
 PRs that passed review and are queued for Champion auto-merge (`loom:pr`).
 
-- **#6**: ci: add check-ci gate and graded klt signoff manifest
 - **#35**: feat: add TX CML path schematics, netlists, PVT-edge sizing record and R3 finding
 - **#38**: fix(ci): wire package.json checks to the real synth-freshness and cocotb gates
 
@@ -57,7 +55,6 @@ Issues carrying `loom:curated`.
 
 - **#2**: Draft and ratify the target spec *(curated)*
 - **#3**: PDK and simulator bring-up: pin SG13G2, build the OSDI models, smoke-simulate MOS and HBT models *(curated)*
-- **#4**: Repo hygiene and CI (T1 item 10): real CI checks, a graded klt signoff manifest, README spec-issue fix *(curated)*
 - **#21**: T1 item 1 (design sources, analog): TX CML final mux, pre-driver, FFE line driver and pad/ESD schematics *(curated)*
 - **#23**: T1 item 1 (design sources, digital): serializer/deserializer, PRBS, CDR loop filter RTL plus sg13g2 netlist *(curated)*
 - **#32**: Digital partition: demonstrate or re-budget 625 MHz timing (no gate-level STA yet) *(curated)*
@@ -78,10 +75,10 @@ _None._
 | Very important | 1 |
 | Important | 1 |
 | Ready (`loom:issue`) | 1 |
-| In Progress (`loom:building`) | 4 |
+| In Progress (`loom:building`) | 3 |
 | PRs awaiting review | 1 |
-| Approved PRs awaiting merge | 3 |
-| Curated | 6 |
+| Approved PRs awaiting merge | 2 |
+| Curated | 5 |
 | Architect / Hermit proposals | 0 |
 | Active epics | 0 |
 <!-- guide:plan-body:end -->
