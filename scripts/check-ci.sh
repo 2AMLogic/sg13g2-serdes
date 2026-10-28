@@ -2,7 +2,7 @@
 # The CI gate. .github/workflows/ci.yml and package.json (check:ci, test, lint)
 # both run this script, so local and CI checks cannot diverge.
 #   scripts/check-ci.sh [json|links|harness|signoff|all]   (default: all)
-#   scripts/check-ci.sh --regen    regenerate the committed signoff record
+#   scripts/check-ci.sh --regen    re-attest item 10, regenerate the committed signoff record
 set -uo pipefail
 cd "$(dirname "$0")/.."
 # shellcheck source=scripts/klt-pin.env
@@ -11,6 +11,8 @@ cd "$(dirname "$0")/.."
 MANIFEST=manifests/sg13g2-serdes.json
 TIERS=manifests/design-evidence-tiers.md
 RECORD=manifests/sg13g2-serdes.signoff.json
+ITEM10_INVENTORY=manifests/evidence/item10.inventory.json
+ITEM10_ENVELOPE=manifests/evidence/item10.json
 
 klt_signoff() {
   uvx --from "klayout-tools==${KLT_VERSION}" klt signoff \
@@ -61,10 +63,19 @@ check_signoff() {
     return 1
   fi
   echo "signoff: committed record matches klt ${KLT_VERSION}"
+  # Item 10 re-attests the hygiene inventory, which lists this script. Its checks
+  # must therefore not call `signoff` or `all` (that would recurse).
+  uvx --from "klayout-tools==${KLT_VERSION}" klt signoff \
+    --attest 10 --inventory "$ITEM10_INVENTORY" --check "$ITEM10_ENVELOPE" --format json >/dev/null \
+    || { echo "::error::item 10 attestation drifted or failed: re-attest with scripts/check-ci.sh --regen"; return 1; }
+  echo "signoff: item 10 attestation holds"
 }
 
 case "${1:-all}" in
   --regen)
+    uvx --from "klayout-tools==${KLT_VERSION}" klt signoff \
+      --attest 10 --inventory "$ITEM10_INVENTORY" -o "$ITEM10_ENVELOPE" --format json >/dev/null \
+      || { echo "item 10 attestation failed" >&2; exit 1; }
     out=$(mktemp); rc=0; klt_signoff > "$out" || rc=$?
     [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ] || { echo "klt signoff exited $rc" >&2; exit 1; }
     mv "$out" "$RECORD" ;;
