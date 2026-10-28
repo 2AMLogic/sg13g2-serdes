@@ -37,14 +37,12 @@ Issues currently being built (`loom:building`).
 - **#31**: Replace always-green package.json check stubs with the repo's real checks
 - **#32**: Digital partition: demonstrate or re-budget 625 MHz timing (no gate-level STA yet)
 - **#44**: Install the two-key ratification path and ratify spec/target-spec.md
-- **#49**: T1 item 10 (repo hygiene): klt signoff --attest 10 envelope cited for both partitions
 
 ## PRs Awaiting Review
 
 PRs waiting on Judge (`loom:review-requested`).
 
 - **#37**: feat: record gate-level STA of the digital partition and route the 625 MHz miss
-- **#51**: feat: attest T1 item 10 repo hygiene via klt signoff --attest
 
 ## Approved (Awaiting Merge)
 
@@ -64,11 +62,10 @@ Issues carrying `loom:curated`.
 - **#23**: T1 item 1 (design sources, digital): serializer/deserializer, PRBS, CDR loop filter RTL plus sg13g2 netlist *(curated)*
 - **#32**: Digital partition: demonstrate or re-budget 625 MHz timing (no gate-level STA yet) *(curated)*
 - **#44**: Install the two-key ratification path and ratify spec/target-spec.md *(curated)*
-- **#49**: T1 item 10 (repo hygiene): klt signoff --attest 10 envelope cited for both partitions *(curated)*
 
 ## Proposed (Architect / Hermit)
 
-_None._
+- **#50**: Dedupe klt version pin: scripts/klt-pin.env duplicates layout/toolchain.json *(hermit)*
 
 ## Epics
 
@@ -82,10 +79,10 @@ _None._
 | Very important | 1 |
 | Important | 1 |
 | Ready (`loom:issue`) | 1 |
-| In Progress (`loom:building`) | 5 |
-| PRs awaiting review | 2 |
+| In Progress (`loom:building`) | 4 |
+| PRs awaiting review | 1 |
 | Approved PRs awaiting merge | 3 |
-| Curated | 7 |
-| Architect / Hermit proposals | 0 |
+| Curated | 6 |
+| Architect / Hermit proposals | 1 |
 | Active epics | 0 |
 <!-- guide:plan-body:end -->

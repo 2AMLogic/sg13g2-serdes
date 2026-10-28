@@ -2,6 +2,11 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-10-28
+
+- **PR #51**: feat: attest T1 item 10 repo hygiene via klt signoff --attest
+- **Issue #49** (closed): T1 item 10 (repo hygiene): klt signoff --attest 10 envelope cited for both partitions
+
 ### 2026-10-27
 
 - **PR #45**: docs: add EE-key and market-key ratification directories
