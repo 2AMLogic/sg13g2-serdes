@@ -9,6 +9,7 @@ Judge-approved PRs under a hold (`loom:blocked` or `loom:operator`) — only a h
 
 - **#35**: feat: add TX CML path schematics, netlists, PVT-edge sizing record and R3 finding
 - **#38**: fix(ci): wire package.json checks to the real synth-freshness and cocotb gates
+- **#47**: docs(spec): propose ratification of target spec with DR-005 scope record
 
 ## Very Important
 
@@ -35,6 +36,7 @@ Issues currently being built (`loom:building`).
 - **#21**: T1 item 1 (design sources, analog): TX CML final mux, pre-driver, FFE line driver and pad/ESD schematics
 - **#31**: Replace always-green package.json check stubs with the repo's real checks
 - **#32**: Digital partition: demonstrate or re-budget 625 MHz timing (no gate-level STA yet)
+- **#44**: Install the two-key ratification path and ratify spec/target-spec.md
 
 ## PRs Awaiting Review
 
@@ -48,6 +50,7 @@ PRs that passed review and are queued for Champion auto-merge (`loom:pr`).
 
 - **#35**: feat: add TX CML path schematics, netlists, PVT-edge sizing record and R3 finding
 - **#38**: fix(ci): wire package.json checks to the real synth-freshness and cocotb gates
+- **#47**: docs(spec): propose ratification of target spec with DR-005 scope record
 
 ## Proposed
 
@@ -58,6 +61,7 @@ Issues carrying `loom:curated`.
 - **#21**: T1 item 1 (design sources, analog): TX CML final mux, pre-driver, FFE line driver and pad/ESD schematics *(curated)*
 - **#23**: T1 item 1 (design sources, digital): serializer/deserializer, PRBS, CDR loop filter RTL plus sg13g2 netlist *(curated)*
 - **#32**: Digital partition: demonstrate or re-budget 625 MHz timing (no gate-level STA yet) *(curated)*
+- **#44**: Install the two-key ratification path and ratify spec/target-spec.md *(curated)*
 
 ## Proposed (Architect / Hermit)
 
@@ -71,14 +75,14 @@ _None._
 
 | Bucket | Count |
 |------|-------|
-| Operator merge-risk holds | 2 |
+| Operator merge-risk holds | 3 |
 | Very important | 1 |
 | Important | 1 |
 | Ready (`loom:issue`) | 1 |
-| In Progress (`loom:building`) | 3 |
+| In Progress (`loom:building`) | 4 |
 | PRs awaiting review | 1 |
-| Approved PRs awaiting merge | 2 |
-| Curated | 5 |
+| Approved PRs awaiting merge | 3 |
+| Curated | 6 |
 | Architect / Hermit proposals | 0 |
 | Active epics | 0 |
 <!-- guide:plan-body:end -->
