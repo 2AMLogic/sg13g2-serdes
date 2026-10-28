@@ -4,6 +4,7 @@ Chronological record of merged PRs and closed issues. Maintained by the Guide ro
 
 ### 2026-10-27
 
+- **PR #45**: docs: add EE-key and market-key ratification directories
 - **PR #43**: build: bump klayout-tools pin to 0.8.0 (PyPI) and verify by version
 - **Issue #42** (closed): Bump klayout-tools pin 0.7.0, 267ea83a0510 → 0.8.0
 - **PR #6**: ci: add check-ci gate and graded klt signoff manifest
