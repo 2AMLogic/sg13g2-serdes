@@ -27,6 +27,14 @@ check_json() {
   done < <(git ls-files 'sim/*.json' 'sim/**/*.json' 'manifests/*.json' \
              reuse.lock.json layout/toolchain.json 2>/dev/null | sort -u)
   echo "json: validated $n file(s)"
+  # The klt version is pinned in two places (this script's klt-pin.env and the
+  # layout/sim flows' toolchain.json); a bump that touches only one must fail here.
+  local layout_pin
+  layout_pin=$(jq -r '.klt_install // empty' layout/toolchain.json 2>/dev/null)
+  if [ "$layout_pin" != "klayout-tools==${KLT_VERSION}" ]; then
+    echo "::error file=layout/toolchain.json::klt_install '${layout_pin}' != klayout-tools==${KLT_VERSION} (scripts/klt-pin.env)"
+    rc=1
+  fi
   return $rc
 }
 
