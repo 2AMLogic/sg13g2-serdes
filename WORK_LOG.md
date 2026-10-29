@@ -2,6 +2,11 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-10-29
+
+- **PR #54**: ci: fail check-ci when klt pins in klt-pin.env and toolchain.json differ
+- **Issue #50** (closed): Dedupe klt version pin: scripts/klt-pin.env duplicates layout/toolchain.json
+
 ### 2026-10-28
 
 - **PR #51**: feat: attest T1 item 10 repo hygiene via klt signoff --attest
