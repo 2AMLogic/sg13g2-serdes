@@ -1,0 +1,10 @@
+{
+  "block": "sg13g2-serdes",
+  "kind": "mixed-signal",
+  "evidence": {
+    "10": {
+      "file": "manifests/evidence/item10.json",
+      "content_hash": "sha256:0ae256afaa7bd7ec2e913a54da8703f403df6c8fa172cf1fac0404f1d8b0447e"
+    }
+  }
+}

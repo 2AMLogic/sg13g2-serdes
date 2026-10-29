@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "kind": "generic",
+  "status": "pass",
+  "t1_item": 10,
+  "summary": "T1 item 10 (Repo hygiene): 7/7 attestation checks passed (klt signoff --attest)",
+  "source": "manifests/evidence/item10.inventory.json",
+  "attestation": {
+    "producer": "klt signoff --attest",
+    "inventory_schema_version": 1,
+    "hash_algorithm": "sha256-raw-bytes",
+    "check_count": 7,
+    "passed_count": 7,
+    "checks": [
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": ".github/workflows/ci.yml",
+        "passed": true,
+        "content_hash": "sha256:946def71ca99e4373e64c420766d41d9f70175389f47c898da85111c743eb09e"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "LICENSE",
+        "passed": true,
+        "content_hash": "sha256:cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "README.md",
+        "passed": true,
+        "content_hash": "sha256:b80369421fb2762714e62e3ae7d0bd9b772593b3c942e0d7077138ab71f39ac9"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "package.json",
+        "passed": true,
+        "content_hash": "sha256:b45683577ef12e26ce16937a8619ad827e132051992e91382f29e8846061e36e"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/check-ci.sh",
+        "passed": true,
+        "content_hash": "sha256:008b09c4813e7050f3224b5ecbff46c85456f1c7389b3ebe92b4ea4966d17163"
+      },
+      {
+        "check": "command",
+        "role": "audit",
+        "name": "ci-json",
+        "argv": [
+          "scripts/check-ci.sh",
+          "json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true
+      },
+      {
+        "check": "command",
+        "role": "audit",
+        "name": "ci-links",
+        "argv": [
+          "scripts/check-ci.sh",
+          "links"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true
+      }
+    ]
+  },
+  "provenance": {
+    "klt_version": "0.8.0",
+    "klayout_version": null,
+    "pdk": null,
+    "deck": null,
+    "input": {
+      "path": {
+        "path": "manifests/evidence/item10.inventory.json",
+        "scope": "repo"
+      },
+      "content_hash": "sha256:0ae256afaa7bd7ec2e913a54da8703f403df6c8fa172cf1fac0404f1d8b0447e"
+    }
+  }
+}
