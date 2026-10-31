@@ -1,0 +1,143 @@
+{
+  "schema_version": 2,
+  "engine": "openroad",
+  "engine_version": "26Q3-1510-g6cb3f2b704",
+  "hdl_toplevel": "serdes_digital_top",
+  "status": "ok",
+  "def_path": null,
+  "verilog_path": {
+    "path": "rtl/synth/serdes_digital_top_synth.v",
+    "scope": "repo"
+  },
+  "geometry_source": "netlist_estimate",
+  "wire_load_model": null,
+  "wire_load_mode": null,
+  "clock_mode": "ideal",
+  "spef_path": null,
+  "worst_slack_ns": -2.0947,
+  "total_negative_slack_ns": -174.329,
+  "worst_hold_slack_ns": 0.24337,
+  "total_negative_hold_slack_ns": 0,
+  "fmax_mhz": 270.658,
+  "timing_status": "constrained",
+  "constraint_completeness": {
+    "status": "incomplete",
+    "unconstrained_endpoints": {
+      "status": "ok",
+      "count": 43,
+      "sample": [
+        "eye_ph_off[0]",
+        "eye_ph_off[1]",
+        "eye_ph_off[2]",
+        "eye_ph_off[3]",
+        "eye_ph_off[4]",
+        "eye_ph_off[5]",
+        "eye_ph_off[6]",
+        "eye_smp_off[0]",
+        "eye_smp_off[1]",
+        "eye_smp_off[2]",
+        "eye_smp_off[3]",
+        "eye_smp_off[4]",
+        "eye_smp_off[5]",
+        "pi_code[0]",
+        "pi_code[1]",
+        "pi_code[2]",
+        "pi_code[3]",
+        "pi_code[4]",
+        "pi_code[5]",
+        "pi_code[6]"
+      ],
+      "truncated": true,
+      "reason": null
+    },
+    "unclocked_registers": {
+      "status": "ok",
+      "count": 0,
+      "sample": [],
+      "truncated": false,
+      "reason": null
+    },
+    "sample_limit": 20
+  },
+  "setup_violation_count": 157,
+  "hold_violation_count": 0,
+  "worst_setup_path": {
+    "status": "ok",
+    "check_type": "setup",
+    "engine_check_role": "setup",
+    "startpoint": "u_ctrl/_1731_/Q",
+    "endpoint": "u_chk/_1559_/D",
+    "slack_ns": -2.0947,
+    "consistent_with_aggregate": true,
+    "reason": null
+  },
+  "worst_hold_path": {
+    "status": "ok",
+    "check_type": "hold",
+    "engine_check_role": "hold",
+    "startpoint": "u_eye/_0972_/Q",
+    "endpoint": "u_eye/_0972_/D",
+    "slack_ns": 0.24337,
+    "consistent_with_aggregate": true,
+    "reason": null
+  },
+  "clock_skew_ns": 0,
+  "estimated_power_mw": 18.1504,
+  "provenance": {
+    "klt_version": "0.7.1.dev1771+g267ea83a0510",
+    "klayout_version": "0.30.12",
+    "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+        "search root: ~/share/pdk"
+      ]
+    },
+    "deck": {
+      "name": "sg13g2_stdcell__typ_1p20V_25C",
+      "content_hash": "sha256:7677a8918689f452e80405ad16a83e744709342574f2aedcc507c2758986b396",
+      "released": false
+    },
+    "input": {
+      "content_hash": "sha256:303ba30aab361132f9bd18c316146137f1afd33eabaf922e255236da9a0125ad",
+      "role": "netlist"
+    }
+  },
+  "spef_annotation": null,
+  "clock_propagation": null,
+  "sdf": null,
+  "electrical_checks": null,
+  "engine_log": {
+    "invocation_id": "1132abbaed0947f9bb278fe5233748ff",
+    "script_name": "sta_serdes_digital_top_synth.tcl",
+    "script_path": {
+      "path": ".cache/sta/.klt/sta/sta_serdes_digital_top_synth.tcl",
+      "scope": "repo"
+    },
+    "script_sha256": "560eb30bf701b164910733c772015ecf8d67438bed76bba5ec2254834d4bed9b",
+    "metrics_path": {
+      "path": ".cache/sta/.klt/sta/serdes_digital_top_synth_metrics.json",
+      "scope": "repo"
+    },
+    "outcome": "exited",
+    "returncode": 0,
+    "directory": {
+      "path": ".cache/sta/.klt/sta/openroad-logs/1132abbaed0947f9bb278fe5233748ff",
+      "scope": "repo"
+    },
+    "stdout_path": {
+      "path": ".cache/sta/.klt/sta/openroad-logs/1132abbaed0947f9bb278fe5233748ff/stdout.log",
+      "scope": "repo"
+    },
+    "stderr_path": {
+      "path": ".cache/sta/.klt/sta/openroad-logs/1132abbaed0947f9bb278fe5233748ff/stderr.log",
+      "scope": "repo"
+    },
+    "metadata_path": {
+      "path": ".cache/sta/.klt/sta/openroad-logs/1132abbaed0947f9bb278fe5233748ff/invocation.json",
+      "scope": "repo"
+    },
+    "retention_errors": []
+  }
+}
