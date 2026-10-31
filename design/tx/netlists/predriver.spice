@@ -1,0 +1,16 @@
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-21/design/tx/predriver.sch
+.subckt predriver vdd vss inp inn vbn outp outn
+*.iopin vdd
+*.iopin vss
+*.iopin inp
+*.iopin inn
+*.iopin vbn
+*.iopin outp
+*.iopin outn
+XQ1 outn inp e vss npn13G2 Nx=4
+XQ2 outp inn e vss npn13G2 Nx=4
+XQt e vbn et vss npn13G2 Nx=4
+XRe et vss vss rsil w=8u l=18.29u m=1 b=0
+XRL1 vdd outp vss rsil w=8u l=68.57u m=1 b=0
+XRL2 vdd outn vss rsil w=8u l=68.57u m=1 b=0
+.ends

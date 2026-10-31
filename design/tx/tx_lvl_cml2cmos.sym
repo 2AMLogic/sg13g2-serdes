@@ -1,0 +1,27 @@
+v {xschem version=3.4.6 file_version=1.2
+}
+G {}
+K {type=subcircuit
+format="@name @pinlist @symname"
+template="name=x1"
+}
+V {}
+S {}
+E {}
+B 4 -100 -50 100 50 {}
+T {tx_lvl_cml2cmos} 0 -95 0 0 0.3 0.3 {hcenter=true}
+L 4 0 -70 0 -50 {}
+T {vdd} 8 -46 0 0 0.2 0.2 {}
+L 4 0 50 0 70 {}
+T {vss} 8 26 0 0 0.2 0.2 {}
+L 4 -120 -30 -100 -30 {}
+T {inp} -95 -36 0 0 0.2 0.2 {}
+L 4 -120 10 -100 10 {}
+T {inn} -95 4 0 0 0.2 0.2 {}
+L 4 100 -30 120 -30 {}
+T {out} 95 -36 0 1 0.2 0.2 {}
+B 5 -2.5 -72.5 2.5 -67.5 {name=vdd dir=inout}
+B 5 -2.5 67.5 2.5 72.5 {name=vss dir=inout}
+B 5 -122.5 -32.5 -117.5 -27.5 {name=inp dir=in}
+B 5 -122.5 7.5 -117.5 12.5 {name=inn dir=in}
+B 5 117.5 -32.5 122.5 -27.5 {name=out dir=out}

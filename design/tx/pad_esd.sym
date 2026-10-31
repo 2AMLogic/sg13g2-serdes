@@ -1,0 +1,30 @@
+v {xschem version=3.4.6 file_version=1.2
+}
+G {}
+K {type=subcircuit
+format="@name @pinlist @symname"
+template="name=x1"
+}
+V {}
+S {}
+E {}
+B 4 -100 -90 100 90 {}
+T {pad_esd} 0 -135 0 0 0.3 0.3 {hcenter=true}
+L 4 0 -110 0 -90 {}
+T {vdd} 8 -86 0 0 0.2 0.2 {}
+L 4 0 90 0 110 {}
+T {vss} 8 66 0 0 0.2 0.2 {}
+L 4 100 -70 120 -70 {}
+T {cp} 95 -76 0 1 0.2 0.2 {}
+L 4 100 -30 120 -30 {}
+T {cn} 95 -36 0 1 0.2 0.2 {}
+L 4 100 10 120 10 {}
+T {padp} 95 4 0 1 0.2 0.2 {}
+L 4 100 50 120 50 {}
+T {padn} 95 44 0 1 0.2 0.2 {}
+B 5 -2.5 -112.5 2.5 -107.5 {name=vdd dir=inout}
+B 5 -2.5 107.5 2.5 112.5 {name=vss dir=inout}
+B 5 117.5 -72.5 122.5 -67.5 {name=cp dir=inout}
+B 5 117.5 -32.5 122.5 -27.5 {name=cn dir=inout}
+B 5 117.5 7.5 122.5 12.5 {name=padp dir=inout}
+B 5 117.5 47.5 122.5 52.5 {name=padn dir=inout}

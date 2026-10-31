@@ -1,0 +1,389 @@
+{
+  "engine": "ngspice",
+  "netlist": "tx_sizing_ffe0_typ.sp",
+  "models": {
+    "pdk": "ihp-sg13g2",
+    "lib": "libs.tech/ngspice/models/cornerHBT.lib"
+  },
+  "corners": {
+    "process": [
+      {
+        "name": "typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          }
+        ]
+      }
+    ],
+    "supply_v": {
+      "vdd": [
+        1.08,
+        1.2,
+        1.32
+      ]
+    },
+    "temperature_c": [
+      -40,
+      27,
+      125
+    ]
+  },
+  "analysis": {
+    "kind": "tran",
+    "args": "2p 8.8e-09"
+  },
+  "measurements": [
+    {
+      "name": "vc_max_drv_out_p",
+      "unit": "V",
+      "spice": ".meas tran vc_max_drv_out_p max par('v(cop)')",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vc_max_drv_out_n",
+      "unit": "V",
+      "spice": ".meas tran vc_max_drv_out_n max par('v(con)')",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vc_max_drv_tail_main",
+      "unit": "V",
+      "spice": ".meas tran vc_max_drv_tail_main max par('v(xdrv.em)')",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vc_max_drv_tail_post0",
+      "unit": "V",
+      "spice": ".meas tran vc_max_drv_tail_post0 max par('v(xdrv.ep0)')",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vc_max_drv_tail_post1",
+      "unit": "V",
+      "spice": ".meas tran vc_max_drv_tail_post1 max par('v(xdrv.ep1)')",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vc_max_drv_tail_post2",
+      "unit": "V",
+      "spice": ".meas tran vc_max_drv_tail_post2 max par('v(xdrv.ep2)')",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vc_max_pre_main_outp",
+      "unit": "V",
+      "spice": ".meas tran vc_max_pre_main_outp max par('v(pp)')",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vc_max_pre_main_outn",
+      "unit": "V",
+      "spice": ".meas tran vc_max_pre_main_outn max par('v(pn)')",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vc_max_pre_main_tail",
+      "unit": "V",
+      "spice": ".meas tran vc_max_pre_main_tail max par('v(xprem.e)')",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vc_max_pre_post_outp",
+      "unit": "V",
+      "spice": ".meas tran vc_max_pre_post_outp max par('v(rp)')",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vc_max_pre_post_outn",
+      "unit": "V",
+      "spice": ".meas tran vc_max_pre_post_outn max par('v(rn)')",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vc_max_pre_post_tail",
+      "unit": "V",
+      "spice": ".meas tran vc_max_pre_post_tail max par('v(xprep.e)')",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vc_max_bias_vbn",
+      "unit": "V",
+      "spice": ".meas tran vc_max_bias_vbn max par('v(vbn)')",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vbe_rev_max_drv_main_p",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_drv_main_p max par('v(xdrv.em)-v(pp)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_drv_main_n",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_drv_main_n max par('v(xdrv.em)-v(pn)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_drv_tail_main",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_drv_tail_main max par('v(xdrv.etm)-v(vbn)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_pre_main_p",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_pre_main_p max par('v(xprem.e)-v(mp)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_pre_main_n",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_pre_main_n max par('v(xprem.e)-v(mn)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_pre_main_tail",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_pre_main_tail max par('v(xprem.et)-v(vbn)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_pre_post_p",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_pre_post_p max par('v(xprep.e)-v(qp)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_pre_post_n",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_pre_post_n max par('v(xprep.e)-v(qn)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_pre_post_tail",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_pre_post_tail max par('v(xprep.et)-v(vbn)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_bias_ref",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_bias_ref max par('v(xbias.er)-v(vbn)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_drv_post0_p",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_drv_post0_p max par('v(xdrv.ep0)-v(rp)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_drv_post0_n",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_drv_post0_n max par('v(xdrv.ep0)-v(rn)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_drv_post0_tail",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_drv_post0_tail max par('v(xdrv.etp0)-v(vbp0)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_drv_post1_p",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_drv_post1_p max par('v(xdrv.ep1)-v(rp)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_drv_post1_n",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_drv_post1_n max par('v(xdrv.ep1)-v(rn)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_drv_post1_tail",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_drv_post1_tail max par('v(xdrv.etp1)-v(vbp1)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_drv_post2_p",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_drv_post2_p max par('v(xdrv.ep2)-v(rp)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_drv_post2_n",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_drv_post2_n max par('v(xdrv.ep2)-v(rn)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_drv_post2_tail",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_drv_post2_tail max par('v(xdrv.etp2)-v(vbp2)')",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vce_min_drv_tail_main",
+      "unit": "V",
+      "spice": ".meas tran vce_min_drv_tail_main min par('v(xdrv.em)-v(xdrv.etm)')"
+    },
+    {
+      "name": "vce_min_pre_main_tail",
+      "unit": "V",
+      "spice": ".meas tran vce_min_pre_main_tail min par('v(xprem.e)-v(xprem.et)')"
+    },
+    {
+      "name": "vcb_min_drv_pair_p",
+      "unit": "V",
+      "spice": ".meas tran vcb_min_drv_pair_p min par('v(cop)-v(pp)')"
+    },
+    {
+      "name": "vcb_min_drv_pair_n",
+      "unit": "V",
+      "spice": ".meas tran vcb_min_drv_pair_n min par('v(con)-v(pn)')"
+    },
+    {
+      "name": "vce_max_drv_pair_p",
+      "unit": "V",
+      "spice": ".meas tran vce_max_drv_pair_p max par('v(cop)-v(xdrv.em)')"
+    },
+    {
+      "name": "vce_max_drv_pair_n",
+      "unit": "V",
+      "spice": ".meas tran vce_max_drv_pair_n max par('v(con)-v(xdrv.em)')"
+    },
+    {
+      "name": "vce_max_pre_main_pair_p",
+      "unit": "V",
+      "spice": ".meas tran vce_max_pre_main_pair_p max par('v(pp)-v(xprem.e)')"
+    },
+    {
+      "name": "vce_max_pre_main_pair_n",
+      "unit": "V",
+      "spice": ".meas tran vce_max_pre_main_pair_n max par('v(pn)-v(xprem.e)')"
+    },
+    {
+      "name": "vce_max_pre_post_pair_p",
+      "unit": "V",
+      "spice": ".meas tran vce_max_pre_post_pair_p max par('v(rp)-v(xprep.e)')"
+    },
+    {
+      "name": "vce_max_pre_post_pair_n",
+      "unit": "V",
+      "spice": ".meas tran vce_max_pre_post_pair_n max par('v(rn)-v(xprep.e)')"
+    },
+    {
+      "name": "r4_peak_max_vppd",
+      "unit": "V",
+      "spice": ".meas tran r4_peak_max_vppd max v(vd)"
+    },
+    {
+      "name": "r4_peak_min_vppd",
+      "unit": "V",
+      "spice": ".meas tran r4_peak_min_vppd min v(vd)"
+    },
+    {
+      "name": "r4_steady_hi",
+      "unit": "V",
+      "spice": ".meas tran r4_steady_hi find v(vd) at=1.35e-09"
+    },
+    {
+      "name": "r4_steady_lo",
+      "unit": "V",
+      "spice": ".meas tran r4_steady_lo find v(vd) at=2.55e-09"
+    },
+    {
+      "name": "r7_rise_20_80_s",
+      "unit": "s",
+      "spice": ".meas tran r7_rise_20_80_s trig v(vd) val=-0.06 rise=1 td=2.5n targ v(vd) val=0.06 rise=1 td=2.5n"
+    },
+    {
+      "name": "r7_fall_80_20_s",
+      "unit": "s",
+      "spice": ".meas tran r7_fall_80_20_s trig v(vd) val=0.06 fall=1 td=1.3n targ v(vd) val=-0.06 fall=1 td=1.3n"
+    },
+    {
+      "name": "idd_avg",
+      "unit": "A",
+      "spice": ".meas tran idd_avg avg par('-i(vdd)') from=1.5n to=8.8e-09"
+    }
+  ],
+  "options": {
+    "stage_model_inputs": true,
+    "timeout_s": 1800,
+    "keep_artifacts": false
+  }
+}
