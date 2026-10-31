@@ -1,6 +1,6 @@
 # sg13g2-serdes target specification
 
-**Status: PROPOSED — not ratified.** Ratification is the operator's act on
+**Status: PROPOSED — ratification PR open ([DR-005](decisions/DR-005-ratification-scope.md)); not ratified.** Ratification is the operator's act on
 merge; no agent marks it ratified. Every number is labelled by its basis:
 **PDK** (cited from a PDK document), **arith** (arithmetic written out in the
 cited record), **sibling** (a sibling's ratified target, cited at a commit) or
