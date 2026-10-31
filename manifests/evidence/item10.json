@@ -38,7 +38,7 @@
         "role": "hygiene",
         "path": "package.json",
         "passed": true,
-        "content_hash": "sha256:b45683577ef12e26ce16937a8619ad827e132051992e91382f29e8846061e36e"
+        "content_hash": "sha256:8f2fe4b0d67f66f4cc26df84329cf51c16ecfb30a215116d0629e5544cf8b6ab"
       },
       {
         "check": "present",
