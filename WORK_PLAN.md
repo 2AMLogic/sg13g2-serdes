@@ -33,7 +33,6 @@ Human-approved issues ready for implementation (`loom:issue`).
 Issues currently being built (`loom:building`).
 
 - **#21**: T1 item 1 (design sources, analog): TX CML final mux, pre-driver, FFE line driver and pad/ESD schematics
-- **#31**: Replace always-green package.json check stubs with the repo's real checks
 - **#32**: Digital partition: demonstrate or re-budget 625 MHz timing (no gate-level STA yet)
 - **#44**: Install the two-key ratification path and ratify spec/target-spec.md
 
@@ -42,7 +41,6 @@ Issues currently being built (`loom:building`).
 PRs waiting on Judge (`loom:review-requested`).
 
 - **#37**: feat: record gate-level STA of the digital partition and route the 625 MHz miss
-- **#38**: fix(ci): wire package.json checks to the real synth-freshness and cocotb gates
 
 ## Approved (Awaiting Merge)
 
@@ -78,8 +76,8 @@ _None._
 | Very important | 1 |
 | Important | 1 |
 | Ready (`loom:issue`) | 1 |
-| In Progress (`loom:building`) | 4 |
-| PRs awaiting review | 2 |
+| In Progress (`loom:building`) | 3 |
+| PRs awaiting review | 1 |
 | Approved PRs awaiting merge | 2 |
 | Curated | 6 |
 | Architect / Hermit proposals | 0 |

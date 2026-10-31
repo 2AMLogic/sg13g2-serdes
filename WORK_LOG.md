@@ -2,6 +2,11 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-10-31
+
+- **PR #38**: fix(ci): wire package.json checks to the real synth-freshness and cocotb gates
+- **Issue #31** (closed): Replace always-green package.json check stubs with the repo's real checks
+
 ### 2026-10-29
 
 - **PR #54**: ci: fail check-ci when klt pins in klt-pin.env and toolchain.json differ
