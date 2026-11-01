@@ -1,11 +1,11 @@
 # sg13g2-serdes target specification
 
-**Status: PROPOSED — ratification PR open ([DR-005](decisions/DR-005-ratification-scope.md)); not ratified.** Ratification is the operator's act on
+**Status: PROPOSED — ratification PR open ([DR-008](decisions/DR-008-ratification-scope.md)); not ratified.** Ratification is the operator's act on
 merge; no agent marks it ratified. Every number is labelled by its basis:
 **PDK** (cited from a PDK document), **arith** (arithmetic written out in the
 cited record), **sibling** (a sibling's ratified target, cited at a commit) or
 **proposal** (an engineering judgement with reasoning in a decision record or
-the row). No number here is a measurement; nothing is designed or simulated yet.
+the row). No number here is a measurement; simulated sizing and STA records exist under `sim/` and `rtl/synth/sta/` (cited in DR-008), none is a measurement.
 10 Gb/s is the driving target; 12.5 Gb/s shapes nothing (`CLAUDE.md`).
 
 Decision records: [`decisions/`](decisions/). Clock interface:
@@ -34,14 +34,14 @@ Verification column names the testbench class; no testbench exists yet.
 | # | Parameter | Target | Fallback | Stretch | Verification | Corners | Basis |
 |---|---|---|---|---|---|---|---|
 | R1 | Line rate | 10 Gb/s | 5 Gb/s (full-rate, same 5 GHz clock) | 12.5 Gb/s (outside the clock band, see clock-requirement) | Rate is "met" when R15 BER ≤ 1e-12 (extrapolated) holds over R14 at that rate | PVT-full | CLAUDE.md; DR-001 |
-| R2 | Architecture | half-rate TX and RX at 5 GHz; 4-phase RX; HBT CML for the last 2:1 mux, driver, RX front end, 4 sampling latches and 5 GHz clock path; CMOS ≤ 625 MHz; **16:1, 16-bit word @ 625 MHz** | full-rate at 5 Gb/s | quarter-rate RX (2.5 GHz) | Netlist/RTL review against DR-001; boundary checked by clock-domain list | n/a (structural) | DR-001 |
-| R3 | Supplies and device flavours | CML 1.2 V ±10 % with `npn13G2` and thin-oxide MOS bias; digital 1.2 V thin-oxide; IO ring 3.3 V thick-oxide only; no HBT collector node > 1.32 V; no reverse Vbe > 1.0 V | `npn13G2V` on ~1.8–2.0 V CML rail | — | Node-voltage extraction per corner from transient runs; breakdown limits checked against the table below | PVT-full, incl. the +10 % supply | PDK (breakdown), proposal (rails); DR-003 |
+| R2 | Architecture | half-rate TX and RX at 5 GHz; 4-phase RX; HBT CML for the 5 GHz-clocked final 2:1 mux, driver, RX front end, 4 sampling latches and 5 GHz clock path; CMOS for the 625 MHz word domain; the 1.25 GHz and 2.5 GHz-clocked serializer/deserializer stages and the CML-to-CMOS level conversion are **OPEN** (CML or CMOS, assigned per stage when a timing record exists; DR-008); **16:1, 16-bit word @ 625 MHz** | full-rate at 5 Gb/s | quarter-rate RX (2.5 GHz) | Netlist/RTL review against DR-001; boundary checked by a per-stage clock-domain list (625 MHz, 1.25 GHz, 2.5 GHz, 5 GHz), each stage marked CML, CMOS or OPEN; a CMOS stage at ≥ 1.25 GHz needs an STA or SPICE record over the liberty corners | n/a (structural) | DR-001 |
+| R3 | Supplies and device flavours | CML 1.2 V ±10 % with `npn13G2` and thin-oxide MOS bias; digital 1.2 V thin-oxide; IO ring 3.3 V thick-oxide only; HBT collector–emitter voltage ≤ 1.26 V on every device at every corner incl. +10 % supply (90 % of `npn13G2` BVCEO 1.4 V, arith); no reverse Vbe > 1.0 V (BVEBO 1.0 V) | `npn13G2V` on ~1.8–2.0 V CML rail | — | Per-device Vce and reverse-Vbe extraction per corner from transient runs, transient overshoot included; breakdown limits checked against the table below | PVT-full, incl. the +10 % supply | PDK (breakdown), proposal (rails); DR-003 |
 | R4 | TX differential output swing into 100 Ω | 500 mVppd | 300 mVppd | 800 mVppd | Transient, 100 Ω differential load, PRBS-7, measure steady-state swing; loaded by the R18 pad model | PVT-full | proposal |
 | R5 | TX FFE | 2 taps (main + 1 post-cursor); post-cursor de-emphasis 0–6 dB in ≥ 4 steps | no FFE | 3 taps | Pulse response measured in simulation; step-by-step against the model | PVT-full | proposal (README draft) |
 | R6 | TX output return loss (SDD22, 100 Ω) | ≤ −10 dB from DC to 5 GHz | ≤ −8 dB to 5 GHz | ≤ −10 dB to 7.5 GHz | AC/S-parameter of driver + pad network, driver on | PVT-full | proposal |
 | R7 | TX rise/fall (20–80 %) | ≤ 30 ps (0.3 UI) | ≤ 50 ps (0.25 UI at 5 Gb/s) | ≤ 25 ps | Transient step, R4 load | PVT-full | proposal |
 | R8 | RX input sensitivity | 50 mVppd at the pad for BER 1e-12 (extrapolated) after R14 | 100 mVppd | 25 mVppd | Statistical-eye with sampler offset/noise from Monte Carlo records (DR-002) | PVT-full + MC on samplers | proposal |
-| R9 | RX termination and return loss | 100 Ω differential ±10 %; SDD11 ≤ −10 dB to 5 GHz | ±15 %; ≤ −8 dB | ≤ −10 dB to 7.5 GHz | DC resistance and AC/S-parameter of termination + pad | PVT-full, incl. resistor corners | proposal |
+| R9 | RX termination and return loss | 100 Ω differential ±15 % untrimmed (the `rppd` window over −40…125 °C is about −10.5 %/+11.8 %, PDK process spec p.11); SDD11 ≤ −10 dB to 5 GHz | — (target is already the untrimmed PDK window) | ±10 % with a named trim/calibration mechanism; ≤ −10 dB to 7.5 GHz | DC resistance and AC/S-parameter of termination + pad | PVT-full, incl. resistor corners | proposal |
 | R10 | RX CTLE | peaking 0–10 dB at 5 GHz in ≥ 8 steps (covers CH-A's 10.18 dB with margin for FFE to share) | peaking 0–6 dB | + 1 DFE tap (not designed) | AC response per setting; combined channel+FFE+CTLE pulse response | PVT-full | proposal; R14 |
 | R11 | CDR | bang-bang (Alexander), half-rate, 4 phases, digital loop filter | CTLE only, forwarded clock (no CDR) | — | Time-domain behavioural model fitted to latch records (DR-002); lock/hold from simulation | PVT-edge for the loop, PVT-full for the latch fits | README draft; DR-002 |
 | R12 | Jitter-tolerance mask (sinusoidal, UIpp) | ≥ 0.15 above 10 MHz; −20 dB/dec up to ≥ 1.5 at 1 MHz and ≥ 15 at 100 kHz | ≥ 0.1 above 10 MHz, ≥ 1 at 1 MHz | ≥ 0.2 above 10 MHz | Statistical sim sweeping SJ amplitude vs frequency to BER 1e-12 | PVT-edge | proposal; shape is common practice, **not taken from a named standard** |
@@ -58,7 +58,7 @@ Verification column names the testbench class; no testbench exists yet.
 
 HBT breakdown limits on every node that sees the CML rail (PDK process spec
 Rev. 1.2 §3, min column; open-base BVCEO; **not simulated**, see DR-003):
-`npn13G2` BVCEO 1.4 V, BVCBO 3.8 V, BVEBO 1.0 V. R3 uses these as hard limits.
+`npn13G2` BVCEO 1.4 V, BVCBO 3.8 V, BVEBO 1.0 V. R3 bounds Vce at 90 % of BVCEO and reverse Vbe at BVEBO; a collector node above the rail is not itself a violation (DR-008).
 
 ### Pads and ESD (R18, R19)
 
