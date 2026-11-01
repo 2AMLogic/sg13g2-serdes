@@ -73,8 +73,11 @@ Both run the klt pinned in `layout/toolchain.json` through `uvx`, never the host
 The check hashes the RTL files byte for byte, so even a comment edit needs a regenerate.
 
 Last regeneration (pinned klt `267ea83`, Yosys 0.67): 3674 cells, 51 291 um2 (21 800 um2
-sequential), no latches, loops or multiple drivers. **Timing is not demonstrated.** ABC's own
-estimate (no wires, no placement) puts the longest path near 3.0 ns against the 1.6 ns target;
-the pinned install has no gate-level STA (`sta` is null), so 625 MHz is an open item, not a
-result. The per-module estimates when synthesised alone were: checker 3.1 ns, phase detector
-2.6 ns, eye monitor 2.1 ns, loop filter 1.7 ns, PRBS generator 1.2 ns, control 1.3 ns.
+sequential), no latches, loops or multiple drivers. **625 MHz is not met.** Gate-level
+STA (OpenSTA via `klt sta`, `scripts/sta-paths.sh`; typ_1p20V_25C, ideal clock, no wires or
+placement, so a pre-layout *estimate*, not a post-route number) puts the worst setup slack at
+-2.09 ns against the 1.6 ns period (path 3.57 ns, fmax 270.7 MHz, 157 violating endpoints).
+Record: `synth/sta/`; routing of the miss: `spec/decisions/DR-005-digital-timing-budget.md`.
+Worst setup slack by endpoint module: checker -2.09 ns, phase detector -2.03 ns, eye monitor
+-0.95 ns, loop filter -0.51 ns, loopback -0.02 ns, control -0.02 ns, PRBS generator +0.04 ns.
+(`klt synthesize`'s own integrated `sta` stays null: it cannot analyse a hierarchical netlist.)
