@@ -81,7 +81,12 @@ unchanged):
 - DR-001 to DR-004, as the reasoning behind the rows. DR-001 §Decision 3 and its
   16:1 table still say the last two stages are CML and the boundary is at the first
   divided clock; R2 as revised supersedes that wording until a per-stage record
-  exists (a new record will say so).
+  exists (a new record will say so). DR-003 §Decision ("no collector node may
+  exceed 1.32 V", 94 % of BVCEO) and its Consequences line ("A CML rail above
+  1.32 V needs a superseding record") still carry the old ceiling; R3 as revised
+  (Vce ≤ 1.26 V, 90 % of the 1.4 V BVCEO, transients included) supersedes that
+  node-to-ground ceiling until a superseding record exists. DR-003 is append-only
+  and is not edited in place.
 
 This record does **not** ratify: any measured or simulated result, any BER or eye figure (never "measured", DR-002), or any change to a
 number. Apart from the R2, R3 and R9 corrections above, no spec number, corner or fallback
