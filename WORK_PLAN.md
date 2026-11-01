@@ -20,6 +20,7 @@ Judge-approved PRs under a hold (`loom:blocked` or `loom:operator`) — only a h
 `loom:important`; taken before unlabelled work.
 
 - **#3**: PDK and simulator bring-up: pin SG13G2, build the OSDI models, smoke-simulate MOS and HBT models
+- **#23**: T1 item 1 (design sources, digital): serializer/deserializer, PRBS, CDR loop filter RTL plus sg13g2 netlist
 
 ## Ready
 
@@ -27,13 +28,13 @@ Human-approved issues ready for implementation (`loom:issue`).
 
 - **#2**: Draft and ratify the target spec
 - **#3**: PDK and simulator bring-up: pin SG13G2, build the OSDI models, smoke-simulate MOS and HBT models
-- **#23**: T1 item 1 (design sources, digital): serializer/deserializer, PRBS, CDR loop filter RTL plus sg13g2 netlist
 
 ## In Progress
 
 Issues currently being built (`loom:building`).
 
 - **#44**: Install the two-key ratification path and ratify spec/target-spec.md
+- **#69**: Consolidate duplicated xschem emitters in tx/rx gen_schematics.py
 
 ## PRs Awaiting Review
 
@@ -70,9 +71,9 @@ _None._
 |------|-------|
 | Operator merge-risk holds | 1 |
 | Very important | 1 |
-| Important | 1 |
-| Ready (`loom:issue`) | 3 |
-| In Progress (`loom:building`) | 1 |
+| Important | 2 |
+| Ready (`loom:issue`) | 2 |
+| In Progress (`loom:building`) | 2 |
 | PRs awaiting review | 0 |
 | Approved PRs awaiting merge | 1 |
 | Curated | 4 |
