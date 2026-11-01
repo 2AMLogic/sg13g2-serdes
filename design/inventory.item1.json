@@ -34,7 +34,16 @@
     "design/tx/pad_esd.sym",
     "design/tx/tx_top.sch",
     "design/tx/tx_top.sym",
-    "design/tx/gen_schematics.py"
+    "design/tx/gen_schematics.py",
+    "rtl/serdes_cdr_filter.v",
+    "rtl/serdes_cdr_pd.v",
+    "rtl/serdes_ctrl.v",
+    "rtl/serdes_digital_top.v",
+    "rtl/serdes_eye_mon.v",
+    "rtl/serdes_loopback.v",
+    "rtl/serdes_prbs_chk.v",
+    "rtl/serdes_prbs_gen.v",
+    "rtl/synth/request.json"
   ],
   "derived": [
     {
@@ -292,6 +301,30 @@
           "design/xschemrc",
           "--block",
           "--check"
+        ],
+        "cwd": ".",
+        "local_only": true
+      }
+    },
+    {
+      "path": "rtl/synth/serdes_digital_top_synth.v",
+      "generator": "klt synthesize",
+      "check": {
+        "argv": [
+          "bash",
+          "scripts/check-synth-fresh.sh"
+        ],
+        "cwd": ".",
+        "local_only": true
+      }
+    },
+    {
+      "path": "rtl/synth/serdes_digital_top.synth.json",
+      "generator": "klt synthesize",
+      "check": {
+        "argv": [
+          "bash",
+          "scripts/check-synth-fresh.sh"
         ],
         "cwd": ".",
         "local_only": true
