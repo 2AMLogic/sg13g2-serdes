@@ -4,6 +4,10 @@ Chronological record of merged PRs and closed issues. Maintained by the Guide ro
 
 ### 2026-11-01
 
+- **PR #64**: docs(spec): add DR-007 CDR loop delay analysis
+- **PR #63**: feat(rtl): pipeline the digital partition to meet the 1.6 ns word clock pre-layout
+- **Issue #62** (closed): Write the CDR loop analysis and check the 7-clock digital loop delay against it
+- **Issue #36** (closed): Restructure digital partition RTL to close 625 MHz timing (DR-005)
 - **PR #60**: Bump Repo Skills 0.24.7 -> 0.25.1
 - **PR #37**: feat: record gate-level STA of the digital partition and route the 625 MHz miss
 - **Issue #32** (closed): Digital partition: demonstrate or re-budget 625 MHz timing (no gate-level STA yet)
