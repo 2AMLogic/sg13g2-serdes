@@ -29,9 +29,19 @@ Reproduced by `scripts/cdr-loop-analysis.py` (numpy only, ~20 s,
 - **KP = 16, KI = 1, FMAX = 1023** (phase LSB per vote / freq LSB per vote).
 - Units: 1 phase LSB = 1/16384 clock period = 1/8192 UI (half-rate); half a UI
   = 4096 LSB; one word = 16 UI, so 1 ppm = 0.131 LSB per word.
-- `u[n]` is the PD vote sum measured L-1 words earlier. **L = total delay in
-  word clocks** from a data word to the `pi_code` that reflects it = digital +
-  analog.
+- `u[n]` is the PD vote sum measured `D = L-1` words earlier, i.e.
+  `corr[n-(L-1)]`. Both views below use this one convention
+  (`simulate()` keeps a `D`-entry delay line; `stable_gain_max(L-1)` uses the
+  same `D`). **L = clocks around the whole loop**
+  (`pi_code` -> analog -> RX register -> PD -> filter -> `pi_code`) = digital +
+  analog. The filter's own `phi[n+1]` update is one of those L clocks (the model
+  with `D = 0` is a 1-clock loop), so the filter's 3 clocks to `pi_code` count
+  inside the digital 7, not on top of it. Mapping: RX reg 1 + PD 3 + filter 3 = 7
+  digital; + 1 assumed analog = L = 8, i.e. `D = 7`.
+- An earlier revision of the script gave the simulation an `L`-word delay
+  while the g_max table used `L-1`; that was a bug (found in review of this PR).
+  The simulation table below is the corrected re-run; its rows are the previous
+  rows shifted by one.
 - Two views: (a) linearised stability, largest effective PD gain g (votes/LSB)
   for which `(z-1)^2 z^(L-1) + g(KP(z-1)+KI) = 0` stays inside the unit circle;
   (b) time-domain bang-bang simulation at +300 ppm (R13), 120 000 words,
@@ -49,52 +59,62 @@ Reproduced by `scripts/cdr-loop-analysis.py` (numpy only, ~20 s,
 
 ## Margin criterion
 
-Chosen before the run: peak phase error with `Binomial(16, 0.5)` votes, no
+Builder's stated choice (no earlier commit carries it as evidence): peak phase error with `Binomial(16, 0.5)` votes, no
 noise, at +300 ppm, must stay **<= 0.05 UI** and the loop must not slip (error
 reaching 0.5 UI). Why: 0.05 UI of deterministic limit-cycle error is a
 sizeable but bounded share of the jitter budget, and it is a clean separator.
-The error grows slowly with delay up to 9 and then climbs steeply
-(0.046 -> 0.062 -> 0.082 -> 0.14 -> 0.28 -> 1.0 UI for L = 9..14), so the
-conclusion is not sensitive to the exact threshold within 0.04..0.06 UI.
+The error grows slowly with delay up to 10 and then climbs steeply
+(0.046 -> 0.062 -> 0.082 -> 0.14 -> 0.28 UI for L = 10..14).
+
+Threshold sensitivity, read off the table: L = 8 (0.0293 UI) passes for any
+threshold >= 0.030 UI, i.e. with 41 % margin on the chosen 0.05 UI. The
+allowed-delay result (L <= 10) holds for thresholds from 0.0462 UI up to just
+below 0.0623 UI; a threshold in 0.0407..0.0462 UI gives L <= 9, and so on down.
+Outside roughly 0.046..0.062 UI the allowed L changes by one or more clocks.
 
 ## Results (simulated)
 
 Linearised g_max (votes/LSB): L=2 0.0622, 4 0.0256, 6 0.0148, 8 0.0094,
-10 0.0061, 12 0.0036, 14 0.0017. Peak |e| in UI, +300 ppm:
+10 0.0061, 12 0.0036, 14 0.0017 (same `D = L-1` as the simulation). Peak |e| in
+UI, +300 ppm:
 
 | L | all-16 votes | Bin(16,.5) | Bin + 3 % UI noise | slip | criterion |
 |---|---|---|---|---|---|
-| 2 | 0.0132 | 0.0132 | 0.0626 | no | pass |
-| 4 | 0.0135 | 0.0135 | 0.1118 | no | pass |
-| 6 | 0.0241 | 0.0241 | 0.1822 | no | pass |
-| 7 | 0.0291 | 0.0293 | 0.2237 | no | pass |
-| **8 (7 digital + 1 analog)** | 0.0407 | **0.0407** | 0.2690 | no | **pass** |
-| 9 | 0.0455 | 0.0462 | 0.3381 | no | pass |
-| 10 | 0.0623 | 0.0623 | 0.4990 | no | fail |
-| 11 | 0.0816 | 0.0817 | 0.7114 | YES (noisy) | fail |
-| 12 | 0.1402 | 0.1409 | 1.2286 | YES | fail |
+| 2 | 0.0120 | 0.0120 | 0.0447 | no | pass |
+| 4 | 0.0132 | 0.0132 | 0.0758 | no | pass |
+| 6 | 0.0184 | 0.0190 | 0.1426 | no | pass |
+| 7 | 0.0241 | 0.0241 | 0.1822 | no | pass |
+| **8 (7 digital + 1 analog)** | 0.0291 | **0.0293** | 0.2237 | no | **pass** |
+| 9 | 0.0407 | 0.0407 | 0.2690 | no | pass |
+| 10 | 0.0455 | 0.0462 | 0.3381 | no | pass |
+| 11 | 0.0623 | 0.0623 | 0.4990 | no | fail |
+| 12 | 0.0816 | 0.0817 | 0.7114 | YES (noisy) | fail |
+| 13 | 0.1402 | 0.1409 | 1.2286 | YES | fail |
 
--300 ppm at L = 8: peak 0.0409 UI, final integrator -43; 0 ppm: 0.0000 UI.
+-300 ppm at L = 8: peak 0.0296 UI, final integrator -48; 0 ppm: 0.0000 UI.
 
 ## Decision
 
-1. **Allowed total delay L <= 9 word clocks** under the criterion above.
+1. **Allowed total delay L <= 10 word clocks** under the criterion above.
    With the assumed analog delay of 1 that is **an allowed digital delay of
-   <= 8 clocks**.
-2. **The 7-clock digital loop passes** (L = 8: 0.041 UI peak, no slip, +300 and
-   -300 ppm). KP = 16 and KI = 1 are kept; `rtl/` and its tests are unchanged
+   <= 9 clocks**.
+2. **The 7-clock digital loop passes** (L = 8: 0.029 UI peak, 41 % margin on
+   the 0.05 UI threshold, no slip, +300 and -300 ppm), for the noise-free
+   criterion only; with 3 % UI rms decision noise the peak is 0.22 UI, so
+   this is not a statement that the loop is adequate for the link. KP = 16 and KI = 1 are kept; `rtl/` and its tests are unchanged
    and no latency-cut record is needed.
 3. Digital delay of 7 is the single value the DR-002 statistical CDR model
    reads; when that model is filed it cites this record.
 
 ## Consequences and limits
 
-- **Headroom is one clock.** If the real analog delay is 2 or more, L >= 9 and
-  the loop is at or past the edge; at 3+ it fails. The assumed analog delay is
-  the weakest link of this record and needs a PI/sampler/deserialiser delay
-  record. Until then a pass here means "passes if analog <= 2 words".
+- **Headroom is two clocks** (allowed L <= 10, used L = 8). If the real analog
+  delay is 4 or more, L >= 11 and the loop fails the criterion. The assumed
+  analog delay is the weakest link of this record and needs a
+  PI/sampler/deserialiser delay record. Until then a pass here means "passes if
+  analog <= 3 words".
 - **With noise the margin is thin.** At L = 8 and 3 % UI rms decision noise the
-  noise-free criterion passes but the peak error is 0.27 UI (sd ~0.13 UI), no
+  noise-free criterion passes but the peak error is 0.22 UI (sd ~0.10 UI), no
   slip. The 3 % figure is a placeholder, not a fitted value; the real noise
   comes from the sampler/jitter records (DR-002). Re-run the script with those
   values when they exist, and revisit if the peak approaches 0.5 UI.

@@ -4,11 +4,15 @@
 Models the word-rate (625 MHz) digital bang-bang loop of rtl/serdes_cdr_filter.v:
     f[n+1] = sat(f[n] + KI*u[n]);  phi[n+1] = phi[n] + KP*u[n] + f[n]   (mod 2^14)
     pi_code = phi[13:7]  (applied phase = 128 * pi_code)
-    u[n]    = corr measured (L-1) words earlier  (L = total clocks from a word to
-              the pi_code that reflects it = DIGITAL + ANALOG)
+    u[n]    = corr measured D = L-1 words earlier, i.e. corr[n-(L-1)]
+              L = clocks around the whole loop (pi_code -> analog -> RX reg -> PD ->
+              filter -> pi_code) = DIGITAL + ANALOG.  The filter's own phi[n+1]
+              update is one of those L clocks (the model with D=0 is a 1-clock loop),
+              so the filter's 3 clocks to pi_code count inside DIGITAL, not on top.
+    The same D = L-1 is used by stable_gain_max() and simulate().
 Phase unit: 1 LSB = 1/16384 clock period = 1/8192 UI (half-rate).
 
-Usage: python3 -I scripts/cdr-loop-analysis.py        (numpy only, ~1 min)
+Usage: python3 -I scripts/cdr-loop-analysis.py        (numpy only, ~20 s)
 """
 import numpy as np
 
@@ -18,7 +22,7 @@ HALF_UI = UI / 2
 PPM_LSB = 0.131072               # LSB per word per ppm  (16 UI * 1e-6 * 8192)
 DIGITAL = 7                      # RX reg 1 + PD 3 + filter->pi_code 3 (DR-006)
 ANALOG_ASSUMED = 1               # words; ASSUMPTION, not traced (see DR-007)
-CRIT_PK_UI = 0.05                # limit-cycle peak error criterion, chosen before running
+CRIT_PK_UI = 0.05                # limit-cycle peak error criterion (builder's stated choice)
 NWORDS, SETTLE = 120000, 60000
 
 
@@ -47,7 +51,7 @@ def simulate(L, ppm, mode, sigma_lsb=0.0, seed=1):
     D = L - 1
     phi, f = float(1 << 13), 0
     theta0 = phi
-    hist = [0] * (D + 1)         # delay line for corr
+    hist = [0] * D               # delay line: append then pop(0) yields corr[n-D]
     errs = []
     for n in range(NWORDS):
         theta = theta0 + ppm * PPM_LSB * n
