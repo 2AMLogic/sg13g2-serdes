@@ -4,79 +4,55 @@
   "engine_version": "0.67+post",
   "hdl_toplevel": "serdes_digital_top",
   "parameters": {},
-  "run_id": "run-deb5795919844e9aab67831620b032d4",
+  "run_id": "run-9765142c6f494052aefbeb594ed2d9f8",
   "status": "ok",
-  "instance_count": 3674,
-  "area_um2": 51290.5932,
-  "sequential_area_um2": 21800.016,
+  "instance_count": 4843,
+  "area_um2": 71244.4572,
+  "sequential_area_um2": 34537.104,
   "instance_counts_by_type": {
-    "sg13g2_a21o_1": 36,
-    "sg13g2_a21o_2": 1,
-    "sg13g2_a21oi_1": 443,
-    "sg13g2_a21oi_2": 5,
-    "sg13g2_a221oi_1": 12,
-    "sg13g2_a22oi_1": 114,
-    "sg13g2_and2_1": 87,
-    "sg13g2_and2_2": 1,
-    "sg13g2_and3_1": 12,
-    "sg13g2_and4_1": 20,
-    "sg13g2_buf_1": 124,
-    "sg13g2_buf_16": 1,
-    "sg13g2_buf_2": 1,
-    "sg13g2_buf_4": 5,
-    "sg13g2_buf_8": 6,
-    "sg13g2_dfrbpq_1": 445,
-    "sg13g2_dlygate4sd2_1": 1,
-    "sg13g2_inv_1": 140,
-    "sg13g2_mux2_1": 28,
-    "sg13g2_mux2_2": 5,
-    "sg13g2_nand2_1": 311,
-    "sg13g2_nand2_2": 2,
-    "sg13g2_nand2b_1": 114,
-    "sg13g2_nand3_1": 110,
-    "sg13g2_nand3b_1": 27,
-    "sg13g2_nand4_1": 41,
-    "sg13g2_nor2_1": 162,
-    "sg13g2_nor2b_1": 67,
-    "sg13g2_nor3_1": 56,
-    "sg13g2_nor3_2": 1,
-    "sg13g2_nor4_1": 38,
-    "sg13g2_nor4_2": 3,
-    "sg13g2_o21ai_1": 257,
-    "sg13g2_or2_1": 27,
-    "sg13g2_or2_2": 2,
-    "sg13g2_or3_1": 18,
-    "sg13g2_or3_2": 1,
-    "sg13g2_or4_1": 10,
-    "sg13g2_tiehi": 463,
-    "sg13g2_tielo": 198,
-    "sg13g2_xnor2_1": 160,
-    "sg13g2_xor2_1": 119
+    "sg13g2_a21o_1": 50,
+    "sg13g2_a21oi_1": 579,
+    "sg13g2_a221oi_1": 13,
+    "sg13g2_a22oi_1": 138,
+    "sg13g2_and2_1": 132,
+    "sg13g2_and3_1": 18,
+    "sg13g2_and4_1": 14,
+    "sg13g2_buf_1": 180,
+    "sg13g2_dfrbpq_1": 705,
+    "sg13g2_inv_1": 150,
+    "sg13g2_mux2_1": 7,
+    "sg13g2_nand2_1": 368,
+    "sg13g2_nand2b_1": 160,
+    "sg13g2_nand3_1": 97,
+    "sg13g2_nand3b_1": 20,
+    "sg13g2_nand4_1": 53,
+    "sg13g2_nor2_1": 178,
+    "sg13g2_nor2b_1": 64,
+    "sg13g2_nor3_1": 57,
+    "sg13g2_nor4_1": 43,
+    "sg13g2_o21ai_1": 408,
+    "sg13g2_or2_1": 32,
+    "sg13g2_or3_1": 7,
+    "sg13g2_or4_1": 18,
+    "sg13g2_tiehi": 713,
+    "sg13g2_tielo": 307,
+    "sg13g2_xnor2_1": 206,
+    "sg13g2_xor2_1": 126
   },
-  "leakage_power_nw": 578.5871387,
+  "leakage_power_nw": 789.5830751999999,
   "leakage_by_type_nw": {
     "sg13g2_a21o_1": 0.158296,
-    "sg13g2_a21o_2": 0.224289,
     "sg13g2_a21oi_1": 0.11447700000000001,
-    "sg13g2_a21oi_2": 0.228945,
     "sg13g2_a221oi_1": 0.157856,
     "sg13g2_a22oi_1": 0.13888499999999998,
     "sg13g2_and2_1": 0.13761,
-    "sg13g2_and2_2": 0.21032,
     "sg13g2_and3_1": 0.14666200000000001,
     "sg13g2_and4_1": 0.151909,
     "sg13g2_buf_1": 0.110317,
-    "sg13g2_buf_16": 1.3853900000000001,
-    "sg13g2_buf_2": 0.18154499999999998,
-    "sg13g2_buf_4": 0.337354,
-    "sg13g2_buf_8": 0.69269,
     "sg13g2_dfrbpq_1": 0.510517,
-    "sg13g2_dlygate4sd2_1": 0.18857200000000002,
     "sg13g2_inv_1": 0.0630032,
     "sg13g2_mux2_1": 0.246339,
-    "sg13g2_mux2_2": 0.30929199999999996,
     "sg13g2_nand2_1": 0.0812456,
-    "sg13g2_nand2_2": 0.16059500000000002,
     "sg13g2_nand2b_1": 0.128618,
     "sg13g2_nand3_1": 0.08718479999999999,
     "sg13g2_nand3b_1": 0.134524,
@@ -84,14 +60,10 @@
     "sg13g2_nor2_1": 0.08292350000000001,
     "sg13g2_nor2b_1": 0.130258,
     "sg13g2_nor3_1": 0.0950841,
-    "sg13g2_nor3_2": 0.18571000000000001,
     "sg13g2_nor4_1": 0.0997618,
-    "sg13g2_nor4_2": 0.19953600000000002,
     "sg13g2_o21ai_1": 0.126648,
     "sg13g2_or2_1": 0.114895,
-    "sg13g2_or2_2": 0.168119,
     "sg13g2_or3_1": 0.121923,
-    "sg13g2_or3_2": 0.17038499999999998,
     "sg13g2_or4_1": 0.124109,
     "sg13g2_tiehi": 0.0580661,
     "sg13g2_tielo": 0.057848000000000004,
@@ -101,7 +73,7 @@
   "timing": {
     "source": "abc_stime",
     "wire_load": null,
-    "critical_path_ps": 3020.77,
+    "critical_path_ps": 1252.14,
     "delay_target_ps": 1600
   },
   "clock_targets": {
@@ -111,7 +83,7 @@
     "per_clock_enforced": false
   },
   "sta": null,
-  "sta_unavailable_reason": "the optional klt_statime_native extension is not installed, so no gate-level static timing analysis was attempted -- from a repo checkout, run `uv sync --group statime` (or `maturin develop --release` inside native/statime/) and re-run to populate `sta`",
+  "sta_unavailable_reason": "the optional klt_statime_native extension is not installed (it is not shipped with the published klayout-tools package), so no gate-level static timing analysis was attempted -- from a repo checkout, run `uv sync --group statime` (or `maturin develop --release` inside native/statime/) and re-run to populate `sta`; from an installed package, `klt sta` with a `verilog` request gives a netlist-level timing estimate (needs OpenSTA)",
   "structural": {
     "latches": 0,
     "expected_latches": 0,
@@ -141,43 +113,35 @@
     "engine_supports_dont_use": true
   },
   "warnings": {
-    "total": 3,
-    "by_category": {
-      "other": 3
-    },
-    "representatives": [
-      {
-        "category": "other",
-        "count": 3,
-        "text": "at rtl/serdes_prbs_chk.v:59.27-59.38: candiate for shiftadd optimization (shifting '\\h' by '$sub$rtl/serdes_prbs_chk.v:58$180_Y [5:0] - 30' bits) was ignored to avoid high resource usage, see help peepopt"
-      }
-    ]
+    "total": 0,
+    "by_category": {},
+    "representatives": []
   },
   "memory_mapping": {
     "status": "none_detected",
     "reason": null,
     "modules": [],
     "script_path": {
-      "path": "rtl/synth/.klt/synthesize/run-deb5795919844e9aab67831620b032d4/serdes_digital_top_memory_evidence.ys",
+      "path": "rtl/synth/.klt/synthesize/run-9765142c6f494052aefbeb594ed2d9f8/serdes_digital_top_memory_evidence.ys",
       "scope": "repo"
     }
   },
   "blackbox_modules": [],
   "netlist_path": {
-    "path": "rtl/synth/.klt/synthesize/run-deb5795919844e9aab67831620b032d4/serdes_digital_top_synth.v",
+    "path": "rtl/synth/.klt/synthesize/run-9765142c6f494052aefbeb594ed2d9f8/serdes_digital_top_synth.v",
     "scope": "repo"
   },
-  "netlist_sha256": "303ba30aab361132f9bd18c316146137f1afd33eabaf922e255236da9a0125ad",
+  "netlist_sha256": "d659124458e555fdf5dabdd5bb80246b9c44585486021e466e67b8c9a6edb4aa",
   "script_path": {
-    "path": "rtl/synth/.klt/synthesize/run-deb5795919844e9aab67831620b032d4/synth_serdes_digital_top.ys",
+    "path": "rtl/synth/.klt/synthesize/run-9765142c6f494052aefbeb594ed2d9f8/synth_serdes_digital_top.ys",
     "scope": "repo"
   },
   "run_script_path": {
-    "path": "rtl/synth/.klt/synthesize/run-deb5795919844e9aab67831620b032d4/synth_serdes_digital_top.run.ys",
+    "path": "rtl/synth/.klt/synthesize/run-9765142c6f494052aefbeb594ed2d9f8/synth_serdes_digital_top.run.ys",
     "scope": "repo"
   },
   "provenance": {
-    "klt_version": "0.7.1.dev1771+g267ea83a0510",
+    "klt_version": "0.8.0",
     "klayout_version": "0.30.12",
     "pdk": {
       "name": "ihp-sg13g2",
@@ -193,7 +157,7 @@
       "released": false
     },
     "input": {
-      "content_hash": "sha256:0d1ce63d9f32a807f8ea498f98b1cdc0e3fe857d71dbf947703d57cd53ba0a11",
+      "content_hash": "sha256:4b390fe301e0d02315a539c3dedffc83579ab4cba08752f1d2ade8742d9672da",
       "role": "source"
     },
     "parameters": {}

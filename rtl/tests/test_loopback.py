@@ -15,7 +15,7 @@ async def mux_matrix(dut):
     for n in ("prbs_word", "ext_word", "rx_d_in", "rx_e_in"):
         getattr(dut, n).value = 0
     await bu.start(dut)
-    tx_model = 0
+    prev_tx = 0                        # TX register value before the clock edge
     for _ in range(800):
         s_ext, p_en, plb, slb = (rng.getrandbits(1) for _ in range(4))
         pw, ew, rd, re = (rng.getrandbits(16) for _ in range(4))
@@ -23,13 +23,15 @@ async def mux_matrix(dut):
         dut.par_lb.value, dut.ser_lb_ctl.value = plb, slb
         dut.prbs_word.value, dut.ext_word.value = pw, ew
         dut.rx_d_in.value, dut.rx_e_in.value = rd, re
-        # combinational outputs react to the loopback select and the CURRENT tx_word
+        # rx_d / rx_e are registered (issue #36): they capture the loopback select,
+        # the RX inputs and the tx_word that was held BEFORE this clock edge
         await FallingEdge(dut.clk)
         want_tx = ew if s_ext else (pw if p_en else 0)
         bu.expect("tx", int(dut.tx_word.value), want_tx, "registered TX word")
-        bu.expect("rx_d", int(dut.rx_d.value), want_tx if plb else rd, "rx data word")
+        bu.expect("rx_d", int(dut.rx_d.value), prev_tx if plb else rd, "rx data word")
         bu.expect("rx_e", int(dut.rx_e.value), 0 if plb else re, "rx edge word")
         bu.expect("ser_lb", int(dut.ser_lb.value), slb, "serial loopback control")
+        prev_tx = want_tx
 
 
 @cocotb.test()

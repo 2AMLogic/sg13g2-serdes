@@ -18,6 +18,7 @@ LSB_PER_UI = 16384 / 2            # one clock period = 2 UI (half rate)
 
 
 async def setup(dut, **inp):
+    hist[:] = [ref.CdrFilter().pi_code] * (PI_LAG + 1)
     dut.clear.value = 0
     dut.en.value = 1
     dut.hold.value = 0
@@ -31,13 +32,21 @@ def sgn(sig):
     return v.to_signed() if hasattr(v, "to_signed") else int(v)
 
 
+PI_LAG = 2          # pi_code trails freq_o by two clocks (F2, F3 stages)
+hist = []           # model pi_code after each step, oldest first
+
+
 async def step(dut, m, corr, valid=1, check=True):
     dut.corr.value = corr
     dut.corr_valid.value = valid
     await FallingEdge(dut.clk)
+    if int(dut.clear.value):            # clear flushes the pipeline: pi_code is at reset value now
+        hist[:] = [m.pi_code] * (PI_LAG + 1)
+    else:
+        hist.append(m.pi_code)
     if check:
         got = (int(dut.pi_code.value), sgn(dut.freq_o), int(dut.freq_sat.value))
-        want = (m.pi_code, m.freq, int(m.sat))
+        want = (hist[-1 - PI_LAG], m.freq, int(m.sat))
         if got != want:
             bu.fail("model", f"pi/freq/sat got {got}, want {want}")
 

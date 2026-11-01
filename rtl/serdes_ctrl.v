@@ -100,6 +100,10 @@ module serdes_ctrl (
     reg  [15:0] edwell;
     reg  [31:0] snap_err, snap_bits;
     reg         snap_pend;
+    // The checker's err_cnt is a resolved value (carry logic behind it), so it is
+    // staged through a plain register before the snapshot mux (DR-005, issue
+    // #36): the snapshot is of the counters one clock before the snap_pend clock.
+    reg  [31:0] chk_err_q, chk_bits_q;
 
     assign prbs_en  = ctrl[0];
     assign src_ext  = ctrl[1];
@@ -149,6 +153,7 @@ module serdes_ctrl (
 
     always @(posedge clk) begin
         chk_clear <= 1'b0; gen_restart <= 1'b0; cdr_clear <= 1'b0; eye_start <= 1'b0;
+        chk_err_q <= chk_err; chk_bits_q <= chk_bits;
         if (!rst_n) begin
             ctrl <= 8'h02; eph <= 7'd0; eofs <= 6'd0; edwell <= 16'h0100;
             snap_err <= 32'd0; snap_bits <= 32'd0; snap_pend <= 1'b0;
@@ -157,7 +162,7 @@ module serdes_ctrl (
         end else begin
             if (snap_pend) begin
                 // taken one clock after the write so the pulse and counters are stable
-                snap_err <= chk_err; snap_bits <= chk_bits; snap_pend <= 1'b0;
+                snap_err <= chk_err_q; snap_bits <= chk_bits_q; snap_pend <= 1'b0;
             end
             if (!cs_act) begin
                 nrise <= 5'd0; spi_miso <= 1'b0;

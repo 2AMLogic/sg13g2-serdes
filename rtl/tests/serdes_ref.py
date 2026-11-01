@@ -57,55 +57,96 @@ class PrbsGen:
 
 
 class PrbsChk:
-    """Mirror of serdes_prbs_chk (see the RTL header for the rule set).
+    """Register-level mirror of serdes_prbs_chk (the RTL header has the rule set).
 
-    Counters in the RTL run one clock behind word_err; `err` / `bits` here are
-    the settled values after the word has been accumulated."""
+    The checker is a pipeline (issue #36): call `clock(word)` once per clock edge
+    (word=None for an idle clock, en = 0); the attributes then hold what the DUT
+    outputs show after that edge. `err` / `bits` are the resolved counter values
+    (the RTL err_cnt port includes its pending carry)."""
 
     def __init__(self, order, lock_words=4, loss_thr=8):
         self.order, self.lock_words, self.loss_thr = order, lock_words, loss_thr
         self.clear()
 
     def clear(self):
-        self.h, self.good, self.locked = 0, 0, False
-        self.err, self.bits, self.word_err = 0, 0, 0
+        self.rr = self.f = 0
+        self.good, self.locked, self.was_locked = 0, False, False
+        self.vA = self.hcA = False
+        self.rxA = 0
+        self.vB = self.wlB = False
+        self.eB = 0
+        self.vC = self.wlC = False
+        self.pcC = 0
+        self.word_valid, self.word_err = False, 0
+        self.err, self.bits = 0, 0
+
+    def _tbits(self, hist, extra):
+        n = N_K[self.order][0]
+        return [(hist >> (n - 1 - j)) & 1 for j in range(n)] + extra
+
+    def clock(self, word=None, clear=False):
+        if clear:
+            self.clear()
+            return
+        n, k = N_K[self.order]
+        # ---- combinational values from the current state ----
+        hc_now, rr_new = False, self.rr
+        if word is not None:
+            rx = bits_of(word)
+            t = self._tbits(self.rr, rx)
+            e_h = [rx[i] ^ t[i] ^ t[i + k] for i in range(16)]
+            rr_new = sum(rx[15 - j] << j if j < 16 else ((self.rr >> (j - 16)) & 1) << j
+                         for j in range(n))
+            hc_now = not any(e_h) and rr_new != 0
+        t = self._tbits(self.f, [0] * 16)
+        for i in range(16):
+            t[n + i] = t[i] ^ t[i + k]
+        ref_w = [t[n + i] for i in range(16)]
+        f_adv = sum(ref_w[15 - j] << j if j < 16 else ((self.f >> (j - 16)) & 1) << j
+                    for j in range(n))
+        lost = (self.locked and self.word_valid and self.was_locked
+                and self.word_err >= self.loss_thr)
+        gain = self.vA and not self.locked and self.hcA and self.good + 1 >= self.lock_words
+        # ---- next state (all from the values above) ----
+        e_err, e_bits = self.err, self.bits
+        if self.word_valid:
+            e_err = min(e_err + self.word_err, 0xFFFFFFFF)
+            if self.was_locked:
+                e_bits = min(e_bits + 16, 0xFFFFFFFF)
+        nxt = {}
+        nxt["word_valid"] = self.vC
+        if self.vC:
+            nxt["word_err"] = self.pcC if self.wlC else 0
+            nxt["was_locked"] = self.wlC
+        if self.vB:
+            nxt["pcC"] = bin(self.eB).count("1")
+            nxt["wlC"] = self.wlB
+        nxt["vC"] = self.vB
+        nxt["vB"] = self.vA
+        if self.vA:
+            nxt["eB"] = pack([a ^ b for a, b in zip(bits_of(self.rxA), ref_w)])
+            nxt["wlB"] = self.locked
+            nxt["f"] = self.rr if gain else f_adv
+        locked, good = self.locked, self.good
+        if lost:
+            locked, good = False, 0
+        elif self.vA and not self.locked:
+            if self.hcA:
+                if gain:
+                    locked = True
+                good = min(good + 1, 15)
+            else:
+                good = 0
+        nxt["locked"], nxt["good"] = locked, good
+        nxt["vA"] = word is not None
+        if word is not None:
+            nxt["hcA"], nxt["rxA"], nxt["rr"] = hc_now, word, rr_new
+        nxt["err"], nxt["bits"] = e_err, e_bits
+        for key, val in nxt.items():
+            setattr(self, key, val)
 
     def word(self, w):
-        n, k = N_K[self.order]
-        # T[j] j<n: history oldest..newest; T[n+i]: word bit i
-        past = [(self.h >> (n - 1 - j)) & 1 for j in range(n)]
-        rx = [(w >> i) & 1 for i in range(16)]
-        th = past + rx
-        eh = [rx[i] ^ th[i] ^ th[i + k] for i in range(16)]
-        tl = past + [0] * 16
-        for i in range(16):
-            tl[n + i] = tl[i] ^ tl[i + k]
-        el = [rx[i] ^ tl[n + i] for i in range(16)]
-
-        def hist(t):
-            return sum(t[n + 15 - j] << j for j in range(n))
-
-        h_hunt, h_lock = hist(th), hist(tl)
-        pc = sum(el)
-        lost = self.locked and pc >= self.loss_thr
-        nerr = pc if self.locked else 0
-        was = self.locked
-        if self.locked and not lost:
-            self.h = h_lock
-        else:
-            self.h = h_hunt
-            if lost:
-                self.locked, self.good = False, 0
-            elif not any(eh) and h_hunt != 0:
-                if self.good + 1 >= self.lock_words:
-                    self.locked = True
-                self.good = min(self.good + 1, 15)
-            else:
-                self.good = 0
-        self.word_err = nerr
-        self.err = min(self.err + nerr, 0xFFFFFFFF)
-        if was:
-            self.bits = min(self.bits + 16, 0xFFFFFFFF)
+        self.clock(w)
 
 
 class CdrPd:
