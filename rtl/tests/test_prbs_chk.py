@@ -18,38 +18,42 @@ async def setup(dut, sel31):
     await bu.start(dut)
 
 
+DRAIN = 8      # clocks for a word to leave the pipeline and be counted
+
+
 class Drv:
-    """Counters run one clock behind the per-word result, so they are compared
-    with the model state from before the word just fed; flush() drains the
-    accumulate stage."""
+    """One word per clock into the DUT and the register-level model
+    (serdes_ref.PrbsChk), compared after every clock edge: lock flag, word_err,
+    word_valid and the resolved counters. flush() clocks idle cycles (en = 0) until
+    the last word has been counted."""
 
     def __init__(self, dut, order):
         self.d, self.m = dut, ref.PrbsChk(order)
-        self.prev = (0, 0)
 
-    def counters(self):
-        return int(self.d.err_cnt.value), int(self.d.bit_cnt.value)
+    def check(self):
+        d, m = self.d, self.m
+        got = (int(d.locked.value), int(d.word_valid.value), int(d.word_err.value),
+               int(d.err_cnt.value), int(d.bit_cnt.value))
+        want = (int(m.locked), int(m.word_valid), m.word_err, m.err, m.bits)
+        if got != want:
+            bu.fail("model", f"locked/word_valid/word_err/err/bits got {got}, want {want}")
 
     async def word(self, w):
-        """Feed one word; compare all DUT outputs to the model after it."""
+        """Feed one word; compare all DUT outputs to the model after the edge."""
         d = self.d
         d.rx_word.value = w
         d.en.value = 1
-        prev = (self.m.err, self.m.bits)
-        self.m.word(w)
-        await FallingEdge(d.clk)      # state updated at the rising edge
-        got = (int(d.locked.value), int(d.word_err.value), self.counters())
-        want = (int(self.m.locked), self.m.word_err, prev)
-        if got != want:
-            bu.fail("model", f"locked/word_err/(err,bits) got {got}, want {want}")
+        self.m.clock(w)
+        await FallingEdge(d.clk)
+        self.check()
         return self.m
 
     async def flush(self):
         self.d.en.value = 0
-        await FallingEdge(self.d.clk)
-        want = (self.m.err, self.m.bits)
-        if self.counters() != want:
-            bu.fail("model", f"settled (err,bits) got {self.counters()}, want {want}")
+        for _ in range(DRAIN):
+            self.m.clock(None)
+            await FallingEdge(self.d.clk)
+            self.check()
         self.d.en.value = 1
 
 
@@ -150,7 +154,7 @@ async def loss_of_lock_and_relock(dut):
     for w in stream(7, 40):
         m = await c.word(w)
     assert m.locked
-    for _ in range(4):
+    for _ in range(12):                  # loss is decided a few words late
         m = await c.word(rng.getrandbits(16))
     if m.locked:
         bu.fail("loss", "lock not dropped under random data")
@@ -170,18 +174,13 @@ async def clear_and_saturation(dut):
     for w in stream(7, 40):
         await c.word(w)
     await c.flush()
-    dut.err_cnt.value = 0xFFFFFFF8
-    dut.bit_cnt.value = 0xFFFFFFF8
+    # the counters are split registers with registered carries: set them all
+    dut.el.value, dut.eh.value, dut.pe.value, dut.pend.value = 0x18, (1 << 27) - 1, 0x7, 0
+    dut.bit_cnt.value, dut.pb.value = 0xFFFFFFF8, 0x7
     c.m.err = c.m.bits = 0xFFFFFFF8
     # continue the stream from the model state, one flipped bit in every word
-    g = c.m.h
-    for _ in range(10):   # 8 errors to saturate from ...F8 (+1 per word), 10 words
-        bits = []
-        for _ in range(16):
-            g, b = ref.prbs_step(g, 7)
-            bits.append(b)
-        bits[0] ^= 1
-        await c.word(ref.pack(bits))
+    for w in stream(7, 50)[40:]:   # 8 errors to saturate from ...F8 (+1 per word), 10 words
+        await c.word(w ^ 1)
     await c.flush()
     got = (int(dut.err_cnt.value), int(dut.bit_cnt.value))
     if got != (0xFFFFFFFF, 0xFFFFFFFF):

@@ -139,11 +139,11 @@ module serdes_prbs_chk #(
     // ---- counters (DR-005 option 1, issue #36) ----
     // A 32-bit saturating add is too deep for 1.6 ns, so the carries are kept
     // in flops. err_cnt = {eh, el}: `el` (5 b) takes the word's mismatches, its
-    // carry-out is held in `pend` and added to `eh` (27 b, 7 groups) one clock
+    // carry-out is held in `pend` and added to `eh` (27 b, 3 groups of 9) one clock
     // later; `pe[g]` is the registered "group g is all ones" flag, so the carry
     // into group g is an AND of flops. The err_cnt port is the RESOLVED value
     // (pending carry included), identical clock by clock to a one-stage adder.
-    // bit_cnt[31:4] counts words the same way (bit_cnt[3:0] never changes).
+    // bit_cnt[31:4] (3 groups, flags `pb`) counts words the same way (bit_cnt[3:0] never changes).
     // A deposit into these registers must also set pend/pe/pb consistently.
     reg   [4:0] el;
     reg  [26:0] eh;
