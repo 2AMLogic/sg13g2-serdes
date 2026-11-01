@@ -8,7 +8,7 @@ T1 item 1 is graded from `design/inventory.item1.json` with
 design/
   xschemrc               project xschem config (PDK from PDK_ROOT; block directories on the symbol path)
   check-netlists.sh      staleness gate over design/*/: exit 0 match, 3 drifted (--write re-exports)
-  inventory.item1.json   item-1 inventory, shared by every partition
+  inventory.item1.json   item-1 inventory, shared by every partition (analog + digital RTL/netlist; envelope in manifests/evidence/item1.json)
   rx/                    RX high-speed path and 5 GHz clock path (issue #22)
   tx/                    TX high-speed path (issue #21)
 ```
