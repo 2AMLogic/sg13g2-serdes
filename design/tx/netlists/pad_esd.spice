@@ -1,0 +1,17 @@
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-21/design/tx/pad_esd.sch
+.subckt pad_esd vdd vss cp cn padp padn
+*.iopin vdd
+*.iopin vss
+*.iopin cp
+*.iopin cn
+*.iopin padp
+*.iopin padn
+XRs0 cp padp vss rsil w=8u l=4.571u m=1 b=0
+XDh0 vdd padp vss diodevdd_2kv m=1
+XDl0 vdd padp vss diodevss_2kv m=1
+XXPAD0 padp bondpad size=80u shape=0 padtype=0
+XRs1 cn padn vss rsil w=8u l=4.571u m=1 b=0
+XDh1 vdd padn vss diodevdd_2kv m=1
+XDl1 vdd padn vss diodevss_2kv m=1
+XXPAD1 padn bondpad size=80u shape=0 padtype=0
+.ends

@@ -1,0 +1,10 @@
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-21/design/tx/bias.sch
+.subckt bias vdd vss vbn
+*.iopin vdd
+*.iopin vss
+*.iopin vbn
+XRref vdd vbn vss rsil w=4u l=114.3u m=1 b=0
+XQref vbn vbn er vss npn13G2 Nx=1
+XRer er vss vss rsil w=4u l=36.57u m=1 b=0
+XCvbn vbn vss cap_cmim w=7u l=7u m=1
+.ends
