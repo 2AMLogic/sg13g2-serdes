@@ -4,6 +4,8 @@ Chronological record of merged PRs and closed issues. Maintained by the Guide ro
 
 ### 2026-11-01
 
+- **PR #35**: feat: add TX CML path schematics, netlists, PVT-edge sizing record and R3 finding
+- **Issue #21** (closed): T1 item 1 (design sources, analog): TX CML final mux, pre-driver, FFE line driver and pad/ESD schematics
 - **PR #64**: docs(spec): add DR-007 CDR loop delay analysis
 - **PR #63**: feat(rtl): pipeline the digital partition to meet the 1.6 ns word clock pre-layout
 - **Issue #62** (closed): Write the CDR loop analysis and check the 7-clock digital loop delay against it
