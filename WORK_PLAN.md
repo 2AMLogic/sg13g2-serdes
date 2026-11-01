@@ -33,14 +33,13 @@ Human-approved issues ready for implementation (`loom:issue`).
 Issues currently being built (`loom:building`).
 
 - **#21**: T1 item 1 (design sources, analog): TX CML final mux, pre-driver, FFE line driver and pad/ESD schematics
-- **#32**: Digital partition: demonstrate or re-budget 625 MHz timing (no gate-level STA yet)
 - **#44**: Install the two-key ratification path and ratify spec/target-spec.md
 
 ## PRs Awaiting Review
 
 PRs waiting on Judge (`loom:review-requested`).
 
-- **#37**: feat: record gate-level STA of the digital partition and route the 625 MHz miss
+_None._
 
 ## Approved (Awaiting Merge)
 
@@ -57,7 +56,6 @@ Issues carrying `loom:curated`.
 - **#3**: PDK and simulator bring-up: pin SG13G2, build the OSDI models, smoke-simulate MOS and HBT models *(curated)*
 - **#21**: T1 item 1 (design sources, analog): TX CML final mux, pre-driver, FFE line driver and pad/ESD schematics *(curated)*
 - **#23**: T1 item 1 (design sources, digital): serializer/deserializer, PRBS, CDR loop filter RTL plus sg13g2 netlist *(curated)*
-- **#32**: Digital partition: demonstrate or re-budget 625 MHz timing (no gate-level STA yet) *(curated)*
 - **#44**: Install the two-key ratification path and ratify spec/target-spec.md *(curated)*
 
 ## Proposed (Architect / Hermit)
@@ -76,10 +74,10 @@ _None._
 | Very important | 1 |
 | Important | 1 |
 | Ready (`loom:issue`) | 1 |
-| In Progress (`loom:building`) | 3 |
-| PRs awaiting review | 1 |
+| In Progress (`loom:building`) | 2 |
+| PRs awaiting review | 0 |
 | Approved PRs awaiting merge | 2 |
-| Curated | 6 |
+| Curated | 5 |
 | Architect / Hermit proposals | 0 |
 | Active epics | 0 |
 <!-- guide:plan-body:end -->

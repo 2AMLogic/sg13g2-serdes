@@ -2,6 +2,12 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-11-01
+
+- **PR #60**: Bump Repo Skills 0.24.7 -> 0.25.1
+- **PR #37**: feat: record gate-level STA of the digital partition and route the 625 MHz miss
+- **Issue #32** (closed): Digital partition: demonstrate or re-budget 625 MHz timing (no gate-level STA yet)
+
 ### 2026-10-31
 
 - **PR #38**: fix(ci): wire package.json checks to the real synth-freshness and cocotb gates
