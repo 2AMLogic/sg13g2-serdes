@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "worktree:return": "./.loom/scripts/worktree-return.sh",
-    "check:ci": "scripts/check-ci.sh all",
-    "check:all": "echo 'No checks configured. Customize this script for your project.' && exit 0",
-    "test": "scripts/check-ci.sh harness",
+    "check:ci": "scripts/check-ci.sh all && scripts/check-synth-fresh.sh",
+    "check:all": "scripts/check-ci.sh all && scripts/check-synth-fresh.sh && rtl/tests/run.sh",
+    "test": "rtl/tests/run.sh",
     "lint": "scripts/check-ci.sh json && scripts/check-ci.sh links"
   }
 }

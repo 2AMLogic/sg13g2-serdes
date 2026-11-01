@@ -1,0 +1,37 @@
+# Linearised stability: max PD gain g_max (votes/LSB) vs total delay L
+L  D=L-1  g_max
+ 2   1   0.06222
+ 3   2   0.03704
+ 4   3   0.02558
+ 5   4   0.01904
+ 6   5   0.01476
+ 7   6   0.01172
+ 8   7   0.00942
+ 9   8   0.00758
+10   9   0.00607
+11  10   0.00477
+12  11   0.00364
+13  12   0.00262
+14  13   0.00169
+
+# Bang-bang sim, +300 ppm, KP=16 KI=1; peak |e| in UI (0.5 UI = slip), criterion peak <= 0.05 UI
+L   all16(noise-free)  Bin(16,.5)(noise-free)  Bin+3%UI rms noise   slip?  PASS
+ 2    0.0120 (sd 0.0049)    0.0120 (sd 0.0049)    0.0447 (sd 0.0106)   no    PASS
+ 3    0.0132 (sd 0.0055)    0.0132 (sd 0.0055)    0.0626 (sd 0.0140)   no    PASS
+ 4    0.0132 (sd 0.0049)    0.0132 (sd 0.0049)    0.0758 (sd 0.0218)   no    PASS
+ 5    0.0135 (sd 0.0047)    0.0135 (sd 0.0047)    0.1118 (sd 0.0385)   no    PASS
+ 6    0.0184 (sd 0.0084)    0.0190 (sd 0.0084)    0.1426 (sd 0.0570)   no    PASS
+ 7    0.0241 (sd 0.0107)    0.0241 (sd 0.0107)    0.1822 (sd 0.0774)   no    PASS
+ 8    0.0291 (sd 0.0124)    0.0293 (sd 0.0124)    0.2237 (sd 0.1017)   no    PASS
+ 9    0.0407 (sd 0.0177)    0.0407 (sd 0.0175)    0.2690 (sd 0.1336)   no    PASS
+10    0.0455 (sd 0.0219)    0.0462 (sd 0.0219)    0.3381 (sd 0.1808)   no    PASS
+11    0.0623 (sd 0.0318)    0.0623 (sd 0.0319)    0.4990 (sd 0.2528)   no    fail
+12    0.0816 (sd 0.0458)    0.0817 (sd 0.0460)    0.7114 (sd 0.3771)   YES   fail
+13    0.1402 (sd 0.0815)    0.1409 (sd 0.0812)    1.2286 (sd 0.6441)   YES   fail
+14    0.2819 (sd 0.1751)    0.2819 (sd 0.1733)    2.6747 (sd 1.4035)   YES   fail
+
+max total delay L meeting criterion (contiguous from 2): 10
+digital = 7, assumed analog = 1, total L = 8: PASS
+max allowed digital delay at analog=1: 9
+L=8, +0 ppm, Bin noise-free: peak 0.0000 UI, final freq 0
+L=8, -300 ppm, Bin noise-free: peak 0.0296 UI, final freq -48

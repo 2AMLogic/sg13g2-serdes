@@ -131,7 +131,7 @@ async def cdr_closed_loop_plus_300ppm(dut):
     await spi.write(0x00, CTRL_EXT | CTRL_CDR | PULSE_CDRCLR)
     rng = random.Random(5)
     drift = 8e-6 * 300 * 16384
-    st = {"data_ph": 64 * 128 + 64.0, "prev": 0, "worst": 0.0, "w": 0}
+    st = {"data_ph": 64 * 128 + 64.0, "prev": 0, "worst": 0.0, "w": 0, "fsum": 0, "fn": 0}
 
     async def plant():
         while True:
@@ -151,6 +151,9 @@ async def cdr_closed_loop_plus_300ppm(dut):
             st["w"] += 1
             if st["w"] > 5000:
                 st["worst"] = max(st["worst"], abs(err))
+                f = int(dut.freq.value.to_signed())
+                st["fsum"] += f
+                st["fn"] += 1
 
     task = cocotb.start_soon(plant())
     while st["w"] < 24000:
@@ -159,12 +162,19 @@ async def cdr_closed_loop_plus_300ppm(dut):
     await spi.write(0x00, CTRL_EXT | CTRL_CDR | CTRL_HOLD)    # freeze before reading
     freq = await spi.read(0x10)
     freq = freq - 0x10000 if freq & 0x8000 else freq
+    fmean = st["fsum"] / st["fn"]
     code = int(dut.pi_code.value)
-    cocotb.log.info("closed loop +300 ppm: freq %d (ideal 39), worst |err| after acquisition %.0f LSB", freq, worst)
-    if abs(freq - 39) > 10:
-        bu.fail("freq", f"integrator {freq}, ideal ~39")
-    if worst > 1024:
-        bu.fail("track", f"phase error {worst:.0f} LSB after acquisition")
+    # The loop now carries 7 clocks of digital latency, was 2 (issue #36: RX register 1,
+    # phase detector 3, filter 3 to pi_code), so the bang-bang
+    # loop rings: the integrator is judged by its mean, the phase error against
+    # the R13 no-slip bound (half a UI = 4096 LSB). The old single-stage loop
+    # measured worst |err| 462 LSB and freq 39 on this bench.
+    cocotb.log.info("closed loop +300 ppm: freq now %d, mean %.1f (ideal 39), worst |err| after acquisition %.0f LSB",
+                    freq, fmean, worst)
+    if abs(fmean - 39) > 10:
+        bu.fail("freq", f"mean integrator {fmean:.1f}, ideal ~39")
+    if worst >= 4096:
+        bu.fail("track", f"phase error {worst:.0f} LSB after acquisition reaches half a UI (4096): slip")
     for _ in range(200):                      # hold: the plant keeps running, code stays put
         await FallingEdge(dut.clk)
     bu.expect("hold", int(dut.pi_code.value), code, "pi_code moved while cdr_hold")

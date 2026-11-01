@@ -16,7 +16,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      # klt is pinned in scripts/klt-pin.env; the committed signoff record
+      # klt is pinned in scripts/klt-pin.env (kept equal to layout/toolchain.json
+      # by the json check); the committed signoff record
       # embeds its build fields, so it is only byte-stable under that pin.
       - name: JSON validity
         run: scripts/check-ci.sh json

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "kind": "t1-attestation-inventory",
+  "t1_item": 10,
+  "description": "Repo hygiene: README (what the block is, spec table, Reproduce), license, CI workflow and the scripts it runs.",
+  "hygiene": [
+    "README.md",
+    "LICENSE",
+    ".github/workflows/ci.yml",
+    "scripts/check-ci.sh",
+    "package.json"
+  ],
+  "checks": [
+    {"name": "ci-json", "argv": ["scripts/check-ci.sh", "json"]},
+    {"name": "ci-links", "argv": ["scripts/check-ci.sh", "links"]}
+  ]
+}

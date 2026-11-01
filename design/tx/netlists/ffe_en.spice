@@ -1,0 +1,24 @@
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-21/design/tx/ffe_en.sch
+.subckt ffe_en vdd vss vbn en0 en1 en2 vbp0 vbp1 vbp2
+*.iopin vdd
+*.iopin vss
+*.iopin vbn
+*.iopin en0
+*.iopin en1
+*.iopin en2
+*.iopin vbp0
+*.iopin vbp1
+*.iopin vbp2
+XMPi0 enb0 en0 vdd vdd sg13_lv_pmos w=1u l=0.13u ng=1 m=1
+XMNi0 enb0 en0 vss vss sg13_lv_nmos w=0.5u l=0.13u ng=1 m=1
+XRb0 vbn vbp0 vss rsil w=2u l=285.7u m=1 b=0
+XMNd0 vbp0 enb0 vss vss sg13_lv_nmos w=2u l=0.13u ng=1 m=1
+XMPi1 enb1 en1 vdd vdd sg13_lv_pmos w=1u l=0.13u ng=1 m=1
+XMNi1 enb1 en1 vss vss sg13_lv_nmos w=0.5u l=0.13u ng=1 m=1
+XRb1 vbn vbp1 vss rsil w=2u l=285.7u m=1 b=0
+XMNd1 vbp1 enb1 vss vss sg13_lv_nmos w=2u l=0.13u ng=1 m=1
+XMPi2 enb2 en2 vdd vdd sg13_lv_pmos w=1u l=0.13u ng=1 m=1
+XMNi2 enb2 en2 vss vss sg13_lv_nmos w=0.5u l=0.13u ng=1 m=1
+XRb2 vbn vbp2 vss rsil w=2u l=285.7u m=1 b=0
+XMNd2 vbp2 enb2 vss vss sg13_lv_nmos w=2u l=0.13u ng=1 m=1
+.ends

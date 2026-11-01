@@ -2,8 +2,34 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-11-01
+
+- **PR #64**: docs(spec): add DR-007 CDR loop delay analysis
+- **PR #63**: feat(rtl): pipeline the digital partition to meet the 1.6 ns word clock pre-layout
+- **Issue #62** (closed): Write the CDR loop analysis and check the 7-clock digital loop delay against it
+- **Issue #36** (closed): Restructure digital partition RTL to close 625 MHz timing (DR-005)
+- **PR #60**: Bump Repo Skills 0.24.7 -> 0.25.1
+- **PR #37**: feat: record gate-level STA of the digital partition and route the 625 MHz miss
+- **Issue #32** (closed): Digital partition: demonstrate or re-budget 625 MHz timing (no gate-level STA yet)
+
+### 2026-10-31
+
+- **PR #38**: fix(ci): wire package.json checks to the real synth-freshness and cocotb gates
+- **Issue #31** (closed): Replace always-green package.json check stubs with the repo's real checks
+
+### 2026-10-29
+
+- **PR #54**: ci: fail check-ci when klt pins in klt-pin.env and toolchain.json differ
+- **Issue #50** (closed): Dedupe klt version pin: scripts/klt-pin.env duplicates layout/toolchain.json
+
+### 2026-10-28
+
+- **PR #51**: feat: attest T1 item 10 repo hygiene via klt signoff --attest
+- **Issue #49** (closed): T1 item 10 (repo hygiene): klt signoff --attest 10 envelope cited for both partitions
+
 ### 2026-10-27
 
+- **PR #45**: docs: add EE-key and market-key ratification directories
 - **PR #43**: build: bump klayout-tools pin to 0.8.0 (PyPI) and verify by version
 - **Issue #42** (closed): Bump klayout-tools pin 0.7.0, 267ea83a0510 → 0.8.0
 - **PR #6**: ci: add check-ci gate and graded klt signoff manifest

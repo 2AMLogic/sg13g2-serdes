@@ -55,7 +55,6 @@ sim/harness/
 .loom/claims/
 .loom/locks/
 .loom/signals/
-.loom/sweep-dispatch-tap/
 .loom/status/
 .loom/retry-state/
 .loom/exit-codes/
@@ -113,3 +112,6 @@ sim/harness/
 .claude/skills/repo/.install-local.json
 # klt sim scratch (batch receipts)
 .klt/
+
+# Repo Skills Codex-side machine-local install metadata (never committed)
+.agents/skills/repo/.install-local.json

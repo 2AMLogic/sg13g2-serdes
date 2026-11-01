@@ -48,11 +48,15 @@ votes, loop-filter fixed-point arithmetic. Beyond the reference:
 
 - PRBS-7 period 127 and balance; lock from arbitrary seed and bit alignment; each injected
   line error counted exactly once; stuck-at-0 never locks; loss of lock and re-lock;
-  counter saturation.
+  counter saturation. `serdes_ref.PrbsChk` is a register-level model of the pipelined checker
+  (`clock(word)` per edge), compared after every clock.
 - Loop filter saturation, hold, clear; a +-300 ppm (R13) run of 62 500 words (1e6 UI) around a
   bench plant with no slip, at the filter input and again through PD + filter in the top.
   **This checks the filter arithmetic and tracking only. It is not the behavioural CDR model
-  of DR-002 and is not link evidence.**
+  of DR-002 and is not link evidence.** With the 7-clock loop delay the bang-bang loop rings
+  (top bench: worst phase error 1618 LSB vs 462 LSB with the 2-clock loop, mean integrator 39.8;
+  half a UI = 4096 LSB is the no-slip bound the bench now enforces). No loop analysis is on
+  `main`; see DR-006.
 - SPI: reset values, round trips, field masking, write-1 pulses, snapshot, aborted frames.
 - `top_gl` runs the top bench against the committed gate-level netlist (functional
   `sg13g2_stdcell` models from the repo-local PDK fetch, `scripts/setup-env.sh`). It passes
@@ -72,9 +76,21 @@ scripts/check-synth-fresh.sh   # exit 0 fresh, 3 stale (klt synthesize --check);
 Both run the klt pinned in `layout/toolchain.json` through `uvx`, never the host install.
 The check hashes the RTL files byte for byte, so even a comment edit needs a regenerate.
 
-Last regeneration (pinned klt `267ea83`, Yosys 0.67): 3674 cells, 51 291 um2 (21 800 um2
-sequential), no latches, loops or multiple drivers. **Timing is not demonstrated.** ABC's own
-estimate (no wires, no placement) puts the longest path near 3.0 ns against the 1.6 ns target;
-the pinned install has no gate-level STA (`sta` is null), so 625 MHz is an open item, not a
-result. The per-module estimates when synthesised alone were: checker 3.1 ns, phase detector
-2.6 ns, eye monitor 2.1 ns, loop filter 1.7 ns, PRBS generator 1.2 ns, control 1.3 ns.
+Last regeneration (pinned klt `267ea83`, Yosys 0.67): 4843 cells, 71 244 um2 (34 537 um2
+sequential), no latches, loops or multiple drivers. Gate-level STA (OpenSTA via `klt sta`,
+`scripts/sta-paths.sh`; typ_1p20V_25C, ideal clock, no wires or placement, so a pre-layout
+*estimate* at **one corner**, not a post-route or PVT number) puts the worst setup slack at
+**+0.014 ns** against the 1.6 ns period (fmax 630.5 MHz, 0 violating endpoints, hold +0.19 ns).
+That is a margin of about 1 %: layout parasitics and clock skew will consume it, so this
+shows the RTL *can* be structured for 625 MHz, not that the placed design meets it.
+Before issue #36 the worst slack was -2.09 ns (DR-005). Record: `synth/sta/`; the change and
+what it cost: `spec/decisions/DR-006-digital-timing-restructure.md`.
+Worst setup slack by endpoint module: checker +0.09 ns, phase detector +0.19 ns, eye monitor
++0.09 ns, loop filter +0.04 ns, loopback +0.46 ns, control +0.01 ns, PRBS generator +0.27 ns.
+
+Pipeline latency added by the restructure (all in clocks of the 625 MHz word clock):
+RX words registered in `serdes_loopback` (+1), phase detector 1 -> 3 stages, filter `pi_code`
+at +3 from `corr` (was +1), checker `word_valid` at +4 (was +1) and `locked` at +1 (was 0);
+SPI control writes take effect one clock later (registered in the top). CDR loop delay from
+the RX word to `pi_code`: 2 -> 7 clocks.
+(`klt synthesize`'s own integrated `sta` stays null: it cannot analyse a hierarchical netlist.)

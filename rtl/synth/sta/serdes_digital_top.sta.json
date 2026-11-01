@@ -1,0 +1,153 @@
+{
+  "schema_version": 2,
+  "engine": "openroad",
+  "engine_version": "26Q3-1510-g6cb3f2b704",
+  "hdl_toplevel": "serdes_digital_top",
+  "status": "ok",
+  "def_path": null,
+  "verilog_path": {
+    "path": "rtl/synth/serdes_digital_top_synth.v",
+    "scope": "repo"
+  },
+  "geometry_source": "netlist_estimate",
+  "wire_load_model": null,
+  "wire_load_mode": null,
+  "clock_mode": "ideal",
+  "spef_path": null,
+  "worst_slack_ns": 0.01392,
+  "total_negative_slack_ns": 0,
+  "worst_hold_slack_ns": 0.19216,
+  "total_negative_hold_slack_ns": 0,
+  "fmax_mhz": 630.485,
+  "timing_status": "constrained",
+  "constraint_completeness": {
+    "status": "incomplete",
+    "unconstrained_endpoints": {
+      "status": "ok",
+      "count": 43,
+      "sample": [
+        "eye_ph_off[0]",
+        "eye_ph_off[1]",
+        "eye_ph_off[2]",
+        "eye_ph_off[3]",
+        "eye_ph_off[4]",
+        "eye_ph_off[5]",
+        "eye_ph_off[6]",
+        "eye_smp_off[0]",
+        "eye_smp_off[1]",
+        "eye_smp_off[2]",
+        "eye_smp_off[3]",
+        "eye_smp_off[4]",
+        "eye_smp_off[5]",
+        "pi_code[0]",
+        "pi_code[1]",
+        "pi_code[2]",
+        "pi_code[3]",
+        "pi_code[4]",
+        "pi_code[5]",
+        "pi_code[6]"
+      ],
+      "truncated": true,
+      "reason": null
+    },
+    "unclocked_registers": {
+      "status": "ok",
+      "count": 0,
+      "sample": [],
+      "truncated": false,
+      "reason": null
+    },
+    "sample_limit": 20
+  },
+  "setup_violation_count": 0,
+  "hold_violation_count": 0,
+  "worst_setup_path": {
+    "status": "ok",
+    "check_type": "setup",
+    "engine_check_role": "setup",
+    "startpoint": "u_ctrl/_1837_/Q",
+    "endpoint": "u_ctrl/_1714_/D",
+    "slack_ns": 0.01392,
+    "consistent_with_aggregate": true,
+    "reason": null
+  },
+  "worst_hold_path": {
+    "status": "ok",
+    "check_type": "hold",
+    "engine_check_role": "hold",
+    "startpoint": "u_chk/_2069_/Q",
+    "endpoint": "u_ctrl/_1918_/D",
+    "slack_ns": 0.19216,
+    "consistent_with_aggregate": true,
+    "reason": null
+  },
+  "clock_skew_ns": 0,
+  "estimated_power_mw": 24.8077,
+  "power_basis": {
+    "activity_source": "engine_default",
+    "activity": null,
+    "duty": null,
+    "parasitics": "estimate_only"
+  },
+  "provenance": {
+    "klt_version": "0.8.0",
+    "klayout_version": "0.30.12",
+    "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+        "search root: ~/share/pdk"
+      ]
+    },
+    "deck": {
+      "name": "sg13g2_stdcell__typ_1p20V_25C",
+      "content_hash": "sha256:7677a8918689f452e80405ad16a83e744709342574f2aedcc507c2758986b396",
+      "released": false,
+      "path": {
+        "path": ".cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p20V_25C.lib",
+        "scope": "repo"
+      }
+    },
+    "input": {
+      "content_hash": "sha256:d659124458e555fdf5dabdd5bb80246b9c44585486021e466e67b8c9a6edb4aa",
+      "role": "netlist"
+    }
+  },
+  "spef_annotation": null,
+  "clock_propagation": null,
+  "sdf": null,
+  "electrical_checks": null,
+  "engine_log": {
+    "invocation_id": "d8af9148092348859bddeaf96fd8e4a7",
+    "script_name": "sta_serdes_digital_top_synth.tcl",
+    "script_path": {
+      "path": ".cache/sta/.klt/sta/sta_serdes_digital_top_synth.tcl",
+      "scope": "repo"
+    },
+    "script_sha256": "d166503638f88909c06ee9e5da421cd45c2e7c48baba28a5968d732df2ee4424",
+    "metrics_path": {
+      "path": ".cache/sta/.klt/sta/serdes_digital_top_synth_metrics.json",
+      "scope": "repo"
+    },
+    "outcome": "exited",
+    "returncode": 0,
+    "directory": {
+      "path": ".cache/sta/.klt/sta/openroad-logs/d8af9148092348859bddeaf96fd8e4a7",
+      "scope": "repo"
+    },
+    "stdout_path": {
+      "path": ".cache/sta/.klt/sta/openroad-logs/d8af9148092348859bddeaf96fd8e4a7/stdout.log",
+      "scope": "repo"
+    },
+    "stderr_path": {
+      "path": ".cache/sta/.klt/sta/openroad-logs/d8af9148092348859bddeaf96fd8e4a7/stderr.log",
+      "scope": "repo"
+    },
+    "metadata_path": {
+      "path": ".cache/sta/.klt/sta/openroad-logs/d8af9148092348859bddeaf96fd8e4a7/invocation.json",
+      "scope": "repo"
+    },
+    "retention_errors": []
+  }
+}

@@ -29,8 +29,28 @@ module serdes_digital_top (
     output wire        ser_lb         // analog serial-loopback switch
 );
     wire ser_lb_ctl;
-    wire prbs_en, src_ext, sel31, chk_en, par_lb, cdr_en, cdr_hold;
-    wire chk_clear, gen_restart, cdr_clear, eye_start;
+    // Control outputs of serdes_ctrl, and their one-clock-late copies that the
+    // datapath uses (DR-005 option 1, issue #36): the register file's mode and
+    // pulse bits fan out to hundreds of datapath gates, so each is re-registered
+    // here, close to the datapath. Pulses and levels are delayed alike, so their
+    // relative order is unchanged; only the effect of an SPI write moves one
+    // clock later.
+    wire prbs_en_c, src_ext_c, sel31_c, chk_en_c, par_lb_c, cdr_en_c, cdr_hold_c;
+    wire chk_clear_c, gen_restart_c, cdr_clear_c, eye_start_c;
+    reg  prbs_en, src_ext, sel31, chk_en, par_lb, cdr_en, cdr_hold;
+    reg  chk_clear, gen_restart, cdr_clear, eye_start;
+    always @(posedge clk) begin
+        if (!rst_n) begin
+            prbs_en <= 1'b0; src_ext <= 1'b1; sel31 <= 1'b0; chk_en <= 1'b0;
+            par_lb <= 1'b0; cdr_en <= 1'b0; cdr_hold <= 1'b0;
+            chk_clear <= 1'b0; gen_restart <= 1'b0; cdr_clear <= 1'b0; eye_start <= 1'b0;
+        end else begin
+            prbs_en <= prbs_en_c; src_ext <= src_ext_c; sel31 <= sel31_c; chk_en <= chk_en_c;
+            par_lb <= par_lb_c; cdr_en <= cdr_en_c; cdr_hold <= cdr_hold_c;
+            chk_clear <= chk_clear_c; gen_restart <= gen_restart_c; cdr_clear <= cdr_clear_c;
+            eye_start <= eye_start_c;
+        end
+    end
     wire [15:0] eye_dwell;
     wire [15:0] prbs_word, rx_d, rx_e;
     wire        chk_locked, word_valid, freq_sat;
@@ -75,11 +95,11 @@ module serdes_digital_top (
         .clk(clk), .rst_n(rst_n), .spi_cs_n(spi_cs_n), .spi_sclk(spi_sclk),
         .spi_mosi(spi_mosi), .spi_miso(spi_miso), .spi_miso_oe(spi_miso_oe),
         .status_o(status_o),
-        .prbs_en(prbs_en), .src_ext(src_ext), .sel31(sel31), .chk_en(chk_en),
-        .par_lb(par_lb), .ser_lb(ser_lb_ctl), .cdr_en(cdr_en), .cdr_hold(cdr_hold),
-        .chk_clear(chk_clear), .gen_restart(gen_restart), .cdr_clear(cdr_clear),
+        .prbs_en(prbs_en_c), .src_ext(src_ext_c), .sel31(sel31_c), .chk_en(chk_en_c),
+        .par_lb(par_lb_c), .ser_lb(ser_lb_ctl), .cdr_en(cdr_en_c), .cdr_hold(cdr_hold_c),
+        .chk_clear(chk_clear_c), .gen_restart(gen_restart_c), .cdr_clear(cdr_clear_c),
         .eye_ph_off(eye_ph_off), .eye_smp_off(eye_smp_off), .eye_dwell(eye_dwell),
-        .eye_start(eye_start),
+        .eye_start(eye_start_c),
         .chk_locked(chk_locked), .chk_err(chk_err), .chk_bits(chk_bits),
         .freq_sat(freq_sat), .eye_busy(eye_busy), .eye_done(eye_done),
         .eye_invalid(eye_invalid), .eye_err(eye_err), .eye_bits(eye_bits),
