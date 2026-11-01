@@ -33,7 +33,7 @@
         "command": null,
         "kind": "generic",
         "check_status": "pass",
-        "content_hash": "sha256:ad9a4fa5fcf0354bf2a73e02f6114259938648830416f5c5b95f0ec41a03d82f",
+        "content_hash": "sha256:efbb3cf1945ab98343c0d3004507b0b194199e993b9c4f2bc7d675c4d44a4ed3",
         "input_verified": true,
         "exit_status": 0,
         "artifact_binding": {
@@ -42,15 +42,15 @@
             "path": "design/inventory.item1.json",
             "scope": "repo"
           },
-          "content_hash": "sha256:ad9a4fa5fcf0354bf2a73e02f6114259938648830416f5c5b95f0ec41a03d82f",
+          "content_hash": "sha256:efbb3cf1945ab98343c0d3004507b0b194199e993b9c4f2bc7d675c4d44a4ed3",
           "input_verified": true,
-          "summary": "T1 item 1 (Design sources): 72/72 attestation checks passed (klt signoff --attest)",
+          "summary": "T1 item 1 (Design sources): 73/73 attestation checks passed (klt signoff --attest)",
           "source": "design/inventory.item1.json",
           "attestation": {
             "producer": "klt signoff --attest",
             "inventory_schema_version": 1,
-            "check_count": 72,
-            "passed_count": 72
+            "check_count": 73,
+            "passed_count": 73
           }
         }
       }
@@ -70,7 +70,7 @@
         "command": null,
         "kind": "generic",
         "check_status": "pass",
-        "content_hash": "sha256:ad9a4fa5fcf0354bf2a73e02f6114259938648830416f5c5b95f0ec41a03d82f",
+        "content_hash": "sha256:efbb3cf1945ab98343c0d3004507b0b194199e993b9c4f2bc7d675c4d44a4ed3",
         "input_verified": true,
         "exit_status": 0,
         "artifact_binding": {
@@ -79,15 +79,15 @@
             "path": "design/inventory.item1.json",
             "scope": "repo"
           },
-          "content_hash": "sha256:ad9a4fa5fcf0354bf2a73e02f6114259938648830416f5c5b95f0ec41a03d82f",
+          "content_hash": "sha256:efbb3cf1945ab98343c0d3004507b0b194199e993b9c4f2bc7d675c4d44a4ed3",
           "input_verified": true,
-          "summary": "T1 item 1 (Design sources): 72/72 attestation checks passed (klt signoff --attest)",
+          "summary": "T1 item 1 (Design sources): 73/73 attestation checks passed (klt signoff --attest)",
           "source": "design/inventory.item1.json",
           "attestation": {
             "producer": "klt signoff --attest",
             "inventory_schema_version": 1,
-            "check_count": 72,
-            "passed_count": 72
+            "check_count": 73,
+            "passed_count": 73
           }
         }
       }

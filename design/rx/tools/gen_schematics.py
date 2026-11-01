@@ -13,17 +13,9 @@ import sys
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 
-# pin offsets (rot 0) of the symbols used
-PINS = {
-    "sg13g2_pr/npn13G2.sym": {"C": (20, -30), "B": (-20, 0), "E": (20, 30), "S": (20, 0)},
-    "devices/res.sym": {"P": (0, -30), "M": (0, 30)},
-    "sg13g2_pr/cap_cmim.sym": {"c0": (0, -30), "c1": (0, 30)},
-    "devices/capa.sym": {"p": (0, -30), "m": (0, 30)},
-    "sg13g2_pr/diodevdd_2kv.sym": {"vdd": (0, -30), "pad": (0, 30), "vss": (-30, 0)},
-    "sg13g2_pr/diodevss_2kv.sym": {"vdd": (-30, 0), "pad": (0, -30), "vss": (0, 30)},
-    "sg13g2_pr/sg13_lv_nmos.sym": {"D": (20, -30), "G": (-20, 0), "S": (20, 30), "B": (20, 0)},
-    "sg13g2_pr/sg13_lv_pmos.sym": {"D": (20, 30), "G": (-20, 0), "S": (20, -30), "B": (20, 0)},
-}
+# pin offsets (rot 0) of the symbols used: shared with the TX generator
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+from xschem_pins import PIN_OFFSETS as PINS  # noqa: E402
 
 # block interfaces: name -> (inputs/left, outputs/right)
 BLOCKS = {

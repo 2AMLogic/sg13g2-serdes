@@ -6,6 +6,7 @@ T1 item 1 is graded from `design/inventory.item1.json` with
 
 ```
 design/
+  xschem_pins.py         shared xschem symbol pin-offset table, imported by both gen_schematics.py generators
   xschemrc               project xschem config (PDK from PDK_ROOT; block directories on the symbol path)
   check-netlists.sh      staleness gate over design/*/: exit 0 match, 3 drifted (--write re-exports)
   inventory.item1.json   item-1 inventory, shared by every partition (analog + digital RTL/netlist; envelope in manifests/evidence/item1.json)
