@@ -2,6 +2,11 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-11-02
+
+- **PR #76**: sim: record passing batch smoke grid on klt 0.8.0
+- **Issue #3** (closed): PDK and simulator bring-up: pin SG13G2, build the OSDI models, smoke-simulate MOS and HBT models
+
 ### 2026-11-01
 
 - **PR #71**: refactor(design): share xschem pin-offset table between TX and RX generators
