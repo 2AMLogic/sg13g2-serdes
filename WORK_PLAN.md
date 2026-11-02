@@ -53,7 +53,6 @@ Issues carrying `loom:curated`.
 
 - **#2**: Draft and ratify the target spec *(curated)*
 - **#3**: PDK and simulator bring-up: pin SG13G2, build the OSDI models, smoke-simulate MOS and HBT models *(curated)*
-- **#23**: T1 item 1 (design sources, digital): serializer/deserializer, PRBS, CDR loop filter RTL plus sg13g2 netlist *(curated)*
 - **#24**: T1 item 2 (layout, analog): GDS for the CML TX/RX cells, clock path and high-speed pads *(curated)*
 - **#44**: Install the two-key ratification path and ratify spec/target-spec.md *(curated)*
 
@@ -76,7 +75,7 @@ _None._
 | In Progress (`loom:building`) | 1 |
 | PRs awaiting review | 0 |
 | Approved PRs awaiting merge | 1 |
-| Curated | 5 |
+| Curated | 4 |
 | Architect / Hermit proposals | 0 |
 | Active epics | 0 |
 <!-- guide:plan-body:end -->
