@@ -34,7 +34,6 @@ Human-approved issues ready for implementation (`loom:issue`).
 Issues currently being built (`loom:building`).
 
 - **#44**: Install the two-key ratification path and ratify spec/target-spec.md
-- **#69**: Consolidate duplicated xschem emitters in tx/rx gen_schematics.py
 
 ## PRs Awaiting Review
 
@@ -73,7 +72,7 @@ _None._
 | Very important | 1 |
 | Important | 2 |
 | Ready (`loom:issue`) | 2 |
-| In Progress (`loom:building`) | 2 |
+| In Progress (`loom:building`) | 1 |
 | PRs awaiting review | 0 |
 | Approved PRs awaiting merge | 1 |
 | Curated | 4 |
