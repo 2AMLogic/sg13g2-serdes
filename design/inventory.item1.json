@@ -17,6 +17,7 @@
     "design/rx/rx_top.sch",
     "design/rx/rx_top.sym",
     "design/rx/tools/gen_schematics.py",
+    "design/xschem_pins.py",
     "design/xschemrc",
     "design/tx/bias.sch",
     "design/tx/bias.sym",

@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 1,
-  "summary": "T1 item 1 (Design sources): 72/72 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 1 (Design sources): 73/73 attestation checks passed (klt signoff --attest)",
   "source": "design/inventory.item1.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 72,
-    "passed_count": 72,
+    "check_count": 73,
+    "passed_count": 73,
     "checks": [
       {
         "check": "present",
@@ -101,7 +101,7 @@
         "role": "source",
         "path": "design/rx/tools/gen_schematics.py",
         "passed": true,
-        "content_hash": "sha256:a2906416e6e426282ee6b0c5f2d64756b3e8d6734a2c781c4ceb1018247d8896"
+        "content_hash": "sha256:f3767b8ca81efaa3a35ada2b2b0491d03d72affdb3423e85a258947965327520"
       },
       {
         "check": "present",
@@ -150,7 +150,7 @@
         "role": "source",
         "path": "design/tx/gen_schematics.py",
         "passed": true,
-        "content_hash": "sha256:95fb27e72cf4c6be3eaa95ff2be773f1d1d82e0cceee0bce25a55c6de278989e"
+        "content_hash": "sha256:9779238722cfd18637792c00989a524dfa818f60db150238be1429639de75830"
       },
       {
         "check": "present",
@@ -221,6 +221,13 @@
         "path": "design/tx/tx_top.sym",
         "passed": true,
         "content_hash": "sha256:96e0e640f96eef2a6f6ee395c5278190fc6bdd39941b557e169bbbc39e377434"
+      },
+      {
+        "check": "present",
+        "role": "source",
+        "path": "design/xschem_pins.py",
+        "passed": true,
+        "content_hash": "sha256:0caaaa80ad1b985cd0c47ea32c62cabbb8273e26910d84f6ed114d885e8af051"
       },
       {
         "check": "present",
@@ -738,7 +745,7 @@
         "path": "design/inventory.item1.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:ad9a4fa5fcf0354bf2a73e02f6114259938648830416f5c5b95f0ec41a03d82f"
+      "content_hash": "sha256:efbb3cf1945ab98343c0d3004507b0b194199e993b9c4f2bc7d675c4d44a4ed3"
     }
   }
 }

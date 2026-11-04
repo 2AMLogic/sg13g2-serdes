@@ -4,7 +4,7 @@
 The cells are described once, as data, below. The generated .sch/.sym files are
 the committed schematic sources; this script is the generator that produced
 them (T1 item 1: "committed schematic sources (or generator)"). Re-run it after
-editing a cell, then re-export the netlists with design/tx/export-netlists.sh.
+editing a cell, then re-export the netlists with design/check-netlists.sh --write.
 
 Every value is a first-cut SIZING value for the draft spec rows (R3, R4, R5,
 R7, R18, R19), not a spec result and not a measurement.
@@ -17,32 +17,28 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 # ---------------------------------------------------------------- device kinds
-# pin -> (dx, dy, stub_dx, stub_dy): pin offset from the symbol origin and the
-# direction the label stub leaves the pin.
+# Pin offsets come from the shared table in design/xschem_pins.py; the label
+# stub direction of each pin is derived from its offset.
+sys.path.insert(0, os.path.join(HERE, ".."))
+from xschem_pins import PIN_OFFSETS, stub  # noqa: E402
+
+
+def _kind(model, sym=None):
+    sym = sym or "sg13g2_pr/%s.sym" % model
+    return dict(sym=sym, prefix="X", model=model,
+                pins={p: (dx, dy) + stub(dx, dy) for p, (dx, dy) in PIN_OFFSETS[sym].items()})
+
+
 KINDS = {
-    "npn": dict(sym="sg13g2_pr/npn13G2.sym", prefix="X", model="npn13G2",
-                pins={"C": (20, -30, 0, -20), "B": (-20, 0, -30, 0),
-                      "E": (20, 30, 0, 20), "S": (20, 0, 30, 0)}),
-    "nmos": dict(sym="sg13g2_pr/sg13_lv_nmos.sym", prefix="X", model="sg13_lv_nmos",
-                 pins={"D": (20, -30, 0, -20), "G": (-20, 0, -30, 0),
-                       "S": (20, 30, 0, 20), "B": (20, 0, 30, 0)}),
-    "pmos": dict(sym="sg13g2_pr/sg13_lv_pmos.sym", prefix="X", model="sg13_lv_pmos",
-                 pins={"D": (20, 30, 0, 20), "G": (-20, 0, -30, 0),
-                       "S": (20, -30, 0, -20), "B": (20, 0, 30, 0)}),
-    "rsil": dict(sym="sg13g2_pr/rsil.sym", prefix="X", model="rsil",
-                 pins={"P": (0, -30, 0, -20), "M": (0, 30, 0, 20)}),
-    "rppd": dict(sym="sg13g2_pr/rppd.sym", prefix="X", model="rppd",
-                 pins={"P": (0, -30, 0, -20), "M": (0, 30, 0, 20)}),
-    "cmim": dict(sym="sg13g2_pr/cap_cmim.sym", prefix="X", model="cap_cmim",
-                 pins={"c0": (0, -30, 0, -20), "c1": (0, 30, 0, 20)}),
-    "dvdd": dict(sym="sg13g2_pr/diodevdd_2kv.sym", prefix="X", model="diodevdd_2kv",
-                 pins={"vdd": (0, -30, 0, -20), "pad": (0, 30, 0, 20),
-                       "vss": (-30, 0, -30, 0)}),
-    "dvss": dict(sym="sg13g2_pr/diodevss_2kv.sym", prefix="X", model="diodevss_2kv",
-                 pins={"vdd": (-30, 0, -30, 0), "pad": (0, -30, 0, -20),
-                       "vss": (0, 30, 0, 20)}),
-    "bondpad": dict(sym="sg13g2_pr/bondpad.sym", prefix="X", model="bondpad",
-                    pins={"pad": (0, 40, 0, 20)}),
+    "npn": _kind("npn13G2"),
+    "nmos": _kind("sg13_lv_nmos"),
+    "pmos": _kind("sg13_lv_pmos"),
+    "rsil": _kind("rsil"),
+    "rppd": _kind("rppd"),
+    "cmim": _kind("cap_cmim"),
+    "dvdd": _kind("diodevdd_2kv"),
+    "dvss": _kind("diodevss_2kv"),
+    "bondpad": _kind("bondpad"),
 }
 
 

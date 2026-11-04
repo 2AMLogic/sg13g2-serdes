@@ -2,8 +2,16 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-11-02
+
+- **PR #76**: sim: record passing batch smoke grid on klt 0.8.0
+- **Issue #3** (closed): PDK and simulator bring-up: pin SG13G2, build the OSDI models, smoke-simulate MOS and HBT models
+
 ### 2026-11-01
 
+- **PR #71**: refactor(design): share xschem pin-offset table between TX and RX generators
+- **Issue #69** (closed): Consolidate duplicated xschem emitters in tx/rx gen_schematics.py
+- **PR #68**: feat(signoff): attest T1 item 1 for analog and digital partitions (partial increment of #23)
 - **PR #35**: feat: add TX CML path schematics, netlists, PVT-edge sizing record and R3 finding
 - **Issue #21** (closed): T1 item 1 (design sources, analog): TX CML final mux, pre-driver, FFE line driver and pad/ESD schematics
 - **PR #64**: docs(spec): add DR-007 CDR loop delay analysis
