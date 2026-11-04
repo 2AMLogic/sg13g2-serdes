@@ -8,7 +8,7 @@ cited record), **sibling** (a sibling's ratified target, cited at a commit) or
 the row). No number here is a measurement; nothing is designed or simulated yet.
 10 Gb/s is the driving target; 12.5 Gb/s shapes nothing (`CLAUDE.md`).
 
-Decision records: [`decisions/`](decisions/). Clock interface:
+Decision records: [`decisions/`](decisions/). Basis of each budget, limits and validation gates: [`validation-plan.md`](validation-plan.md). Clock interface:
 [`clock-requirement.md`](clock-requirement.md). Channel: [`channel/`](channel/README.md).
 
 ## Corner sets
@@ -34,7 +34,7 @@ Verification column names the testbench class; no testbench exists yet.
 | # | Parameter | Target | Fallback | Stretch | Verification | Corners | Basis |
 |---|---|---|---|---|---|---|---|
 | R1 | Line rate | 10 Gb/s | 5 Gb/s (full-rate, same 5 GHz clock) | 12.5 Gb/s (outside the clock band, see clock-requirement) | Rate is "met" when R15 BER ≤ 1e-12 (extrapolated) holds over R14 at that rate | PVT-full | CLAUDE.md; DR-001 |
-| R2 | Architecture | half-rate TX and RX at 5 GHz; 4-phase RX; HBT CML for the last 2:1 mux, driver, RX front end, 4 sampling latches and 5 GHz clock path; CMOS ≤ 625 MHz; **16:1, 16-bit word @ 625 MHz** | full-rate at 5 Gb/s | quarter-rate RX (2.5 GHz) | Netlist/RTL review against DR-001; boundary checked by clock-domain list | n/a (structural) | DR-001 |
+| R2 | Architecture | half-rate TX and RX at 5 GHz; 4-phase RX; HBT CML for the last 2:1 mux, driver, RX front end, 4 sampling latches and 5 GHz clock path; CMOS ≤ 625 MHz; **16:1, 16-bit word @ 625 MHz** (stage assignment and the 625 MHz CMOS assumption: DR-008, which proposes CML for S1 and the divider chain down to 625 MHz) | full-rate at 5 Gb/s | quarter-rate RX (2.5 GHz) | Netlist/RTL review against DR-001; boundary checked by clock-domain list | n/a (structural) | DR-001 |
 | R3 | Supplies and device flavours | CML 1.2 V ±10 % with `npn13G2` and thin-oxide MOS bias; digital 1.2 V thin-oxide; IO ring 3.3 V thick-oxide only; no HBT collector node > 1.32 V; no reverse Vbe > 1.0 V | `npn13G2V` on ~1.8–2.0 V CML rail | — | Node-voltage extraction per corner from transient runs; breakdown limits checked against the table below | PVT-full, incl. the +10 % supply | PDK (breakdown), proposal (rails); DR-003 |
 | R4 | TX differential output swing into 100 Ω | 500 mVppd | 300 mVppd | 800 mVppd | Transient, 100 Ω differential load, PRBS-7, measure steady-state swing; loaded by the R18 pad model | PVT-full | proposal |
 | R5 | TX FFE | 2 taps (main + 1 post-cursor); post-cursor de-emphasis 0–6 dB in ≥ 4 steps | no FFE | 3 taps | Pulse response measured in simulation; step-by-step against the model | PVT-full | proposal (README draft) |
