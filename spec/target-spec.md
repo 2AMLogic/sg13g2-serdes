@@ -29,7 +29,7 @@ only where a row says so (offsets, CDR samplers).
 
 ## Parameter table
 
-Verification column names the testbench class; no testbench exists yet.
+Verification column names the testbench class. Benches and first-cut records now exist under `sim/rx`, `sim/tx`, `sim/smoke` and `rtl/synth/sta`; none is a measurement and none is ratified (DR-008).
 
 | # | Parameter | Target | Fallback | Stretch | Verification | Corners | Basis |
 |---|---|---|---|---|---|---|---|
@@ -57,7 +57,7 @@ Verification column names the testbench class; no testbench exists yet.
 | R22 | On-chip test access | PRBS-7/31 generator and checker with error counter; TX→RX loopback (serial, at the pad side) and parallel loopback; eye monitor by stepping sampling phase and sampler offset; all through a ≤ 8-pin digital control/readout | PRBS checker + parallel loopback only | — | RTL tests + behavioural eye-monitor sim | n/a | proposal; answers open question 3 |
 
 HBT breakdown limits on every node that sees the CML rail (PDK process spec
-Rev. 1.2 §3, min column; open-base BVCEO; **not simulated**, see DR-003):
+Rev. 1.2 §3, min column; open-base BVCEO; node and Vce stress are extracted in the `sim/rx` and `sim/tx` records, which are simulated, not measured, and not ratified; see DR-003 and DR-008):
 `npn13G2` BVCEO 1.4 V, BVCBO 3.8 V, BVEBO 1.0 V. R3 bounds Vce at 90 % of BVCEO and reverse Vbe at BVEBO; a collector node above the rail is not itself a violation (DR-008).
 
 ### Pads and ESD (R18, R19)
@@ -77,7 +77,7 @@ study (extraction or EM) before R4, R6 and R9 can be graded.
 
 | Question | Disposition |
 |---|---|
-| Does ngspice simulate HBT CML at 5 GHz with acceptable runtime and convergence across all corners, and with which HBT model? | **Open; owner #3** (bring-up smoke results). The PDK ships VBIC (`sg13g2_hbt_mod.lib`, corners `cornerHBT.lib`: `hbt_typ/bcs/wcs`). Nothing here is simulated. |
+| Does ngspice simulate HBT CML at 5 GHz with acceptable runtime and convergence across all corners, and with which HBT model? | **Open; owner #3** (bring-up smoke results). The PDK ships VBIC (`sg13g2_hbt_mod.lib`, corners `cornerHBT.lib`: `hbt_typ/bcs/wcs`). The smoke record `sim/smoke/records/20261017-215340-24026b8` exists, and `main` has a passing batch smoke grid on klt 0.8.0 (11/11 corners); the HBT CML stages themselves are only first-cut simulated (`sim/rx`, `sim/tx`), none ratified. |
 | Can a bang-bang CDR be verified credibly with behavioural models fitted to transistor-level latch results, and how is the fit validated? | **Answered as a procedure in DR-002** (fit on a subset, validate on held-out corners/stimuli, stated tolerance); whether the fit passes is **open**. Owner: the CDR-verification issue to be filed under the T1 tracker (#5). |
 | What on-chip test access does a shuttle part need? | **Answered as a proposal: R22.** |
 

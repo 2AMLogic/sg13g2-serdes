@@ -86,7 +86,11 @@ unchanged):
   1.32 V needs a superseding record") still carry the old ceiling; R3 as revised
   (Vce ≤ 1.26 V, 90 % of the 1.4 V BVCEO, transients included) supersedes that
   node-to-ground ceiling until a superseding record exists. DR-003 is append-only
-  and is not edited in place.
+  and is not edited in place. DR-003's claim that the stack (tail + pair + load)
+  fits 1.2 V CML at 0.3–0.5 Vppd is **not** ratified: the cited records contradict
+  it at the −10 % corner (RX latch non-regeneration at 1.08 V, `sim/rx/records/20261027-022309-00c2ed7`;
+  TX tail Vce 0.049–0.109 V at 1.08 V / −40 °C, `sim/tx/records/20261027-024044-2e55774`),
+  and DR-003's "Not simulated" clause is no longer true.
 
 This record does **not** ratify: any measured or simulated result, any BER or eye figure (never "measured", DR-002), or any change to a
 number. Apart from the R2, R3 and R9 corrections above, no spec number, corner or fallback
