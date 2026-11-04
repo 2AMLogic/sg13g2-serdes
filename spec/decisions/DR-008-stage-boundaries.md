@@ -21,17 +21,20 @@ standard cells", which would equally exclude a CMOS 1.25 GHz stage.
 | S4: 2:1 to the line | 10 Gb/s | 5 GHz | HBT CML (both texts agree) | consistent |
 | S3: 4:2 | 5 Gb/s | 2.5 GHz | DR-001 prose: CML; R2: unassigned | **conflict** |
 | S2: 8:4 | 2.5 Gb/s | 1.25 GHz | unassigned | **gap** |
-| S1: 16:8 | 1.25 Gb/s | 625 MHz | CMOS | assumption |
-| Word clock | 625 Mb/s per bit, 16 wires | 625 MHz | CMOS | assumption |
+| S1: 16:8 | 1.25 Gb/s | 625 MHz | unassigned (RTL port comment implies CML) | **gap** |
+| Word (converter output) | 625 Mb/s per bit, 16 wires | 625 MHz | CMOS | assumption |
 | Clock divider chain 5 → 2.5 → 1.25 → 0.625 GHz | n/a | n/a | unassigned | **gap** |
 
 ## Options
 
-- **B1 (proposed default)**: CML for S4, S3, S2 and the divider chain down to
-  1.25 GHz; the CML-to-CMOS level conversion and the first CMOS flops sit at
-  the 625 MHz word boundary. Makes no CMOS claim above 625 MHz. Cost: more CML
-  power, not estimated (R16 has no device-level estimate), and a larger
-  HBT clock tree.
+- **B1 (proposed default)**: CML for S4, S3, S2 and S1 (the whole 2:1 tree)
+  and the divider chain all the way down to 625 MHz; the CML-to-CMOS level
+  conversion (RX) and CMOS-to-CML conversion (TX) sit at the 16 x 625 Mb/s
+  word boundary, matching `rtl/serdes_digital_top.v` (`tx_word`, "to the CML
+  serialiser, 625 MHz"). Makes no CMOS claim above 625 MHz in clock frequency
+  or data rate. Cost: one more CML stage (S1) and a CML divide-by-2 from
+  1.25 to 0.625 GHz than the DR-001 prose implies; more CML power, not
+  estimated (R16 has no device-level estimate), and a larger HBT clock tree.
 - **B2**: CML for S4 and S3 only; S2 in CMOS at 1.25 GHz. Saves CML power but
   rests on a CMOS 1.25 GHz stage that DR-001 itself called too fast for the
   standard cells and that nothing in the repo supports. Not proposed.
@@ -40,8 +43,9 @@ standard cells", which would equally exclude a CMOS 1.25 GHz stage.
 
 ## Proposed decision (all Proposed)
 
-1. Adopt B1. R2's text becomes: HBT CML for S4, S3, S2 and the 5/2.5/1.25 GHz
-   clock path; CMOS from the 625 MHz word boundary down.
+1. Adopt B1. R2's text becomes: HBT CML for S4, S3, S2, S1 and the
+   5/2.5/1.25/0.625 GHz clock path; CMOS from the 625 MHz word boundary down.
+   The level converters therefore carry the 16-bit 625 Mb/s-per-wire word.
 2. **The 625 MHz CMOS claim is a proposed feasibility assumption.** The only
    timing evidence is DR-005/DR-006: OpenSTA, pre-layout, ideal clock, no wire
    load, **one corner** (`typ_1p20V_25C`), worst setup slack +0.014 ns at
@@ -58,6 +62,10 @@ standard cells", which would equally exclude a CMOS 1.25 GHz stage.
 
 ## Unresolved feasibility, stated
 
+The CML-to-CMOS clock edge at 625 MHz (the last CML divide-by-2 output driving
+the CMOS word clock) is part of the converter work in item 3 and is likewise
+unsimulated.
+
 Whether HBT CML at 5 GHz with `npn13G2` and a 1.2 V ±10 % rail has the
 headroom for a stacked S4 mux plus tail source is **unsimulated** (depends on
-#3, DR-003). The 2.5 and 1.25 GHz CML latches have the same dependency.
+#3, DR-003). The 2.5, 1.25 and 0.625 GHz CML latches have the same dependency.
