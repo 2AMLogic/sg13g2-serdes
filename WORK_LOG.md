@@ -2,6 +2,10 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-11-04
+
+- **PR #75**: docs(spec): refresh clock fit table and reconcile serializer stage boundaries
+
 ### 2026-11-02
 
 - **PR #76**: sim: record passing batch smoke grid on klt 0.8.0
