@@ -23,10 +23,10 @@ OSDI models and `cornerMOSlv.lib` sections `mos_tt/ff/ss/fs/sf`.
 
 ## Known gaps (tool issues filed on 2AMLogic/klayout-tools)
 
-- [#3818](https://github.com/2AMLogic/klayout-tools/issues/3818): batch jobs that stage `.osdi` inputs exit 2 with no diagnostic. Fixed in klt 0.8.0 (the pin since issue #42); not re-run here. It is why the MOS and mixed smoke runs in the first record (klt 0.7.0) are `error`, not `pass`.
+- [#3818](https://github.com/2AMLogic/klayout-tools/issues/3818): batch jobs that stage `.osdi` inputs exit 2 with no diagnostic. Fixed in klt 0.8.0 (the pin since issue #42). Re-run by PR #76 (smoke) and by the TX MOS-cell benches in `tx/` (issue #80, see `tx/README.md`). It is why the MOS and mixed smoke runs in the first record (klt 0.7.0) are `error`, not `pass`.
 - [#3819](https://github.com/2AMLogic/klayout-tools/issues/3819): the submit-time OSDI ABI check judges the client's ngspice, not the worker's.
 
-- PDK resistors (`rsil`, `rppd`) are `r3_cmc` OSDI models, so they cannot be simulated either; `design/rx` uses ideal resistors and records that.
+- PDK resistors (`rsil`, `rppd`) are `r3_cmc` OSDI models. They now load with `osdi_preload` (PR #76) and the TX MOS-cell benches in `tx/` simulate them (issue #80). The six TX HBT-bench decks still use a behavioural `rsil`, and `design/rx` uses ideal resistors and records that.
 
 ## PDK pin
 
