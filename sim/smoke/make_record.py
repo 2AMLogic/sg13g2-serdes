@@ -9,8 +9,9 @@ import sys
 out = pathlib.Path(sys.argv[1])
 smoke = out.parent.parent
 repo = smoke.parent.parent
-pdk = json.load(open(repo / "sim" / "pdk.json"))
-tool = json.load(open(repo / "layout" / "toolchain.json"))
+sys.path.insert(0, str(repo / "sim" / "tools"))
+import record_common as rc  # noqa: E402
+pdk, tool = rc.load_pins(repo)
 openvaf_tag = re.search(r'^OPENVAF_TAG="([^"]+)"', (repo / "sim" / "tools" / "build-osdi.sh").read_text(), re.M).group(1)
 
 lines = [
@@ -25,22 +26,15 @@ lines = [
     "",
     "## Runs",
 ]
-exit_codes = (out / "exit-codes.txt").read_text().strip().splitlines()
+exit_codes = rc.exit_codes(out)
 for name in ("hbt_gummel", "mos_inv_dc", "mixed_tran"):
     req = json.load(open(smoke / f"{name}.request.json"))
     lines += ["", f"### {name}", f"- command: `cd sim/smoke && klt sim --format json --wait-for-capacity 900 --report-out records/{out.name}/{name}.report.json {name}.request.json`"]
     lines.append(f"- {[l for l in exit_codes if l.startswith(name)][0]}")
-    rp = out / f"{name}.report.json"
-    if not rp.exists():
-        err = (out / f"{name}.stderr.txt").read_text()
-        msg = "no report written"
-        try:
-            msg = json.loads(err[err.index("{"):])["error"]["message"]
-        except Exception:
-            pass
+    rep, msg = rc.report_or_error(out, name)
+    if rep is None:
         lines.append(f"- NO REPORT: {msg}")
         continue
-    rep = json.load(open(rp))
     env = rep["environment"]
     rem = env.get("remote") or {}
     sim = (rem.get("worker_environment") or {}).get("simulator") or {}

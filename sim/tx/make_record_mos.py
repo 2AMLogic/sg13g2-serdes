@@ -5,7 +5,6 @@ requests, sim/pdk.json and design/tx/netlists/*.spice (for hashes); writes recor
 beside the reports. Failing, erroring and missing corners are kept and listed.
 Sizing evidence only.
 """
-import hashlib
 import json
 import pathlib
 import sys
@@ -13,13 +12,14 @@ import sys
 out = pathlib.Path(sys.argv[1])
 tx = out.parent.parent
 repo = tx.parent.parent
-pdk = json.load(open(repo / "sim" / "pdk.json"))
-tool = json.load(open(repo / "layout" / "toolchain.json"))
+sys.path.insert(0, str(repo / "sim" / "tools"))
+import record_common as rc  # noqa: E402
+pdk, tool = rc.load_pins(repo)
 CELLS = ["mux2to1_cml", "tx_lvl_cml2cmos", "ffe_en"]
-sha = lambda p: hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+sha = rc.sha
 
 L = [f"# TX MOS-cell sizing record {out.name}", "",
-     "**Sizing evidence, not a spec result and not a measurement.** Simulated, first-cut "
+     rc.SIZING_BANNER + " Simulated, first-cut "
      "sizes, ideal-source drive. No `spec/` row is graded here.", "",
      "## Pins and inputs",
      f"- PDK: {pdk['source']} {pdk['release_tag']} (sim/pdk.json), tarball sha256 `{pdk['tarball_sha256']}`",
@@ -32,21 +32,14 @@ for c in CELLS:
 L.append("- bias cell netlists also inlined: `bias`, `predriver` (mux bench), `bias` (ffe_en bench)")
 L.append("")
 
-exit_codes = (out / "exit-codes.txt").read_text().strip().replace("\n", "; ")
+exit_codes = "; ".join(rc.exit_codes(out))
 L += ["## Run", f"- {exit_codes}"]
 reps, missing = {}, []
 for c in CELLS:
-    rp = out / f"tx_mos_{c}.report.json"
-    if rp.exists():
-        reps[c] = json.load(open(rp))
+    rep, msg = rc.report_or_error(out, f"tx_mos_{c}")
+    if rep is not None:
+        reps[c] = rep
     else:
-        errp = out / f"tx_mos_{c}.stderr.txt"
-        err = errp.read_text() if errp.exists() else ""
-        msg = "no report written"
-        try:
-            msg = json.loads(err[err.index("{"):])["error"]["message"]
-        except Exception:
-            msg = (err.strip().splitlines() or [msg])[-1]
         missing.append((c, msg))
 for c, msg in missing:
     L.append(f"- {c}: NO REPORT: {msg}")
@@ -68,11 +61,7 @@ if bad:
     L.append("")
 
 
-def val(k, n):
-    for m in k.get("measurements", []):
-        if m["name"] == n:
-            return m.get("value")
-    return None
+val = rc.val
 
 
 def fmt(v, scale=1.0, nd=4):
