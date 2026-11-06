@@ -2,6 +2,12 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-11-06
+
+- **PR #83**: refactor(sim): share record renderer boilerplate in sim/tools/record_common.py
+- **PR #81**: feat(sim/tx): add batch-fleet sizing benches for the TX MOS cells
+- **Issue #82** (closed): Consolidate duplicated boilerplate across the four sim make_record*.py renderers
+
 ### 2026-11-04
 
 - **PR #75**: docs(spec): refresh clock fit table and reconcile serializer stage boundaries
