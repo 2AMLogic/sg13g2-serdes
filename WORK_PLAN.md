@@ -52,6 +52,7 @@ Issues carrying `loom:curated`.
 - **#2**: Draft and ratify the target spec *(curated)*
 - **#24**: T1 item 2 (layout, analog): GDS for the CML TX/RX cells, clock path and high-speed pads *(curated)*
 - **#44**: Install the two-key ratification path and ratify spec/target-spec.md *(curated)*
+- **#80**: sim/tx: add batch-fleet sizing benches for the MOS cells mux2to1_cml, ffe_en, tx_lvl_cml2cmos *(curated)*
 
 ## Proposed (Architect / Hermit)
 
@@ -72,7 +73,7 @@ _None._
 | In Progress (`loom:building`) | 1 |
 | PRs awaiting review | 0 |
 | Approved PRs awaiting merge | 1 |
-| Curated | 3 |
+| Curated | 4 |
 | Architect / Hermit proposals | 0 |
 | Active epics | 0 |
 <!-- guide:plan-body:end -->
