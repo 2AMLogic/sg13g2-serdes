@@ -1,6 +1,6 @@
 {
-  "loom_version": "0.19.1259",
-  "loom_commit": "eb1c923e22e5497626e1c670bbd3fa554031fc8a",
+  "loom_version": "0.19.1275",
+  "loom_commit": "fd229189401ab93f132973ad08f23d424270f1aa",
   "requires_daemon": "0.19.1146",
   "install_date": "2026-10-17",
   "loom_source_remote": "git@github.com:rjwalters/loom.git",
@@ -296,7 +296,6 @@
     ".loom/scripts/cli/loom-daemon-watchdog.sh",
     ".loom/scripts/cli/loom-help.sh",
     ".loom/scripts/cli/loom-logs.sh",
-    ".loom/scripts/cli/loom-scale.sh",
     ".loom/scripts/cli/loom-send.sh",
     ".loom/scripts/cli/loom-start.sh",
     ".loom/scripts/cli/loom-status.sh",
@@ -785,7 +784,15 @@
     ".agents/skills/loom-judge-ci-red/SKILL.md",
     ".loom/docs/ratification-lane.md",
     ".loom/scripts/tests/test-doctor-champion-hold-conflict.sh",
-    ".agents/skills/loom-curator/SKILL.md"
+    ".agents/skills/loom-curator/SKILL.md",
+    ".loom/scripts/tests/test-champion-merged-before-hold.sh",
+    ".loom/scripts/tests/test-merge-pr-release-hold.sh",
+    ".loom/scripts/tests/test-guide-awaiting-revision-park.sh",
+    ".loom/scripts/tests/test-guide-transient-first-at.sh",
+    ".loom/scripts/tests/test-resync-installed-agents-md-create.sh",
+    ".agents/skills/loom-hermit/SKILL.md",
+    ".claude/commands/loom/accelerate.md",
+    ".loom/scripts/tests/test-guide-split-parent-unblock.sh"
   ],
-  "last_resync": "2026-11-03"
+  "last_resync": "2026-11-07"
 }

@@ -11,9 +11,10 @@ import sys
 out = pathlib.Path(sys.argv[1])
 rx = out.parent.parent
 repo = rx.parent.parent
-pdk = json.load(open(repo / "sim" / "pdk.json"))
-tool = json.load(open(repo / "layout" / "toolchain.json"))
-codes = (out / "exit-codes.txt").read_text().strip().splitlines()
+sys.path.insert(0, str(repo / "sim" / "tools"))
+import record_common as rc  # noqa: E402
+pdk, tool = rc.load_pins(repo)
+codes = rc.exit_codes(out)
 
 reports = {}
 for name in ("ctle_ac", "ctle_op", "pad_ac", "latch_regen"):
@@ -21,11 +22,7 @@ for name in ("ctle_ac", "ctle_op", "pad_ac", "latch_regen"):
     reports[name] = json.load(open(p)) if p.exists() else None
 
 
-def val(c, n):
-    for m in c.get("measurements", []):
-        if m["name"] == n:
-            return m.get("value")
-    return None
+val = rc.val
 
 
 def peak(c, k):

@@ -3,7 +3,6 @@
 Reads the report, the request, sim/pdk.json and design/tx/netlists/*.spice (for
 hashes); writes record.md beside the report. Sizing evidence only.
 """
-import hashlib
 import json
 import pathlib
 import sys
@@ -11,15 +10,16 @@ import sys
 out = pathlib.Path(sys.argv[1])
 tx = out.parent.parent
 repo = tx.parent.parent
-pdk = json.load(open(repo / "sim" / "pdk.json"))
-tool = json.load(open(repo / "layout" / "toolchain.json"))
+sys.path.insert(0, str(repo / "sim" / "tools"))
+import record_common as rc  # noqa: E402
+pdk, tool = rc.load_pins(repo)
 TAGS = ["ffe%d_%s" % (f, t) for f in (0, 1) for t in ("typ", "bcs", "wcs")]
 reqs = {t: json.load(open(tx / f"tx_sizing_{t}.request.json")) for t in TAGS}
 req = reqs[TAGS[0]]  # all six share the measurement names
-sha = lambda p: hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+sha = rc.sha
 
 L = [f"# TX sizing record {out.name}", "",
-     "**Sizing evidence, not a spec result and not a measurement.** Simulated, "
+     rc.SIZING_BANNER + " Simulated, "
      "first-cut sizes, ideal-source drive, lumped pad stand-in.", "",
      "## Pins and inputs",
      f"- PDK: {pdk['source']} {pdk['release_tag']} (sim/pdk.json), tarball sha256 `{pdk['tarball_sha256']}`",
@@ -31,20 +31,14 @@ for t in TAGS:
 for c in ("bias", "predriver", "driver_ffe"):
     L.append(f"- netlist `design/tx/netlists/{c}.spice` sha256 `{sha(repo / 'design' / 'tx' / 'netlists' / (c + '.spice'))}`")
 L.append("")
-exit_codes = (out / "exit-codes.txt").read_text().strip()
+exit_codes = "\n".join(rc.exit_codes(out))
 L += ["## Run", f"- {exit_codes}"]
 reps, missing = {}, []
 for t in TAGS:
-    rp = out / f"tx_sizing_{t}.report.json"
-    if rp.exists():
-        reps[t] = json.load(open(rp))
+    rep, msg = rc.report_or_error(out, f"tx_sizing_{t}")
+    if rep is not None:
+        reps[t] = rep
     else:
-        err = (out / f"tx_sizing_{t}.stderr.txt").read_text()
-        msg = "no report written"
-        try:
-            msg = json.loads(err[err.index("{"):])["error"]["message"]
-        except Exception:
-            pass
         missing.append((t, msg))
 for t, msg in missing:
     L.append(f"- {t}: NO REPORT: {msg}")
@@ -61,11 +55,7 @@ for t, rep in reps.items():
         corners.append(c)
 L.append("")
 names = [m["name"] for m in req["measurements"]]
-def val(c, n):
-    for m in c.get("measurements", []):
-        if m["name"] == n:
-            return m.get("value")
-    return None
+val = rc.val
 
 def worst(prefix, fn):
     rows = []

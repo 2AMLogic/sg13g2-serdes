@@ -8,7 +8,7 @@ cited record), **sibling** (a sibling's ratified target, cited at a commit) or
 the row). No number here is a measurement; simulated sizing and STA records exist under `sim/` and `rtl/synth/sta/` (cited in DR-008), none is a measurement.
 10 Gb/s is the driving target; 12.5 Gb/s shapes nothing (`CLAUDE.md`).
 
-Decision records: [`decisions/`](decisions/). Clock interface:
+Decision records: [`decisions/`](decisions/). Basis of each budget, limits and validation gates: [`validation-plan.md`](validation-plan.md). Clock interface:
 [`clock-requirement.md`](clock-requirement.md). Channel: [`channel/`](channel/README.md).
 
 ## Corner sets

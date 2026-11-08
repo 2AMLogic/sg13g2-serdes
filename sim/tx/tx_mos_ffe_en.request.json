@@ -1,0 +1,226 @@
+{
+  "engine": "ngspice",
+  "netlist": "tx_mos_ffe_en.sp",
+  "models": {
+    "pdk": "ihp-sg13g2",
+    "lib": "libs.tech/ngspice/models/cornerMOSlv.lib"
+  },
+  "corners": {
+    "process": [
+      {
+        "name": "tt_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_tt"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_typ"
+          }
+        ]
+      },
+      {
+        "name": "ff_bcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_ff"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_bcs"
+          }
+        ]
+      },
+      {
+        "name": "ss_wcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_ss"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_wcs"
+          }
+        ]
+      },
+      {
+        "name": "fs_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_fs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_typ"
+          }
+        ]
+      },
+      {
+        "name": "sf_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_sf"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_typ"
+          }
+        ]
+      }
+    ],
+    "supply_v": {
+      "vdd": [
+        1.08,
+        1.2,
+        1.32
+      ]
+    },
+    "temperature_c": [
+      -40,
+      27,
+      125
+    ]
+  },
+  "analysis": {
+    "kind": "tran",
+    "args": "20p 4e-08"
+  },
+  "measurements": [
+    {
+      "name": "vbn_code0",
+      "unit": "V",
+      "spice": ".meas tran vbn_code0 find v(vbn) at=9.5e-09"
+    },
+    {
+      "name": "vbp0_minus_vbn_code0",
+      "unit": "V",
+      "spice": ".meas tran vbp0_minus_vbn_code0 find par('v(vbp0)-v(vbn)') at=9.5e-09"
+    },
+    {
+      "name": "vbp1_minus_vbn_code0",
+      "unit": "V",
+      "spice": ".meas tran vbp1_minus_vbn_code0 find par('v(vbp1)-v(vbn)') at=9.5e-09"
+    },
+    {
+      "name": "vbp2_minus_vbn_code0",
+      "unit": "V",
+      "spice": ".meas tran vbp2_minus_vbn_code0 find par('v(vbp2)-v(vbn)') at=9.5e-09"
+    },
+    {
+      "name": "vbn_code1",
+      "unit": "V",
+      "spice": ".meas tran vbn_code1 find v(vbn) at=1.95e-08"
+    },
+    {
+      "name": "vbp0_minus_vbn_code1",
+      "unit": "V",
+      "spice": ".meas tran vbp0_minus_vbn_code1 find par('v(vbp0)-v(vbn)') at=1.95e-08"
+    },
+    {
+      "name": "vbp1_minus_vbn_code1",
+      "unit": "V",
+      "spice": ".meas tran vbp1_minus_vbn_code1 find par('v(vbp1)-v(vbn)') at=1.95e-08"
+    },
+    {
+      "name": "vbp2_minus_vbn_code1",
+      "unit": "V",
+      "spice": ".meas tran vbp2_minus_vbn_code1 find par('v(vbp2)-v(vbn)') at=1.95e-08"
+    },
+    {
+      "name": "vbn_code2",
+      "unit": "V",
+      "spice": ".meas tran vbn_code2 find v(vbn) at=2.95e-08"
+    },
+    {
+      "name": "vbp0_minus_vbn_code2",
+      "unit": "V",
+      "spice": ".meas tran vbp0_minus_vbn_code2 find par('v(vbp0)-v(vbn)') at=2.95e-08"
+    },
+    {
+      "name": "vbp1_minus_vbn_code2",
+      "unit": "V",
+      "spice": ".meas tran vbp1_minus_vbn_code2 find par('v(vbp1)-v(vbn)') at=2.95e-08"
+    },
+    {
+      "name": "vbp2_minus_vbn_code2",
+      "unit": "V",
+      "spice": ".meas tran vbp2_minus_vbn_code2 find par('v(vbp2)-v(vbn)') at=2.95e-08"
+    },
+    {
+      "name": "vbn_code3",
+      "unit": "V",
+      "spice": ".meas tran vbn_code3 find v(vbn) at=3.95e-08"
+    },
+    {
+      "name": "vbp0_minus_vbn_code3",
+      "unit": "V",
+      "spice": ".meas tran vbp0_minus_vbn_code3 find par('v(vbp0)-v(vbn)') at=3.95e-08"
+    },
+    {
+      "name": "vbp1_minus_vbn_code3",
+      "unit": "V",
+      "spice": ".meas tran vbp1_minus_vbn_code3 find par('v(vbp1)-v(vbn)') at=3.95e-08"
+    },
+    {
+      "name": "vbp2_minus_vbn_code3",
+      "unit": "V",
+      "spice": ".meas tran vbp2_minus_vbn_code3 find par('v(vbp2)-v(vbn)') at=3.95e-08"
+    }
+  ],
+  "options": {
+    "stage_model_inputs": true,
+    "timeout_s": 1800,
+    "keep_artifacts": false,
+    "osdi_preload": [
+      "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/psp103.osdi",
+      "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/psp103_nqs.osdi",
+      "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/r3_cmc.osdi",
+      "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/mosvar.osdi"
+    ]
+  }
+}

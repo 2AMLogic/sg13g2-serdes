@@ -1,0 +1,254 @@
+{
+  "engine": "ngspice",
+  "netlist": "tx_mos_mux2to1_cml.sp",
+  "models": {
+    "pdk": "ihp-sg13g2",
+    "lib": "libs.tech/ngspice/models/cornerMOSlv.lib"
+  },
+  "corners": {
+    "process": [
+      {
+        "name": "tt_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_tt"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_typ"
+          }
+        ]
+      },
+      {
+        "name": "ff_bcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_ff"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_bcs"
+          }
+        ]
+      },
+      {
+        "name": "ss_wcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_ss"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_wcs"
+          }
+        ]
+      },
+      {
+        "name": "fs_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_fs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_typ"
+          }
+        ]
+      },
+      {
+        "name": "sf_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_sf"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_typ"
+          }
+        ]
+      }
+    ],
+    "supply_v": {
+      "vdd": [
+        1.08,
+        1.2,
+        1.32
+      ]
+    },
+    "temperature_c": [
+      -40,
+      27,
+      125
+    ]
+  },
+  "analysis": {
+    "kind": "tran",
+    "args": "2p 1e-08"
+  },
+  "measurements": [
+    {
+      "name": "out_diff_max",
+      "unit": "V",
+      "spice": ".meas tran out_diff_max max v(vd) from=6e-09 to=1e-08"
+    },
+    {
+      "name": "out_diff_min",
+      "unit": "V",
+      "spice": ".meas tran out_diff_min min v(vd) from=6e-09 to=1e-08"
+    },
+    {
+      "name": "out_cm_avg",
+      "unit": "V",
+      "spice": ".meas tran out_cm_avg avg par('0.5*(v(mp)+v(mn))') from=6e-09 to=1e-08"
+    },
+    {
+      "name": "rise_pm30mv_s",
+      "unit": "s",
+      "spice": ".meas tran rise_pm30mv_s trig v(vd) val=-0.03 rise=1 td=6e-09 targ v(vd) val=0.03 rise=1 td=6e-09"
+    },
+    {
+      "name": "fall_pm30mv_s",
+      "unit": "s",
+      "spice": ".meas tran fall_pm30mv_s trig v(vd) val=0.03 fall=1 td=6e-09 targ v(vd) val=-0.03 fall=1 td=6e-09"
+    },
+    {
+      "name": "idd_avg",
+      "unit": "A",
+      "spice": ".meas tran idd_avg avg par('-i(vdd)') from=6e-09 to=1e-08"
+    },
+    {
+      "name": "vc_max_mux_outp",
+      "unit": "V",
+      "spice": ".meas tran vc_max_mux_outp max v(mp) from=6e-09 to=1e-08",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vc_max_mux_outn",
+      "unit": "V",
+      "spice": ".meas tran vc_max_mux_outn max v(mn) from=6e-09 to=1e-08",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vbe_rev_max_mux_a1",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_mux_a1 max par('v(xmux.ea)-v(dap)') from=6e-09 to=1e-08",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_mux_a2",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_mux_a2 max par('v(xmux.ea)-v(dan)') from=6e-09 to=1e-08",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_mux_b1",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_mux_b1 max par('v(xmux.eb)-v(dbp)') from=6e-09 to=1e-08",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vbe_rev_max_mux_b2",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_mux_b2 max par('v(xmux.eb)-v(dbn)') from=6e-09 to=1e-08",
+      "limits": {
+        "max": 1.0
+      }
+    },
+    {
+      "name": "vce_max_mux_a1",
+      "unit": "V",
+      "spice": ".meas tran vce_max_mux_a1 max par('v(mn)-v(xmux.ea)') from=6e-09 to=1e-08"
+    },
+    {
+      "name": "vce_max_mux_a2",
+      "unit": "V",
+      "spice": ".meas tran vce_max_mux_a2 max par('v(mp)-v(xmux.ea)') from=6e-09 to=1e-08"
+    },
+    {
+      "name": "vce_max_mux_b1",
+      "unit": "V",
+      "spice": ".meas tran vce_max_mux_b1 max par('v(mn)-v(xmux.eb)') from=6e-09 to=1e-08"
+    },
+    {
+      "name": "vce_max_mux_b2",
+      "unit": "V",
+      "spice": ".meas tran vce_max_mux_b2 max par('v(mp)-v(xmux.eb)') from=6e-09 to=1e-08"
+    },
+    {
+      "name": "sq_a_max",
+      "unit": "V",
+      "spice": ".meas tran sq_a_max max v(xmux.sqa) from=6e-09 to=1e-08"
+    },
+    {
+      "name": "sq_a_min",
+      "unit": "V",
+      "spice": ".meas tran sq_a_min min v(xmux.sqa) from=6e-09 to=1e-08"
+    }
+  ],
+  "options": {
+    "stage_model_inputs": true,
+    "timeout_s": 1800,
+    "keep_artifacts": false,
+    "osdi_preload": [
+      "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/psp103.osdi",
+      "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/psp103_nqs.osdi",
+      "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/r3_cmc.osdi",
+      "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/mosvar.osdi"
+    ]
+  }
+}
