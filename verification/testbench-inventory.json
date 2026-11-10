@@ -1,0 +1,322 @@
+{
+  "schema_version": 1,
+  "kind": "t1-attestation-inventory",
+  "t1_item": 9,
+  "description": "Testbenches against the PROPOSED draft spec rows (#2, not ratified) and DR-001 to DR-004. Cold start = scripts/run-bench.sh <id>: analog benches validate the klt sim request and expand the declared corner set (no PDK, no fleet); digital benches run the cocotb bench. The full corner grid is scripts/run-bench.sh <id> --run (klt sim, batch fleet). No bench output is a measurement. Rows without a bench are listed in unbenched_rows.",
+  "testbenches": [
+    {
+      "path": "sim/tx/tx_sizing_ffe0_typ.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-link",
+          "--request",
+          "sim/tx/tx_sizing_ffe0_typ.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/tx/tx_sizing_ffe0_bcs.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-link",
+          "--request",
+          "sim/tx/tx_sizing_ffe0_bcs.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/tx/tx_sizing_ffe0_wcs.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-link",
+          "--request",
+          "sim/tx/tx_sizing_ffe0_wcs.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/tx/tx_sizing_ffe1_typ.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-link",
+          "--request",
+          "sim/tx/tx_sizing_ffe1_typ.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/tx/tx_sizing_ffe1_bcs.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-link",
+          "--request",
+          "sim/tx/tx_sizing_ffe1_bcs.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/tx/tx_sizing_ffe1_wcs.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-link",
+          "--request",
+          "sim/tx/tx_sizing_ffe1_wcs.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/tx/tx_mos_ffe_en.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-mos-ffe-en",
+          "--request",
+          "sim/tx/tx_mos_ffe_en.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/tx/tx_mos_mux2to1_cml.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-mos-mux2to1-cml",
+          "--request",
+          "sim/tx/tx_mos_mux2to1_cml.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/tx/tx_mos_tx_lvl_cml2cmos.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-mos-lvl-cml2cmos",
+          "--request",
+          "sim/tx/tx_mos_tx_lvl_cml2cmos.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/rx/ctle_ac.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "rx-ctle-ac",
+          "--request",
+          "sim/rx/ctle_ac.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/rx/ctle_op.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "rx-ctle-op",
+          "--request",
+          "sim/rx/ctle_op.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/rx/latch_regen.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "rx-latch-regen",
+          "--request",
+          "sim/rx/latch_regen.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/rx/pad_ac.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "rx-term-pad",
+          "--request",
+          "sim/rx/pad_ac.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "rtl/tests/test_prbs_gen.py",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-prbs-gen"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "rtl/tests/test_prbs_chk.py",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-prbs-chk"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "rtl/tests/test_loopback.py",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-loopback"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "rtl/tests/test_eye.py",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-eye"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "rtl/tests/test_ctrl.py",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-ctrl"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "rtl/tests/test_cdr_pd.py",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-cdr-pd"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "rtl/tests/test_cdr.py",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-cdr"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "rtl/tests/test_top.py",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-top"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/bench/benches.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "--list"
+        ],
+        "local_only": true
+      }
+    }
+  ],
+  "pins": {
+    "pdk": {
+      "name": "ihp-sg13g2",
+      "revision": "IHP-GmbH/IHP-Open-PDK v0.3.0 sha256:f6afb7a8d2adf3e40acd3fd2c7892fc93510e6f760565409a8df2b5b242254fc"
+    },
+    "tools": {
+      "klt": "0.9.0",
+      "ngspice_min": "42",
+      "harness": "2AMLogic/sg13g2-stdcells@f450813c6a5eecf3cf67aaf899db90d11f4ee68c",
+      "cocotb": "2.0.1",
+      "icarus": "Icarus Verilog version 13.0 (stable) (v13_0)"
+    }
+  },
+  "unbenched_rows": [
+    {
+      "row": "R6",
+      "issue": 92
+    },
+    {
+      "row": "R20",
+      "issue": 92
+    },
+    {
+      "row": "R8",
+      "issue": 93
+    },
+    {
+      "row": "R12",
+      "issue": 93
+    },
+    {
+      "row": "R13",
+      "issue": 93
+    },
+    {
+      "row": "R15",
+      "issue": 93
+    },
+    {
+      "row": "R18",
+      "issue": 94
+    },
+    {
+      "row": "R19",
+      "issue": 94
+    }
+  ]
+}

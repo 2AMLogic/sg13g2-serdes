@@ -1,0 +1,321 @@
+{
+  "schema_version": 1,
+  "note": "Single source of truth for the shipped testbenches (T1 item 9). Graded against the PROPOSED spec rows (#2, not ratified) and DR-001 to DR-004. No bench output is a measurement; figures a bench prints are simulated. verification/testbench-inventory.json is generated from this file by sim/bench/gen_inventory.py.",
+  "pdk": "sim/pdk.json",
+  "unbenched_rows": [
+    {
+      "row": "R6",
+      "issue": 92,
+      "reason": "no TX AC/S-parameter deck for driver + pad exists yet"
+    },
+    {
+      "row": "R20",
+      "issue": 92,
+      "reason": "latch_regen measures regeneration, not duty/quadrature/jitter at the receiving buffer"
+    },
+    {
+      "row": "R8",
+      "issue": 93,
+      "reason": "statistical eye with sampler Monte Carlo (DR-002) not built; rx-latch-regen carries the latch record only"
+    },
+    {
+      "row": "R12",
+      "issue": 93,
+      "reason": "jitter-tolerance sweep needs the behavioural CDR model, not built"
+    },
+    {
+      "row": "R13",
+      "issue": 93,
+      "reason": "frequency-offset behavioural run not built"
+    },
+    {
+      "row": "R15",
+      "issue": 93,
+      "reason": "error-rate method entry point (PRBS-31 statistical eye) not built"
+    },
+    {
+      "row": "R18",
+      "issue": 94,
+      "reason": "PDK bondpad model is an empty placeholder; no extracted/EM pad model"
+    },
+    {
+      "row": "R19",
+      "issue": 94,
+      "reason": "no extracted ESD clamp model; no ESD claim is made"
+    }
+  ],
+  "not_simulation_rows": {
+    "R1": "graded by R15",
+    "R2": "structural (netlist/RTL review); the digital top bench is listed under R2 as a functional check",
+    "R14": "committed model spec/channel/channel_model.py, not a simulation",
+    "R17": "layout bounding box",
+    "R21": "signoff (DRC/LVS)"
+  },
+  "benches": [
+    {
+      "id": "tx-link",
+      "partition": "analog",
+      "rows": [
+        "R3",
+        "R4",
+        "R5",
+        "R7",
+        "R16"
+      ],
+      "requests": [
+        "sim/tx/tx_sizing_ffe0_typ.request.json",
+        "sim/tx/tx_sizing_ffe0_bcs.request.json",
+        "sim/tx/tx_sizing_ffe0_wcs.request.json",
+        "sim/tx/tx_sizing_ffe1_typ.request.json",
+        "sim/tx/tx_sizing_ffe1_bcs.request.json",
+        "sim/tx/tx_sizing_ffe1_wcs.request.json"
+      ],
+      "description": "TX HBT chain (pre-driver, FFE line driver) into 100 ohm, FFE off and on: swing, rise/fall, collector and reverse-Vbe stress, supply current",
+      "corner_set": "per request: one HBT process corner x 3 supplies x 3 temperatures; six requests give the 54-point PVT-full set",
+      "units_per_request": 9,
+      "required_measurements": [
+        "r4_peak_max_vppd",
+        "r4_peak_min_vppd",
+        "r4_steady_hi",
+        "r4_steady_lo",
+        "r7_rise_20_80_s",
+        "r7_fall_80_20_s",
+        "idd_avg",
+        "vc_max_drv_out_p",
+        "vbe_rev_max_drv_main_p"
+      ],
+      "limitations": "R4 uses an ideal 100 ohm load, not the R18 pad model (placeholder). R16 covers the TX supply current only; RX and clock-path current are not measured here. R5 is graded at FFE off/on; the 4-step code sweep is tx-mos-ffe-en"
+    },
+    {
+      "id": "tx-mos-ffe-en",
+      "partition": "analog",
+      "rows": [
+        "R5"
+      ],
+      "requests": [
+        "sim/tx/tx_mos_ffe_en.request.json"
+      ],
+      "description": "FFE enable/bias MOS cell: post-cursor bias per 4 FFE codes",
+      "corner_set": "5 MOS corners (tt/ff/ss/fs/sf) x 1.08/1.2/1.32 V x -40/27/125 C (PVT-full)",
+      "units_per_request": 45,
+      "required_measurements": [
+        "vbn_code0",
+        "vbp0_minus_vbn_code0",
+        "vbn_code3",
+        "vbp2_minus_vbn_code3"
+      ],
+      "limitations": "Bias cell only; the de-emphasis in dB follows from tx-link"
+    },
+    {
+      "id": "tx-mos-mux2to1-cml",
+      "partition": "analog",
+      "rows": [
+        "R3",
+        "R7",
+        "R16"
+      ],
+      "requests": [
+        "sim/tx/tx_mos_mux2to1_cml.request.json"
+      ],
+      "description": "Final 2:1 CML mux (MOS cell): swing, edge time, supply current",
+      "corner_set": "5 MOS corners (tt/ff/ss/fs/sf) x 1.08/1.2/1.32 V x -40/27/125 C (PVT-full)",
+      "units_per_request": 45,
+      "required_measurements": [
+        "out_diff_max",
+        "out_diff_min",
+        "rise_pm30mv_s",
+        "fall_pm30mv_s",
+        "idd_avg"
+      ],
+      "limitations": "Edge times are +-30 mV thresholds of the cell output, not the 20-80 % pad edge of R7"
+    },
+    {
+      "id": "tx-mos-lvl-cml2cmos",
+      "partition": "analog",
+      "rows": [
+        "R16"
+      ],
+      "requests": [
+        "sim/tx/tx_mos_tx_lvl_cml2cmos.request.json"
+      ],
+      "description": "CML-to-CMOS level shifter at the 5 GHz to 625 MHz seam: levels, delay, supply current",
+      "corner_set": "5 MOS corners (tt/ff/ss/fs/sf) x 1.08/1.2/1.32 V x -40/27/125 C (PVT-full)",
+      "units_per_request": 45,
+      "required_measurements": [
+        "out_hi",
+        "out_lo",
+        "tpd_lh_s",
+        "tpd_hl_s",
+        "idd_avg"
+      ],
+      "limitations": ""
+    },
+    {
+      "id": "rx-ctle-ac",
+      "partition": "analog",
+      "rows": [
+        "R10"
+      ],
+      "requests": [
+        "sim/rx/ctle_ac.request.json"
+      ],
+      "description": "CTLE AC gain at 0.1, 2.5, 5 GHz for all 8 peaking codes",
+      "corner_set": "3 HBT process corners x 1.08/1.2/1.32 V x -40/27/125 C (PVT-full)",
+      "units_per_request": 27,
+      "required_measurements": [
+        "ctle_c0_g0p1g_db",
+        "ctle_c0_g5g_db",
+        "ctle_c7_g0p1g_db",
+        "ctle_c7_g5g_db"
+      ],
+      "limitations": "Placeholder CTLE load; combined channel+FFE+CTLE pulse response is not part of this bench"
+    },
+    {
+      "id": "rx-ctle-op",
+      "partition": "analog",
+      "rows": [
+        "R3"
+      ],
+      "requests": [
+        "sim/rx/ctle_op.request.json"
+      ],
+      "description": "CTLE operating point: collector voltage and reverse Vbe per HBT",
+      "corner_set": "3 HBT process corners x 1.08/1.2/1.32 V x -40/27/125 C (PVT-full)",
+      "units_per_request": 27,
+      "required_measurements": [
+        "ctle_c0_xd0_q1_vc_max",
+        "ctle_c0_xd0_q1_vbe_rev_max"
+      ],
+      "limitations": ""
+    },
+    {
+      "id": "rx-latch-regen",
+      "partition": "analog",
+      "rows": [
+        "R3",
+        "R8"
+      ],
+      "requests": [
+        "sim/rx/latch_regen.request.json"
+      ],
+      "description": "Clock buffer + CML sampling latch at 5 GHz: regeneration time and node stress; the latch record that DR-002 fits are made from",
+      "corner_set": "3 HBT process corners x 1.08/1.2/1.32 V x -40/27/125 C (PVT-full)",
+      "units_per_request": 27,
+      "required_measurements": [
+        "latch_t_regen_up",
+        "latch_t_regen_dn",
+        "latch_q_max_v",
+        "latch_q_min_v"
+      ],
+      "limitations": "Regeneration time only: sampler offset/noise Monte Carlo and the statistical eye are not in this bench (see unbenched R8 in the inventory, issue #93)"
+    },
+    {
+      "id": "rx-term-pad",
+      "partition": "analog",
+      "rows": [
+        "R9"
+      ],
+      "requests": [
+        "sim/rx/pad_ac.request.json"
+      ],
+      "description": "RX termination + pad + CTLE input: differential drive current, hence |Zdiff| at 0.1 and 5 GHz",
+      "corner_set": "3 HBT process corners x 1.08/1.2/1.32 V x -40/27/125 C (PVT-full)",
+      "units_per_request": 27,
+      "required_measurements": [
+        "pad_idiff_0p1g_a",
+        "pad_idiff_5g_a"
+      ],
+      "limitations": "Ideal resistors and a placeholder pad capacitance (PDK bondpad is empty); |Zdiff| only, SDD11 is not extracted, resistor corners not applied"
+    },
+    {
+      "id": "rtl-prbs-gen",
+      "partition": "digital",
+      "rows": [
+        "R22"
+      ],
+      "rtl_bench": "prbs_gen",
+      "description": "cocotb + Icarus bench: PRBS-7/31 generator",
+      "corner_set": "n/a (functional RTL simulation; timing is graded by STA, not here)",
+      "limitations": ""
+    },
+    {
+      "id": "rtl-prbs-chk",
+      "partition": "digital",
+      "rows": [
+        "R22"
+      ],
+      "rtl_bench": "prbs_chk",
+      "description": "cocotb + Icarus bench: PRBS checker and error counter",
+      "corner_set": "n/a (functional RTL simulation; timing is graded by STA, not here)",
+      "limitations": ""
+    },
+    {
+      "id": "rtl-loopback",
+      "partition": "digital",
+      "rows": [
+        "R22"
+      ],
+      "rtl_bench": "loopback",
+      "description": "cocotb + Icarus bench: serial and parallel loopback",
+      "corner_set": "n/a (functional RTL simulation; timing is graded by STA, not here)",
+      "limitations": ""
+    },
+    {
+      "id": "rtl-eye",
+      "partition": "digital",
+      "rows": [
+        "R22"
+      ],
+      "rtl_bench": "eye",
+      "description": "cocotb + Icarus bench: eye monitor dwell controller",
+      "corner_set": "n/a (functional RTL simulation; timing is graded by STA, not here)",
+      "limitations": ""
+    },
+    {
+      "id": "rtl-ctrl",
+      "partition": "digital",
+      "rows": [
+        "R22"
+      ],
+      "rtl_bench": "ctrl",
+      "description": "cocotb + Icarus bench: <=8-pin control/readout block",
+      "corner_set": "n/a (functional RTL simulation; timing is graded by STA, not here)",
+      "limitations": ""
+    },
+    {
+      "id": "rtl-cdr-pd",
+      "partition": "digital",
+      "rows": [
+        "R11"
+      ],
+      "rtl_bench": "cdr_pd",
+      "description": "cocotb + Icarus bench: CDR phase detector (bang-bang)",
+      "corner_set": "n/a (functional RTL simulation; timing is graded by STA, not here)",
+      "limitations": "Functional only. R11 lock/hold in the time domain with the analog latch fits is not graded here (issue #93)"
+    },
+    {
+      "id": "rtl-cdr",
+      "partition": "digital",
+      "rows": [
+        "R11"
+      ],
+      "rtl_bench": "cdr",
+      "description": "cocotb + Icarus bench: CDR digital loop filter and phase code",
+      "corner_set": "n/a (functional RTL simulation; timing is graded by STA, not here)",
+      "limitations": "Functional only. R11 lock/hold in the time domain with the analog latch fits is not graded here (issue #93)"
+    },
+    {
+      "id": "rtl-top",
+      "partition": "digital",
+      "rows": [
+        "R2",
+        "R11",
+        "R22"
+      ],
+      "rtl_bench": "top",
+      "description": "cocotb + Icarus bench: digital top: 16:1 word path, CDR, test access",
+      "corner_set": "n/a (functional RTL simulation; timing is graded by STA, not here)",
+      "limitations": "Functional only. R11 lock/hold in the time domain with the analog latch fits is not graded here (issue #93)"
+    }
+  ]
+}
