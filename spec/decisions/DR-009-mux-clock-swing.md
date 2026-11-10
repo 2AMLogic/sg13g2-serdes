@@ -63,7 +63,7 @@ needed swing at the slow corner is above 0.4 V per side and was not swept
 | `sg13g2-lc-pll` | No swing row found; buffer is "if needed", load not stated | Not stated |
 
 No sibling states or meets it. Requirements are filed on each sibling (links
-below, added at filing time).
+in Consequences).
 
 ## Consequences
 
@@ -75,4 +75,4 @@ below, added at filing time).
 - The mux does not close at `ss_wcs`/1.08 V at 0.4 V per side. Whether a larger
   swing closes it, or the squarer/tail sizing must change, is open work on the
   mux cell, not a clock-provider question alone.
-- Sibling requirement issues: see the PR description.
+- Sibling requirement issues filed: `2AMLogic/sg13g2-vco#319`, `2AMLogic/sg13g2-pll#312`, `2AMLogic/sg13g2-lc-pll#206`.
