@@ -1,0 +1,3 @@
+tx_mos_ffe_en exit=0
+tx_mos_mux2to1_cml exit=4
+tx_mos_tx_lvl_cml2cmos exit=0
