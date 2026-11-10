@@ -105,6 +105,11 @@ Each recorded result appends the exact command that reproduces it here.
 Repo checks (JSON validity, README links, signoff record): `npm run check:ci`
 (runs `scripts/check-ci.sh`; klt is pinned in `scripts/klt-pin.env`, which must match `layout/toolchain.json`).
 
+Testbenches (T1 item 9, against the PROPOSED draft rows): `scripts/run-bench.sh --list`, then
+`scripts/run-bench.sh <id>` from a fresh clone (analog: validates the `klt sim` request and expands the
+corner set; digital: runs the cocotb bench). The full corner grid is `scripts/run-bench.sh <id> --run`
+after `scripts/setup-env.sh`. Table and gaps: `sim/README.md`. Outputs are simulated, never measured.
+
 ## License
 
 Apache License 2.0 — see [LICENSE](LICENSE).

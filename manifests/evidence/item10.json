@@ -31,7 +31,7 @@
         "role": "hygiene",
         "path": "README.md",
         "passed": true,
-        "content_hash": "sha256:b80369421fb2762714e62e3ae7d0bd9b772593b3c942e0d7077138ab71f39ac9"
+        "content_hash": "sha256:76c3b5f1083ed4838fb6c760a43beaa331fae78631fb3c351de96024cf1fd611"
       },
       {
         "check": "present",
@@ -45,7 +45,7 @@
         "role": "hygiene",
         "path": "scripts/check-ci.sh",
         "passed": true,
-        "content_hash": "sha256:008b09c4813e7050f3224b5ecbff46c85456f1c7389b3ebe92b4ea4966d17163"
+        "content_hash": "sha256:9a8623f5471ba2793d22daaf003d14346e70dd128c674dd6e9caa07aaf76e846"
       },
       {
         "check": "command",
