@@ -49,9 +49,21 @@ MOS-set run status:
     thresholds never being crossed: the output swing there is under 30 mV. At other
     low-swing corners the same thresholds give rise/fall values (some negative) that are
     threshold artifacts, not 20-80 % times. Do not read rise/fall from this record.
-  - Not changed in this pass: node names, `.ic` values and the 0.4 V clock swing were
-    exercised and the benches ran, but the swing is an assumption and the rise/fall
-    measurement needs a 20-80 % derivation from the measured swing; both stay open.
+  - Not changed in this pass: node names and `.ic` values were exercised and the benches
+    ran. The rise/fall measurement still needs a 20-80 % derivation from the measured swing.
+  - 0.4 V clock swing, checked against the records (issue #80, no new run): it cannot be
+    validated against the predriver record `20261027-024044-2e55774`. That record measures
+    the driver output (R4) and collector stress at the predriver outputs, not a predriver
+    output swing, and the mux clock is not driven by the predriver anyway (it comes from
+    the clock provider, `spec/clock-requirement.md`). The only written figure is the
+    `sg13g2-vco` row there, "swing >= 0.40 Vpp at the tank nodes". The bench source is
+    0.4 V to 0.8 V on each of `ckp`/`ckn` (0.4 V per side, 0.8 V differential
+    peak-to-peak); whether the sibling's 0.40 Vpp is per node or differential is not
+    stated, so the bench is at or above that floor and is not shown to match it. The
+    swing is kept as is and remains an assumption, no generator change and no re-run.
+    Open: the clock provider should state its swing at the mux input (per node or
+    differential, with its buffer load), after which `mux2to1_cml` should be re-run at
+    that swing on the fleet in a new append-only record.
   - Request bound: each 45-unit job finished in about 100 s, so the 45 x 1800 s
     `timeout_s` bound warning was advisory. `timeout_s` is now 75 s per unit in the MOS
     requests (45 x 75 s = 3375 s, under the fleet's 3600 s ceiling); per-unit runtime was
