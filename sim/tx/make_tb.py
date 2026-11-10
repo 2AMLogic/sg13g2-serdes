@@ -231,7 +231,9 @@ def mos_mm(name, spice, unit="V", limit=None):
     return d
 
 
-def mux_deck():
+def mux_deck(swing=0.4):
+    """swing: per-side clock swing in V, centred on 0.6 V (0.4 V gives the 0.4/0.8 V source)."""
+    lo, hi = 0.6 - swing / 2, 0.6 + swing / 2
     L = ["* TX mux2to1_cml sizing bench (issue #80). SIZING EVIDENCE, not a spec result.",
          "* Cells inlined from design/tx/netlists/ with the PDK's own MOS / rsil / rppd / cap_cmim.",
          "* Clock: ideal complementary 5 GHz source, 0.4 V swing (AC-coupled into the squarers; an",
@@ -242,8 +244,8 @@ def mux_deck():
          "Vdd vdd 0 dc 1.2"]
     for c in ("bias", "predriver", "mux2to1_cml"):
         L.append(inline(c))
-    L += ["Vckp ckp 0 pulse(0.4 0.8 0 20p 20p 80p %.4g)" % CK_T,
-          "Vckn ckn 0 pulse(0.8 0.4 0 20p 20p 80p %.4g)" % CK_T,
+    L += ["Vckp ckp 0 pulse(%.4g %.4g 0 20p 20p 80p %.4g)" % (lo, hi, CK_T),
+          "Vckn ckn 0 pulse(%.4g %.4g 0 20p 20p 80p %.4g)" % (hi, lo, CK_T),
           "Bdap dap 0 V='v(vdd)'", "Bdan dan 0 V='v(vdd)-0.3'",
           "Bdbp dbp 0 V='v(vdd)-0.3'", "Bdbn dbn 0 V='v(vdd)'",
           "Xbias vdd 0 vbn bias",
@@ -358,7 +360,16 @@ MOS_CELLS = {
 }
 
 
-def mos_request(cell):
+# Issue #98: mux clock-swing sweep (per-side swing, V). Separate prefix tx_mosck_ so the
+# default tx_mos_* set and its record are untouched.
+CK_SWINGS = [0.1, 0.2, 0.3]
+
+
+def ck_tag(sw):
+    return "mux2to1_cml_sw%03d" % round(sw * 1000)
+
+
+def mos_request(cell, netlist=None):
     _, meas_fn, t_end, step = MOS_CELLS[cell]
     procs = []
     for name, mos, other in PAIRING:
@@ -369,7 +380,7 @@ def mos_request(cell):
             {"lib": RES_LIB, "section": "res_" + other}]})
     return {
         "engine": "ngspice",
-        "netlist": "tx_mos_%s.sp" % cell,
+        "netlist": netlist or "tx_mos_%s.sp" % cell,
         "models": {"pdk": "ihp-sg13g2", "lib": MOS_LIB},
         "corners": {"process": procs, "supply_v": {"vdd": [1.08, 1.2, 1.32]},
                     "temperature_c": [-40, 27, 125]},
@@ -386,6 +397,13 @@ if __name__ == "__main__":
             fh.write(deck_fn())
         with open(os.path.join(HERE, "tx_mos_%s.request.json" % cell), "w") as fh:
             json.dump(mos_request(cell), fh, indent=2)
+            fh.write("\n")
+    for sw in CK_SWINGS:
+        tag = ck_tag(sw)
+        with open(os.path.join(HERE, "tx_mosck_%s.sp" % tag), "w") as fh:
+            fh.write(mux_deck(sw))
+        with open(os.path.join(HERE, "tx_mosck_%s.request.json" % tag), "w") as fh:
+            json.dump(mos_request("mux2to1_cml", "tx_mosck_%s.sp" % tag), fh, indent=2)
             fh.write("\n")
     # HBT, capacitor and resistor corners move together; the resistor sheet scale and
     # the FFE setting are baked into each deck (the batch worker does not honour
