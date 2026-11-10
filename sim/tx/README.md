@@ -53,4 +53,9 @@ MOS-set run status:
     exercised and the benches ran, but the swing is an assumption and the rise/fall
     measurement needs a 20-80 % derivation from the measured swing; both stay open.
   - Request bound: each 45-unit job finished in about 100 s, so the 45 x 1800 s
-    `timeout_s` bound warning is advisory; lowering `timeout_s` is left to a later change.
+    `timeout_s` bound warning was advisory. `timeout_s` is now 75 s per unit in the MOS
+    requests (45 x 75 s = 3375 s, under the fleet's 3600 s ceiling); per-unit runtime was
+    not recorded, only the ~100 s per job, so a re-run confirms it fits: record `20261110-224611-4092fc2-mos` re-ran all 135 units at
+    75 s with the same 36 pass / 7 fail / 2 error on `mux2to1_cml` and no timeouts.
+  - Rise/fall stays at the fixed +-30 mV thresholds (artifacts at low swing, see above);
+    no 20-80 % derivation was added because the benches keep no waveforms.

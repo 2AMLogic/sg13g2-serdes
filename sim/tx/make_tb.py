@@ -375,7 +375,7 @@ def mos_request(cell):
                     "temperature_c": [-40, 27, 125]},
         "analysis": {"kind": "tran", "args": "%s %s" % (step, t_end)},
         "measurements": meas_fn(),
-        "options": {"stage_model_inputs": True, "timeout_s": 1800, "keep_artifacts": False,
+        "options": {"stage_model_inputs": True, "timeout_s": 75, "keep_artifacts": False,
                     "osdi_preload": OSDI},
     }
 
