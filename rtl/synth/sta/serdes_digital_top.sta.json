@@ -12,7 +12,20 @@
   "geometry_source": "netlist_estimate",
   "wire_load_model": null,
   "wire_load_mode": null,
+  "macros": [],
   "clock_mode": "ideal",
+  "clock_targets": {
+    "clocks": [
+      {
+        "port": "clk",
+        "period_ns": 1.6
+      }
+    ],
+    "clock_groups": []
+  },
+  "clock_uncertainty": {
+    "applied": false
+  },
   "spef_path": null,
   "worst_slack_ns": 0.01392,
   "total_negative_slack_ns": 0,
@@ -90,8 +103,10 @@
     "parasitics": "estimate_only"
   },
   "provenance": {
-    "klt_version": "0.8.0",
-    "klayout_version": "0.30.12",
+    "klt_version": "0.9.0",
+    "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+    "klt_reinstall_spec": "klayout-tools==0.9.0",
+    "klayout_version": "0.30.13",
     "pdk": {
       "name": "ihp-sg13g2",
       "source": "PDK_ROOT environment variable",
@@ -110,7 +125,7 @@
       }
     },
     "input": {
-      "content_hash": "sha256:d659124458e555fdf5dabdd5bb80246b9c44585486021e466e67b8c9a6edb4aa",
+      "content_hash": "sha256:08b90805a96b63df1e768a0055cf664b94796e26108ff1ada66ba285d709c7d8",
       "role": "netlist"
     }
   },
@@ -119,13 +134,13 @@
   "sdf": null,
   "electrical_checks": null,
   "engine_log": {
-    "invocation_id": "d8af9148092348859bddeaf96fd8e4a7",
+    "invocation_id": "a970956e25cc4ad6a44ae5f8cf1c0e3c",
     "script_name": "sta_serdes_digital_top_synth.tcl",
     "script_path": {
       "path": ".cache/sta/.klt/sta/sta_serdes_digital_top_synth.tcl",
       "scope": "repo"
     },
-    "script_sha256": "d166503638f88909c06ee9e5da421cd45c2e7c48baba28a5968d732df2ee4424",
+    "script_sha256": "b7f9bf105195acbfb1b405c0910043d2c167acc79f65db73296c3951e58febbf",
     "metrics_path": {
       "path": ".cache/sta/.klt/sta/serdes_digital_top_synth_metrics.json",
       "scope": "repo"
@@ -133,19 +148,19 @@
     "outcome": "exited",
     "returncode": 0,
     "directory": {
-      "path": ".cache/sta/.klt/sta/openroad-logs/d8af9148092348859bddeaf96fd8e4a7",
+      "path": ".cache/sta/.klt/sta/openroad-logs/a970956e25cc4ad6a44ae5f8cf1c0e3c",
       "scope": "repo"
     },
     "stdout_path": {
-      "path": ".cache/sta/.klt/sta/openroad-logs/d8af9148092348859bddeaf96fd8e4a7/stdout.log",
+      "path": ".cache/sta/.klt/sta/openroad-logs/a970956e25cc4ad6a44ae5f8cf1c0e3c/stdout.log",
       "scope": "repo"
     },
     "stderr_path": {
-      "path": ".cache/sta/.klt/sta/openroad-logs/d8af9148092348859bddeaf96fd8e4a7/stderr.log",
+      "path": ".cache/sta/.klt/sta/openroad-logs/a970956e25cc4ad6a44ae5f8cf1c0e3c/stderr.log",
       "scope": "repo"
     },
     "metadata_path": {
-      "path": ".cache/sta/.klt/sta/openroad-logs/d8af9148092348859bddeaf96fd8e4a7/invocation.json",
+      "path": ".cache/sta/.klt/sta/openroad-logs/a970956e25cc4ad6a44ae5f8cf1c0e3c/invocation.json",
       "scope": "repo"
     },
     "retention_errors": []
