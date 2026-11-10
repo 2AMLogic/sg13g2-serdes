@@ -2,6 +2,11 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-11-10
+
+- **PR #89**: build: bump klayout-tools pin to 0.9.0 and record TX MOS-cell fleet run
+- **Issue #23** (closed): T1 item 1 (design sources, digital): serializer/deserializer, PRBS, CDR loop filter RTL plus sg13g2 netlist
+
 ### 2026-11-07
 
 - **PR #85**: Merge pull request: chore: Bump Repo Skills 0.25.1 -> 0.25.10
