@@ -35,7 +35,22 @@ Corner pairing (MOS / HBT / CAP / RES sections moved together): `mos_tt`/`hbt_ty
 `mos_ff`/`hbt_bcs`, `mos_ss`/`hbt_wcs`, and `mos_fs`, `mos_sf` with the typical
 HBT/CAP/RES (no HBT skew exists for them). Parameter axes are baked into the decks.
 
-MOS-set run status: the first run, `records/20261106-054913-a506fea-mos/`, did not simulate
-anything. The fleet runner is klt 0.9.0 and the pinned client is 0.8.0, so all 135 units
-returned `batch_runner_version_mismatch`. The results are an open item until the pin and the
-runner agree; there is no local fallback.
+MOS-set run status:
+
+- `records/20261106-054913-a506fea-mos/` (klt client 0.8.0): nothing simulated. The fleet
+  runner was klt 0.9.0, so all 135 units returned `batch_runner_version_mismatch`.
+- `records/20261110-221849-506b37e-mos/` (client pinned to 0.9.0 by issue #80, the runner
+  version re-read from a fresh fleet report): all 135 units executed on the fleet, none
+  errored on the version. `tx_lvl_cml2cmos` 45/45 and `ffe_en` 45/45 corners pass.
+  `mux2to1_cml` is 36 pass, 7 fail, 2 error. Sizing evidence, not a spec result.
+  - The 7 failures are `vc_max_mux_outp/outn` over the 1.32 V collector limit (about 1 to
+    5 mV over at 1.32 V supply, same class as the RX latch finding), kept and reported.
+  - The 2 errors (`ss_wcs/1.080V` at -40C and 27C) are the fixed +-30 mV rise/fall
+    thresholds never being crossed: the output swing there is under 30 mV. At other
+    low-swing corners the same thresholds give rise/fall values (some negative) that are
+    threshold artifacts, not 20-80 % times. Do not read rise/fall from this record.
+  - Not changed in this pass: node names, `.ic` values and the 0.4 V clock swing were
+    exercised and the benches ran, but the swing is an assumption and the rise/fall
+    measurement needs a 20-80 % derivation from the measured swing; both stay open.
+  - Request bound: each 45-unit job finished in about 100 s, so the 45 x 1800 s
+    `timeout_s` bound warning is advisory; lowering `timeout_s` is left to a later change.

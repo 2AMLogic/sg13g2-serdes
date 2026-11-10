@@ -1,0 +1,585 @@
+{
+  "schema_version": 3,
+  "netlist": {
+    "path": "sim/smoke/mos_inv.sp",
+    "scope": "repo"
+  },
+  "status": "pass",
+  "corner_count": 5,
+  "passed": 5,
+  "failed": 0,
+  "errored": 0,
+  "inconclusive": 0,
+  "diagnostic_counts": {
+    "by_code": {},
+    "by_severity": {},
+    "corners_with_diagnostics": 0
+  },
+  "metrics": {
+    "sim__corner__count": 5,
+    "sim__corner__passed_count": 5,
+    "sim__corner__failed_count": 0,
+    "sim__corner__errored_count": 0,
+    "sim__corner__inconclusive_count": 0
+  },
+  "environment": {
+    "engine": "ngspice",
+    "engine_version": "46",
+    "ngspice_binary": "/usr/local/bin/ngspice",
+    "engine_build": {
+      "version_banner": "******\n** ngspice-46 : Circuit level simulation program\n** Compiled with KLU Direct Linear Solver\n** The U. C. Berkeley CAD Group\n** Copyright 1985-1994, Regents of the University of California.\n** Copyright 2001-2025, The ngspice team.\n** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html\n** Please file your bug-reports at http://ngspice.sourceforge.net/bugrep.html\n** Creation Date: Thu Oct  1 23:51:59 UTC 2026\n******",
+      "binary_sha256": "dc859418bedd0478ff439a2d3e2e09f4386a7f4d5e3f17671953e101a000cc60",
+      "probe": "ok",
+      "reason": null
+    },
+    "models_lib": {
+      "path": null,
+      "scope": "absent"
+    },
+    "models_lib_sha256": null,
+    "models_lib_sha256_scope": "client",
+    "netlist_sha256": "9cc2d0fa7e99bcb2a3ec8acb195adb3368af9af47140917f1bb8b2bde5fd9eb8",
+    "netlist_closure": [
+      {
+        "path": "sim/smoke/mos_inv.sp",
+        "scope": "repo",
+        "sha256": "9cc2d0fa7e99bcb2a3ec8acb195adb3368af9af47140917f1bb8b2bde5fd9eb8"
+      }
+    ],
+    "netlist_identity": "sha256:c357db7a88b22094ef06305d3029dc8cca0e0af3d5319859ad9d80d2972397b7",
+    "corner_section_libs": [
+      {
+        "name": "cornerMOSlv.lib",
+        "path": ".cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.tech/ngspice/models/cornerMOSlv.lib",
+        "scope": "repo",
+        "sha256": "03d505847c880d233b341be115a1e5460edf4d8e9b3e8a7df791a52fa4455d67"
+      }
+    ],
+    "osdi_preload_runner_resolved": [
+      {
+        "entry": "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/psp103.osdi",
+        "reason": "env_var"
+      },
+      {
+        "entry": "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/psp103_nqs.osdi",
+        "reason": "env_var"
+      },
+      {
+        "entry": "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/r3_cmc.osdi",
+        "reason": "env_var"
+      },
+      {
+        "entry": "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/mosvar.osdi",
+        "reason": "env_var"
+      }
+    ],
+    "staged_model_inputs": [
+      {
+        "name": "cornerMOSlv.lib",
+        "field": "models.lib",
+        "kind": "library",
+        "sha256": "07f15f24b990ab9eff8e1000457ad180a5199b48fc17217ac3572bdcdfbf5f72",
+        "rewritten": true,
+        "source_sha256": "03d505847c880d233b341be115a1e5460edf4d8e9b3e8a7df791a52fa4455d67"
+      },
+      {
+        "name": "sg13g2_moslv_mod.lib",
+        "field": "models.lib",
+        "kind": "dependency",
+        "sha256": "0aa1a5630a7c8fb8ae896c57c475954ff5885c4831311f8cd9c9e64d6cbb8332",
+        "rewritten": true,
+        "source_sha256": "124c48af28aee8f4788170b50dbb4d798e7d830c6bb37516f749e16f676fa9db"
+      },
+      {
+        "name": "sg13g2_moslv_mismatch.lib",
+        "field": "models.lib",
+        "kind": "dependency",
+        "sha256": "2d3251e2d42eadb0f8af152a4915fdc60a68bceb95a2d17a52f90cfb34b7e63e",
+        "rewritten": false,
+        "source_sha256": "2d3251e2d42eadb0f8af152a4915fdc60a68bceb95a2d17a52f90cfb34b7e63e"
+      },
+      {
+        "name": "sg13g2_moslv_mod_mismatch.lib",
+        "field": "models.lib",
+        "kind": "dependency",
+        "sha256": "28f681005831113ad5377f1b867d8869b78f329a7f52aa821ff56aa1e648b68b",
+        "rewritten": true,
+        "source_sha256": "67672ffa1f224294a90270f687d11b804a24dbf268071c5cd98923ab1b3e2f84"
+      },
+      {
+        "name": "sg13g2_moslv_stat.lib",
+        "field": "models.lib",
+        "kind": "dependency",
+        "sha256": "7f4cf8df714e327348ba3975a2630e9d7dd7ae1a7a88817df4890e82745f0f52",
+        "rewritten": false,
+        "source_sha256": "7f4cf8df714e327348ba3975a2630e9d7dd7ae1a7a88817df4890e82745f0f52"
+      },
+      {
+        "name": "sg13g2_moslv_parm.lib",
+        "field": "models.lib",
+        "kind": "dependency",
+        "sha256": "cbf10b8453a18bb70b8ad0d6e40faa0937338e699b5460947a94900db6c92a6e",
+        "rewritten": false,
+        "source_sha256": "cbf10b8453a18bb70b8ad0d6e40faa0937338e699b5460947a94900db6c92a6e"
+      }
+    ],
+    "remote": {
+      "provider": "aws-batch-fleet",
+      "job_id": "klt-sim-2326b8e9e4fb",
+      "region": "us-east-1",
+      "instance_id": "i-084eb5f1268a0112b",
+      "instance_type": "m6i.4xlarge",
+      "availability_zone": "us-east-1d",
+      "ami_id": "ami-095c25ae241a4d360",
+      "lifecycle": "spot",
+      "spot": true,
+      "state": "done",
+      "exit_code": "0",
+      "concurrency": "1",
+      "physical_cores": "8",
+      "elapsed_seconds": 9,
+      "client_submitted_at": "2026-11-10T22:25:30.027236Z",
+      "client_launched_at": "2026-11-10T22:25:57.008830Z",
+      "client_status_terminal_at": "2026-11-10T22:26:28.523116Z",
+      "client_collected_at": "2026-11-10T22:26:29.353681Z",
+      "runner_klt_version": "0.9.0",
+      "client_klt_version": "0.9.0",
+      "runner_compatibility": "match",
+      "runner_request_features": {
+        "required": [
+          "corners.process[].sections[]",
+          "options.osdi_preload",
+          "options.stage_model_inputs"
+        ],
+        "missing": [],
+        "status": "supported"
+      },
+      "worker_environment": {
+        "capture": "ok",
+        "simulator": {
+          "requested_binary": "ngspice",
+          "binary_source": "PATH",
+          "selected_path": "/usr/local/bin/ngspice",
+          "version_banner": "******\n** ngspice-46 : Circuit level simulation program\n** Compiled with KLU Direct Linear Solver\n** The U. C. Berkeley CAD Group\n** Copyright 1985-1994, Regents of the University of California.\n** Copyright 2001-2025, The ngspice team.\n** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html\n** Please file your bug-reports at http://ngspice.sourceforge.net/bugrep.html\n** Creation Date: Thu Oct  1 23:51:59 UTC 2026\n******\n",
+          "version_probe": "ok"
+        },
+        "pdk": {
+          "variant": "ihp-sg13g2",
+          "root": "/opt/pdk",
+          "stamp_scheme": null,
+          "stamp_sha256": null,
+          "stamp_text": null,
+          "models_staged": true,
+          "stamp_scope": "image"
+        },
+        "cpu_model": "Intel(R) Xeon(R) Platinum 8375C CPU @ 2.90GHz",
+        "omp_num_threads": null,
+        "image_manifest": null,
+        "model_inputs": [
+          {
+            "name": "cornerMOSlv.lib",
+            "sha256": "07f15f24b990ab9eff8e1000457ad180a5199b48fc17217ac3572bdcdfbf5f72"
+          },
+          {
+            "name": "sg13g2_moslv_mod.lib",
+            "sha256": "0aa1a5630a7c8fb8ae896c57c475954ff5885c4831311f8cd9c9e64d6cbb8332"
+          },
+          {
+            "name": "sg13g2_moslv_mismatch.lib",
+            "sha256": "2d3251e2d42eadb0f8af152a4915fdc60a68bceb95a2d17a52f90cfb34b7e63e"
+          },
+          {
+            "name": "sg13g2_moslv_mod_mismatch.lib",
+            "sha256": "28f681005831113ad5377f1b867d8869b78f329a7f52aa821ff56aa1e648b68b"
+          },
+          {
+            "name": "sg13g2_moslv_stat.lib",
+            "sha256": "7f4cf8df714e327348ba3975a2630e9d7dd7ae1a7a88817df4890e82745f0f52"
+          },
+          {
+            "name": "sg13g2_moslv_parm.lib",
+            "sha256": "cbf10b8453a18bb70b8ad0d6e40faa0937338e699b5460947a94900db6c92a6e"
+          }
+        ],
+        "diagnostics": [
+          "pdk stamp unreadable: FileNotFoundError"
+        ],
+        "pdk_stamp_comparison": {
+          "basis": "staged_model_inputs",
+          "status": "match"
+        },
+        "engine_build_comparison": {
+          "status": "match"
+        }
+      },
+      "runner_model_inputs": [
+        {
+          "name": "cornerMOSlv.lib",
+          "sha256": "07f15f24b990ab9eff8e1000457ad180a5199b48fc17217ac3572bdcdfbf5f72"
+        },
+        {
+          "name": "sg13g2_moslv_mod.lib",
+          "sha256": "0aa1a5630a7c8fb8ae896c57c475954ff5885c4831311f8cd9c9e64d6cbb8332"
+        },
+        {
+          "name": "sg13g2_moslv_mismatch.lib",
+          "sha256": "2d3251e2d42eadb0f8af152a4915fdc60a68bceb95a2d17a52f90cfb34b7e63e"
+        },
+        {
+          "name": "sg13g2_moslv_mod_mismatch.lib",
+          "sha256": "28f681005831113ad5377f1b867d8869b78f329a7f52aa821ff56aa1e648b68b"
+        },
+        {
+          "name": "sg13g2_moslv_stat.lib",
+          "sha256": "7f4cf8df714e327348ba3975a2630e9d7dd7ae1a7a88817df4890e82745f0f52"
+        },
+        {
+          "name": "sg13g2_moslv_parm.lib",
+          "sha256": "cbf10b8453a18bb70b8ad0d6e40faa0937338e699b5460947a94900db6c92a6e"
+        }
+      ],
+      "job_ceiling": {
+        "basis": "conservative_serial_bound",
+        "unit_count": 5,
+        "per_unit_timeout_s": 900,
+        "overhead_s": 120.0,
+        "job_bound_s": 4620.0,
+        "max_job_seconds": 3600.0,
+        "max_job_seconds_source": "fleet_config",
+        "exceeds_ceiling": true,
+        "check": "warn",
+        "max_units_per_job": 3,
+        "recommended_hosts": 2,
+        "warning": "batch job bound 4620s (options.timeout_s 900s x 5 units + 120s; a conservative fully-serial upper bound, not a runtime estimate) exceeds the fleet's whole-job ceiling of 3600s (max_job_seconds from fleet_config); a job still running at the ceiling is killed and every unit is reported batch_job_timeout. Set request.remote.hosts to at least 2 to run one job per shard of at most 3 units, each within the ceiling"
+      }
+    },
+    "engine_host": "worker",
+    "client_ngspice_binary": "/home/ubuntu/.local/bin/ngspice",
+    "backend": {
+      "resolved": "batch",
+      "source": "env",
+      "requested": "batch"
+    }
+  },
+  "coverage": {
+    "corners_simulated": 5,
+    "measurements_declared": 3,
+    "measurements_with_limits": 2,
+    "unrecognized_limit_keys": [],
+    "schema_version": 1,
+    "known": true,
+    "checked": [
+      "limit:[0,\"tt/novdd/27C\",\"voh\",\"min\"]",
+      "limit:[0,\"tt/novdd/27C\",\"vol\",\"max\"]",
+      "limit:[1,\"ff/novdd/27C\",\"voh\",\"min\"]",
+      "limit:[1,\"ff/novdd/27C\",\"vol\",\"max\"]",
+      "limit:[2,\"ss/novdd/27C\",\"voh\",\"min\"]",
+      "limit:[2,\"ss/novdd/27C\",\"vol\",\"max\"]",
+      "limit:[3,\"fs/novdd/27C\",\"voh\",\"min\"]",
+      "limit:[3,\"fs/novdd/27C\",\"vol\",\"max\"]",
+      "limit:[4,\"sf/novdd/27C\",\"voh\",\"min\"]",
+      "limit:[4,\"sf/novdd/27C\",\"vol\",\"max\"]",
+      "measurement:[0,\"tt/novdd/27C\",\"vm\"]/observation",
+      "measurement:[1,\"ff/novdd/27C\",\"vm\"]/observation",
+      "measurement:[2,\"ss/novdd/27C\",\"vm\"]/observation",
+      "measurement:[3,\"fs/novdd/27C\",\"vm\"]/observation",
+      "measurement:[4,\"sf/novdd/27C\",\"vm\"]/observation"
+    ],
+    "skipped": [],
+    "inapplicable": [
+      {
+        "id": "measurement:[0,\"tt/novdd/27C\",\"vm\"]/limits",
+        "reason": "characterization_without_limits"
+      },
+      {
+        "id": "measurement:[1,\"ff/novdd/27C\",\"vm\"]/limits",
+        "reason": "characterization_without_limits"
+      },
+      {
+        "id": "measurement:[2,\"ss/novdd/27C\",\"vm\"]/limits",
+        "reason": "characterization_without_limits"
+      },
+      {
+        "id": "measurement:[3,\"fs/novdd/27C\",\"vm\"]/limits",
+        "reason": "characterization_without_limits"
+      },
+      {
+        "id": "measurement:[4,\"sf/novdd/27C\",\"vm\"]/limits",
+        "reason": "characterization_without_limits"
+      }
+    ],
+    "unknown": [],
+    "nothing_checked": false,
+    "nothing_checked_reasons": []
+  },
+  "provenance": {
+    "klt_version": "0.9.0",
+    "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+    "klt_reinstall_spec": "klayout-tools==0.9.0",
+    "klayout_version": "0.30.13",
+    "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+        "search root: ~/share/pdk"
+      ]
+    },
+    "deck": null,
+    "input": {
+      "content_hash": "sha256:9cc2d0fa7e99bcb2a3ec8acb195adb3368af9af47140917f1bb8b2bde5fd9eb8",
+      "role": "netlist"
+    }
+  },
+  "measurements": [
+    {
+      "name": "voh",
+      "unit": "V",
+      "limits": {
+        "min": 1.1
+      },
+      "status": "pass",
+      "worst_case": {
+        "corner_id": "tt/novdd/27C",
+        "value": 1.2,
+        "margin": 0.09999999999999987
+      }
+    },
+    {
+      "name": "vol",
+      "unit": "V",
+      "limits": {
+        "max": 0.1
+      },
+      "status": "pass",
+      "worst_case": {
+        "corner_id": "ff/novdd/27C",
+        "value": 6.72594e-07,
+        "margin": 0.09999932740600001
+      }
+    },
+    {
+      "name": "vm",
+      "unit": "V",
+      "limits": null,
+      "status": "pass",
+      "worst_case": {
+        "corner_id": "tt/novdd/27C",
+        "value": 0.622562,
+        "margin": null
+      }
+    }
+  ],
+  "corners": [
+    {
+      "corner_id": "tt/novdd/27C",
+      "process": "tt",
+      "supply_v": {},
+      "temperature_c": 27,
+      "status": "pass",
+      "runtime_s": 0.268,
+      "peak_rss_bytes": 50249728,
+      "engine_exit_code": 0,
+      "engine_killed_by_signal": null,
+      "measurements": [
+        {
+          "name": "voh",
+          "value": 1.2,
+          "unit": "V",
+          "status": "pass",
+          "margin": 0.09999999999999987
+        },
+        {
+          "name": "vol",
+          "value": 7.72861e-08,
+          "unit": "V",
+          "status": "pass",
+          "margin": 0.0999999227139
+        },
+        {
+          "name": "vm",
+          "value": 0.622562,
+          "unit": "V",
+          "status": "pass",
+          "margin": null
+        }
+      ],
+      "diagnostics": [],
+      "artifacts": {
+        "log": null,
+        "raw": null,
+        "waveform": null,
+        "deck": null
+      },
+      "monte_carlo": null
+    },
+    {
+      "corner_id": "ff/novdd/27C",
+      "process": "ff",
+      "supply_v": {},
+      "temperature_c": 27,
+      "status": "pass",
+      "runtime_s": 0.266,
+      "peak_rss_bytes": 50249728,
+      "engine_exit_code": 0,
+      "engine_killed_by_signal": null,
+      "measurements": [
+        {
+          "name": "voh",
+          "value": 1.2,
+          "unit": "V",
+          "status": "pass",
+          "margin": 0.09999999999999987
+        },
+        {
+          "name": "vol",
+          "value": 6.72594e-07,
+          "unit": "V",
+          "status": "pass",
+          "margin": 0.09999932740600001
+        },
+        {
+          "name": "vm",
+          "value": 0.625593,
+          "unit": "V",
+          "status": "pass",
+          "margin": null
+        }
+      ],
+      "diagnostics": [],
+      "artifacts": {
+        "log": null,
+        "raw": null,
+        "waveform": null,
+        "deck": null
+      },
+      "monte_carlo": null
+    },
+    {
+      "corner_id": "ss/novdd/27C",
+      "process": "ss",
+      "supply_v": {},
+      "temperature_c": 27,
+      "status": "pass",
+      "runtime_s": 0.267,
+      "peak_rss_bytes": 50249728,
+      "engine_exit_code": 0,
+      "engine_killed_by_signal": null,
+      "measurements": [
+        {
+          "name": "voh",
+          "value": 1.2,
+          "unit": "V",
+          "status": "pass",
+          "margin": 0.09999999999999987
+        },
+        {
+          "name": "vol",
+          "value": 6.9846e-09,
+          "unit": "V",
+          "status": "pass",
+          "margin": 0.09999999301540001
+        },
+        {
+          "name": "vm",
+          "value": 0.616373,
+          "unit": "V",
+          "status": "pass",
+          "margin": null
+        }
+      ],
+      "diagnostics": [],
+      "artifacts": {
+        "log": null,
+        "raw": null,
+        "waveform": null,
+        "deck": null
+      },
+      "monte_carlo": null
+    },
+    {
+      "corner_id": "fs/novdd/27C",
+      "process": "fs",
+      "supply_v": {},
+      "temperature_c": 27,
+      "status": "pass",
+      "runtime_s": 0.266,
+      "peak_rss_bytes": 50249728,
+      "engine_exit_code": 0,
+      "engine_killed_by_signal": null,
+      "measurements": [
+        {
+          "name": "voh",
+          "value": 1.2,
+          "unit": "V",
+          "status": "pass",
+          "margin": 0.09999999999999987
+        },
+        {
+          "name": "vol",
+          "value": 3.38543e-08,
+          "unit": "V",
+          "status": "pass",
+          "margin": 0.0999999661457
+        },
+        {
+          "name": "vm",
+          "value": 0.587724,
+          "unit": "V",
+          "status": "pass",
+          "margin": null
+        }
+      ],
+      "diagnostics": [],
+      "artifacts": {
+        "log": null,
+        "raw": null,
+        "waveform": null,
+        "deck": null
+      },
+      "monte_carlo": null
+    },
+    {
+      "corner_id": "sf/novdd/27C",
+      "process": "sf",
+      "supply_v": {},
+      "temperature_c": 27,
+      "status": "pass",
+      "runtime_s": 0.267,
+      "peak_rss_bytes": 50249728,
+      "engine_exit_code": 0,
+      "engine_killed_by_signal": null,
+      "measurements": [
+        {
+          "name": "voh",
+          "value": 1.2,
+          "unit": "V",
+          "status": "pass",
+          "margin": 0.09999999999999987
+        },
+        {
+          "name": "vol",
+          "value": 2.30489e-07,
+          "unit": "V",
+          "status": "pass",
+          "margin": 0.09999976951100001
+        },
+        {
+          "name": "vm",
+          "value": 0.655947,
+          "unit": "V",
+          "status": "pass",
+          "margin": null
+        }
+      ],
+      "diagnostics": [],
+      "artifacts": {
+        "log": null,
+        "raw": null,
+        "waveform": null,
+        "deck": null
+      },
+      "monte_carlo": null
+    }
+  ]
+}

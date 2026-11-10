@@ -5,17 +5,17 @@
   "tier": null,
   "t1_item_count": 22,
   "build_t1_item_count": 22,
-  "t1_met_count": 4,
+  "t1_met_count": 2,
   "source_doc": "manifests/design-evidence-tiers.md",
   "source_doc_content_hash": "sha256:a26b90262320d0fbd32b3f549a02b6300832706041797a559d8bf6bdb62efdc7",
   "build": {
-    "version": "0.8.0",
-    "package_version": "0.8.0",
-    "git_commit": "c572046be644e0407f693f2410f3abb799d68a3a",
-    "git_tag": "v0.8.0",
+    "version": "0.9.0",
+    "package_version": "0.9.0",
+    "git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+    "git_tag": "v0.9.0",
     "dirty": false,
     "is_release": true,
-    "grading_ruleset_id": "sha256:46c446d84423b7399ee1cf957b3d49801ae4f42a0bda53da92f435776cf977c4"
+    "grading_ruleset_id": "sha256:22c42b66c4d1f99b5c00f6bf53d80b20fa8365860d857a921508ca5ab5f3771b"
   },
   "items": [
     {
@@ -25,33 +25,24 @@
       "partition": "analog",
       "text": "committed schematic sources (or generator) plus the netlist derived from them, regenerated on design change.",
       "notes": [],
-      "status": "met",
-      "reason": null,
+      "status": "unmet",
+      "reason": "stale_evidence",
       "graded_by_build": true,
-      "citation": {
-        "file": "manifests/evidence/item1.json",
-        "command": null,
-        "kind": "generic",
-        "check_status": "pass",
-        "content_hash": "sha256:efbb3cf1945ab98343c0d3004507b0b194199e993b9c4f2bc7d675c4d44a4ed3",
-        "input_verified": true,
-        "exit_status": 0,
+      "citation": null,
+      "detail": {
         "artifact_binding": {
-          "t1_item": 1,
-          "path": {
-            "path": "design/inventory.item1.json",
-            "scope": "repo"
-          },
-          "content_hash": "sha256:efbb3cf1945ab98343c0d3004507b0b194199e993b9c4f2bc7d675c4d44a4ed3",
-          "input_verified": true,
-          "summary": "T1 item 1 (Design sources): 73/73 attestation checks passed (klt signoff --attest)",
-          "source": "design/inventory.item1.json",
-          "attestation": {
-            "producer": "klt signoff --attest",
-            "inventory_schema_version": 1,
-            "check_count": 73,
-            "passed_count": 73
-          }
+          "members": [
+            {
+              "path": "rtl/synth/serdes_digital_top.synth.json",
+              "content_hash": "sha256:0655732f26c3cfcd2db6ad2deb20c44daa4da659bd3018dee60a0daac8cb0856",
+              "status": "stale"
+            },
+            {
+              "path": "rtl/synth/serdes_digital_top_synth.v",
+              "content_hash": "sha256:d659124458e555fdf5dabdd5bb80246b9c44585486021e466e67b8c9a6edb4aa",
+              "status": "stale"
+            }
+          ]
         }
       }
     },
@@ -62,33 +53,24 @@
       "partition": "digital",
       "text": "committed RTL sources plus the synthesized gate-level netlist derived from them, regenerated on design change. For a hand-captured full-custom digital partition (no RTL, no synthesis step \u2014 see \"Full-custom digital sub-case\" above), this item is satisfied instead by the Analog column's artifact: committed schematic sources (or generator) plus the netlist derived from them, regenerated on design change, with every logic gate captured as a schematic exactly like an analog partition's.",
       "notes": [],
-      "status": "met",
-      "reason": null,
+      "status": "unmet",
+      "reason": "stale_evidence",
       "graded_by_build": true,
-      "citation": {
-        "file": "manifests/evidence/item1.json",
-        "command": null,
-        "kind": "generic",
-        "check_status": "pass",
-        "content_hash": "sha256:efbb3cf1945ab98343c0d3004507b0b194199e993b9c4f2bc7d675c4d44a4ed3",
-        "input_verified": true,
-        "exit_status": 0,
+      "citation": null,
+      "detail": {
         "artifact_binding": {
-          "t1_item": 1,
-          "path": {
-            "path": "design/inventory.item1.json",
-            "scope": "repo"
-          },
-          "content_hash": "sha256:efbb3cf1945ab98343c0d3004507b0b194199e993b9c4f2bc7d675c4d44a4ed3",
-          "input_verified": true,
-          "summary": "T1 item 1 (Design sources): 73/73 attestation checks passed (klt signoff --attest)",
-          "source": "design/inventory.item1.json",
-          "attestation": {
-            "producer": "klt signoff --attest",
-            "inventory_schema_version": 1,
-            "check_count": 73,
-            "passed_count": 73
-          }
+          "members": [
+            {
+              "path": "rtl/synth/serdes_digital_top.synth.json",
+              "content_hash": "sha256:0655732f26c3cfcd2db6ad2deb20c44daa4da659bd3018dee60a0daac8cb0856",
+              "status": "stale"
+            },
+            {
+              "path": "rtl/synth/serdes_digital_top_synth.v",
+              "content_hash": "sha256:d659124458e555fdf5dabdd5bb80246b9c44585486021e466e67b8c9a6edb4aa",
+              "status": "stale"
+            }
+          ]
         }
       }
     },
