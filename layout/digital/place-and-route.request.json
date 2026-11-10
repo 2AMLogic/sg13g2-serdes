@@ -1,0 +1,21 @@
+{
+  "schema": "klt.place-and-route.request/1",
+  "netlist": "../../rtl/synth/serdes_digital_top_synth.v",
+  "hdl_toplevel": "serdes_digital_top",
+  "pdk": { "cell_library": "sg13g2_stdcell", "corner": "typ_1p20V_25C" },
+  "floorplan": { "method": "utilization", "utilization_pct": 40, "site": "CoreSite", "aspect_ratio": 1.0, "core_margin_um": 10 },
+  "io": { "layer_h": "Metal3", "layer_v": "Metal2" },
+  "power": {
+    "power_net": "VDD",
+    "ground_net": "VSS",
+    "straps": [
+      { "layer": "Metal1", "width_um": 0.44, "pitch_um": 7.56, "offset_um": 0.0, "followpins": true },
+      { "layer": "TopMetal1", "width_um": 2.2, "pitch_um": 75.6, "offset_um": 13.6, "spacing_um": 4.0 },
+      { "layer": "TopMetal2", "width_um": 2.2, "pitch_um": 75.6, "offset_um": 13.6, "spacing_um": 4.0 }
+    ]
+  },
+  "constraints": { "clock_port": "clk", "clock_period_ns": 1.6 },
+  "seed": 1,
+  "target_stage": "route",
+  "portable_paths": true
+}

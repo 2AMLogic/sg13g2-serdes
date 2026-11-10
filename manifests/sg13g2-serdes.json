@@ -9,6 +9,14 @@
     "10": {
       "file": "manifests/evidence/item10.json",
       "content_hash": "sha256:0ae256afaa7bd7ec2e913a54da8703f403df6c8fa172cf1fac0404f1d8b0447e"
+    },
+    "2.digital": {
+      "file": "manifests/evidence/item2.json",
+      "content_hash": "sha256:24be966f1f92c9d0355a8325d5e8e00c07b90dfcd5f53ad305d439529d4fdf23"
     }
+  },
+  "partition_boundary": {
+    "analog": "design/tx and design/rx CML cells (HBT CML from the serial pad down to the 625 MHz word boundary, including the CML-to-CMOS level converter design/rx/lvl_cml2cmos and its TX counterpart); the pads and ESD",
+    "digital": "rtl/serdes_digital_top.v hierarchy (CMOS from the 625 MHz word boundary down): ports tx_word[15:0] (to the CML serialiser), rx_data_word[15:0], rx_edge_word[15:0] (from the CML deserialiser), pi_code, eye_ph_off, eye_smp_off, ser_lb, and the SPI/clk/rst_n pins. Seam per spec/decisions/DR-008-stage-boundaries.md; level conversion is unresolved there (DR-008 consequence 3)."
   }
 }

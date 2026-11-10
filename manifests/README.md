@@ -1,8 +1,12 @@
 # Signoff manifests
 
-- `sg13g2-serdes.json` — block manifest: `kind: "mixed-signal"`, evidence map
-  empty until results land. `partition_boundary` is omitted until the spec
-  (issue #2) fixes it.
+- `sg13g2-serdes.json` — block manifest: `kind: "mixed-signal"`, evidence map.
+  `partition_boundary` is declared from `spec/decisions/DR-008-stage-boundaries.md`
+  (the spec itself, issue #2, is still PROPOSED, so re-check on ratification).
+  Evidence `2.digital` is the routed digital GDS attestation
+  (`evidence/item2.json`, made with `klt signoff --attest 2`, which the pinned
+  klt 0.8.0 lacks; it was produced with a throwaway klt 0.9.1 and graded by
+  the pinned 0.8.0). Analog item 2 stays unmet (issue #24).
 - `design-evidence-tiers.md` — vendored verbatim from
   `2AMLogic/klayout-tools` `docs/design-evidence-tiers.md` at tag `v0.8.0`,
   commit `c572046be644e0407f693f2410f3abb799d68a3a`.
