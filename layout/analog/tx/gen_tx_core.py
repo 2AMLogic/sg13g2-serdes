@@ -11,8 +11,11 @@ pad/ESD. No DRC/LVS/extraction claim is made (#26, #27).
 
 usage: gen_tx_core.py <netlist> <out-dir> [--klt PATH]   (needs PDK/PDK_ROOT env)
 """
-import json, math, os, re, subprocess, sys, tempfile
+import json, math, os, subprocess, sys, tempfile
 import klayout.db as db
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+from layout_common import parse_subckts, um
 
 CELLS = ["bias", "ffe_en", "mux2to1_cml", "predriver", "driver_ffe", "tx_lvl_cml2cmos"]
 GAP, ROW_W, PIN = 4.0, 120.0, 0.5
@@ -20,24 +23,17 @@ M2, M2_PIN, M2_LBL = (10, 0), (10, 2), (10, 25)
 
 
 def parse(path):
-    subs, cur = {}, None
-    for ln in open(path):
-        ln = ln.strip()
-        if ln.lower().startswith(".subckt"):
-            t = ln.split(); cur = {"ports": t[2:], "devs": []}; subs[t[1]] = cur
-        elif ln.lower().startswith(".ends"):
-            cur = None
-        elif cur is not None and ln.startswith("X"):
-            t = ln.split(); kv = dict(x.split("=") for x in t if "=" in x)
-            nodes = [x for x in t[1:] if "=" not in x]
-            cur["devs"].append({"name": t[0], "model": nodes[-1], "kv": kv})
+    """Shared subckt parse, reduced to the X-prefixed devices this generator maps."""
+    subs = parse_subckts(path)
+    for sub in subs.values():
+        devs = []
+        for t in sub["devs"]:
+            if t[0].startswith("X"):
+                nodes = [x for x in t[1:] if "=" not in x]
+                devs.append({"name": t[0], "model": nodes[-1],
+                             "kv": dict(x.split("=") for x in t if "=" in x)})
+        sub["devs"] = devs
     return subs
-
-
-def um(v):
-    """SPICE length with u/m suffix (or bare metres) -> micrometres."""
-    m = re.fullmatch(r"([0-9.]+)([um]?)", v)
-    return float(m.group(1)) * {"u": 1.0, "m": 1e3, "": 1e6}[m.group(2)]
 
 
 def gen_params(d):

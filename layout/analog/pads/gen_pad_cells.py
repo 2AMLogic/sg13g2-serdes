@@ -16,7 +16,10 @@ not drawn devices, so they have no layout.
 
 Usage: gen_pad_cells.py OUTDIR   (source scripts/env.sh first)
 """
-import json, os, subprocess, sys
+import json, os, sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+from layout_common import parse_subckts, run_klt as run
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 PDK = "ihp-sg13g2"
@@ -25,26 +28,8 @@ RSIL_OHM_SQ = 7.0     # nominal rsil sheet resistance used only to size bodies (
 GAP = 5.0             # um between placed blocks
 
 
-def run(args):
-    r = subprocess.run(args, capture_output=True, text=True)
-    if r.returncode not in (0, 3):
-        sys.exit(f"{' '.join(args)} failed ({r.returncode}):\n{r.stderr}{r.stdout}")
-    return json.loads(r.stdout)
-
-
 def netlist_devices(path, sub):
-    cur, devs = None, []
-    for line in open(path):
-        t = line.split()
-        if not t or t[0].startswith(("*", "+")):
-            continue
-        if t[0] == ".subckt":
-            cur = t[1]
-        elif t[0] == ".ends":
-            cur = None
-        elif cur == sub:
-            devs.append(t)
-    return devs
+    return parse_subckts(path)[sub]["devs"]
 
 
 def res_block(out, cell, name, w, l):
