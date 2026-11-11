@@ -174,6 +174,45 @@
       }
     },
     {
+      "path": "sim/bench/r6_tx_return_loss_on.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-return-loss",
+          "--request",
+          "sim/bench/r6_tx_return_loss_on.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/bench/r6_tx_return_loss_off.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-return-loss",
+          "--request",
+          "sim/bench/r6_tx_return_loss_off.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/bench/r20_clk_quality.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "rx-clk-quality",
+          "--request",
+          "sim/bench/r20_clk_quality.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
       "path": "rtl/tests/test_prbs_gen.py",
       "cold_start": {
         "argv": [
@@ -341,14 +380,6 @@
     }
   },
   "unbenched_rows": [
-    {
-      "row": "R6",
-      "issue": 92
-    },
-    {
-      "row": "R20",
-      "issue": 92
-    },
     {
       "row": "R18",
       "issue": 94

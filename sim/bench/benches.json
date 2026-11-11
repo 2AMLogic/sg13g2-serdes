@@ -4,16 +4,6 @@
   "pdk": "sim/pdk.json",
   "unbenched_rows": [
     {
-      "row": "R6",
-      "issue": 92,
-      "reason": "no TX AC/S-parameter deck for driver + pad exists yet"
-    },
-    {
-      "row": "R20",
-      "issue": 92,
-      "reason": "latch_regen measures regeneration, not duty/quadrature/jitter at the receiving buffer"
-    },
-    {
       "row": "R18",
       "issue": 94,
       "reason": "PDK bondpad model is an empty placeholder; no extracted/EM pad model"
@@ -206,6 +196,53 @@
         "pad_idiff_5g_a"
       ],
       "limitations": "Ideal resistors and a placeholder pad capacitance (PDK bondpad is empty); |Zdiff| only, SDD11 is not extracted, resistor corners not applied"
+    },
+    {
+      "id": "tx-return-loss",
+      "partition": "analog",
+      "rows": [
+        "R6"
+      ],
+      "requests": [
+        "sim/bench/r6_tx_return_loss_on.request.json",
+        "sim/bench/r6_tx_return_loss_off.request.json"
+      ],
+      "description": "TX driver + pad network SDD22 (100 ohm differential) from 1 MHz to 10 GHz via a 100 ohm AC port; driver on (bias live, pair balanced, FFE slices off) and a driver-off reference (vbn = 0)",
+      "corner_set": "per request: 3 HBT/CAP/DIO ganged process corners x 1.08/1.2/1.32 V x -40/27/125 C (PVT-full)",
+      "units_per_request": 27,
+      "required_measurements": [
+        "r6_sdd22_0p1g_db",
+        "r6_sdd22_1g_db",
+        "r6_sdd22_5g_db",
+        "r6_sdd22_7p5g_db",
+        "r6_sdd22_max_to_5g_db",
+        "r6_sdd22_max_to_7p5g_db"
+      ],
+      "limitations": "PLACEHOLDER PAD: the PDK bondpad model has no capacitance, so each bondpad is a 100 fF capacitor to ground (R18 budget); R6 cannot be graded against a real pad until #94. DC is approximated by 1 MHz (AC-coupled port). Driver-on is the FFE-off balanced-pair small-signal point; FFE-on slices and the mux/predriver input stage are not exercised (mux outputs replaced by their DC mid level). rsil is the behavioural stand-in at typical rsh, no resistor corner. No limits are attached: the bench reports SDD22, it does not claim a pass"
+    },
+    {
+      "id": "rx-clk-quality",
+      "partition": "analog",
+      "rows": [
+        "R20"
+      ],
+      "requests": [
+        "sim/bench/r20_clk_quality.request.json"
+      ],
+      "description": "Receiving clock buffer clk_buf_quad driven by an ideal 5 GHz quadrature source: duty of the 0/180 and 90/270 pairs, 90 and 270 degree quadrature delays, swing and crossing slew",
+      "corner_set": "3 HBT/CAP/DIO ganged process corners x 1.08/1.2/1.32 V x -40/27/125 C (PVT-full)",
+      "units_per_request": 27,
+      "required_measurements": [
+        "r20_high_a_s",
+        "r20_period_a_s",
+        "r20_high_b_s",
+        "r20_period_b_s",
+        "r20_quad_90_s",
+        "r20_quad_270_s",
+        "r20_slew_rise_a_s",
+        "r20_slew_rise_b_s"
+      ],
+      "limitations": "RANDOM JITTER IS A GAP: a noise-free ngspice transient has no RJ and .noise is small-signal about DC, so no rms jitter is measured; the crossing slew is reported as the AM-to-PM factor only (RJ = noise rms / slew needs a declared noise source, not provided). Input clock is ideal (source quality not modelled; deterministic error here is the buffer's own). Load is a 20 fF placeholder per output. Duty and quadrature are read from differential pairs A (0/180) and B (90/270); single-ended duty is not measured"
     },
     {
       "id": "rtl-prbs-gen",
