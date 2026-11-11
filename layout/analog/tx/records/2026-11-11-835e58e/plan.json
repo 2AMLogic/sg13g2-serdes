@@ -1,0 +1,1955 @@
+{
+  "bias": {
+    "bbox_um": [
+      0.0,
+      0.0,
+      103.25,
+      12.8
+    ],
+    "devices": [
+      {
+        "device": "XRref",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          0.0,
+          0.0
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 38.1,
+          "num": 3,
+          "rows": 3,
+          "series": true,
+          "snap": true,
+          "width_um": 4.0
+        },
+        "size_um": [
+          38.94,
+          12.8
+        ]
+      },
+      {
+        "device": "XQref",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          42.94,
+          0.0
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 1,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          6.7,
+          7.11
+        ]
+      },
+      {
+        "device": "XRer",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          53.64,
+          0.0
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 36.57,
+          "num": 1,
+          "rows": 1,
+          "series": false,
+          "snap": true,
+          "width_um": 4.0
+        },
+        "size_um": [
+          37.41,
+          4.0
+        ]
+      },
+      {
+        "device": "XCvbn",
+        "generator": "cap_array",
+        "model": "cap_cmim",
+        "origin_um": [
+          95.05,
+          0.0
+        ],
+        "params": {
+          "num": 1,
+          "plate_h_um": 7.0,
+          "plate_w_um": 7.0
+        },
+        "size_um": [
+          8.2,
+          10.34
+        ]
+      }
+    ],
+    "pins": [
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vdd",
+        "x_um": 0.25,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vss",
+        "x_um": 34.666,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vbn",
+        "x_um": 69.082,
+        "y_um": -0.25
+      }
+    ]
+  },
+  "driver_ffe": {
+    "bbox_um": [
+      0.0,
+      0.0,
+      113.98,
+      115.82
+    ],
+    "devices": [
+      {
+        "device": "XQM1",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          0.0,
+          0.0
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 8,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          67.6,
+          7.11
+        ]
+      },
+      {
+        "device": "XQM2",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          0.0,
+          11.11
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 8,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          67.6,
+          7.11
+        ]
+      },
+      {
+        "device": "XQTM",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          0.0,
+          22.22
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 8,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          67.6,
+          7.11
+        ]
+      },
+      {
+        "device": "XREM",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          71.6,
+          22.22
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 18.29,
+          "num": 1,
+          "rows": 1,
+          "series": false,
+          "snap": true,
+          "width_um": 16.0
+        },
+        "size_um": [
+          19.13,
+          16.0
+        ]
+      },
+      {
+        "device": "XRT1",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          0.0,
+          42.22
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 38.1,
+          "num": 3,
+          "rows": 3,
+          "series": true,
+          "snap": true,
+          "width_um": 16.0
+        },
+        "size_um": [
+          38.94,
+          48.8
+        ]
+      },
+      {
+        "device": "XRT2",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          42.94,
+          42.22
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 38.1,
+          "num": 3,
+          "rows": 3,
+          "series": true,
+          "snap": true,
+          "width_um": 16.0
+        },
+        "size_um": [
+          38.94,
+          48.8
+        ]
+      },
+      {
+        "device": "XQP0a",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          85.88,
+          42.22
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 1,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          6.7,
+          7.11
+        ]
+      },
+      {
+        "device": "XQP0b",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          96.58,
+          42.22
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 1,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          6.7,
+          7.11
+        ]
+      },
+      {
+        "device": "XQTP0",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          107.28,
+          42.22
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 1,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          6.7,
+          7.11
+        ]
+      },
+      {
+        "device": "XREP0",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          0.0,
+          95.02
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 20.57,
+          "num": 2,
+          "rows": 2,
+          "series": true,
+          "snap": true,
+          "width_um": 4.0
+        },
+        "size_um": [
+          21.41,
+          8.4
+        ]
+      },
+      {
+        "device": "XQP1a",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          25.41,
+          95.02
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 1,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          6.7,
+          7.11
+        ]
+      },
+      {
+        "device": "XQP1b",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          36.11,
+          95.02
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 1,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          6.7,
+          7.11
+        ]
+      },
+      {
+        "device": "XQTP1",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          46.81,
+          95.02
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 1,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          6.7,
+          7.11
+        ]
+      },
+      {
+        "device": "XREP1",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          57.51,
+          95.02
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 20.57,
+          "num": 2,
+          "rows": 2,
+          "series": true,
+          "snap": true,
+          "width_um": 4.0
+        },
+        "size_um": [
+          21.41,
+          8.4
+        ]
+      },
+      {
+        "device": "XQP2a",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          82.92,
+          95.02
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 1,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          6.7,
+          7.11
+        ]
+      },
+      {
+        "device": "XQP2b",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          93.62,
+          95.02
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 1,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          6.7,
+          7.11
+        ]
+      },
+      {
+        "device": "XQTP2",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          104.32,
+          95.02
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 1,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          6.7,
+          7.11
+        ]
+      },
+      {
+        "device": "XREP2",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          0.0,
+          107.42
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 20.57,
+          "num": 2,
+          "rows": 2,
+          "series": true,
+          "snap": true,
+          "width_um": 4.0
+        },
+        "size_um": [
+          21.41,
+          8.4
+        ]
+      }
+    ],
+    "pins": [
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vdd",
+        "x_um": 0.25,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vss",
+        "x_um": 9.748,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "inp",
+        "x_um": 19.246,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "inn",
+        "x_um": 28.744,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "pip",
+        "x_um": 38.242,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "pin",
+        "x_um": 47.74,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vbn",
+        "x_um": 57.238,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vbp0",
+        "x_um": 66.736,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vbp1",
+        "x_um": 76.234,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vbp2",
+        "x_um": 85.732,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "outp",
+        "x_um": 95.23,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "outn",
+        "x_um": 104.728,
+        "y_um": -0.25
+      }
+    ]
+  },
+  "ffe_en": {
+    "bbox_um": [
+      0.0,
+      0.0,
+      118.724,
+      41.6
+    ],
+    "devices": [
+      {
+        "device": "XMPi0",
+        "generator": "mos_array",
+        "model": "sg13_lv_pmos",
+        "origin_um": [
+          0.0,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 1,
+          "flavor": "pfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 1.0
+        },
+        "size_um": [
+          1.39,
+          2.22
+        ]
+      },
+      {
+        "device": "XMNi0",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          5.39,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 1,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 0.5
+        },
+        "size_um": [
+          1.09,
+          1.42
+        ]
+      },
+      {
+        "device": "XRb0",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          10.48,
+          0.0
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 35.7125,
+          "num": 8,
+          "rows": 8,
+          "series": true,
+          "snap": true,
+          "width_um": 2.0
+        },
+        "size_um": [
+          36.552,
+          18.8
+        ]
+      },
+      {
+        "device": "XMNd0",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          51.032,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 1,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 2.0
+        },
+        "size_um": [
+          1.09,
+          2.92
+        ]
+      },
+      {
+        "device": "XMPi1",
+        "generator": "mos_array",
+        "model": "sg13_lv_pmos",
+        "origin_um": [
+          56.122,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 1,
+          "flavor": "pfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 1.0
+        },
+        "size_um": [
+          1.39,
+          2.22
+        ]
+      },
+      {
+        "device": "XMNi1",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          61.512,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 1,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 0.5
+        },
+        "size_um": [
+          1.09,
+          1.42
+        ]
+      },
+      {
+        "device": "XRb1",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          66.602,
+          0.0
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 35.7125,
+          "num": 8,
+          "rows": 8,
+          "series": true,
+          "snap": true,
+          "width_um": 2.0
+        },
+        "size_um": [
+          36.552,
+          18.8
+        ]
+      },
+      {
+        "device": "XMNd1",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          107.154,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 1,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 2.0
+        },
+        "size_um": [
+          1.09,
+          2.92
+        ]
+      },
+      {
+        "device": "XMPi2",
+        "generator": "mos_array",
+        "model": "sg13_lv_pmos",
+        "origin_um": [
+          112.244,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 1,
+          "flavor": "pfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 1.0
+        },
+        "size_um": [
+          1.39,
+          2.22
+        ]
+      },
+      {
+        "device": "XMNi2",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          117.634,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 1,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 0.5
+        },
+        "size_um": [
+          1.09,
+          1.42
+        ]
+      },
+      {
+        "device": "XRb2",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          0.0,
+          22.8
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 35.7125,
+          "num": 8,
+          "rows": 8,
+          "series": true,
+          "snap": true,
+          "width_um": 2.0
+        },
+        "size_um": [
+          36.552,
+          18.8
+        ]
+      },
+      {
+        "device": "XMNd2",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          40.552,
+          22.8
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 1,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 2.0
+        },
+        "size_um": [
+          1.09,
+          2.92
+        ]
+      }
+    ],
+    "pins": [
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vdd",
+        "x_um": 0.25,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vss",
+        "x_um": 13.441,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vbn",
+        "x_um": 26.632,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "en0",
+        "x_um": 39.823,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "en1",
+        "x_um": 53.014,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "en2",
+        "x_um": 66.205,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vbp0",
+        "x_um": 79.396,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vbp1",
+        "x_um": 92.587,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vbp2",
+        "x_um": 105.778,
+        "y_um": -0.25
+      }
+    ]
+  },
+  "mux2to1_cml": {
+    "bbox_um": [
+      0.0,
+      0.0,
+      110.18,
+      99.8
+    ],
+    "devices": [
+      {
+        "device": "XCca",
+        "generator": "cap_array",
+        "model": "cap_cmim",
+        "origin_um": [
+          0.0,
+          0.0
+        ],
+        "params": {
+          "num": 1,
+          "plate_h_um": 7.0,
+          "plate_w_um": 7.0
+        },
+        "size_um": [
+          8.2,
+          10.34
+        ]
+      },
+      {
+        "device": "XRfa",
+        "generator": "res_array",
+        "model": "rppd",
+        "origin_um": [
+          12.2,
+          0.0
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "rppd",
+          "length_um": 38.46,
+          "num": 1,
+          "rows": 1,
+          "series": false,
+          "snap": true,
+          "width_um": 0.5
+        },
+        "size_um": [
+          39.3,
+          0.5
+        ]
+      },
+      {
+        "device": "XMP1a",
+        "generator": "mos_array",
+        "model": "sg13_lv_pmos",
+        "origin_um": [
+          55.5,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 2,
+          "flavor": "pfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 4.0
+        },
+        "size_um": [
+          2.06,
+          6.76
+        ]
+      },
+      {
+        "device": "XMN1a",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          61.56,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 2,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 2.0
+        },
+        "size_um": [
+          1.76,
+          4.46
+        ]
+      },
+      {
+        "device": "XMP2a",
+        "generator": "mos_array",
+        "model": "sg13_lv_pmos",
+        "origin_um": [
+          67.32,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 4,
+          "flavor": "pfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 4.0
+        },
+        "size_um": [
+          3.4,
+          6.76
+        ]
+      },
+      {
+        "device": "XMN2a",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          74.72,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 2,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 4.0
+        },
+        "size_um": [
+          1.76,
+          6.46
+        ]
+      },
+      {
+        "device": "XCcb",
+        "generator": "cap_array",
+        "model": "cap_cmim",
+        "origin_um": [
+          80.48,
+          0.0
+        ],
+        "params": {
+          "num": 1,
+          "plate_h_um": 7.0,
+          "plate_w_um": 7.0
+        },
+        "size_um": [
+          8.2,
+          10.34
+        ]
+      },
+      {
+        "device": "XRfb",
+        "generator": "res_array",
+        "model": "rppd",
+        "origin_um": [
+          0.0,
+          14.34
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "rppd",
+          "length_um": 38.46,
+          "num": 1,
+          "rows": 1,
+          "series": false,
+          "snap": true,
+          "width_um": 0.5
+        },
+        "size_um": [
+          39.3,
+          0.5
+        ]
+      },
+      {
+        "device": "XMP1b",
+        "generator": "mos_array",
+        "model": "sg13_lv_pmos",
+        "origin_um": [
+          43.3,
+          14.34
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 2,
+          "flavor": "pfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 4.0
+        },
+        "size_um": [
+          2.06,
+          6.76
+        ]
+      },
+      {
+        "device": "XMN1b",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          49.36,
+          14.34
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 2,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 2.0
+        },
+        "size_um": [
+          1.76,
+          4.46
+        ]
+      },
+      {
+        "device": "XMP2b",
+        "generator": "mos_array",
+        "model": "sg13_lv_pmos",
+        "origin_um": [
+          55.12,
+          14.34
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 4,
+          "flavor": "pfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 4.0
+        },
+        "size_um": [
+          3.4,
+          6.76
+        ]
+      },
+      {
+        "device": "XMN2b",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          62.52,
+          14.34
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 2,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 4.0
+        },
+        "size_um": [
+          1.76,
+          6.46
+        ]
+      },
+      {
+        "device": "XQa1",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          68.28,
+          14.34
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 2,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          15.4,
+          7.11
+        ]
+      },
+      {
+        "device": "XQa2",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          87.68,
+          14.34
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 2,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          15.4,
+          7.11
+        ]
+      },
+      {
+        "device": "XMTa",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          107.08,
+          14.34
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 4,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 5.0
+        },
+        "size_um": [
+          3.1,
+          7.46
+        ]
+      },
+      {
+        "device": "XRsa",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          0.0,
+          25.8
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 34.285,
+          "num": 2,
+          "rows": 2,
+          "series": true,
+          "snap": true,
+          "width_um": 8.0
+        },
+        "size_um": [
+          35.125,
+          16.4
+        ]
+      },
+      {
+        "device": "XQb1",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          39.125,
+          25.8
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 2,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          15.4,
+          7.11
+        ]
+      },
+      {
+        "device": "XQb2",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          58.525,
+          25.8
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 2,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          15.4,
+          7.11
+        ]
+      },
+      {
+        "device": "XMTb",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          77.925,
+          25.8
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 4,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 5.0
+        },
+        "size_um": [
+          3.1,
+          7.46
+        ]
+      },
+      {
+        "device": "XRsb",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          0.0,
+          46.2
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 34.285,
+          "num": 2,
+          "rows": 2,
+          "series": true,
+          "snap": true,
+          "width_um": 8.0
+        },
+        "size_um": [
+          35.125,
+          16.4
+        ]
+      },
+      {
+        "device": "XRLp",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          39.125,
+          46.2
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 38.1,
+          "num": 3,
+          "rows": 3,
+          "series": true,
+          "snap": true,
+          "width_um": 8.0
+        },
+        "size_um": [
+          38.94,
+          24.8
+        ]
+      },
+      {
+        "device": "XRLn",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          0.0,
+          75.0
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 38.1,
+          "num": 3,
+          "rows": 3,
+          "series": true,
+          "snap": true,
+          "width_um": 8.0
+        },
+        "size_um": [
+          38.94,
+          24.8
+        ]
+      }
+    ],
+    "pins": [
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vdd",
+        "x_um": 0.25,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vss",
+        "x_um": 11.268,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "ckp",
+        "x_um": 22.286,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "ckn",
+        "x_um": 33.304,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "dap",
+        "x_um": 44.322,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "dan",
+        "x_um": 55.34,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "dbp",
+        "x_um": 66.358,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "dbn",
+        "x_um": 77.376,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "outp",
+        "x_um": 88.394,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "outn",
+        "x_um": 99.412,
+        "y_um": -0.25
+      }
+    ]
+  },
+  "predriver": {
+    "bbox_um": [
+      0.0,
+      0.0,
+      106.4,
+      27.51
+    ],
+    "devices": [
+      {
+        "device": "XQ1",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          0.0,
+          0.0
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 4,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          32.8,
+          7.11
+        ]
+      },
+      {
+        "device": "XQ2",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          36.8,
+          0.0
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 4,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          32.8,
+          7.11
+        ]
+      },
+      {
+        "device": "XQt",
+        "generator": "bjt_array",
+        "model": "npn13G2",
+        "origin_um": [
+          73.6,
+          0.0
+        ],
+        "params": {
+          "add_collector_ring": false,
+          "cols": 4,
+          "dummy": 0,
+          "flavor": "npn13G2",
+          "rows": 1,
+          "topology": "array"
+        },
+        "size_um": [
+          32.8,
+          7.11
+        ]
+      },
+      {
+        "device": "XRe",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          0.0,
+          11.11
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 18.29,
+          "num": 1,
+          "rows": 1,
+          "series": false,
+          "snap": true,
+          "width_um": 8.0
+        },
+        "size_um": [
+          19.13,
+          8.0
+        ]
+      },
+      {
+        "device": "XRL1",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          23.13,
+          11.11
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 34.285,
+          "num": 2,
+          "rows": 2,
+          "series": true,
+          "snap": true,
+          "width_um": 8.0
+        },
+        "size_um": [
+          35.125,
+          16.4
+        ]
+      },
+      {
+        "device": "XRL2",
+        "generator": "res_array",
+        "model": "rsil",
+        "origin_um": [
+          62.255,
+          11.11
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "generic",
+          "length_um": 34.285,
+          "num": 2,
+          "rows": 2,
+          "series": true,
+          "snap": true,
+          "width_um": 8.0
+        },
+        "size_um": [
+          35.125,
+          16.4
+        ]
+      }
+    ],
+    "pins": [
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vdd",
+        "x_um": 0.25,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vss",
+        "x_um": 15.45,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "inp",
+        "x_um": 30.65,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "inn",
+        "x_um": 45.85,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vbn",
+        "x_um": 61.05,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "outp",
+        "x_um": 76.25,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "outn",
+        "x_um": 91.45,
+        "y_um": -0.25
+      }
+    ]
+  },
+  "tx_lvl_cml2cmos": {
+    "bbox_um": [
+      0.0,
+      0.0,
+      65.04,
+      6.76
+    ],
+    "devices": [
+      {
+        "device": "XMN1",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          0.0,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 2,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 4.0
+        },
+        "size_um": [
+          1.76,
+          6.46
+        ]
+      },
+      {
+        "device": "XMN2",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          5.76,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 2,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 4.0
+        },
+        "size_um": [
+          1.76,
+          6.46
+        ]
+      },
+      {
+        "device": "XMP1",
+        "generator": "mos_array",
+        "model": "sg13_lv_pmos",
+        "origin_um": [
+          11.52,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 2,
+          "flavor": "pfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 4.0
+        },
+        "size_um": [
+          2.06,
+          6.76
+        ]
+      },
+      {
+        "device": "XMP2",
+        "generator": "mos_array",
+        "model": "sg13_lv_pmos",
+        "origin_um": [
+          17.58,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 2,
+          "flavor": "pfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 4.0
+        },
+        "size_um": [
+          2.06,
+          6.76
+        ]
+      },
+      {
+        "device": "XMNt",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          23.64,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 2,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 4.0
+        },
+        "size_um": [
+          1.76,
+          6.46
+        ]
+      },
+      {
+        "device": "XMNb",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          29.4,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 1,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 2.0
+        },
+        "size_um": [
+          1.09,
+          2.92
+        ]
+      },
+      {
+        "device": "XRbm",
+        "generator": "res_array",
+        "model": "rppd",
+        "origin_um": [
+          34.49,
+          0.0
+        ],
+        "params": {
+          "dummy": 0,
+          "flavor": "rppd",
+          "length_um": 19.23,
+          "num": 1,
+          "rows": 1,
+          "series": false,
+          "snap": true,
+          "width_um": 0.5
+        },
+        "size_um": [
+          20.07,
+          0.5
+        ]
+      },
+      {
+        "device": "XMP3",
+        "generator": "mos_array",
+        "model": "sg13_lv_pmos",
+        "origin_um": [
+          58.56,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 1,
+          "flavor": "pfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 4.0
+        },
+        "size_um": [
+          1.39,
+          5.22
+        ]
+      },
+      {
+        "device": "XMN3",
+        "generator": "mos_array",
+        "model": "sg13_lv_nmos",
+        "origin_um": [
+          63.95,
+          0.0
+        ],
+        "params": {
+          "cols": 1,
+          "dummy": 0,
+          "fingers": 1,
+          "flavor": "nfet",
+          "gate_contact": true,
+          "l_um": 0.13,
+          "rows": 1,
+          "topology": "array",
+          "w_um": 2.0
+        },
+        "size_um": [
+          1.09,
+          2.92
+        ]
+      }
+    ],
+    "pins": [
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vdd",
+        "x_um": 0.25,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "vss",
+        "x_um": 13.258,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "inp",
+        "x_um": 26.266,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "inn",
+        "x_um": 39.274,
+        "y_um": -0.25
+      },
+      {
+        "layer": "Metal2 10/0 pin 10/2 label 10/25",
+        "port": "out",
+        "x_um": 52.282,
+        "y_um": -0.25
+      }
+    ]
+  }
+}
