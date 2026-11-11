@@ -5,7 +5,7 @@
     python3 -I sim/bench/gen_inventory.py --check    # exit 1 if the committed file differs
 
 The inventory is derived, never hand-edited, so it cannot drift from the bench files.
-Each bench contributes one testbench entry per request file (analog) or per cocotb
+Each bench contributes one testbench entry per request file (analog), per behavioural entry point, or per cocotb
 test module (digital), each with its own cold-start command. Cold starts are
 local_only: they need klt, jq, iverilog and a cocotb uvx environment, which the CI
 runner does not provision, so `--attest 9 --check` in CI re-hashes the files and
@@ -31,6 +31,8 @@ def build():
     for b in man["benches"]:
         if b["partition"] == "digital":
             paths = [(f"rtl/tests/test_{b['rtl_bench']}.py", ["scripts/run-bench.sh", b["id"]])]
+        elif b["partition"] == "behavioural":
+            paths = [(b["entry"], ["scripts/run-bench.sh", b["id"]])]
         else:
             paths = [(r, ["scripts/run-bench.sh", b["id"], "--request", r]) for r in b["requests"]]
         for path, argv in paths:

@@ -12,7 +12,7 @@ reproduce steps.
 | `smoke/records/<id>/` | append-only run records (reports, `record.md`); never edited after the fact |
 | `rx/` | RX sizing benches (CTLE AC per setting, latch regeneration at 5 GHz, HBT node stress, termination first look). `rx/tools/gen_requests.py` writes the bench bodies and `klt sim` requests; `rx/run_sizing.sh` submits the 27-point HBT PVT grid to the batch fleet and writes `rx/records/<id>/` (append-only). Sizing evidence, not spec results |
 | `tx/` | TX sizing decks, requests and append-only records (issue #21); see `tx/README.md` |
-| `bench/` | testbench registry for T1 item 9: `benches.json` (one entry per bench: spec rows, requests, corner set, declared measurements) and `gen_inventory.py`, which derives `verification/testbench-inventory.json` from it |
+| `bench/` | testbench registry for T1 item 9: `benches.json` (one entry per bench: spec rows, requests, corner set, declared measurements) and `gen_inventory.py`, which derives `verification/testbench-inventory.json` from it. Also the DR-002 behavioural benches (`link_bench.py`, `linkcore.py`, `cdrmodel.py`, smoke test `test_link_bench.py`) |
 | `harness/` | fetched by `scripts/setup-env.sh` per `reuse.lock.json` (gitignored, never committed) |
 
 ## HBT models
@@ -54,15 +54,43 @@ this item (recording is T1 item 5).
 | `rx-ctle-op` | R3 | same | `rx/ctle_op` |
 | `rx-latch-regen` | R3 R8 (latch record only) | same | `rx/latch_regen` |
 | `rx-term-pad` | R9 (|Zdiff| only) | same | `rx/pad_ac` |
+| `link-r8-sensitivity` | R8 | 27-pt HBT PVT-full x sampler offset MC | `bench/link_r8.py` |
+| `link-r11-cdr-lock` | R11 | PVT-edge (corner-independent, see below) | `bench/link_r11.py` |
+| `link-r12-jtol` | R12 | 4 PVT-edge corners for the eye | `bench/link_r12.py` |
+| `link-r13-offset` | R13 | PVT-edge (corner-independent) | `bench/link_r13.py` |
+| `link-r15-method` | R15 | 27-pt HBT PVT-full | `bench/link_r15.py` |
 | `rtl-*` (8) | R22, R11 (digital), R2 | functional | `rtl/tests/test_*.py` |
 
 Each bench's `limitations` field in `bench/benches.json` states what it does not cover. Pad model for
 R6/R9: the placeholder in `rx/pad_ac` (ideal resistors, placeholder pad capacitance).
 
-**Declared gaps** (inventory `unbenched_rows`, none silently omitted): R6, R20 (#92); R8 statistical eye,
-R12, R13, R15 (#93); R18, R19 (#94, PDK `bondpad` is an empty placeholder). Not simulation rows: R1 (graded by R15),
+**Declared gaps** (inventory `unbenched_rows`, none silently omitted): R6, R20 (#92); R18, R19 (#94, PDK `bondpad` is an empty placeholder). Not simulation rows: R1 (graded by R15),
 R14 (committed model), R17, R21; R22 is graded by the `rtl-*` benches (the eye monitor lives in #23's RTL).
 
 Regenerate the inventory after editing `bench/benches.json`: `python3 -I sim/bench/gen_inventory.py`, then
 `scripts/check-ci.sh --regen` (re-attests items 9 and 10; the cold starts are `local_only`, so CI re-hashes
 rather than re-running them).
+
+### Behavioural link benches (R8, R11, R12, R13, R15; issue #93, DR-002)
+
+Cold start, one command per row (numpy only; scipy's `erfc` is used when present; one local process, no fleet,
+no `-j`/`-n`); add `--quick` for a short configuration. The cold start exits 0 whenever the bench ran (the verdict, e.g.
+`NOT MET`, is in the output and is never relaxed); `--strict` makes a missed threshold exit 3:
+
+    scripts/run-bench.sh link-r8-sensitivity     # python3 -I sim/bench/link_r8.py   (~1 min, 27 corners x 16 offset draws)
+    scripts/run-bench.sh link-r11-cdr-lock       # r11
+    scripts/run-bench.sh link-r12-jtol           # r12 (SJ sweep, 4 edge corners)
+    scripts/run-bench.sh link-r13-offset         # r13 (+-300 ppm, 1e6 UI)
+    scripts/run-bench.sh link-r15-method         # r15 (27 corners)
+    python3 -I sim/bench/test_link_bench.py      # smoke + negative controls
+
+Chain: `sim/rx/records/<newest>/ctle_ac.report.json` (per-corner CTLE gain at 0.1/2.5/5 GHz) -> piecewise CTLE
+model -> `spec/channel/channel_model.py` (R14) pulse response -> statistical eye (PRBS-31 as independent symbols)
+-> dual-Dirac Q-scale wall/amplitude fit to 1e-12. The time-domain CDR uses `rtl/tests/serdes_ref.CdrFilter`
+(bit-exact against the RTL) with KP/KI/FMAX parsed from `rtl/serdes_cdr_filter.v` and the delay parsed from
+DR-007; its recovered-clock error feeds the R15 eye. Every printed figure carries its DR-002 label and the record
+it is fitted to. **The latch records carry only the q swing: no sampler offset/noise statistics and no regeneration
+times (all `latch_t_regen_*` are `error`).** Sampler offset/noise, RJ/DJ, PD decision noise and the analog loop delay
+are therefore printed as `UNFITTED ASSUMPTION`s; they are inputs, not results. Fit validation on held-out corners
+(DR-002 step 3) is not done. PVT-edge for R11/R13 is corner-independent in this model (no per-corner PI/sampler
+record); the latch/CTLE fits enter R12 through the per-corner eye.

@@ -9,7 +9,7 @@
   "tier": null,
   "t1_item_count": 22,
   "build_t1_item_count": 22,
-  "t1_met_count": 5,
+  "t1_met_count": 3,
   "source_doc": "manifests/design-evidence-tiers.md",
   "source_doc_content_hash": "sha256:a26b90262320d0fbd32b3f549a02b6300832706041797a559d8bf6bdb62efdc7",
   "build": {
@@ -303,33 +303,17 @@
       "partition_boundary": "design/tx and design/rx CML cells (HBT CML from the serial pad down to the 625 MHz word boundary, including the CML-to-CMOS level converter design/rx/lvl_cml2cmos and its TX counterpart); the pads and ESD",
       "text": "every claimed measurement's testbench committed, with a documented cold-start invocation a third party can run; pinned PDK revision.",
       "notes": [],
-      "status": "met",
-      "reason": null,
+      "status": "unmet",
+      "reason": "stale_evidence",
       "graded_by_build": true,
-      "citation": {
-        "file": "manifests/evidence/item9.json",
-        "command": null,
-        "kind": "generic",
-        "check_status": "pass",
-        "content_hash": "sha256:5f68f3b0037410e8c37ec50dbedbc7d75b602f7a7141d41b128b962800be8eb0",
-        "input_verified": true,
-        "exit_status": 0,
-        "artifact_binding": {
-          "t1_item": 9,
-          "path": {
-            "path": "verification/testbench-inventory.json",
-            "scope": "repo"
-          },
-          "content_hash": "sha256:5f68f3b0037410e8c37ec50dbedbc7d75b602f7a7141d41b128b962800be8eb0",
-          "input_verified": true,
-          "summary": "T1 item 9 (Testbenches shipped): 54/54 attestation checks passed (klt signoff --attest)",
-          "source": "verification/testbench-inventory.json",
-          "attestation": {
-            "producer": "klt signoff --attest",
-            "inventory_schema_version": 1,
-            "check_count": 54,
-            "passed_count": 54
-          }
+      "citation": null,
+      "detail": {
+        "content_hash_pin": "stale",
+        "hash_check": {
+          "field": "provenance.input.content_hash",
+          "expected": "sha256:5f68f3b0037410e8c37ec50dbedbc7d75b602f7a7141d41b128b962800be8eb0",
+          "actual": "sha256:725499353e9912f7c717bae3fa481a67ec625473c2b4b17f778387403d7cf11e",
+          "match": false
         }
       }
     },
@@ -341,33 +325,17 @@
       "partition_boundary": "rtl/serdes_digital_top.v hierarchy (CMOS from the 625 MHz word boundary down): ports tx_word[15:0] (to the CML serialiser), rx_data_word[15:0], rx_edge_word[15:0] (from the CML deserialiser), pi_code, eye_ph_off, eye_smp_off, ser_lb, and the SPI/clk/rst_n pins. Seam per spec/decisions/DR-008-stage-boundaries.md; level conversion is unresolved there (DR-008 consequence 3).",
       "text": "every claimed measurement's testbench committed, with a documented cold-start invocation a third party can run; pinned PDK revision.",
       "notes": [],
-      "status": "met",
-      "reason": null,
+      "status": "unmet",
+      "reason": "stale_evidence",
       "graded_by_build": true,
-      "citation": {
-        "file": "manifests/evidence/item9.json",
-        "command": null,
-        "kind": "generic",
-        "check_status": "pass",
-        "content_hash": "sha256:5f68f3b0037410e8c37ec50dbedbc7d75b602f7a7141d41b128b962800be8eb0",
-        "input_verified": true,
-        "exit_status": 0,
-        "artifact_binding": {
-          "t1_item": 9,
-          "path": {
-            "path": "verification/testbench-inventory.json",
-            "scope": "repo"
-          },
-          "content_hash": "sha256:5f68f3b0037410e8c37ec50dbedbc7d75b602f7a7141d41b128b962800be8eb0",
-          "input_verified": true,
-          "summary": "T1 item 9 (Testbenches shipped): 54/54 attestation checks passed (klt signoff --attest)",
-          "source": "verification/testbench-inventory.json",
-          "attestation": {
-            "producer": "klt signoff --attest",
-            "inventory_schema_version": 1,
-            "check_count": 54,
-            "passed_count": 54
-          }
+      "citation": null,
+      "detail": {
+        "content_hash_pin": "stale",
+        "hash_check": {
+          "field": "provenance.input.content_hash",
+          "expected": "sha256:5f68f3b0037410e8c37ec50dbedbc7d75b602f7a7141d41b128b962800be8eb0",
+          "actual": "sha256:725499353e9912f7c717bae3fa481a67ec625473c2b4b17f778387403d7cf11e",
+          "match": false
         }
       }
     },

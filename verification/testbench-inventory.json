@@ -262,6 +262,61 @@
       }
     },
     {
+      "path": "sim/bench/link_r8.py",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r8-sensitivity"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/bench/link_r11.py",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r11-cdr-lock"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/bench/link_r12.py",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r12-jtol"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/bench/link_r13.py",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r13-offset"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/bench/link_r15.py",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r15-method"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
       "path": "sim/bench/benches.json",
       "cold_start": {
         "argv": [
@@ -293,22 +348,6 @@
     {
       "row": "R20",
       "issue": 92
-    },
-    {
-      "row": "R8",
-      "issue": 93
-    },
-    {
-      "row": "R12",
-      "issue": 93
-    },
-    {
-      "row": "R13",
-      "issue": 93
-    },
-    {
-      "row": "R15",
-      "issue": 93
     },
     {
       "row": "R18",
