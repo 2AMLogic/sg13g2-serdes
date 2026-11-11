@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 9,
-  "summary": "T1 item 9 (Testbenches shipped): 60/60 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 9 (Testbenches shipped): 64/64 attestation checks passed (klt signoff --attest)",
   "source": "verification/testbench-inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 60,
-    "passed_count": 60,
+    "check_count": 64,
+    "passed_count": 64,
     "checks": [
       {
         "check": "present",
@@ -73,7 +73,7 @@
         "role": "testbench",
         "path": "sim/bench/benches.json",
         "passed": true,
-        "content_hash": "sha256:12dc413f9a7ac1c4932658a08c190198676e0bd319b4d45ee5fd028cf3b7bce3"
+        "content_hash": "sha256:0609ad8ad58d34f8c0cd33b09515ee92ee8223f097c6b2429f0516e582b4029b"
       },
       {
         "check": "present",
@@ -109,6 +109,27 @@
         "path": "sim/bench/link_r8.py",
         "passed": true,
         "content_hash": "sha256:3f7b4f80f21dadca7153384112051fc6599712a09c9b866963a27633570397b4"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/r20_clk_quality.request.json",
+        "passed": true,
+        "content_hash": "sha256:a5c36478affaff530d55f541f977fc8420d987178fcdede22b227408e6aae7c8"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/r6_tx_return_loss_off.request.json",
+        "passed": true,
+        "content_hash": "sha256:1c00156f56e2619e5a1dc4f469c204de7447ab04ae8c67f668bccc9beeed2f90"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/r6_tx_return_loss_on.request.json",
+        "passed": true,
+        "content_hash": "sha256:dd04e984a441622fcb5a7bc9c19abb0bfa56763147305fda82aa6f125018c854"
       },
       {
         "check": "present",
@@ -386,6 +407,51 @@
       {
         "check": "command",
         "role": "cold_start",
+        "testbench": "sim/bench/r20_clk_quality.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rx-clk-quality",
+          "--request",
+          "sim/bench/r20_clk_quality.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/r6_tx_return_loss_off.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-return-loss",
+          "--request",
+          "sim/bench/r6_tx_return_loss_off.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/r6_tx_return_loss_on.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-return-loss",
+          "--request",
+          "sim/bench/r6_tx_return_loss_on.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
         "testbench": "sim/rx/ctle_ac.request.json",
         "argv": [
           "scripts/run-bench.sh",
@@ -593,20 +659,6 @@
         "passed": true
       },
       {
-        "check": "unbenched_row",
-        "role": "row",
-        "row": "R20",
-        "issue": 92,
-        "passed": true
-      },
-      {
-        "check": "unbenched_row",
-        "role": "row",
-        "row": "R6",
-        "issue": 92,
-        "passed": true
-      },
-      {
         "check": "pin",
         "role": "pdk",
         "passed": true,
@@ -639,7 +691,7 @@
         "path": "verification/testbench-inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:725499353e9912f7c717bae3fa481a67ec625473c2b4b17f778387403d7cf11e"
+      "content_hash": "sha256:2fa71e990ca8b7911c44e89fb7214570bcdce21546253ee2a4b32292c0048e42"
     }
   }
 }
