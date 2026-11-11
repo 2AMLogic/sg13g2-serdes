@@ -332,7 +332,7 @@
       "rtl_bench": "top",
       "description": "cocotb + Icarus bench: digital top: 16:1 word path, CDR, test access",
       "corner_set": "n/a (functional RTL simulation; timing is graded by STA, not here)",
-      "limitations": "Functional only. R11 lock/hold in the time domain with the analog latch fits in the time domain with the analog latch fits is graded by link-r11-cdr-lock (behavioural), not here"
+      "limitations": "Functional only. R11 lock/hold in the time domain with the analog latch fits is graded by link-r11-cdr-lock (behavioural), not here"
     },
     {
       "id": "link-r8-sensitivity",

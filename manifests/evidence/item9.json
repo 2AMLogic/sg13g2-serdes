@@ -73,7 +73,7 @@
         "role": "testbench",
         "path": "sim/bench/benches.json",
         "passed": true,
-        "content_hash": "sha256:0609ad8ad58d34f8c0cd33b09515ee92ee8223f097c6b2429f0516e582b4029b"
+        "content_hash": "sha256:b7d885edf9c9c1fc97d4b7b56bdf0ec42c1ee7e39af066be3dba5253aaee3310"
       },
       {
         "check": "present",
