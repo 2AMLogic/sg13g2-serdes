@@ -1,0 +1,126 @@
+{
+  "engine": "ngspice",
+  "netlist": "r6_tx_return_loss_off.sp",
+  "models": {
+    "pdk": "ihp-sg13g2",
+    "lib": "libs.tech/ngspice/models/cornerHBT.lib"
+  },
+  "corners": {
+    "process": [
+      {
+        "name": "hbt_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_tt"
+          }
+        ]
+      },
+      {
+        "name": "hbt_bcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_ff"
+          }
+        ]
+      },
+      {
+        "name": "hbt_wcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_ss"
+          }
+        ]
+      }
+    ],
+    "temperature_c": [
+      -40,
+      27,
+      125
+    ],
+    "supply_v": {
+      "vdd": [
+        1.08,
+        1.2,
+        1.32
+      ]
+    }
+  },
+  "analysis": {
+    "kind": "ac",
+    "args": "dec 40 1e6 1e10"
+  },
+  "measurements": [
+    {
+      "name": "r6_sdd22_1m_db",
+      "unit": "dB",
+      "spice": ".meas ac r6_sdd22_1m_db find vdb(s) at=1e6"
+    },
+    {
+      "name": "r6_sdd22_0p1g_db",
+      "unit": "dB",
+      "spice": ".meas ac r6_sdd22_0p1g_db find vdb(s) at=1e8"
+    },
+    {
+      "name": "r6_sdd22_1g_db",
+      "unit": "dB",
+      "spice": ".meas ac r6_sdd22_1g_db find vdb(s) at=1e9"
+    },
+    {
+      "name": "r6_sdd22_2p5g_db",
+      "unit": "dB",
+      "spice": ".meas ac r6_sdd22_2p5g_db find vdb(s) at=2.5e9"
+    },
+    {
+      "name": "r6_sdd22_5g_db",
+      "unit": "dB",
+      "spice": ".meas ac r6_sdd22_5g_db find vdb(s) at=5e9"
+    },
+    {
+      "name": "r6_sdd22_7p5g_db",
+      "unit": "dB",
+      "spice": ".meas ac r6_sdd22_7p5g_db find vdb(s) at=7.5e9"
+    },
+    {
+      "name": "r6_sdd22_max_to_5g_db",
+      "unit": "dB",
+      "spice": ".meas ac r6_sdd22_max_to_5g_db max vdb(s) from=1e6 to=5e9"
+    },
+    {
+      "name": "r6_sdd22_max_to_7p5g_db",
+      "unit": "dB",
+      "spice": ".meas ac r6_sdd22_max_to_7p5g_db max vdb(s) from=1e6 to=7.5e9"
+    }
+  ],
+  "options": {
+    "stage_model_inputs": true,
+    "timeout_s": 300,
+    "keep_artifacts": false
+  }
+}
