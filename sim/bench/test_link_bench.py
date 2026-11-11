@@ -68,6 +68,35 @@ def test_eye_closes_without_signal():
     assert lc.bathtub(pm, 0.001, 0.002, 0.0, ker).min() > 1e-3
 
 
+def test_loop_override_is_model_only():
+    n = 20000
+    base = cm.run(n, vote_noise_ui=0.02)[n // 2:] / cm.UI
+    fix = cm.run(n, vote_noise_ui=0.02, kp=8, ki=0)[n // 2:] / cm.UI
+    assert lc.rtl_loop_params()["KP"] == 16                      # the RTL value is untouched by an override
+    assert np.std(fix) < 0.5 * np.std(base)                      # issue #102: dither falls with the lower gain
+    rc, out = run_bench("r15", "--quick", "--corners", CORNER, "--kp", "8", "--ki", "0")
+    assert "LOOP WHAT-IF: KP=8 KI=0" in out and "rtl/ is unchanged" in out and rc == 0
+
+
+def test_r12_grid_contains_the_mask_amplitude():
+    rc, out = run_bench("r12", "--quick", "--corners", CORNER, "--kp", "8", "--ki", "0")
+    assert "meets" in out and "BELOW MASK" not in out, out        # exact mask amplitude graded, not a coarse grid
+
+
+def test_loop_too_slow_for_ppm_is_reported():
+    n, settle = 40000, 20000
+    assert cm.slips(cm.run(n, ppm=300, kp=4, ki=0), settle) > 0    # KP*votes < 300 ppm slew: the bench must fail it
+
+
+def test_sensitivity_runs():
+    import link_sensitivity as ls
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc = ls.main(["--quick", "--section", "loop"])
+    out = buf.getvalue()
+    assert rc == 0 and "KP=8 KI=0" in out and "UNFITTED" in out and "nothing below is measured" in out
+
+
 if __name__ == "__main__":
     for name, fn in sorted(globals().items()):
         if name.startswith("test_"):
