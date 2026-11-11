@@ -9,6 +9,11 @@
   - `scripts/check-pnr-fresh.sh` checks the newest record against the netlist
     (exit 3 = stale). Needs the PDK (`scripts/setup-env.sh`) and `openroad`, so
     it is not part of `scripts/check-ci.sh`.
+- `analog/pads/` — pad/ESD cells `pad_esd` and `rx_term_pad` (issue #113):
+  PDK bondpad/ESD-diode cells and `klt gen res_array` resistors, placed and
+  net-labelled only (no routing, DRC, LVS or capacitance claim).
+  `regen.sh` writes a new dated, append-only record. The analog top assembly
+  waits on the TX/RX core records (#110, #112).
 - `analog/tx/` — analog layout of the TX CML core cells (`bias`, `ffe_en`,
   `mux2to1_cml`, `predriver`, `driver_ffe`, `tx_lvl_cml2cmos`), T1 item 2,
   Analog column. `gen_tx_core.py` builds one GDS per subckt (cell name = subckt
@@ -16,6 +21,6 @@
   placed, with port-named Metal2 boundary pins. **Placement and pins only: no
   routing, so no DRC/LVS/extraction claim** (#26, #27). `records/<date>-<sha>/`
   is append-only; `scripts/tx-core-regen.sh` re-runs into a new record.
-  Attestation: `manifests/evidence/item2.analog-tx-core.json`. RX and pad/ESD
-  analog layout are not here yet (issues #112, #113).
+  Attestation: `manifests/evidence/item2.analog-tx-core.json`. RX analog
+  layout is not here yet (issue #112).
 - `toolchain.json` pins klt; `tools.json` pins the RTL-flow tool versions.
