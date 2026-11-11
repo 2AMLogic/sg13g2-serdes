@@ -4,6 +4,24 @@ Chronological record of merged PRs and closed issues. Maintained by the Guide ro
 
 ### 2026-11-11
 
+- **PR #120**: feat(layout): analog top assembly of TX/RX core and pad cells with item 2 attestation
+- **PR #118**: fix: run RX layout regen with the repo-local .venv python
+- **PR #116**: feat(layout): pad_esd and rx_term_pad pad cells from PDK bondpad/ESD cells
+- **PR #115**: feat(layout): generate RX core analog cells with a re-runnable klt generator
+- **PR #114**: feat(layout): generate TX core analog cells with port-named pins
+- **PR #109**: fix(bench): remove duplicated phrase in top-bench R11 limitations string
+- **PR #108**: fix(sim): count nt votes in noise-free CDR loop analysis; DR-010 supersedes DR-007 numbers
+- **PR #107**: feat(sim): attribute CDR dither closure and propose KP=8 KI=0 loop fix (DR-009)
+- **PR #104**: feat(sim): add R6 return-loss and R20 clock-quality analog benches
+- **Issue #117** (closed): layout/analog/rx: regen.sh needs klayout.db under plain python3 -I; not provided by setup-env
+- **Issue #113** (closed): T1 item 2 (layout, analog): pad/ESD cells and analog top assembly with item-2 attestation
+- **Issue #112** (closed): T1 item 2 (layout, analog): RX core cell layouts (CTLE, CML latch, clock buffer quad, level converter)
+- **Issue #111** (closed): x
+- **Issue #110** (closed): T1 item 2 (layout, analog): TX core cell layouts (bias, ffe_en, mux, predriver, driver_ffe, level converter)
+- **Issue #106** (closed): scripts/cdr-loop-analysis.py counts one vote per word when noise-free (DR-007 noise-free columns wrong)
+- **Issue #102** (closed): Follow-on from PR #100: 1e-12 eye closes once CDR dither is included (R12/R15)
+- **Issue #101** (closed): Fix garbled limitations text for the digital top bench in sim/bench/benches.json
+- **Issue #92** (closed): T1 item 9 follow-up: analog benches for R6 (TX return loss) and R20 (receiving-buffer clock quality)
 - **PR #100**: feat(sim): add behavioural link benches for R8, R11, R12, R13, R15
 - **Issue #93** (closed): T1 item 9 follow-up: behavioural/statistical benches for R8, R11, R12, R13 and R15
 
