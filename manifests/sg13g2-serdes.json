@@ -17,6 +17,10 @@
     "2.digital": {
       "file": "manifests/evidence/item2.json",
       "content_hash": "sha256:24be966f1f92c9d0355a8325d5e8e00c07b90dfcd5f53ad305d439529d4fdf23"
+    },
+    "2.analog": {
+      "file": "manifests/evidence/item2.analog-top.json",
+      "content_hash": "sha256:2fb35952aa69c0ad89e431e667a7c274b212bc6ee964a8dd12f1cee0d3d34da8"
     }
   },
   "partition_boundary": {

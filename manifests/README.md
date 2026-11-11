@@ -6,7 +6,7 @@
   Evidence `2.digital` is the routed digital GDS attestation
   (`evidence/item2.json`, made with `klt signoff --attest 2`, which the pinned
   klt 0.8.0 lacks; it was produced with a throwaway klt 0.9.1 and graded by
-  the pinned 0.8.0). Analog item 2 stays unmet (issue #24).
+  the pinned 0.8.0). Evidence `2.analog` is the analog top GDS attestation (`evidence/item2.analog-top.json`, issue #113).
 - `design-evidence-tiers.md` — vendored verbatim from
   `2AMLogic/klayout-tools` `docs/design-evidence-tiers.md` at tag `v0.8.0`,
   commit `c572046be644e0407f693f2410f3abb799d68a3a`.
