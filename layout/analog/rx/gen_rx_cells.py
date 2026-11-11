@@ -12,7 +12,10 @@ Usage: gen_rx_cells.py OUTDIR      (needs `klt` + PDK on PATH/env: source script
 
 Nothing here claims DRC, LVS, extraction or matching verification.
 """
-import json, os, re, subprocess, sys
+import json, os, re, sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+from layout_common import parse_subckts, run_klt as run, um
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 NETLIST = os.path.join(REPO, "design/rx/netlists/rx_top.spice")
@@ -24,35 +27,14 @@ ROUTE = {"layer_role": "metal3", "width_um": 0.2}
 # the b half of each differential pair is the mirror_x image of the a half.
 
 
-def parse_subckts():
-    cells, cur = {}, None
-    for line in open(NETLIST):
-        t = line.split()
-        if not t or t[0].startswith(("*", "+")):
-            continue
-        if t[0] == ".subckt":
-            cur = {"ports": t[2:], "devs": []}
-            cells[t[1]] = cur
-        elif t[0] == ".ends":
-            cur = None
-        elif cur is not None:
-            cur["devs"].append(t)
-    return cells
-
-
 def kv(tokens):
     return {k: v for k, _, v in (x.partition("=") for x in tokens if "=" in x)}
-
-
-def um(v):
-    m = re.fullmatch(r"([0-9.]+)([un]?)", v)
-    return float(m.group(1)) * {"": 1.0, "u": 1.0, "n": 1e-3}[m.group(2)]
 
 
 def device(t):
     """-> (name, gen, params, {terminal-net-map: [(port-suffix, net)]})"""
     n, rest = t[0], t[1:]
-    if n.startswith("XQ") or n.startswith("XS") or n.startswith("XQ"):
+    if n.startswith(("XQ", "XS")):
         c, b, e = rest[0:3]
         nx = int(kv(rest).get("Nx", "1"))
         return n, "bjt_array", {"flavor": "npn13G2", "rows": 1, "cols": nx,
@@ -75,13 +57,6 @@ def device(t):
         a, b = rest[0:2]
         return n, "res_array", {"num": 1, "dummy": 0}, [("R0_A", a), ("R0_B", b)]
     raise SystemExit(f"unsupported device: {' '.join(t)}")
-
-
-def run(args, **kw):
-    r = subprocess.run(args, capture_output=True, text=True, **kw)
-    if r.returncode not in (0, 3):
-        sys.exit(f"{' '.join(args)} failed ({r.returncode}):\n{r.stderr}{r.stdout}")
-    return json.loads(r.stdout)
 
 
 def build(cell, spec, out):
@@ -148,7 +123,7 @@ def build(cell, spec, out):
 def main():
     out = os.path.abspath(sys.argv[1])
     os.makedirs(out, exist_ok=True)
-    spice = parse_subckts()
+    spice = parse_subckts(NETLIST)
     summary = [build(c, spice[c], out) for c in CELLS]
     # one stream holding all four cells (shared PDK sub-cells are merged by name)
     import klayout.db as kdb
