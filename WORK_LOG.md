@@ -2,8 +2,20 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-11-11
+
+- **PR #100**: feat(sim): add behavioural link benches for R8, R11, R12, R13, R15
+- **Issue #93** (closed): T1 item 9 follow-up: behavioural/statistical benches for R8, R11, R12, R13 and R15
+
 ### 2026-11-10
 
+- **PR #97**: feat(layout): digital-partition place-and-route flow and routed GDS record
+- **PR #96**: docs(sim/tx): state why the 0.4 V mux clock swing is unvalidated and what closes it
+- **PR #95**: sim: ship testbench registry, run-bench.sh cold start and item-9 attestation
+- **PR #91**: sim: cap TX MOS request timeout_s at 75 s and record 135-unit re-run
+- **Issue #80** (closed): sim/tx: add batch-fleet sizing benches for the MOS cells mux2to1_cml, ffe_en, tx_lvl_cml2cmos
+- **Issue #28** (closed): T1 item 9 (testbenches shipped): one bench per simulation-graded spec row, with cold-start docs and --attest 9
+- **Issue #25** (closed): T1 item 2 (layout, digital): routed GDS of the CMOS partition from a committed klt place-and-route flow
 - **PR #89**: build: bump klayout-tools pin to 0.9.0 and record TX MOS-cell fleet run
 - **Issue #23** (closed): T1 item 1 (design sources, digital): serializer/deserializer, PRBS, CDR loop filter RTL plus sg13g2 netlist
 
