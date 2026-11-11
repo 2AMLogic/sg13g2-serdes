@@ -33,9 +33,7 @@ _None._
 Issues currently being built (`loom:building`).
 
 - **#44**: Install the two-key ratification path and ratify spec/target-spec.md
-- **#92**: T1 item 9 follow-up: analog benches for R6 (TX return loss) and R20 (receiving-buffer clock quality)
 - **#98**: spec: state the mux clock swing the TX needs and re-run mux2to1_cml at it
-- **#102**: Follow-on from PR #100: 1e-12 eye closes once CDR dither is included (R12/R15)
 
 ## PRs Awaiting Review
 
@@ -57,10 +55,8 @@ Issues carrying `loom:curated`.
 - **#2**: Draft and ratify the target spec *(curated)*
 - **#24**: T1 item 2 (layout, analog): GDS for the CML TX/RX cells, clock path and high-speed pads *(curated)*
 - **#44**: Install the two-key ratification path and ratify spec/target-spec.md *(curated)*
-- **#92**: T1 item 9 follow-up: analog benches for R6 (TX return loss) and R20 (receiving-buffer clock quality) *(curated)*
 - **#98**: spec: state the mux clock swing the TX needs and re-run mux2to1_cml at it *(curated)*
-- **#101**: Fix garbled limitations text for the digital top bench in sim/bench/benches.json *(curated)*
-- **#102**: Follow-on from PR #100: 1e-12 eye closes once CDR dither is included (R12/R15) *(curated)*
+- **#105**: rtl: apply DR-009 CDR loop gain (KP=8, KI=0) and regenerate synth/P&R records *(curated)*
 
 ## Proposed (Architect / Hermit)
 
@@ -78,10 +74,10 @@ _None._
 | Very important | 1 |
 | Important | 1 |
 | Ready (`loom:issue`) | 0 |
-| In Progress (`loom:building`) | 4 |
+| In Progress (`loom:building`) | 2 |
 | PRs awaiting review | 0 |
 | Approved PRs awaiting merge | 2 |
-| Curated | 7 |
+| Curated | 5 |
 | Architect / Hermit proposals | 0 |
 | Active epics | 0 |
 <!-- guide:plan-body:end -->
