@@ -14,26 +14,6 @@
       "reason": "latch_regen measures regeneration, not duty/quadrature/jitter at the receiving buffer"
     },
     {
-      "row": "R8",
-      "issue": 93,
-      "reason": "statistical eye with sampler Monte Carlo (DR-002) not built; rx-latch-regen carries the latch record only"
-    },
-    {
-      "row": "R12",
-      "issue": 93,
-      "reason": "jitter-tolerance sweep needs the behavioural CDR model, not built"
-    },
-    {
-      "row": "R13",
-      "issue": 93,
-      "reason": "frequency-offset behavioural run not built"
-    },
-    {
-      "row": "R15",
-      "issue": 93,
-      "reason": "error-rate method entry point (PRBS-31 statistical eye) not built"
-    },
-    {
       "row": "R18",
       "issue": 94,
       "reason": "PDK bondpad model is an empty placeholder; no extracted/EM pad model"
@@ -207,7 +187,7 @@
         "latch_q_max_v",
         "latch_q_min_v"
       ],
-      "limitations": "Regeneration time only: sampler offset/noise Monte Carlo and the statistical eye are not in this bench (see unbenched R8 in the inventory, issue #93)"
+      "limitations": "Regeneration time only: sampler offset/noise Monte Carlo is not in this bench; no record carries those statistics. The statistical eye (R8, R15) is link-r8-sensitivity / link-r15-method, which print the sampler offset/noise as UNFITTED ASSUMPTIONS"
     },
     {
       "id": "rx-term-pad",
@@ -315,7 +295,67 @@
       "rtl_bench": "top",
       "description": "cocotb + Icarus bench: digital top: 16:1 word path, CDR, test access",
       "corner_set": "n/a (functional RTL simulation; timing is graded by STA, not here)",
-      "limitations": "Functional only. R11 lock/hold in the time domain with the analog latch fits is not graded here (issue #93)"
+      "limitations": "Functional only. R11 lock/hold in the time domain with the analog latch fits in the time domain with the analog latch fits is graded by link-r11-cdr-lock (behavioural), not here"
+    },
+    {
+      "id": "link-r8-sensitivity",
+      "partition": "behavioural",
+      "rows": [
+        "R8"
+      ],
+      "entry": "sim/bench/link_r8.py",
+      "args": [],
+      "description": "Statistical eye over R14 with sampler offset Monte Carlo: pad amplitude for BER 1e-12 by dual-Dirac Q-scale extrapolation",
+      "corner_set": "27-pt HBT PVT-full (ctle_ac record corners) x sampler offset MC draws",
+      "limitations": "Behavioural (DR-002): fitted only to the ctle_ac record (gain at 0.1/2.5/5 GHz per corner). UNFITTED ASSUMPTIONS, printed by every run: sampler offset/noise (no sampler Monte Carlo record exists), RJ/DJ, PD decision noise, CTLE roll-off above 5 GHz, analog loop delay (DR-007). TX FFE off; channel phase is a pure delay (symmetric pulse). No fit validation on held-out corners (DR-002 step 3). Figures are simulated/extrapolated, never measured."
+    },
+    {
+      "id": "link-r11-cdr-lock",
+      "partition": "behavioural",
+      "rows": [
+        "R11"
+      ],
+      "entry": "sim/bench/link_r11.py",
+      "args": [],
+      "description": "Behavioural bang-bang CDR (rtl/serdes_cdr_filter.v loop via serdes_ref) lock and hold from a phase offset, PRBS-31",
+      "corner_set": "PVT-edge declared corner-independent: loop model has no per-corner input",
+      "limitations": "Behavioural (DR-002): fitted only to the ctle_ac record (gain at 0.1/2.5/5 GHz per corner). UNFITTED ASSUMPTIONS, printed by every run: sampler offset/noise (no sampler Monte Carlo record exists), RJ/DJ, PD decision noise, CTLE roll-off above 5 GHz, analog loop delay (DR-007). TX FFE off; channel phase is a pure delay (symmetric pulse). No fit validation on held-out corners (DR-002 step 3). Figures are simulated/extrapolated, never measured."
+    },
+    {
+      "id": "link-r12-jtol",
+      "partition": "behavioural",
+      "rows": [
+        "R12"
+      ],
+      "entry": "sim/bench/link_r12.py",
+      "args": [],
+      "description": "SJ amplitude vs frequency through the behavioural CDR, graded against the R12 mask and the per-corner 1e-12 eye",
+      "corner_set": "4 PVT-edge corners (bcs, wcs x {1.08 V, 125 C} and {1.32 V, -40 C}) for the eye; loop corner-independent",
+      "limitations": "Behavioural (DR-002): fitted only to the ctle_ac record (gain at 0.1/2.5/5 GHz per corner). UNFITTED ASSUMPTIONS, printed by every run: sampler offset/noise (no sampler Monte Carlo record exists), RJ/DJ, PD decision noise, CTLE roll-off above 5 GHz, analog loop delay (DR-007). TX FFE off; channel phase is a pure delay (symmetric pulse). No fit validation on held-out corners (DR-002 step 3). Figures are simulated/extrapolated, never measured."
+    },
+    {
+      "id": "link-r13-offset",
+      "partition": "behavioural",
+      "rows": [
+        "R13"
+      ],
+      "entry": "sim/bench/link_r13.py",
+      "args": [],
+      "description": "+-300 ppm offset behavioural run, zero slips over 1e6 UI, with analog-delay sensitivity",
+      "corner_set": "PVT-edge declared corner-independent; analog delay 0/assumed/2 instead",
+      "limitations": "Behavioural (DR-002): fitted only to the ctle_ac record (gain at 0.1/2.5/5 GHz per corner). UNFITTED ASSUMPTIONS, printed by every run: sampler offset/noise (no sampler Monte Carlo record exists), RJ/DJ, PD decision noise, CTLE roll-off above 5 GHz, analog loop delay (DR-007). TX FFE off; channel phase is a pure delay (symmetric pulse). No fit validation on held-out corners (DR-002 step 3). Figures are simulated/extrapolated, never measured."
+    },
+    {
+      "id": "link-r15-method",
+      "partition": "behavioural",
+      "rows": [
+        "R15"
+      ],
+      "entry": "sim/bench/link_r15.py",
+      "args": [],
+      "description": "Error-rate method entry point: PRBS-31 statistical eye + behavioural CDR jitter, 1e-12 by dual-Dirac wall extrapolation",
+      "corner_set": "27-pt HBT PVT-full (ctle_ac record corners)",
+      "limitations": "Behavioural (DR-002): fitted only to the ctle_ac record (gain at 0.1/2.5/5 GHz per corner). UNFITTED ASSUMPTIONS, printed by every run: sampler offset/noise (no sampler Monte Carlo record exists), RJ/DJ, PD decision noise, CTLE roll-off above 5 GHz, analog loop delay (DR-007). TX FFE off; channel phase is a pure delay (symmetric pulse). No fit validation on held-out corners (DR-002 step 3). Figures are simulated/extrapolated, never measured."
     }
   ]
 }

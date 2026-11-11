@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 9,
-  "summary": "T1 item 9 (Testbenches shipped): 54/54 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 9 (Testbenches shipped): 60/60 attestation checks passed (klt signoff --attest)",
   "source": "verification/testbench-inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 54,
-    "passed_count": 54,
+    "check_count": 60,
+    "passed_count": 60,
     "checks": [
       {
         "check": "present",
@@ -73,7 +73,42 @@
         "role": "testbench",
         "path": "sim/bench/benches.json",
         "passed": true,
-        "content_hash": "sha256:f6afb9ee29620f69416b8b120d3f703a9db56295bff6c2f5dd0567e5600ad689"
+        "content_hash": "sha256:12dc413f9a7ac1c4932658a08c190198676e0bd319b4d45ee5fd028cf3b7bce3"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/link_r11.py",
+        "passed": true,
+        "content_hash": "sha256:06b11f213c59ee2f7c0ac166b9ebf8639a24b1e9b2f3a16a0e4bdda5ad035c67"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/link_r12.py",
+        "passed": true,
+        "content_hash": "sha256:cac7950084493b4413fe04010f9722b5fe4988a7571a3316eb8daa799a5bd89a"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/link_r13.py",
+        "passed": true,
+        "content_hash": "sha256:7e10cf5ddb73a4c4a93ee73249abbe9f082cb251c150f042bd071431acaf80b7"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/link_r15.py",
+        "passed": true,
+        "content_hash": "sha256:0623d9feb40bfdee2b554abd9e5f78e213cb00c404d2e98e2220f86914803c24"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/link_r8.py",
+        "passed": true,
+        "content_hash": "sha256:3f7b4f80f21dadca7153384112051fc6599712a09c9b866963a27633570397b4"
       },
       {
         "check": "present",
@@ -286,6 +321,71 @@
       {
         "check": "command",
         "role": "cold_start",
+        "testbench": "sim/bench/link_r11.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r11-cdr-lock"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/link_r12.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r12-jtol"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/link_r13.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r13-offset"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/link_r15.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r15-method"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/link_r8.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r8-sensitivity"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
         "testbench": "sim/rx/ctle_ac.request.json",
         "argv": [
           "scripts/run-bench.sh",
@@ -481,27 +581,6 @@
       {
         "check": "unbenched_row",
         "role": "row",
-        "row": "R12",
-        "issue": 93,
-        "passed": true
-      },
-      {
-        "check": "unbenched_row",
-        "role": "row",
-        "row": "R13",
-        "issue": 93,
-        "passed": true
-      },
-      {
-        "check": "unbenched_row",
-        "role": "row",
-        "row": "R15",
-        "issue": 93,
-        "passed": true
-      },
-      {
-        "check": "unbenched_row",
-        "role": "row",
         "row": "R18",
         "issue": 94,
         "passed": true
@@ -525,13 +604,6 @@
         "role": "row",
         "row": "R6",
         "issue": 92,
-        "passed": true
-      },
-      {
-        "check": "unbenched_row",
-        "role": "row",
-        "row": "R8",
-        "issue": 93,
         "passed": true
       },
       {
@@ -567,7 +639,7 @@
         "path": "verification/testbench-inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:5f68f3b0037410e8c37ec50dbedbc7d75b602f7a7141d41b128b962800be8eb0"
+      "content_hash": "sha256:725499353e9912f7c717bae3fa481a67ec625473c2b4b17f778387403d7cf11e"
     }
   }
 }

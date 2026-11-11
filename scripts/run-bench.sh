@@ -8,6 +8,8 @@
 #                                          bench for real (digital). No PDK, no fleet.
 #   scripts/run-bench.sh <id> [--run] [--request <path>]
 #                                          --request restricts to one of the bench's requests
+#   scripts/run-bench.sh link-<row>-*      behavioural DR-002 benches (R8 R11 R12 R13 R15): run for real, locally,
+#                                          numpy only; add --quick for a short configuration
 #   scripts/run-bench.sh <id> --run        analog only: submit the full corner grid with
 #                                          `klt sim --wait-for-capacity 600` (batch fleet
 #                                          when KLT_SIM_BACKEND=batch). Needs
@@ -24,10 +26,12 @@ command -v jq >/dev/null 2>&1 || die "jq not on PATH" 3
 if [[ "$1" == "--list" ]]; then
   jq -r '.benches[] | "\(.id)\t\(.partition)\t\(.rows|join(","))\t\(.corner_set)"' "${MAN}"; exit 0
 fi
-ID="$1"; shift; MODE=check; ONLY=""
+ID="$1"; shift; MODE=check; ONLY=""; QUICK=()
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --run) MODE="--run" ;;
+    --quick) QUICK+=(--quick) ;;
+    --strict) QUICK+=(--strict) ;;
     --request) ONLY="${2:-}"; [[ -n "${ONLY}" ]] || die "--request needs a path"; shift ;;
     *) die "unknown argument '$1'" ;;
   esac
@@ -36,6 +40,13 @@ done
 B="$(jq -c --arg id "${ID}" '.benches[] | select(.id==$id)' "${MAN}")"
 [[ -n "${B}" ]] || die "unknown bench '${ID}' (see --list)"
 
+if [[ "$(jq -r .partition <<<"${B}")" == "behavioural" ]]; then
+  # DR-002 behavioural/statistical benches: numpy only, one local process, no fleet. --strict (passed through) exits 3 when a
+  # proposed spec threshold is not met (reported, never relaxed).
+  command -v python3 >/dev/null 2>&1 || die "python3 not on PATH" 3
+  mapfile -t BARGS < <(jq -r '.args[]' <<<"${B}")
+  exec python3 -I "${REPO}/$(jq -r .entry <<<"${B}")" "${BARGS[@]}" "${QUICK[@]}"
+fi
 if [[ "$(jq -r .partition <<<"${B}")" == "digital" ]]; then
   [[ "${MODE}" == "check" ]] || die "--run applies to analog benches; the digital bench always runs"
   exec "${REPO}/rtl/tests/run.sh" "$(jq -r .rtl_bench <<<"${B}")"
