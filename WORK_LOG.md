@@ -4,6 +4,8 @@ Chronological record of merged PRs and closed issues. Maintained by the Guide ro
 
 ### 2026-11-11
 
+- **PR #122**: refactor(layout): share netlist parser, klt runner and um() across analog generators
+- **Issue #119** (closed): Consolidate duplicated netlist parser, um() and klt runner across the three analog layout generators
 - **PR #120**: feat(layout): analog top assembly of TX/RX core and pad cells with item 2 attestation
 - **PR #118**: fix: run RX layout regen with the repo-local .venv python
 - **PR #116**: feat(layout): pad_esd and rx_term_pad pad cells from PDK bondpad/ESD cells
