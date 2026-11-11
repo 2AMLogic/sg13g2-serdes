@@ -36,10 +36,18 @@ def header(row, args, fits, rec_id):
     print(f"CDR loop   : KP={p['KP']} KI={p['KI']} FMAX={p['FMAX']} from rtl/serdes_cdr_filter.v via "
           f"rtl/tests/serdes_ref.CdrFilter; delay {d['digital']} digital (DR-007, cited) + "
           f"{d['analog_assumed']} analog (UNFITTED ASSUMPTION, DR-007)")
+    if args.kp is not None or args.ki is not None:
+        print(f"LOOP WHAT-IF: KP={p['KP'] if args.kp is None else args.kp} KI={p['KI'] if args.ki is None else args.ki} "
+              "override the RTL values in the MODEL only (simulated what-if; rtl/ is unchanged)")
     print("UNFITTED ASSUMPTIONS (no transistor-level record): "
           f"sampler noise {A['sigma_noise_mv']} mV rms, sampler offset {A['sigma_offset_mv']} mV 1-sigma, "
           f"RJ {A['rj_ui']} UI rms, DJ {A['dj_uipp']} UIpp, PD decision noise {args.vote_noise_ui} UI rms, "
           f"CTLE >5 GHz roll-off, TX FFE off")
+
+
+def loop_kw(args):
+    """Model-level what-if overrides (--kp/--ki); None keeps the RTL value. The RTL is never changed by a flag."""
+    return {"kp": args.kp, "ki": args.ki}
 
 
 def pick_corners(args, fits):
@@ -73,7 +81,7 @@ def eye(args, pmfs, offset_v=0.0, extra_rj=0.0):
 def r15(args, fits, rec_id):
     print("\nCDR recovered-clock jitter feeds the eye (DR-002 step d): PRBS-31, 0 ppm, locked")
     n = 20000 if args.quick else 60000
-    e = cm.run(n, vote_noise_ui=args.vote_noise_ui)[n // 2:] / cm.UI
+    e = cm.run(n, vote_noise_ui=args.vote_noise_ui, **loop_kw(args))[n // 2:] / cm.UI
     s_cdr = float(np.std(e))
     print(f"  recovered-clock error: rms {s_cdr:.4f} UI, peak {np.max(np.abs(e)):.4f} UI "
           f"[simulated (behavioural bang-bang, loop per above; vote noise UNFITTED)]")
@@ -161,7 +169,7 @@ def r11(args, fits, rec_id):
     print("ppm     lock after (words)   hold: peak |e| UI   rms UI   slips   label")
     bad = 0
     for ppm in (0, 300, -300):
-        e = cm.run(n, ppm=ppm, init_offset_ui=0.4, vote_noise_ui=args.vote_noise_ui) / cm.UI
+        e = cm.run(n, ppm=ppm, init_offset_ui=0.4, vote_noise_ui=args.vote_noise_ui, **loop_kw(args)) / cm.UI
         mavg = np.convolve(e, np.ones(64) / 64, mode="same")
         out = np.nonzero(np.abs(mavg[32:-32]) >= 0.05)[0]
         lock = int(out[-1]) + 33 if len(out) else 0
@@ -183,7 +191,7 @@ def r13(args, fits, rec_id):
     bad = 0
     for ppm in (300, -300):
         for ad in (None, 0, 2):
-            flt_run = cm.run(settle + win, ppm=ppm, vote_noise_ui=args.vote_noise_ui, analog_delay=ad, fmax=args.fmax)
+            flt_run = cm.run(settle + win, ppm=ppm, vote_noise_ui=args.vote_noise_ui, analog_delay=ad, fmax=args.fmax, **loop_kw(args))
             e = flt_run[settle:] / cm.UI
             sl = cm.slips(flt_run, settle)
             bad += (ad is None) and sl > 0
@@ -204,12 +212,13 @@ def r12(args, fits, rec_id):
     freqs = [1e5, 3e5, 1e6, 3e6, 1e7, 3e7, 1e8]
     grid = np.geomspace(0.05, 30.0, 12 if args.quick else 18)
     print("\nSJ sweep through the behavioural CDR: peak recovered-clock error vs SJ amplitude (UIpp), per frequency")
-    peaks = {}
+    peaks, grids = {}, {}
     for f in freqs:
+        grids[f] = np.unique(np.append(grid, mask(f)))      # the mask amplitude itself is always on the grid
         n = int(min(40000, max(15000, 4 / (f * cm.WORD_S))))
         settle = n // 3
-        peaks[f] = [float(np.max(np.abs(cm.run(n, sj_uipp=a, sj_hz=f, vote_noise_ui=args.vote_noise_ui)[settle:])) / cm.UI)
-                    for a in grid]
+        peaks[f] = [float(np.max(np.abs(cm.run(n, sj_uipp=a, sj_hz=f, vote_noise_ui=args.vote_noise_ui, **loop_kw(args))[settle:])) / cm.UI)
+                    for a in grids[f]]
     print("Strict tolerance = largest amplitude whose peak error stays within half the 1e-12 eye width of the corner "
           "(eye without CDR jitter; the CDR's own dither is in the peak error). 0.00 = the eye is already consumed at "
           "the smallest swept amplitude. Slip-free bound = largest amplitude with peak error < 0.5 UI.")
@@ -225,7 +234,7 @@ def r12(args, fits, rec_id):
         tol = []
         for f in freqs:
             t = 0.0
-            for a, pk in zip(grid, peaks[f]):
+            for a, pk in zip(grids[f], peaks[f]):
                 if pk > half:
                     break
                 t = a
@@ -237,7 +246,7 @@ def r12(args, fits, rec_id):
     sf = []
     for f in freqs:
         t = 0.0
-        for a, pk in zip(grid, peaks[f]):
+        for a, pk in zip(grids[f], peaks[f]):
             if pk >= 0.5:
                 break
             t = a
@@ -268,6 +277,8 @@ def main(argv=None):
     ap.add_argument("--vote-noise-ui", type=float, default=A["rj_ui"],
                     help="rms noise on each PD decision, UI (UNFITTED; 0 = noise-free DR-007 case)")
     ap.add_argument("--fmax", type=int, default=None, help="override FMAX (negative control only)")
+    ap.add_argument("--kp", type=int, default=None, help="what-if KP in the model (default: RTL value)")
+    ap.add_argument("--ki", type=int, default=None, help="what-if KI in the model (default: RTL value)")
     ap.add_argument("--strict", action="store_true", help="exit 3 when a proposed-spec threshold is not met")
     ap.add_argument("--quick", action="store_true", help="short configuration (smoke test)")
     args = ap.parse_args(argv)

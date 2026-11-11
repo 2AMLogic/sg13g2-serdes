@@ -12,7 +12,7 @@ reproduce steps.
 | `smoke/records/<id>/` | append-only run records (reports, `record.md`); never edited after the fact |
 | `rx/` | RX sizing benches (CTLE AC per setting, latch regeneration at 5 GHz, HBT node stress, termination first look). `rx/tools/gen_requests.py` writes the bench bodies and `klt sim` requests; `rx/run_sizing.sh` submits the 27-point HBT PVT grid to the batch fleet and writes `rx/records/<id>/` (append-only). Sizing evidence, not spec results |
 | `tx/` | TX sizing decks, requests and append-only records (issue #21); see `tx/README.md` |
-| `bench/` | testbench registry for T1 item 9: `benches.json` (one entry per bench: spec rows, requests, corner set, declared measurements) and `gen_inventory.py`, which derives `verification/testbench-inventory.json` from it. Also the DR-002 behavioural benches (`link_bench.py`, `linkcore.py`, `cdrmodel.py`, smoke test `test_link_bench.py`) |
+| `bench/` | testbench registry for T1 item 9: `benches.json` (one entry per bench: spec rows, requests, corner set, declared measurements) and `gen_inventory.py`, which derives `verification/testbench-inventory.json` from it. Also the DR-002 behavioural benches (`link_bench.py`, `linkcore.py`, `cdrmodel.py`, smoke test `test_link_bench.py`, and `link_sensitivity.py`, the one-factor-at-a-time CDR dither attribution of DR-009) |
 | `harness/` | fetched by `scripts/setup-env.sh` per `reuse.lock.json` (gitignored, never committed) |
 
 ## HBT models

@@ -27,13 +27,15 @@ def transitions(n_words):
 
 
 def run(n_words, ppm=0.0, sj_uipp=0.0, sj_hz=0.0, init_offset_ui=0.0, vote_noise_ui=0.02, analog_delay=None,
-        fmax=None, seed=1):
-    """Returns e (phase error, LSB) per word. Slip = |e| >= 0.5 UI."""
+        fmax=None, seed=1, kp=None, ki=None):
+    """Returns e (phase error, LSB) per word. Slip = |e| >= 0.5 UI.
+    kp/ki/fmax/analog_delay default to the RTL / DR-007 values; an override is a MODEL what-if (the RTL is unchanged)."""
     p = lc.rtl_loop_params()
     dl = lc.dr007_delays()
     L = dl["digital"] + (dl["analog_assumed"] if analog_delay is None else analog_delay)
     D = max(L - 1, 0)
-    flt = lc.serdes_ref.CdrFilter(p["KP"], p["KI"], p["FMAX"] if fmax is None else fmax, p["PHASE_INIT"])
+    flt = lc.serdes_ref.CdrFilter(p["KP"] if kp is None else kp, p["KI"] if ki is None else ki,
+                                  p["FMAX"] if fmax is None else fmax, p["PHASE_INIT"])
     rng = np.random.default_rng(seed)
     nt = transitions(n_words)
     delay = [0] * D
