@@ -1,0 +1,136 @@
+{
+  "engine": "ngspice",
+  "netlist": "r20_clk_quality.sp",
+  "models": {
+    "pdk": "ihp-sg13g2",
+    "lib": "libs.tech/ngspice/models/cornerHBT.lib"
+  },
+  "corners": {
+    "process": [
+      {
+        "name": "hbt_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_tt"
+          }
+        ]
+      },
+      {
+        "name": "hbt_bcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_ff"
+          }
+        ]
+      },
+      {
+        "name": "hbt_wcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_ss"
+          }
+        ]
+      }
+    ],
+    "temperature_c": [
+      -40,
+      27,
+      125
+    ],
+    "supply_v": {
+      "vdd": [
+        1.08,
+        1.2,
+        1.32
+      ]
+    }
+  },
+  "analysis": {
+    "kind": "tran",
+    "args": "2p 4n"
+  },
+  "measurements": [
+    {
+      "name": "r20_period_a_s",
+      "unit": "s",
+      "spice": ".meas tran r20_period_a_s trig v(da) val=0 rise=3 td=1n targ v(da) val=0 rise=4 td=1n"
+    },
+    {
+      "name": "r20_high_a_s",
+      "unit": "s",
+      "spice": ".meas tran r20_high_a_s trig v(da) val=0 rise=3 td=1n targ v(da) val=0 fall=3 td=1n"
+    },
+    {
+      "name": "r20_period_b_s",
+      "unit": "s",
+      "spice": ".meas tran r20_period_b_s trig v(db) val=0 rise=3 td=1n targ v(db) val=0 rise=4 td=1n"
+    },
+    {
+      "name": "r20_high_b_s",
+      "unit": "s",
+      "spice": ".meas tran r20_high_b_s trig v(db) val=0 rise=3 td=1n targ v(db) val=0 fall=3 td=1n"
+    },
+    {
+      "name": "r20_quad_90_s",
+      "unit": "s",
+      "spice": ".meas tran r20_quad_90_s trig v(da) val=0 rise=3 td=1n targ v(db) val=0 rise=3 td=1n"
+    },
+    {
+      "name": "r20_quad_270_s",
+      "unit": "s",
+      "spice": ".meas tran r20_quad_270_s trig v(da) val=0 rise=3 td=1n targ v(db) val=0 fall=3 td=1n"
+    },
+    {
+      "name": "r20_slew_rise_a_s",
+      "unit": "s",
+      "spice": ".meas tran r20_slew_rise_a_s trig v(da) val=-0.05 rise=3 td=1n targ v(da) val=0.05 rise=3 td=1n"
+    },
+    {
+      "name": "r20_slew_rise_b_s",
+      "unit": "s",
+      "spice": ".meas tran r20_slew_rise_b_s trig v(db) val=-0.05 rise=3 td=1n targ v(db) val=0.05 rise=3 td=1n"
+    },
+    {
+      "name": "r20_swing_a_v",
+      "unit": "V",
+      "spice": ".meas tran r20_swing_a_v pp v(da) from=1n to=3n"
+    },
+    {
+      "name": "r20_swing_b_v",
+      "unit": "V",
+      "spice": ".meas tran r20_swing_b_v pp v(db) from=1n to=3n"
+    }
+  ],
+  "options": {
+    "stage_model_inputs": true,
+    "timeout_s": 300,
+    "keep_artifacts": false
+  }
+}
