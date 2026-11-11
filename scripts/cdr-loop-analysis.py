@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CDR loop delay analysis (DR-007, issue #62).  Analytical / simulated, not measured.
+"""CDR loop delay analysis (DR-007 issue #62; noise-free vote count fixed in #106, see DR-010).  Analytical / simulated, not measured.
 
 Models the word-rate (625 MHz) digital bang-bang loop of rtl/serdes_cdr_filter.v:
     f[n+1] = sat(f[n] + KI*u[n]);  phi[n+1] = phi[n] + KP*u[n] + f[n]   (mod 2^14)
@@ -59,7 +59,10 @@ def simulate(L, ppm, mode, sigma_lsb=0.0, seed=1):
         e = theta - applied
         nt = 16 if mode == "all16" else rng.binomial(16, 0.5)
         if nt:
-            s = e + (rng.normal(0, sigma_lsb, nt) if sigma_lsb else 0.0)
+            # nt votes per word.  Noise-free, all nt decisions see the same e, so
+            # the sum is nt*sign(e); a scalar np.sign(e) would be one vote (DR-007
+            # defect, issue #106, superseded by DR-010).
+            s = e + (rng.normal(0, sigma_lsb, nt) if sigma_lsb else np.zeros(nt))
             corr = int(np.sum(np.sign(s)))
         else:
             corr = 0
