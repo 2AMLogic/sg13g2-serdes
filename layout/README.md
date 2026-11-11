@@ -21,8 +21,12 @@
 - `analog/pads/` — pad/ESD cells `pad_esd` and `rx_term_pad` (issue #113):
   PDK bondpad/ESD-diode cells and `klt gen res_array` resistors, placed and
   net-labelled only (no routing, DRC, LVS or capacitance claim).
-  `regen.sh` writes a new dated, append-only record. The analog top assembly
-  waits on the TX/RX core records (#110, #112).
+  `regen.sh` writes a new dated, append-only record.
+- `analog/top/` — analog top `serdes_analog_top` (`tx_top` + `rx_top`: TX/RX
+  core cells plus the pad cells), placed only, T1 item 2, Analog column (#113,
+  part of #24). `gen_analog_top.py` reads the newest `tx`/`rx`/`pads` records;
+  `regen.sh` writes a new dated, append-only record. Evidence:
+  `manifests/evidence/item2.analog-top.json`, cited as `2.analog`.
 - `analog/tx/` — analog layout of the TX CML core cells (`bias`, `ffe_en`,
   `mux2to1_cml`, `predriver`, `driver_ffe`, `tx_lvl_cml2cmos`), T1 item 2,
   Analog column. `gen_tx_core.py` builds one GDS per subckt (cell name = subckt

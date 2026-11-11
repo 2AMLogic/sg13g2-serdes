@@ -9,7 +9,7 @@
   "tier": null,
   "t1_item_count": 22,
   "build_t1_item_count": 22,
-  "t1_met_count": 3,
+  "t1_met_count": 4,
   "source_doc": "manifests/design-evidence-tiers.md",
   "source_doc_content_hash": "sha256:a26b90262320d0fbd32b3f549a02b6300832706041797a559d8bf6bdb62efdc7",
   "build": {
@@ -88,10 +88,35 @@
       "partition_boundary": "design/tx and design/rx CML cells (HBT CML from the serial pad down to the 625 MHz word boundary, including the CML-to-CMOS level converter design/rx/lvl_cml2cmos and its TX counterpart); the pads and ESD",
       "text": "committed GDS/OASIS, reproducibly generated or with documented provenance.",
       "notes": [],
-      "status": "unmet",
-      "reason": "no_evidence",
+      "status": "met",
+      "reason": null,
       "graded_by_build": true,
-      "citation": null
+      "citation": {
+        "file": "manifests/evidence/item2.analog-top.json",
+        "command": null,
+        "kind": "generic",
+        "check_status": "pass",
+        "content_hash": "sha256:2fb35952aa69c0ad89e431e667a7c274b212bc6ee964a8dd12f1cee0d3d34da8",
+        "input_verified": true,
+        "exit_status": 0,
+        "artifact_binding": {
+          "t1_item": 2,
+          "path": {
+            "path": "layout/analog/top/records/2026-11-11-6b21302/serdes_analog_top.gds",
+            "scope": "repo"
+          },
+          "content_hash": "sha256:2fb35952aa69c0ad89e431e667a7c274b212bc6ee964a8dd12f1cee0d3d34da8",
+          "input_verified": true,
+          "summary": "T1 item 2 (Layout): 3/3 attestation checks passed (klt signoff --attest)",
+          "source": "layout/analog/top/records/2026-11-11-6b21302/serdes_analog_top.gds",
+          "attestation": {
+            "producer": "klt signoff --attest",
+            "inventory_schema_version": null,
+            "check_count": 3,
+            "passed_count": 3
+          }
+        }
+      }
     },
     {
       "tier": "T1",
