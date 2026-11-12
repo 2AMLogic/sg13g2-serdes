@@ -4,6 +4,9 @@ Chronological record of merged PRs and closed issues. Maintained by the Guide ro
 
 ### 2026-11-12
 
+- **PR #139**: fix(layout): clear analog DRC by fixing HBT overlap and HBT-net routing, cite item 3
+- **PR #137**: feat(sim): R18 pad-capacitance bench on extracted pad metal plus ESD diodes
+- **Issue #26** (closed): T1 item 3 (DRC clean): klt drc on both partitions' GDS, with the coverage disclosure
 - **PR #136**: feat(layout): digital-partition gate-level LVS flow with a match record
 - **PR #133**: docs: DR-011 compares CDR loop architectures, proposes second-order fractional-integral loop
 - **Issue #125** (closed): CDR loop architecture: find a loop that closes R12/R15 with margin (DR-009 fix KP=8, KI=0 not accepted)
