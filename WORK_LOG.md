@@ -4,6 +4,10 @@ Chronological record of merged PRs and closed issues. Maintained by the Guide ro
 
 ### 2026-11-12
 
+- **PR #132**: feat(layout): extract pad_esd diodes and bondpad via Recog.diode marker and pad-net strap
+- **Issue #131** (closed): Pad cell extractability: add diode markers and bondpad coverage so R18 can be extracted
+- **PR #130**: feat: add klt drc reports for both partitions (digital clean, analog unmet)
+- **PR #129**: feat(sim): add pad ESD cap and clamp IV benches, DR-011 pad model source
 - **Issue #24** (closed): T1 item 2 (layout, analog): GDS for the CML TX/RX cells, clock path and high-speed pads
 - **Issue #105** (closed): rtl: apply DR-009 CDR loop gain (KP=8, KI=0) and regenerate synth/P&R records
 

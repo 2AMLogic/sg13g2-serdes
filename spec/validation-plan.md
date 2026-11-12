@@ -67,4 +67,6 @@ and a declared compute budget. Multi-corner and Monte Carlo runs go through
 | G5 | Does the pad network meet R18? | Extracted or EM pad + ESD model | Cap > fallback 150 fF → return to the operator with a 5 Gb/s proposal |
 | G6 | Is a clock provider available for the clock table? | A sibling spec stating phases, duty/quadrature and a comparable jitter | None after the requirement is filed → remain "no provider"; no design here |
 
+G5 status (2026-11-12, DR-011): **not evaluated.** The ESD diodes alone add 48.8 to 55.2 fF per leg (simulated, 27 PVT corners); the bondpad and pad-metal share has no extracted value because the current pad GDS does not extract the diodes or bondpad. No pass or fail is claimed.
+
 Per-gate resource caps are set when each gate is approved, not here.

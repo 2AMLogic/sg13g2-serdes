@@ -43,3 +43,28 @@
   is append-only; `scripts/tx-core-regen.sh` re-runs into a new record.
   Attestation: `manifests/evidence/item2.analog-tx-core.json`.
 - `toolchain.json` pins klt; `tools.json` pins the RTL-flow tool versions.
+
+## DRC, T1 item 3 (#26)
+
+`klt drc --deck sg13g2` (klayout-tools 0.9.0 via `uvx`, KLayout 0.30.13; the report records `klayout_version_mismatch: true`), curated engine, deck content hash `sha256:1c95db40596afc5412e216009bcf0b775d1d74895b32738447eccbc76336dd15`, run on each partition's committed GDS. Reports sit beside the GDS they checked (`drc.json`); `provenance.input.content_hash` equals the GDS sha256. A GDS-changing fix must go into a new dated record with a regenerated report, never an edit of an old record. Spec is PROPOSED (#2): nothing here is a measurement.
+
+| Partition | Report | status | violations |
+|---|---|---|---|
+| digital | `layout/digital/records/2026-11-10-f6fe587/drc.json` | `clean` | 0 |
+| analog | `layout/analog/top/records/2026-11-11-6b21302/drc.json` | `violations` | 830 |
+
+**Digital** is routed by `klt place-and-route`; `clean` means no violations under this deck's scope and coverage below, graded `met` by `klt signoff`.
+
+**Analog is `violations`, so item 3 is graded `unmet` (not waived).** The top is placed only (devices placed and labelled, routing partial or absent), so even a clean run would say only "no violations in the geometry that exists, under this deck"; it would not claim routed, LVS-clean (#27) or extractable. Violations by rule: `gatpoly.space.1` 4, `metal1.space.1` 139, `metal2.space.1` 135, `via1.space.1` 552. Of 830, 826 are inside the PDK-supplied `npn13G2_base` cell hierarchy and 4+4 are in `clk_buf_quad` (`gatpoly.space.1`, `metal1.space.1`). Whether the curated deck should flag the foundry HBT cell internals is **unverified**; the tool gap is filed at `2AMLogic/klayout-tools#5386` and no waiver is applied.
+
+### Coverage, quoted verbatim from each report
+
+**digital**
+- `coverage.layers_in_stream_without_rules`: `["8/2", "8/25", "30/2", "30/25", "63/0", "99/31", "134/2", "134/25", "189/4"]`
+- `coverage.rules_skipped`: `["metal5.enclosing.mim.1", "mim.enclosing.topvia1.1", "nwell.enclosing.nactiv.1", "nwell.enclosing.nactiv.dig.1", "nwell.enclosing.nactiv.hv.1", "nwell.space.nactiv.1", "nwell.space.nactiv.dig.1", "nwell.space.nactiv.hv.1"]`
+- `coverage.deck_scope`: `["Act", "Cnt", "Gat", "M1", "M2", "M3", "M4", "M5", "MIM", "NW", "TM1", "TM2", "TV1", "TV2", "V1", "V2", "V3", "V4", "pSD"]`
+
+**analog**
+- `coverage.layers_in_stream_without_rules`: `["5/1", "7/21", "8/2", "8/25", "9/0", "10/2", "10/25", "24/0", "26/0", "28/0", "30/25", "33/0", "41/0", "51/0", "63/0", "99/30", "111/0", "128/0", "129/0"]`
+- `coverage.rules_skipped`: `["metal5.enclosing.topvia1.1", "mim.enclosing.topvia1.1", "nwell.enclosing.nactiv.1", "nwell.enclosing.nactiv.dig.1", "nwell.enclosing.nactiv.hv.1", "nwell.space.nactiv.1", "nwell.space.nactiv.dig.1", "nwell.space.nactiv.hv.1", "topmetal1.enclosing.topvia1.1", "topmetal1.enclosing.topvia2.1", "topmetal2.enclosing.topvia2.1", "topvia1.space.1", "topvia1.width.1", "topvia2.space.1", "topvia2.width.1"]`
+- `coverage.deck_scope`: `["Act", "Cnt", "Gat", "M1", "M2", "M3", "M4", "M5", "MIM", "NW", "TM1", "TM2", "TV1", "TV2", "V1", "V2", "V3", "V4", "pSD"]`
