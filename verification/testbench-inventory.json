@@ -187,6 +187,19 @@
       }
     },
     {
+      "path": "sim/tx/pad_esd_iv_extracted.request.json",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "pad-esd-iv-extracted",
+          "--request",
+          "sim/tx/pad_esd_iv_extracted.request.json"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
       "path": "sim/bench/r6_tx_return_loss_on.request.json",
       "cold_start": {
         "argv": [
@@ -392,10 +405,5 @@
       "icarus": "Icarus Verilog version 13.0 (stable) (v13_0)"
     }
   },
-  "unbenched_rows": [
-    {
-      "row": "R19",
-      "issue": 94
-    }
-  ]
+  "unbenched_rows": []
 }
