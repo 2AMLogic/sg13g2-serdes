@@ -1,0 +1,12 @@
+{
+  "_comment": "Template for the digital-partition klt lvs request (T1 item 4, Digital). scripts/lvs-regen.sh fills <GATE_SPICE> and <POSTROUTE_V> with the newest place-and-route record's paths and writes the result beside the report in layout/digital/lvs-records/<date>-<sha>/lvs.request.json. VDD/VSS are the SG13G2 standard-cell PG pin names, read from the extracted layout and the PDK cell SPICE (power_pins in the report).",
+  "layout": { "netlist": "<GATE_SPICE>", "top": "serdes_digital_top" },
+  "reference": {
+    "netlist": "<POSTROUTE_V>",
+    "top": "serdes_digital_top",
+    "form": "gate-level-verilog",
+    "library": "sg13g2_stdcell",
+    "pdk": "ihp-sg13g2"
+  },
+  "options": { "power_connectivity": { "expected_nets": { "VDD": "VDD", "VSS": "VSS" } } }
+}
