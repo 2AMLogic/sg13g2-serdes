@@ -2,13 +2,7 @@
   "schema_version": 1,
   "note": "Single source of truth for the shipped testbenches (T1 item 9). Graded against the PROPOSED spec rows (#2, not ratified) and DR-001 to DR-004. No bench output is a measurement; figures a bench prints are simulated. verification/testbench-inventory.json is generated from this file by sim/bench/gen_inventory.py.",
   "pdk": "sim/pdk.json",
-  "unbenched_rows": [
-    {
-      "row": "R19",
-      "issue": 94,
-      "reason": "only a PDK-model DC clamp IV exists (sim/tx/pad_esd_iv.sp, DR-011); no extracted-layout clamp IV and no ESD claim is made"
-    }
-  ],
+  "unbenched_rows": [],
   "not_simulation_rows": {
     "R1": "graded by R15",
     "R2": "structural (netlist/RTL review); the digital top bench is listed under R2 as a functional check",
@@ -211,6 +205,26 @@
         "pad_im_i_esd_5g_a"
       ],
       "limitations": "Pad-metal C is a quasi-static interconnect-to-substrate extraction pasted in as a lumped value, not a 5 GHz extraction; excludes bondwire/package, pad-to-pad coupling and the series rsil; ESD diode C from PDK models at one 0.6 V bias; no return loss (R9 SDD11) and no limits declared; simulated, not measured"
+    },
+    {
+      "id": "pad-esd-iv-extracted",
+      "partition": "analog",
+      "rows": [
+        "R19"
+      ],
+      "requests": [
+        "sim/tx/pad_esd_iv_extracted.request.json"
+      ],
+      "description": "Clamp DC IV of the diodes and seam resistor the layout extractor found in pad_esd.gds (2 dantenna + 2 dpantenna at 35.0028 um2 / 58.08 um, rsil 5.12 ohm; record 2026-11-12-fc8a7fa), padp leg, pad swept -0.6..1.8 V against VDD = supply",
+      "corner_set": "3 HBT process corners x 1.08/1.2/1.32 V x -40/27/125 C (PVT-full)",
+      "units_per_request": 27,
+      "required_measurements": [
+        "clamp_ext_i_m0p6_a",
+        "clamp_ext_i_p0p6_a",
+        "clamp_ext_i_p1p2_a",
+        "clamp_ext_i_p1p8_a"
+      ],
+      "limitations": "Extracted-clamp characteristics only (R19 wording): DC IV, not TLP or HBM, no ESD qualification claim and no level claimed. PDK dantenna/dpantenna are reverse-bias fits and do not model forward bipolar action, so the forward currents are a lower bound; the sg13g2 diode corner sections do not move these models (identical across the three process legs). Series rsil is an ideal 5.12 ohm (extracted, nominal 7 ohm/sq in the generator, not verified). Only the padp leg; the rx_term_pad cell is unrouted and not covered; simulated, not measured"
     },
     {
       "id": "tx-return-loss",
