@@ -21,7 +21,7 @@ Judge-approved PRs under a hold (`loom:blocked` or `loom:operator`) — only a h
 
 `loom:important`; taken before unlabelled work.
 
-_None._
+- **#127**: T1 item 2 follow-up (layout, analog): route the placed analog cells so they can be LVS-checked
 
 ## Ready
 
@@ -33,6 +33,8 @@ _None._
 
 Issues currently being built (`loom:building`).
 
+- **#26**: T1 item 3 (DRC clean): klt drc on both partitions' GDS, with the coverage disclosure
+- **#27**: T1 item 4 (LVS clean): klt lvs on both partitions, with HBT recognition and power_connectivity
 - **#44**: Install the two-key ratification path and ratify spec/target-spec.md
 - **#98**: spec: state the mux clock swing the TX needs and re-run mux2to1_cml at it
 - **#125**: CDR loop architecture: find a loop that closes R12/R15 with margin (DR-009 fix KP=8, KI=0 not accepted)
@@ -50,6 +52,7 @@ PRs that passed review and are queued for Champion auto-merge (`loom:pr`).
 - **#47**: docs(spec): propose ratification of target spec with DR-005 scope record
 - **#99**: docs(spec): state the TX mux clock swing requirement from a fleet swing sweep
 - **#124**: Bump Repo Skills 0.25.10 -> 0.26.1
+- **#133**: docs: DR-011 compares CDR loop architectures, proposes second-order fractional-integral loop
 
 ## Proposed
 
@@ -62,6 +65,7 @@ Issues carrying `loom:curated`.
 - **#94**: T1 item 9 follow-up: pad and ESD benches for R18 and R19 need an extracted or EM pad model *(curated)*
 - **#98**: spec: state the mux clock swing the TX needs and re-run mux2to1_cml at it *(curated)*
 - **#125**: CDR loop architecture: find a loop that closes R12/R15 with margin (DR-009 fix KP=8, KI=0 not accepted) *(curated)*
+- **#127**: T1 item 2 follow-up (layout, analog): route the placed analog cells so they can be LVS-checked *(curated)*
 
 ## Proposed (Architect / Hermit)
 
@@ -77,12 +81,12 @@ _None._
 |------|-------|
 | Operator merge-risk holds | 3 |
 | Very important | 1 |
-| Important | 0 |
+| Important | 1 |
 | Ready (`loom:issue`) | 0 |
-| In Progress (`loom:building`) | 3 |
+| In Progress (`loom:building`) | 5 |
 | PRs awaiting review | 0 |
-| Approved PRs awaiting merge | 3 |
-| Curated | 7 |
+| Approved PRs awaiting merge | 4 |
+| Curated | 8 |
 | Architect / Hermit proposals | 0 |
 | Active epics | 0 |
 <!-- guide:plan-body:end -->
