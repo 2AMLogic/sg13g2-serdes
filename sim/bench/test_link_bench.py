@@ -88,6 +88,44 @@ def test_loop_too_slow_for_ppm_is_reported():
     assert cm.slips(cm.run(n, ppm=300, kp=4, ki=0), settle) > 0    # KP*votes < 300 ppm slew: the bench must fail it
 
 
+def test_arch_defaults_reproduce_dr009():
+    """DR-011 options off: the model is the DR-009 model, bit for bit (the RTL baseline and the KP=8 KI=0 what-if)."""
+    n = 12000
+    for kw in (dict(), dict(kp=8, ki=0)):
+        a = cm.run(n, **kw)
+        b = cm.run(n, **kw, frac=0, decim=1, gear=None, vote="sum", digital_delay=None, pi_shift=7)
+        assert np.array_equal(a, b), kw
+    assert abs(np.std(cm.run(20000, kp=8, ki=0)[10000:] / cm.UI) - 0.0284) < 0.001      # DR-009's 0.0286 UI (run length differs)
+
+
+def test_arch_options_run_and_are_model_only():
+    n = 20000
+    rec = dict(kp=8, ki=1, frac=6, decim=16, fmax=1023)
+    e = cm.run(n, **rec)[n // 2:] / cm.UI
+    assert np.std(e) < 0.04                                              # dither as low as DR-009's setting
+    assert cm.slips(cm.run(40000, ppm=500, **rec), 20000) == 0           # the +-500 ppm stretch column holds
+    assert cm.slips(cm.run(40000, ppm=500, kp=8, ki=0), 20000) > 0       # DR-009's proportional-only loop does not
+    assert np.std(cm.run(n, digital_delay=3)[n // 2:]) < np.std(cm.run(n)[n // 2:])      # shorter latency lowers dither
+    assert cm.slips(cm.run(40000, ppm=300, vote="sign", kp=8, ki=0), 20000) > 0          # negative control: sign vote slews too slowly
+    assert lc.rtl_loop_params()["KP"] == 16                              # no flag touches the RTL value
+    rc, out = run_bench("r11", "--quick", "--kp", "8", "--ki", "1", "--frac", "6", "--decim", "16")
+    assert "ARCH WHAT-IF (DR-011" in out and "rtl/ is unchanged" in out and rc == 0, out
+
+
+def test_r13_reports_the_500ppm_stretch_column_ungraded():
+    rc, out = run_bench("r13", "--quick", "--kp", "8", "--ki", "0")
+    assert "stretch column, not graded" in out and "SLIPS (stretch" in out and "R13 (+-300 ppm, zero slips over 1e6 UI): MET" in out
+
+
+def test_sensitivity_arch_section_runs():
+    import link_sensitivity as ls
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc = ls.main(["--quick", "--section", "arch"])
+    out = buf.getvalue()
+    assert rc == 0 and "DR-011" in out and "recommended" in out and "E4. slew margin" in out and "FAIL" in out
+
+
 def test_sensitivity_runs():
     import link_sensitivity as ls
     buf = io.StringIO()

@@ -39,6 +39,11 @@ def header(row, args, fits, rec_id):
     if args.kp is not None or args.ki is not None:
         print(f"LOOP WHAT-IF: KP={p['KP'] if args.kp is None else args.kp} KI={p['KI'] if args.ki is None else args.ki} "
               "override the RTL values in the MODEL only (simulated what-if; rtl/ is unchanged)")
+    if args.frac or args.decim != 1 or args.gear or args.vote != "sum" or args.digital_delay is not None or args.pi_shift != 7:
+        print(f"ARCH WHAT-IF (DR-011, model only; rtl/ is unchanged): integral frac bits {args.frac}, integral decimation "
+              f"{args.decim}, gear {args.gear or 'off'} (kp_acq,ki_acq,words), vote {args.vote}, digital delay "
+              f"{'7 (DR-007)' if args.digital_delay is None else args.digital_delay} words, PI step 2^{args.pi_shift} LSB "
+              f"(1/{2 ** (13 - args.pi_shift)} UI)")
     print("UNFITTED ASSUMPTIONS (no transistor-level record): "
           f"sampler noise {A['sigma_noise_mv']} mV rms, sampler offset {A['sigma_offset_mv']} mV 1-sigma, "
           f"RJ {A['rj_ui']} UI rms, DJ {A['dj_uipp']} UIpp, PD decision noise {args.vote_noise_ui} UI rms, "
@@ -47,7 +52,12 @@ def header(row, args, fits, rec_id):
 
 def loop_kw(args):
     """Model-level what-if overrides (--kp/--ki); None keeps the RTL value. The RTL is never changed by a flag."""
-    return {"kp": args.kp, "ki": args.ki}
+    kw = {"kp": args.kp, "ki": args.ki}
+    if args.frac or args.decim != 1 or args.gear or args.vote != "sum" or args.digital_delay is not None or args.pi_shift != 7:
+        gear = tuple(int(x) for x in args.gear.split(",")) if args.gear else None
+        kw.update(frac=args.frac, decim=args.decim, gear=gear, vote=args.vote,
+                  digital_delay=args.digital_delay, pi_shift=args.pi_shift)
+    return kw
 
 
 def pick_corners(args, fits):
@@ -189,15 +199,16 @@ def r13(args, fits, rec_id):
     print(f"\nFrequency offset: lock for {settle} words, then count slips (|e| >= 0.5 UI) over {win * 16} UI")
     print("ppm     analog delay   peak |e| UI   slips   label")
     bad = 0
-    for ppm in (300, -300):
+    for ppm in (300, -300, 500, -500):
         for ad in (None, 0, 2):
             flt_run = cm.run(settle + win, ppm=ppm, vote_noise_ui=args.vote_noise_ui, analog_delay=ad, fmax=args.fmax, **loop_kw(args))
             e = flt_run[settle:] / cm.UI
             sl = cm.slips(flt_run, settle)
-            bad += (ad is None) and sl > 0
+            stretch = abs(ppm) > 300            # +-500 ppm is the stretch column: reported, never graded (R13 ratifies +-300)
+            bad += (ad is None) and sl > 0 and not stretch
             tag = "assumed" if ad is None else f"{ad} (sens.)"
             print(f"{ppm:+5d}   {tag:12s}   {np.max(np.abs(e)):.4f}        {sl:5d}   "
-                  f"simulated (behavioural bang-bang) {'no slips' if sl == 0 else 'SLIPS'}")
+                  f"simulated (behavioural bang-bang) {'no slips' if sl == 0 else 'SLIPS'}{' (stretch column, not graded)' if stretch else ''}")
     print("PVT-edge: corner-independent in this model (see r11); analog delay sensitivity shown instead.")
     print(f"proposed R13 (+-300 ppm, zero slips over 1e6 UI): {'MET' if not bad else 'NOT MET'}")
     return 3 if bad else 0
@@ -279,6 +290,12 @@ def main(argv=None):
     ap.add_argument("--fmax", type=int, default=None, help="override FMAX (negative control only)")
     ap.add_argument("--kp", type=int, default=None, help="what-if KP in the model (default: RTL value)")
     ap.add_argument("--ki", type=int, default=None, help="what-if KI in the model (default: RTL value)")
+    ap.add_argument("--frac", type=int, default=0, help="DR-011 model: integral accumulator fractional bits")
+    ap.add_argument("--decim", type=int, default=1, help="DR-011 model: integral path updates once per N words")
+    ap.add_argument("--gear", default=None, help="DR-011 model: KP_ACQ,KI_ACQ,WORDS timer gear shift (acquisition gains first)")
+    ap.add_argument("--vote", choices=("sum", "sign"), default="sum", help="DR-011 model: per-word vote (sum = RTL; sign = majority)")
+    ap.add_argument("--digital-delay", type=int, default=None, help="DR-011 model: digital loop latency, words (DR-007: 7)")
+    ap.add_argument("--pi-shift", type=int, default=7, help="DR-011 model: PI step = 2^N LSB (7 = 1/64 UI, the RTL pi_code)")
     ap.add_argument("--strict", action="store_true", help="exit 3 when a proposed-spec threshold is not met")
     ap.add_argument("--quick", action="store_true", help="short configuration (smoke test)")
     args = ap.parse_args(argv)
