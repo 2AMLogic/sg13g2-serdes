@@ -20,15 +20,15 @@
     },
     "2.analog": {
       "file": "manifests/evidence/item2.analog-top.json",
-      "content_hash": "sha256:2fb35952aa69c0ad89e431e667a7c274b212bc6ee964a8dd12f1cee0d3d34da8"
+      "content_hash": "sha256:17f981b294eb2daf015fc7abe249d07680a65c73c619aa57f2565aee2856985e"
     },
     "3.digital": {
       "file": "layout/digital/records/2026-11-10-f6fe587/drc.json",
       "content_hash": "sha256:24be966f1f92c9d0355a8325d5e8e00c07b90dfcd5f53ad305d439529d4fdf23"
     },
     "3.analog": {
-      "file": "layout/analog/top/records/2026-11-11-6b21302/drc.json",
-      "content_hash": "sha256:2fb35952aa69c0ad89e431e667a7c274b212bc6ee964a8dd12f1cee0d3d34da8"
+      "file": "layout/analog/top/records/2026-11-12-0193777/drc.json",
+      "content_hash": "sha256:17f981b294eb2daf015fc7abe249d07680a65c73c619aa57f2565aee2856985e"
     },
     "4.digital": {
       "file": "manifests/evidence/item4.json",

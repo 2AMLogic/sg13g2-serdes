@@ -4,7 +4,7 @@
   "status": "pass",
   "t1_item": 2,
   "summary": "T1 item 2 (Layout): 3/3 attestation checks passed (klt signoff --attest)",
-  "source": "layout/analog/rx/records/2026-11-11-835e58e/rx_core.gds",
+  "source": "layout/analog/rx/records/2026-11-12-0193777/rx_core.gds",
   "attestation": {
     "producer": "klt signoff --attest",
     "hash_algorithm": "sha256-raw-bytes",
@@ -15,7 +15,7 @@
         "check": "stream_readable",
         "role": "layout",
         "passed": true,
-        "content_hash": "sha256:c1d35a06653c7e1ca61d48275ae00f44b1c12812eb2e7e4d038c9a41dabce577"
+        "content_hash": "sha256:df4b333b910c2c0ef3bbd84213490e667680da84eb913ab57fce289547011645"
       },
       {
         "check": "top_cell_non_empty",
@@ -43,10 +43,10 @@
     "deck": null,
     "input": {
       "path": {
-        "path": "layout/analog/rx/records/2026-11-11-835e58e/rx_core.gds",
+        "path": "layout/analog/rx/records/2026-11-12-0193777/rx_core.gds",
         "scope": "repo"
       },
-      "content_hash": "sha256:c1d35a06653c7e1ca61d48275ae00f44b1c12812eb2e7e4d038c9a41dabce577"
+      "content_hash": "sha256:df4b333b910c2c0ef3bbd84213490e667680da84eb913ab57fce289547011645"
     }
   }
 }
