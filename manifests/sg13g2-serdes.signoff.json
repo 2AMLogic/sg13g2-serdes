@@ -458,7 +458,7 @@
         "hash_check": {
           "field": "provenance.input.content_hash",
           "expected": "sha256:5f68f3b0037410e8c37ec50dbedbc7d75b602f7a7141d41b128b962800be8eb0",
-          "actual": "sha256:0d7f0f1f7161208443ae49ed70aebd0a1207ed8190eb6f14d1988c955bda2ec5",
+          "actual": "sha256:d7ddf90f5e3924311529a39e50bd198cd8bc19b1347f00e2dbfba476955c4870",
           "match": false
         }
       }
@@ -480,7 +480,7 @@
         "hash_check": {
           "field": "provenance.input.content_hash",
           "expected": "sha256:5f68f3b0037410e8c37ec50dbedbc7d75b602f7a7141d41b128b962800be8eb0",
-          "actual": "sha256:0d7f0f1f7161208443ae49ed70aebd0a1207ed8190eb6f14d1988c955bda2ec5",
+          "actual": "sha256:d7ddf90f5e3924311529a39e50bd198cd8bc19b1347f00e2dbfba476955c4870",
           "match": false
         }
       }

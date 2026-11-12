@@ -4,7 +4,7 @@ Append-only. Request `sim/tx/pad_esd_iv_extracted.request.json` (27 corners: 3 H
 legs x 1.08/1.2/1.32 V x -40/27/125 C), run with `klt sim --backend batch --wait-for-capacity 600`
 (batch job `klt-sim-a21feb66cbf7`, klt 0.9.2.dev865 client, ngspice 46). A local single-corner run
 (hbt_typ, 1.2 V, 27 C) debugged the deck first. 27 of 27 corners ran, 0 errors, no limits declared.
-**Simulated from extracted device geometry, not measured.** Raw report: `stdout.json`.
+**Simulated from extracted device geometry, not measured.** Raw report: `stdout.json` (schema 3 JSON, re-fetched from the finished batch job; the original console summary is kept as `stdout.txt`).
 
 Devices come from `layout/analog/pads/records/2026-11-12-fc8a7fa/extract-pad_esd.json`
 (`padp` leg): `dpantenna` (pad to VDD) and `dantenna` (VSS to pad), each 35.0028 um2 /
