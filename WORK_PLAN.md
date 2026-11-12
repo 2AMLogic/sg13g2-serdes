@@ -9,6 +9,7 @@ Judge-approved PRs under a hold (`loom:blocked` or `loom:operator`) — only a h
 
 - **#47**: docs(spec): propose ratification of target spec with DR-005 scope record
 - **#99**: docs(spec): state the TX mux clock swing requirement from a fleet swing sweep
+- **#124**: Bump Repo Skills 0.25.10 -> 0.26.1
 
 ## Very Important
 
@@ -20,7 +21,7 @@ Judge-approved PRs under a hold (`loom:blocked` or `loom:operator`) — only a h
 
 `loom:important`; taken before unlabelled work.
 
-- **#24**: T1 item 2 (layout, analog): GDS for the CML TX/RX cells, clock path and high-speed pads
+_None._
 
 ## Ready
 
@@ -34,6 +35,7 @@ Issues currently being built (`loom:building`).
 
 - **#44**: Install the two-key ratification path and ratify spec/target-spec.md
 - **#98**: spec: state the mux clock swing the TX needs and re-run mux2to1_cml at it
+- **#125**: CDR loop architecture: find a loop that closes R12/R15 with margin (DR-009 fix KP=8, KI=0 not accepted)
 
 ## PRs Awaiting Review
 
@@ -47,16 +49,19 @@ PRs that passed review and are queued for Champion auto-merge (`loom:pr`).
 
 - **#47**: docs(spec): propose ratification of target spec with DR-005 scope record
 - **#99**: docs(spec): state the TX mux clock swing requirement from a fleet swing sweep
+- **#124**: Bump Repo Skills 0.25.10 -> 0.26.1
 
 ## Proposed
 
 Issues carrying `loom:curated`.
 
 - **#2**: Draft and ratify the target spec *(curated)*
-- **#24**: T1 item 2 (layout, analog): GDS for the CML TX/RX cells, clock path and high-speed pads *(curated)*
+- **#26**: T1 item 3 (DRC clean): klt drc on both partitions' GDS, with the coverage disclosure *(curated)*
+- **#27**: T1 item 4 (LVS clean): klt lvs on both partitions, with HBT recognition and power_connectivity *(curated)*
 - **#44**: Install the two-key ratification path and ratify spec/target-spec.md *(curated)*
+- **#94**: T1 item 9 follow-up: pad and ESD benches for R18 and R19 need an extracted or EM pad model *(curated)*
 - **#98**: spec: state the mux clock swing the TX needs and re-run mux2to1_cml at it *(curated)*
-- **#105**: rtl: apply DR-009 CDR loop gain (KP=8, KI=0) and regenerate synth/P&R records *(curated)*
+- **#125**: CDR loop architecture: find a loop that closes R12/R15 with margin (DR-009 fix KP=8, KI=0 not accepted) *(curated)*
 
 ## Proposed (Architect / Hermit)
 
@@ -70,14 +75,14 @@ _None._
 
 | Bucket | Count |
 |------|-------|
-| Operator merge-risk holds | 2 |
+| Operator merge-risk holds | 3 |
 | Very important | 1 |
-| Important | 1 |
+| Important | 0 |
 | Ready (`loom:issue`) | 0 |
-| In Progress (`loom:building`) | 2 |
+| In Progress (`loom:building`) | 3 |
 | PRs awaiting review | 0 |
-| Approved PRs awaiting merge | 2 |
-| Curated | 5 |
+| Approved PRs awaiting merge | 3 |
+| Curated | 7 |
 | Architect / Hermit proposals | 0 |
 | Active epics | 0 |
 <!-- guide:plan-body:end -->
