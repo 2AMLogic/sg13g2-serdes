@@ -9,6 +9,13 @@
   - `scripts/check-pnr-fresh.sh` checks the newest record against the netlist
     (exit 3 = stale). Needs the PDK (`scripts/setup-env.sh`) and `openroad`, so
     it is not part of `scripts/check-ci.sh`.
+  - `lvs.request.json` is the template for the gate-level LVS request (T1 item 4,
+    Digital column, `4.digital`). `scripts/lvs-regen.sh` extracts the newest routed
+    GDS with every standard cell abstracted (about 15 minutes, single process) and
+    compares it to the post-route Verilog into a new dated, append-only
+    `lvs-records/<date>-<sha>/`. `scripts/check-lvs-fresh.sh` is the `klt lvs --check`
+    freshness gate (exit 3 = a newer place-and-route record or drifted inputs). Analog
+    LVS is #128.
 - `analog/rx/` — RX core analog cells (`ctle`, `latch_cml`, `clk_buf_quad`,
   `lvl_cml2cmos`), T1 item 2, Analog column (#112, part of #24).
   `gen_rx_cells.py` reads `design/rx/netlists/rx_top.spice`, builds each device
