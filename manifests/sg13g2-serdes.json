@@ -29,6 +29,10 @@
     "3.analog": {
       "file": "layout/analog/top/records/2026-11-11-6b21302/drc.json",
       "content_hash": "sha256:2fb35952aa69c0ad89e431e667a7c274b212bc6ee964a8dd12f1cee0d3d34da8"
+    },
+    "4.digital": {
+      "file": "manifests/evidence/item4.json",
+      "content_hash": "sha256:b42acd704f26cc204eaeca37a29f90fe6e28a4c4cb04d469ae1eb88a06146a4d"
     }
   },
   "partition_boundary": {
