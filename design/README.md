@@ -81,6 +81,7 @@ Needs `source scripts/env.sh`. Not wired into CI here (coordinate with #4).
 
 Placeholders chosen to find the headroom problem early: 10 mA main tail, 3 x 1.11 mA
 post-cursor slices, 100/60/50 ohm loads, 1.2 V rail. The pad cell's diodes and bondpad
-carry no 5 GHz capacitance number (the PDK `bondpad` model is empty); R18 and R19 are
-not assessed here. The bias reference current follows the supply; a supply-independent
+carry no 5 GHz capacitance number here (the PDK `bondpad` model is empty); R18 is benched
+on extracted pad metal plus the PDK diodes in `sim/tx/pad_cap_extracted_5ghz.sp` (DR-012,
+119.5 to 125.9 fF per leg, simulated); R19 is not assessed here. The bias reference current follows the supply; a supply-independent
 reference is a sibling block and is not designed in this repo.
