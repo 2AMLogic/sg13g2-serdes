@@ -17,6 +17,10 @@
           {
             "lib": "libs.tech/ngspice/models/cornerCAP.lib",
             "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerDIO.lib",
+            "section": "dio_tt"
           }
         ]
       }

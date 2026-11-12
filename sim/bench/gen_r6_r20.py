@@ -48,7 +48,11 @@ PROCESS = [
 CORNERS = {"process": PROCESS, "temperature_c": [-40, 27, 125],
            "supply_v": {"vdd": [1.08, 1.2, 1.32]}}
 
-CPAD = "100f"  # per-leg placeholder for the empty PDK bondpad model (R18 budget, spec "Pads and ESD")
+# Per-leg pad-metal capacitance, extracted: `klt extract --deck sg13g2 --parasitics` on pad_esd.gds, net padp,
+# with the bondpad TM2 (layout/analog/pads/records/2026-11-12-fc8a7fa/record.md; padn identical). The PDK
+# bondpad model has no capacitance, so this lumped C replaces it; the ESD diodes come from pad_esd.spice.
+# Same value and source as sim/tx/pad_cap_extracted_5ghz.sp (issue #94, DR-012). Quasi-static, not 5 GHz.
+CPAD = "70.66f"
 
 
 def inline(netdir, cell):
@@ -57,7 +61,7 @@ def inline(netdir, cell):
 
 
 def pad_cell():
-    """pad_esd.spice with each `bondpad` instance replaced by a placeholder capacitor."""
+    """pad_esd.spice with each `bondpad` instance replaced by the extracted pad-metal capacitor."""
     text = inline(TXNET, "pad_esd")
     out, n = [], 0
     for line in text.splitlines():
@@ -77,8 +81,9 @@ def r6_deck(driver_on):
          "* driver %s: %s" % ("ON" if driver_on else "OFF",
                              "bias live, predriver and driver pair balanced at the mux mid level, FFE slices off"
                              if driver_on else "vbn held at 0 V, every tail off (reference only)"),
-         "* PAD MODEL IS A PLACEHOLDER: the PDK bondpad model has no capacitance, so each bondpad is",
-         "* replaced by %s to ground. Return loss here is NOT graded against a real pad (see #94)." % CPAD,
+         "* PAD MODEL: the PDK bondpad has no capacitance, so each bondpad is replaced by the EXTRACTED",
+         "* pad-metal C (%s to ground, record layout/analog/pads/records/2026-11-12-fc8a7fa); the PDK ESD" % CPAD,
+         "* diodes come from pad_esd.spice. Quasi-static lumped C: no bondwire/package, no pad coupling.",
          "* rsil is a behavioural stand-in (PDK symbol formula, typical rsh), as in sim/tx/tx_sizing_*.sp.",
          ".subckt rsil 1 2 bn",
          ".param w=0.5e-6 l=0.5e-6 b=0 m=1",

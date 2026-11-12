@@ -20,7 +20,7 @@ sha = rc.sha
 
 L = [f"# TX sizing record {out.name}", "",
      rc.SIZING_BANNER + " Simulated, "
-     "first-cut sizes, ideal-source drive, lumped pad stand-in.", "",
+     "first-cut sizes, ideal-source drive, extracted pad-metal C + PDK ESD diodes (issue #142).", "",
      "## Pins and inputs",
      f"- PDK: {pdk['source']} {pdk['release_tag']} (sim/pdk.json), tarball sha256 `{pdk['tarball_sha256']}`",
      f"- klt: `{tool['klt_last_verified_commit']}`",
@@ -92,8 +92,8 @@ for c in sorted(corners, key=lambda c: c["corner_id"]):
     L.append(f"| {c['corner_id']} | {g('r4_steady_hi')} | {g('r4_steady_lo')} | "
              f"{g('r4_peak_max_vppd')} / {g('r4_peak_min_vppd')} | {g('r7_rise_20_80_s', 1e12)} | "
              f"{g('r7_fall_80_20_s', 1e12)} | {g('idd_avg', 1e3)} |")
-L += ["", "Differential output `v(padp)-v(padn)` into 100 ohm differential, 4 ohm + 100 fF per "
-      "leg. R7 is NOT a conforming 20-80 % measurement: the thresholds are fixed absolute "
+L += ["", "Differential output `v(padp)-v(padn)` into 100 ohm differential, 4 ohm series + extracted "
+      "70.66 fF pad-metal C + PDK ESD clamp diodes per leg (issue #142; was 4 ohm + 100 fF). R7 is NOT a conforming 20-80 % measurement: the thresholds are fixed absolute "
       "levels (+-0.06 V FFE off, +-0.04 V FFE on), chosen below the smallest steady half-swing "
       "so every corner crosses them, so the time is that of the central part of the edge and "
       "understates 20-80 % at large swing. The inputs are ideal 20 ps ramps. 'n/a' = no crossing.", ""]
@@ -103,8 +103,10 @@ L += ["## Not simulated", "",
       "the host ngspice cannot load OSDI v0.4 and batch jobs staging `.osdi` fail "
       "(sim/README.md known gaps, klayout-tools#3818/#3819; owner #3). Their R3 status is "
       "unknown beyond the argument in design/README.md.",
-      "- `pad_esd`: the PDK ESD diode models are not loaded in this deck; a lumped stand-in "
-      "loads each output. R18, R19 and R6 are not assessed (#24).",
+      "- `pad_esd` cell: not inlined; each output sees a 4 ohm series stand-in, the extracted "
+      "70.66 fF pad-metal C (layout/analog/pads/records/2026-11-12-fc8a7fa, quasi-static, no bondwire/package) "
+      "and the PDK clamp diodes. PDK dantenna/dpantenna equivalence to the diodevdd_2kv clamp is not "
+      "established (LVS #27, DR-013); only the TX padp leg is covered. R6 is in sim/bench/.",
       "- PDK `rsil` is an OSDI (`r3_cmc`) model, so the deck uses a behavioural resistor "
       "from the PDK symbol's own value formula, with the corner's sheet-resistance scale "
       "(6.02/7.0/7.98 ohm/sq) and tc1 = 3.1e-3. Resistor current-density limits are not checked.",

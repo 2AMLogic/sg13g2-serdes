@@ -43,7 +43,7 @@
         "vc_max_drv_out_p",
         "vbe_rev_max_drv_main_p"
       ],
-      "limitations": "R4 uses an ideal 100 ohm load, not the R18 pad model (placeholder). R16 covers the TX supply current only; RX and clock-path current are not measured here. R5 is graded at FFE off/on; the 4-step code sweep is tx-mos-ffe-en"
+      "limitations": "R4 loads each output with a 4 ohm series stand-in, the extracted pad-metal C (70.66 fF per leg, quasi-static lumped, layout/analog/pads/records/2026-11-12-fc8a7fa) and the PDK ESD clamp diodes into the 100 ohm differential termination; no bondwire/package, no pad-to-pad coupling, PDK dantenna/dpantenna equivalence to the clamp not established (LVS #27); simulated, not measured. R4 steady-state swing is insensitive to the pad C (record 20261112-141317-582746a). R16 covers the TX supply current only; RX and clock-path current are not measured here. R5 is graded at FFE off/on; the 4-step code sweep is tx-mos-ffe-en"
     },
     {
       "id": "tx-mos-ffe-en",
@@ -247,7 +247,7 @@
         "r6_sdd22_max_to_5g_db",
         "r6_sdd22_max_to_7p5g_db"
       ],
-      "limitations": "PLACEHOLDER PAD: the PDK bondpad model has no capacitance, so each bondpad is a 100 fF capacitor to ground (R18 budget); R6 cannot be graded against a real pad until #94. DC is approximated by 1 MHz (AC-coupled port). Driver-on is the FFE-off balanced-pair small-signal point; FFE-on slices and the mux/predriver input stage are not exercised (mux outputs replaced by their DC mid level). rsil is the behavioural stand-in at typical rsh, no resistor corner. No limits are attached: the bench reports SDD22, it does not claim a pass"
+      "limitations": "Pad: the PDK bondpad model has no capacitance, so each bondpad is the extracted pad-metal C (70.66 fF to ground, quasi-static lumped, layout/analog/pads/records/2026-11-12-fc8a7fa) plus the PDK ESD diodes; no bondwire/package, no pad-to-pad coupling, no distributed 5 GHz effect; PDK dantenna/dpantenna equivalence to the clamp not established (LVS #27); only the TX padp leg; simulated, not measured. DC is approximated by 1 MHz (AC-coupled port). Driver-on is the FFE-off balanced-pair small-signal point; FFE-on slices and the mux/predriver input stage are not exercised (mux outputs replaced by their DC mid level). rsil is the behavioural stand-in at typical rsh, no resistor corner. No limits are attached: the bench reports SDD22, it does not claim a pass"
     },
     {
       "id": "rx-clk-quality",
