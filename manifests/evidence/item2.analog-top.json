@@ -4,7 +4,7 @@
   "status": "pass",
   "t1_item": 2,
   "summary": "T1 item 2 (Layout): 3/3 attestation checks passed (klt signoff --attest)",
-  "source": "layout/analog/top/records/2026-11-11-6b21302/serdes_analog_top.gds",
+  "source": "layout/analog/top/records/2026-11-12-0193777/serdes_analog_top.gds",
   "attestation": {
     "producer": "klt signoff --attest",
     "hash_algorithm": "sha256-raw-bytes",
@@ -15,7 +15,7 @@
         "check": "stream_readable",
         "role": "layout",
         "passed": true,
-        "content_hash": "sha256:2fb35952aa69c0ad89e431e667a7c274b212bc6ee964a8dd12f1cee0d3d34da8"
+        "content_hash": "sha256:17f981b294eb2daf015fc7abe249d07680a65c73c619aa57f2565aee2856985e"
       },
       {
         "check": "top_cell_non_empty",
@@ -40,10 +40,10 @@
     "deck": null,
     "input": {
       "path": {
-        "path": "layout/analog/top/records/2026-11-11-6b21302/serdes_analog_top.gds",
+        "path": "layout/analog/top/records/2026-11-12-0193777/serdes_analog_top.gds",
         "scope": "repo"
       },
-      "content_hash": "sha256:2fb35952aa69c0ad89e431e667a7c274b212bc6ee964a8dd12f1cee0d3d34da8"
+      "content_hash": "sha256:17f981b294eb2daf015fc7abe249d07680a65c73c619aa57f2565aee2856985e"
     }
   }
 }

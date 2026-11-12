@@ -86,9 +86,14 @@ def build(cell, spec, out):
         x, h = 0.0, 0.0
         for n in row:
             bb = reports[n]["bbox_um"]
-            origins[n] = {"x": round(x - bb["x0"], 3), "y": round(y - bb["y0"], 3)}
             if cell == "clk_buf_quad" and n.endswith("b"):
+                # gen-compose "mirror_x" is the x -> -x flip (GDS m90), so the block
+                # occupies [origin - x1, origin - x0]; put the origin at the right edge
+                # of its slot, else the b device overlaps the a device (#26).
                 orient[n] = "mirror_x"
+                origins[n] = {"x": round(x + bb["x1"], 3), "y": round(y - bb["y0"], 3)}
+            else:
+                origins[n] = {"x": round(x - bb["x0"], 3), "y": round(y - bb["y0"], 3)}
             x += bb["x1"] - bb["x0"] + SPACING
             h = max(h, bb["y1"] - bb["y0"])
         y += h + SPACING
@@ -98,7 +103,11 @@ def build(cell, spec, out):
     port_nets = spec["ports"]
     conn, pins = [], []
     for net, pl in sorted(nets.items()):
-        if len(pl) >= 2:
+        # gen-compose routes onto an HBT terminal by dropping a via stack inside the
+        # PDK cell's own via1/metal1 array, 15 nm from existing vias (DRC: via1.space.1,
+        # metal1/2.space.1). Nets with an HBT terminal are therefore left unrouted
+        # (their pins stay labelled); intra-cell routing is partial by design (#26).
+        if len(pl) >= 2 and not any(b.startswith(("XQ", "XS")) for b, _ in pl):
             conn.append({"net": net, "pins": [{"block": b, "port": p} for b, p in pl]})
     for net in port_nets:
         if net in nets:
