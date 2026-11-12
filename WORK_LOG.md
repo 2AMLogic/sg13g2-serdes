@@ -4,6 +4,9 @@ Chronological record of merged PRs and closed issues. Maintained by the Guide ro
 
 ### 2026-11-12
 
+- **PR #145**: feat(sim): load TX R4/R6 benches with extracted pad C and PDK ESD diodes
+- **Issue #142** (closed): Re-point R4/R6/R9 benches to the extracted pad model; ratify DR-011/012/013 pad decisions
+
 - **PR #141**: feat(sim): R19 clamp DC IV bench on extracted pad_esd devices, DR-013
 - **Issue #94** (closed): T1 item 9 follow-up: pad and ESD benches for R18 and R19 need an extracted or EM pad model
 - **PR #139**: fix(layout): clear analog DRC by fixing HBT overlap and HBT-net routing, cite item 3
