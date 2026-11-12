@@ -4,6 +4,10 @@ Chronological record of merged PRs and closed issues. Maintained by the Guide ro
 
 ### 2026-11-12
 
+- **PR #136**: feat(layout): digital-partition gate-level LVS flow with a match record
+- **PR #133**: docs: DR-011 compares CDR loop architectures, proposes second-order fractional-integral loop
+- **Issue #125** (closed): CDR loop architecture: find a loop that closes R12/R15 with margin (DR-009 fix KP=8, KI=0 not accepted)
+- **Issue #27** (closed): T1 item 4 (LVS clean): klt lvs on both partitions, with HBT recognition and power_connectivity
 - **PR #132**: feat(layout): extract pad_esd diodes and bondpad via Recog.diode marker and pad-net strap
 - **Issue #131** (closed): Pad cell extractability: add diode markers and bondpad coverage so R18 can be extracted
 - **PR #130**: feat: add klt drc reports for both partitions (digital clean, analog unmet)
