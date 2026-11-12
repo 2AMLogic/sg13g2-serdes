@@ -4,14 +4,9 @@
   "pdk": "sim/pdk.json",
   "unbenched_rows": [
     {
-      "row": "R18",
-      "issue": 94,
-      "reason": "PDK bondpad model is an empty placeholder; no extracted/EM pad model"
-    },
-    {
       "row": "R19",
       "issue": 94,
-      "reason": "no extracted ESD clamp model; no ESD claim is made"
+      "reason": "only a PDK-model DC clamp IV exists (sim/tx/pad_esd_iv.sp, DR-011); no extracted-layout clamp IV and no ESD claim is made"
     }
   ],
   "not_simulation_rows": {
@@ -196,6 +191,26 @@
         "pad_idiff_5g_a"
       ],
       "limitations": "Ideal resistors and a placeholder pad capacitance (PDK bondpad is empty); |Zdiff| only, SDD11 is not extracted, resistor corners not applied"
+    },
+    {
+      "id": "pad-cap-extracted",
+      "partition": "analog",
+      "rows": [
+        "R18"
+      ],
+      "requests": [
+        "sim/tx/pad_cap_extracted_5ghz.request.json"
+      ],
+      "description": "Pad capacitance per leg at 0.1 and 5 GHz: lumped pad-metal C from layout extraction (70.66 fF, pad_esd.gds record 2026-11-12-fc8a7fa) plus the PDK ESD clamp diodes; total, metal-only and ESD-only legs",
+      "corner_set": "3 HBT process corners x 1.08/1.2/1.32 V x -40/27/125 C (PVT-full)",
+      "units_per_request": 27,
+      "required_measurements": [
+        "pad_im_i_total_0p1g_a",
+        "pad_im_i_total_5g_a",
+        "pad_im_i_metal_5g_a",
+        "pad_im_i_esd_5g_a"
+      ],
+      "limitations": "Pad-metal C is a quasi-static interconnect-to-substrate extraction pasted in as a lumped value, not a 5 GHz extraction; excludes bondwire/package, pad-to-pad coupling and the series rsil; ESD diode C from PDK models at one 0.6 V bias; no return loss (R9 SDD11) and no limits declared; simulated, not measured"
     },
     {
       "id": "tx-return-loss",

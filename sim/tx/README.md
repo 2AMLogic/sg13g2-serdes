@@ -75,3 +75,5 @@ MOS-set run status:
 ## Pad ESD benches (issue #94)
 
 `pad_cap_5ghz.sp` (ESD diode capacitance at the pad, AC) and `pad_esd_iv.sp` (DC clamp IV), with requests; record `records/20261112-pad/`. ESD diode share only, no bondpad, no R18/R19 grade. See `spec/decisions/DR-011-pad-model-source.md`.
+
+`pad_cap_extracted_5ghz.sp` (R18: extracted pad-metal C 70.66 fF from the #131 layout record plus the ESD diodes, AC, 27 corners); record `records/20261112-pad-extracted/`: 119.5 to 125.9 fF per leg, simulated. Lower-bound model, no R18 pass claimed. See `spec/decisions/DR-012-pad-cap-extracted-r18.md`.

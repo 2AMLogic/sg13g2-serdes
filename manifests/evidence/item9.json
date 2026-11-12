@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 9,
-  "summary": "T1 item 9 (Testbenches shipped): 64/64 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 9 (Testbenches shipped): 65/65 attestation checks passed (klt signoff --attest)",
   "source": "verification/testbench-inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 64,
-    "passed_count": 64,
+    "check_count": 65,
+    "passed_count": 65,
     "checks": [
       {
         "check": "present",
@@ -73,7 +73,7 @@
         "role": "testbench",
         "path": "sim/bench/benches.json",
         "passed": true,
-        "content_hash": "sha256:b7d885edf9c9c1fc97d4b7b56bdf0ec42c1ee7e39af066be3dba5253aaee3310"
+        "content_hash": "sha256:b4c33c34ebc324460860cc315be94156dd3bbd502a05ff58b2601eba5dbfbbd3"
       },
       {
         "check": "present",
@@ -158,6 +158,13 @@
         "path": "sim/rx/pad_ac.request.json",
         "passed": true,
         "content_hash": "sha256:2a93baeea3c2e62d7825f92c4e0d6c4adeac29555568f64d288240d0f9d2b369"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/tx/pad_cap_extracted_5ghz.request.json",
+        "passed": true,
+        "content_hash": "sha256:ada027ad7f509ae20dded0f06cfa56cd05fddddf6751a8b3829d031d3693e772"
       },
       {
         "check": "present",
@@ -512,6 +519,21 @@
       {
         "check": "command",
         "role": "cold_start",
+        "testbench": "sim/tx/pad_cap_extracted_5ghz.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "pad-cap-extracted",
+          "--request",
+          "sim/tx/pad_cap_extracted_5ghz.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
         "testbench": "sim/tx/tx_mos_ffe_en.request.json",
         "argv": [
           "scripts/run-bench.sh",
@@ -647,13 +669,6 @@
       {
         "check": "unbenched_row",
         "role": "row",
-        "row": "R18",
-        "issue": 94,
-        "passed": true
-      },
-      {
-        "check": "unbenched_row",
-        "role": "row",
         "row": "R19",
         "issue": 94,
         "passed": true
@@ -691,7 +706,7 @@
         "path": "verification/testbench-inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:2fa71e990ca8b7911c44e89fb7214570bcdce21546253ee2a4b32292c0048e42"
+      "content_hash": "sha256:0d7f0f1f7161208443ae49ed70aebd0a1207ed8190eb6f14d1988c955bda2ec5"
     }
   }
 }
