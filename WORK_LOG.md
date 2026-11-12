@@ -2,6 +2,11 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-11-12
+
+- **Issue #24** (closed): T1 item 2 (layout, analog): GDS for the CML TX/RX cells, clock path and high-speed pads
+- **Issue #105** (closed): rtl: apply DR-009 CDR loop gain (KP=8, KI=0) and regenerate synth/P&R records
+
 ### 2026-11-11
 
 - **PR #122**: refactor(layout): share netlist parser, klt runner and um() across analog generators
