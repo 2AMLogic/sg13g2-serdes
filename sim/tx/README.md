@@ -71,3 +71,7 @@ MOS-set run status:
     75 s with the same 36 pass / 7 fail / 2 error on `mux2to1_cml` and no timeouts.
   - Rise/fall stays at the fixed +-30 mV thresholds (artifacts at low swing, see above);
     no 20-80 % derivation was added because the benches keep no waveforms.
+
+## Pad ESD benches (issue #94)
+
+`pad_cap_5ghz.sp` (ESD diode capacitance at the pad, AC) and `pad_esd_iv.sp` (DC clamp IV), with requests; record `records/20261112-pad/`. ESD diode share only, no bondpad, no R18/R19 grade. See `spec/decisions/DR-011-pad-model-source.md`.
