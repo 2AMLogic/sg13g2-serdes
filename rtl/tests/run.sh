@@ -16,6 +16,8 @@ set -u
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 TOOLS="$ROOT/layout/tools.json"
 die() { echo "run.sh: $*" >&2; exit 2; }
+# shellcheck source=scripts/klt-lib.sh
+. "$ROOT/scripts/klt-lib.sh"
 
 COCOTB_VER="$(jq -r .cocotb.version "$TOOLS")"
 COCOTB_PY="$(jq -r .cocotb.python "$TOOLS")"
@@ -33,7 +35,7 @@ run_one() { # name test_module toplevel sources
   (cd "$ROOT/rtl/tests" && "${UV[@]}" python -I runner.py "$2" "$3" "$4")
 }
 pdk_verilog() {
-  local d="${PDK_ROOT:-$ROOT/.cache/pdk/$(jq -r .extracted_dir "$ROOT/sim/pdk.json")}"
+  local d="${PDK_ROOT:-$(pdk_default_root "$ROOT")}"
   echo "$d/ihp-sg13g2/libs.ref/sg13g2_stdcell/verilog"
 }
 bench() {
