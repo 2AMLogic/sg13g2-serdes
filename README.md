@@ -7,10 +7,22 @@ logic for the high-speed edge — designed by AI agents driving
 [klayout-tools](https://github.com/2AMLogic/klayout-tools), xschem + ngspice
 on the analog side and Yosys/OpenROAD on the digital side.
 
-**Status: just opened, specification phase.** Nothing is designed yet.
+**Status: design in progress against a PROPOSED specification.** The target
+spec is not ratified (issue #2), so nothing in [`spec/`](spec/README.md) binds
+design work yet. What is on `main` today, by partition — *analog*: TX and RX
+CML schematics in [`design/`](design/) with simulated PVT corner records under
+[`sim/`](sim/README.md), plus placed (not routed) RX-core and pad/ESD layout
+under `layout/analog/`; *digital*: the CMOS partition in [`rtl/`](rtl/) with
+cocotb benches, synthesized and routed into an append-only record under
+`layout/digital/`. The two partitions are not assembled into a top-level
+block, and nothing has been fabricated or measured. The T1 evidence position
+of record is
+[`manifests/sg13g2-serdes.signoff.json`](manifests/sg13g2-serdes.signoff.json)
+(`t1_met_count` of `t1_item_count`) — read the counts from that file rather
+than from this page, which drifts.
 
 **Built agent-native.** Every specification, decision record, testbench, and
-line of documentation here is produced by AI agents working from a ratified
+line of documentation here is produced by AI agents working from a written
 spec and an append-only evidence trail — not human-authored work that agents
 merely assisted with. Verification is the product: every claim traces to a
 recorded result under PVT corners. Where the agents hit friction with the
@@ -62,17 +74,25 @@ silicon exists, and says so.
 Maturity ladder: spec ratified → TX and RX building blocks simulated across
 PVT → link simulated end to end over the channel model → pads DRC-clean →
 assembled and LVS-clean → post-layout re-verification → shuttle seat →
-measured silicon. **Current position: pre-spec.**
+measured silicon. **Current position: pre-spec** — the first rung is the
+operator's ratification and it has not happened, so every later rung is
+reached only provisionally, against PROPOSED rows that can still change: the
+TX and RX blocks have PVT corner records, the behavioural link benches run
+over the declared channel model, and the digital partition is synthesized and
+routed. Which T1 items that actually satisfies is in the signoff record cited
+above, not here.
 
 ## Repo layout
 
 ```
-spec/          ratified spec + decision records
+spec/          target spec (PROPOSED, issue #2) + decision records
 rtl/           PRBS, serializer/deserializer control, CDR logic
 verification/  cocotb testbenches
 design/        analog schematics (CML stages, driver, CTLE, latches)
 sim/           testbenches + PVT corner results (ngspice), link-level eye studies
 layout/        GDS + DRC/LVS reports, including the pad cells
+manifests/     T1 evidence envelopes + the klt signoff record of verdict
+ratification/  the two non-author review-key rubrics for spec ratification
 measurements/  silicon characterization (empty until tape-out)
 ```
 
