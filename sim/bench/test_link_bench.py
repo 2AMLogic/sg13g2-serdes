@@ -17,6 +17,7 @@ import numpy as np  # noqa: E402
 import cdrmodel as cm  # noqa: E402
 import link_bench as lb  # noqa: E402
 import linkcore as lc  # noqa: E402
+import loop_inputs as li  # noqa: E402
 
 CORNER = "hbt_typ/1.200V/27C"
 
@@ -31,6 +32,23 @@ def run_bench(*argv):
 def test_inputs_come_from_the_repo():
     assert lc.rtl_loop_params() == {"KP": 16, "KI": 1, "FMAX": 1023, "PHASE_INIT": 0x2000}
     assert lc.dr007_delays() == {"digital": 7, "analog_assumed": 1}
+    # linkcore re-exports the one implementation; there is no second parser (issue #154)
+    assert lc.rtl_loop_params is li.rtl_loop_params and lc.dr007_delays is li.dr007_delays
+
+
+def test_cdr_loop_analysis_reads_its_inputs_from_the_repo():
+    """scripts/cdr-loop-analysis.py reads the loop parameters; it does not re-type them (issue #154).
+
+    Importing it runs both parsers, so an RTL or DR-007 edit that breaks a regex fails
+    here instead of leaving the DR-007 / DR-010 script silently reporting stale bounds,
+    and the comparison fails if anyone re-introduces a literal.
+    """
+    ana = lc.load_module("scripts/cdr-loop-analysis.py", "cdr_loop_analysis")
+    p, d = li.rtl_loop_params(), li.dr007_delays()
+    assert (ana.KP, ana.KI, ana.FMAX, ana.PHASE_INIT) == (p["KP"], p["KI"], p["FMAX"], p["PHASE_INIT"])
+    assert (ana.DIGITAL, ana.ANALOG_ASSUMED) == (d["digital"], d["analog_assumed"])
+    # simulate() steps the RTL-checked reference filter, not a second recurrence
+    assert ana.serdes_ref.CdrFilter is lc.serdes_ref.CdrFilter
 
 
 def test_entry_points_run():
