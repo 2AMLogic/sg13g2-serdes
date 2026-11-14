@@ -17,4 +17,12 @@ The klt version is pinned in two places, `scripts/klt-pin.env` (CI gate) and
 `klt_install` in `layout/toolchain.json` (layout/sim flows);
 `scripts/check-ci.sh json` fails if they disagree. Bumping it means
 regenerating the verdict (it embeds `build.*`) and re-vendoring the tiers doc.
-Regenerate with `scripts/check-ci.sh --regen`.
+Regenerate with `scripts/check-ci.sh --regen`: it re-attests items 1, 9 and 10,
+refreshes each of their `evidence[<id>].content_hash` pins from the re-attested
+envelope's own `provenance.input.content_hash` (the field the grader
+hash_checks — not always the sha256 of the envelope's `source`), and only then
+regenerates the verdict, which is graded from those pins. Item 1 re-attestation
+runs the netlist and synthesis freshness commands `design/inventory.item1.json`
+declares, so `--regen` needs a provisioned tree (`scripts/setup-env.sh`, then
+`source scripts/env.sh`); `scripts/check-ci.sh signoff` does not — it carries
+those `local_only` results from the committed envelope.

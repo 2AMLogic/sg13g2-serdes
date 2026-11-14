@@ -133,7 +133,13 @@ done
 KLT_INSTALL="$(json_get "${REPO_DIR}/layout/toolchain.json" "d['klt_install']")"
 if [[ ${CHECK_ONLY} -eq 0 && ! -x "${REPO_DIR}/.venv/bin/klt" ]]; then
   command -v uv >/dev/null 2>&1 || die "'uv' not found on PATH; needed to build the repo-local .venv (not installing it)." 3
-  uv venv "${REPO_DIR}/.venv"
+  # Build on the host python3 (already floor-checked above) and keep its
+  # site-packages visible: scripts/env.sh puts .venv/bin FIRST on PATH, so a
+  # self-contained venv would shadow the host interpreter and hide numpy --
+  # which the behavioural link benches need ("numpy only", sim/README.md), and
+  # which `klt signoff --attest 9` runs as cold_start checks. The venv exists to
+  # pin klt, not to replace the host python.
+  uv venv --python "$(command -v python3)" --system-site-packages "${REPO_DIR}/.venv"
   uv pip install --python "${REPO_DIR}/.venv/bin/python" "${KLT_INSTALL}"
 fi
 [[ -x "${REPO_DIR}/.venv/bin/klt" ]] || die ".venv/bin/klt missing -- run scripts/setup-env.sh (without --check)." 3

@@ -9,7 +9,7 @@
   "tier": null,
   "t1_item_count": 22,
   "build_t1_item_count": 22,
-  "t1_met_count": 7,
+  "t1_met_count": 11,
   "source_doc": "manifests/design-evidence-tiers.md",
   "source_doc_content_hash": "sha256:a26b90262320d0fbd32b3f549a02b6300832706041797a559d8bf6bdb62efdc7",
   "build": {
@@ -30,24 +30,496 @@
       "partition_boundary": "design/tx and design/rx CML cells (HBT CML from the serial pad down to the 625 MHz word boundary, including the CML-to-CMOS level converter design/rx/lvl_cml2cmos and its TX counterpart); the pads and ESD",
       "text": "committed schematic sources (or generator) plus the netlist derived from them, regenerated on design change.",
       "notes": [],
-      "status": "unmet",
-      "reason": "stale_evidence",
+      "status": "met",
+      "reason": null,
       "graded_by_build": true,
-      "citation": null,
-      "detail": {
+      "citation": {
+        "file": "manifests/evidence/item1.json",
+        "command": null,
+        "kind": "generic",
+        "check_status": "pass",
+        "content_hash": "sha256:abe33cf3f6b8b92271edc0da049d75a50a452a9a4040d30eb7a99045b8774e58",
+        "input_verified": true,
+        "exit_status": 0,
         "artifact_binding": {
+          "t1_item": 1,
+          "path": null,
+          "content_hash": "sha256:abe33cf3f6b8b92271edc0da049d75a50a452a9a4040d30eb7a99045b8774e58",
+          "input_verified": true,
           "members": [
             {
-              "path": "rtl/synth/serdes_digital_top.synth.json",
-              "content_hash": "sha256:0655732f26c3cfcd2db6ad2deb20c44daa4da659bd3018dee60a0daac8cb0856",
-              "status": "stale"
+              "path": {
+                "path": "design/inventory.item1.json",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:efbb3cf1945ab98343c0d3004507b0b194199e993b9c4f2bc7d675c4d44a4ed3",
+              "status": "verified"
             },
             {
-              "path": "rtl/synth/serdes_digital_top_synth.v",
-              "content_hash": "sha256:d659124458e555fdf5dabdd5bb80246b9c44585486021e466e67b8c9a6edb4aa",
-              "status": "stale"
+              "path": {
+                "path": "design/rx/clk_buf_quad.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:4b7bafec11de05141fc2b583c0484eaf5187ddd174400a2bd3d52a8c205bd440",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/clk_buf_quad.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:cd89e5d5253d69b3abe0359eddaffb601565ced49e8cadb4109d32bc79ec120b",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/ctle.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:41dde6f3d85550e67562216c0827a2a0740ae27aa2064d5384a71ac9870a96ff",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/ctle.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:e358a4bb54526c54ff489069450dce3f6577785c3cff731065ddc6d42b5c633f",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/latch_cml.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:c4b99ec8b7a87ec711f22a1c8b16641d947b6cefbfd33f45c9801bae2cab051f",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/latch_cml.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:609a9b9605ed83d97b91f1a595542b8b69ac5bbc28c319775a0ed08c1541b53c",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/lvl_cml2cmos.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:4cd8d6d6b4d77eb46d9fc212db69c852074268deae9936a21aa56826607ed1c7",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/lvl_cml2cmos.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:63b2dfbf035bc7841c415414eb2c60ea54d776fc9b268f5f918403b25ee16a0f",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/netlists/clk_buf_quad.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:95f3356809f3bff3f6d1c25738b3faa73182ce099689abf19f7417e2018ed148",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/netlists/ctle.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:38acd49237c792f3a1df857546548cca05d4ff487048d9a4c2515dd5fa4dcaa8",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/netlists/latch_cml.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:f829d16d83c2bc026d5aff9b7edc14206956a1c73b31df5d29fc2ca1b368166a",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/netlists/lvl_cml2cmos.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:802fe8bcc7f3bb904d6b716b04c920826d3ad6d0f53f5d9a2e7f9d8612226175",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/netlists/rx_term_pad.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:ceddb0bcc78445e5c51561c3267d229989b96e643f9084831f2d3e81eba93b10",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/netlists/rx_top.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:ff21846d075e001cf722d291a4bb1ea9447c9f52230c2738933f5dee96f56fd3",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/rx_term_pad.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:5eaa314699b55bc5d98f466a966d044b353eb98be05571e61fd94411a3739e21",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/rx_term_pad.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:bac18d4915470906e965dfb7b11cc9fee52e3a384f5a77372fb1581ab86f0a64",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/rx_top.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:ae899d66d4d123e02b58e0bc85b6a9eb16f9e08fad84895d294d695ad039d5d9",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/rx_top.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:e917d3bc7b9b1463d03cb968aff6a1a6f18832f44f0391928d547529155ac145",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/tools/gen_schematics.py",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:f3767b8ca81efaa3a35ada2b2b0491d03d72affdb3423e85a258947965327520",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/bias.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:99455c1398c611dd3175546f1ae9249c8a1534241bffd3964140eb202aecf191",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/bias.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:94d694466741001403a1cc46942b67fe9489e77c82d64ca9835fe6ec4fef0e46",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/driver_ffe.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:089156a7c4b17294565a25b655a7edda399633be119b7449de95191addba0850",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/driver_ffe.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:5c1854f58c4a3e82a391b38a5acf03cafa427bff77b66ff6a4789acdb7952655",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/ffe_en.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:4e7037f4536e0d519ffcc4d9214567998cb986eb701ce7c7e7400ca531045ab5",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/ffe_en.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:3aa5bf38ba564ec315ea37b71dd06dbdb3e87f06b1182f10b7d1b60b3bdb6195",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/gen_schematics.py",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:9779238722cfd18637792c00989a524dfa818f60db150238be1429639de75830",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/mux2to1_cml.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:9dd663cf45562d373fff0bba5c90157eef63d9a2824c9d9fbc21b41792ee26fb",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/mux2to1_cml.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:08733d393257b2a7b66f286f8d64a0169d4bcbb89ad5fa26e0c0e79ea7a4c2ad",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/bias.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:65855605637769fa33445dfe22c55dedce04b7577ac83a211286d0336e3a47e0",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/driver_ffe.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:874e0b5eea8d1201873fccbe623c9c2185cb569b2225813c7bcd25992b7064e8",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/ffe_en.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:1d3f8b9d5b58779edb3aa9776a635327dc42f69739bf2ae0d920ffecff4f1094",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/mux2to1_cml.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:612cb14e2bb4526e87ed79c5799034d8993f7c936f58c00f38fc622c92a22adc",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/pad_esd.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:128a1b110be9cdc63707b585acd18cbe4260fafda3278c42666aa5a153a56e62",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/predriver.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:0108584d4e4bbe0272aecca85ad475ad71d4db36d445283a6c98549d3efe1f6d",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/tx_lvl_cml2cmos.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:fa1f86408c106ca6fa3f6069004398d97a9a129a86049ff28519c34466f1b5d9",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/tx_top.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:29346ef8696e34ac680f1ffdcfd7c18bfec296122e3ed8bdc116ebb86af89b75",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/pad_esd.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:ae7c832e83c7a4cae114b163a4d227079be026e651c6ffe03221c5f02cdab72a",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/pad_esd.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:eff421bb7b9f49fabf3e013da5e03de496c0362a998c1bf3edaa532954c76643",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/predriver.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:e60d652b13b067e9ea7de9b2035a63f32dac524ffcbf4ffd8a6df7fafec4a18e",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/predriver.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:b667544d0c9368477012cd8ddad53cbbde7a73d9fd0feb58e319477ea0a63c05",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/tx_lvl_cml2cmos.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:07f1c4235cfc15923529ca323fc95373eb72352ed7b84cf7bc06c03c0864c53e",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/tx_lvl_cml2cmos.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:872f49c8d8a76c456061263e72a1d73bc620aabe897bc944b000c1b2c512c70b",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/tx_top.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:62b1dffe8e0eee8cd93406c72dfc97b7ecb2f0308be9d36da24461220b12da9d",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/tx_top.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:96e0e640f96eef2a6f6ee395c5278190fc6bdd39941b557e169bbbc39e377434",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/xschem_pins.py",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:0caaaa80ad1b985cd0c47ea32c62cabbb8273e26910d84f6ed114d885e8af051",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/xschemrc",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:1cf84c99f5ff09d4d5fb248ea4ece57a91b30bf208eedee23570d85242b4f56c",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_cdr_filter.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:e02a41873bdf17796792a8555de455f99cdab9fbbbc07755a8118ef635264f1b",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_cdr_pd.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:2bf222c554d9cd4fc8c9c4811526a3f0d58d906685ca36501b2e466333965528",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_ctrl.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:ad43dd84db50868a372b88de8286fc4cc04309f27defe45a8f98b1724d61a690",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_digital_top.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:76556980d1d5fde53c9fab078a626c2ee7d053656d05731c1f39a7454dbb9365",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_eye_mon.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:7fc6ec6006aaa1fa9695ebf7be35a2e4443be851b971224b78fbfea7fd8e5345",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_loopback.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:fa8134e136b3924e975272ca91298e2bb64aa756b424388b552dee05374bc4be",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_prbs_chk.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:9ed28fd9770ec7ec3e797710f0b7f8819149f6e7140f0f1f27d05d38f10182ab",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_prbs_gen.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:f8b26fa9171298d08f4259ed0a0a3cc8ebc3a3e7bd7a454c328149c0283f3ff8",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/synth/request.json",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:9e458a64c7e13a66d84d11b560e167aabaa6a123364d9df6b3d3f7bd08a6a3f4",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/synth/serdes_digital_top.synth.json",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:382131ffe82b868f18aec974b2bef769bcec844da82900949d264feba64f56c3",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/synth/serdes_digital_top_synth.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:08b90805a96b63df1e768a0055cf664b94796e26108ff1ada66ba285d709c7d8",
+              "status": "verified"
             }
-          ]
+          ],
+          "summary": "T1 item 1 (Design sources): 73/73 attestation checks passed (klt signoff --attest)",
+          "source": "design/inventory.item1.json",
+          "attestation": {
+            "producer": "klt signoff --attest",
+            "inventory_schema_version": 1,
+            "check_count": 73,
+            "passed_count": 73
+          }
         }
       }
     },
@@ -59,24 +531,496 @@
       "partition_boundary": "rtl/serdes_digital_top.v hierarchy (CMOS from the 625 MHz word boundary down): ports tx_word[15:0] (to the CML serialiser), rx_data_word[15:0], rx_edge_word[15:0] (from the CML deserialiser), pi_code, eye_ph_off, eye_smp_off, ser_lb, and the SPI/clk/rst_n pins. Seam per spec/decisions/DR-008-stage-boundaries.md; level conversion is unresolved there (DR-008 consequence 3).",
       "text": "committed RTL sources plus the synthesized gate-level netlist derived from them, regenerated on design change. For a hand-captured full-custom digital partition (no RTL, no synthesis step \u2014 see \"Full-custom digital sub-case\" above), this item is satisfied instead by the Analog column's artifact: committed schematic sources (or generator) plus the netlist derived from them, regenerated on design change, with every logic gate captured as a schematic exactly like an analog partition's.",
       "notes": [],
-      "status": "unmet",
-      "reason": "stale_evidence",
+      "status": "met",
+      "reason": null,
       "graded_by_build": true,
-      "citation": null,
-      "detail": {
+      "citation": {
+        "file": "manifests/evidence/item1.json",
+        "command": null,
+        "kind": "generic",
+        "check_status": "pass",
+        "content_hash": "sha256:abe33cf3f6b8b92271edc0da049d75a50a452a9a4040d30eb7a99045b8774e58",
+        "input_verified": true,
+        "exit_status": 0,
         "artifact_binding": {
+          "t1_item": 1,
+          "path": null,
+          "content_hash": "sha256:abe33cf3f6b8b92271edc0da049d75a50a452a9a4040d30eb7a99045b8774e58",
+          "input_verified": true,
           "members": [
             {
-              "path": "rtl/synth/serdes_digital_top.synth.json",
-              "content_hash": "sha256:0655732f26c3cfcd2db6ad2deb20c44daa4da659bd3018dee60a0daac8cb0856",
-              "status": "stale"
+              "path": {
+                "path": "design/inventory.item1.json",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:efbb3cf1945ab98343c0d3004507b0b194199e993b9c4f2bc7d675c4d44a4ed3",
+              "status": "verified"
             },
             {
-              "path": "rtl/synth/serdes_digital_top_synth.v",
-              "content_hash": "sha256:d659124458e555fdf5dabdd5bb80246b9c44585486021e466e67b8c9a6edb4aa",
-              "status": "stale"
+              "path": {
+                "path": "design/rx/clk_buf_quad.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:4b7bafec11de05141fc2b583c0484eaf5187ddd174400a2bd3d52a8c205bd440",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/clk_buf_quad.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:cd89e5d5253d69b3abe0359eddaffb601565ced49e8cadb4109d32bc79ec120b",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/ctle.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:41dde6f3d85550e67562216c0827a2a0740ae27aa2064d5384a71ac9870a96ff",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/ctle.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:e358a4bb54526c54ff489069450dce3f6577785c3cff731065ddc6d42b5c633f",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/latch_cml.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:c4b99ec8b7a87ec711f22a1c8b16641d947b6cefbfd33f45c9801bae2cab051f",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/latch_cml.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:609a9b9605ed83d97b91f1a595542b8b69ac5bbc28c319775a0ed08c1541b53c",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/lvl_cml2cmos.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:4cd8d6d6b4d77eb46d9fc212db69c852074268deae9936a21aa56826607ed1c7",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/lvl_cml2cmos.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:63b2dfbf035bc7841c415414eb2c60ea54d776fc9b268f5f918403b25ee16a0f",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/netlists/clk_buf_quad.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:95f3356809f3bff3f6d1c25738b3faa73182ce099689abf19f7417e2018ed148",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/netlists/ctle.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:38acd49237c792f3a1df857546548cca05d4ff487048d9a4c2515dd5fa4dcaa8",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/netlists/latch_cml.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:f829d16d83c2bc026d5aff9b7edc14206956a1c73b31df5d29fc2ca1b368166a",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/netlists/lvl_cml2cmos.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:802fe8bcc7f3bb904d6b716b04c920826d3ad6d0f53f5d9a2e7f9d8612226175",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/netlists/rx_term_pad.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:ceddb0bcc78445e5c51561c3267d229989b96e643f9084831f2d3e81eba93b10",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/netlists/rx_top.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:ff21846d075e001cf722d291a4bb1ea9447c9f52230c2738933f5dee96f56fd3",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/rx_term_pad.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:5eaa314699b55bc5d98f466a966d044b353eb98be05571e61fd94411a3739e21",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/rx_term_pad.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:bac18d4915470906e965dfb7b11cc9fee52e3a384f5a77372fb1581ab86f0a64",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/rx_top.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:ae899d66d4d123e02b58e0bc85b6a9eb16f9e08fad84895d294d695ad039d5d9",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/rx_top.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:e917d3bc7b9b1463d03cb968aff6a1a6f18832f44f0391928d547529155ac145",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/rx/tools/gen_schematics.py",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:f3767b8ca81efaa3a35ada2b2b0491d03d72affdb3423e85a258947965327520",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/bias.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:99455c1398c611dd3175546f1ae9249c8a1534241bffd3964140eb202aecf191",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/bias.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:94d694466741001403a1cc46942b67fe9489e77c82d64ca9835fe6ec4fef0e46",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/driver_ffe.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:089156a7c4b17294565a25b655a7edda399633be119b7449de95191addba0850",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/driver_ffe.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:5c1854f58c4a3e82a391b38a5acf03cafa427bff77b66ff6a4789acdb7952655",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/ffe_en.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:4e7037f4536e0d519ffcc4d9214567998cb986eb701ce7c7e7400ca531045ab5",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/ffe_en.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:3aa5bf38ba564ec315ea37b71dd06dbdb3e87f06b1182f10b7d1b60b3bdb6195",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/gen_schematics.py",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:9779238722cfd18637792c00989a524dfa818f60db150238be1429639de75830",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/mux2to1_cml.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:9dd663cf45562d373fff0bba5c90157eef63d9a2824c9d9fbc21b41792ee26fb",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/mux2to1_cml.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:08733d393257b2a7b66f286f8d64a0169d4bcbb89ad5fa26e0c0e79ea7a4c2ad",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/bias.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:65855605637769fa33445dfe22c55dedce04b7577ac83a211286d0336e3a47e0",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/driver_ffe.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:874e0b5eea8d1201873fccbe623c9c2185cb569b2225813c7bcd25992b7064e8",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/ffe_en.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:1d3f8b9d5b58779edb3aa9776a635327dc42f69739bf2ae0d920ffecff4f1094",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/mux2to1_cml.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:612cb14e2bb4526e87ed79c5799034d8993f7c936f58c00f38fc622c92a22adc",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/pad_esd.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:128a1b110be9cdc63707b585acd18cbe4260fafda3278c42666aa5a153a56e62",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/predriver.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:0108584d4e4bbe0272aecca85ad475ad71d4db36d445283a6c98549d3efe1f6d",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/tx_lvl_cml2cmos.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:fa1f86408c106ca6fa3f6069004398d97a9a129a86049ff28519c34466f1b5d9",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/netlists/tx_top.spice",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:29346ef8696e34ac680f1ffdcfd7c18bfec296122e3ed8bdc116ebb86af89b75",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/pad_esd.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:ae7c832e83c7a4cae114b163a4d227079be026e651c6ffe03221c5f02cdab72a",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/pad_esd.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:eff421bb7b9f49fabf3e013da5e03de496c0362a998c1bf3edaa532954c76643",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/predriver.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:e60d652b13b067e9ea7de9b2035a63f32dac524ffcbf4ffd8a6df7fafec4a18e",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/predriver.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:b667544d0c9368477012cd8ddad53cbbde7a73d9fd0feb58e319477ea0a63c05",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/tx_lvl_cml2cmos.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:07f1c4235cfc15923529ca323fc95373eb72352ed7b84cf7bc06c03c0864c53e",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/tx_lvl_cml2cmos.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:872f49c8d8a76c456061263e72a1d73bc620aabe897bc944b000c1b2c512c70b",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/tx_top.sch",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:62b1dffe8e0eee8cd93406c72dfc97b7ecb2f0308be9d36da24461220b12da9d",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/tx/tx_top.sym",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:96e0e640f96eef2a6f6ee395c5278190fc6bdd39941b557e169bbbc39e377434",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/xschem_pins.py",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:0caaaa80ad1b985cd0c47ea32c62cabbb8273e26910d84f6ed114d885e8af051",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "design/xschemrc",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:1cf84c99f5ff09d4d5fb248ea4ece57a91b30bf208eedee23570d85242b4f56c",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_cdr_filter.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:e02a41873bdf17796792a8555de455f99cdab9fbbbc07755a8118ef635264f1b",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_cdr_pd.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:2bf222c554d9cd4fc8c9c4811526a3f0d58d906685ca36501b2e466333965528",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_ctrl.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:ad43dd84db50868a372b88de8286fc4cc04309f27defe45a8f98b1724d61a690",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_digital_top.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:76556980d1d5fde53c9fab078a626c2ee7d053656d05731c1f39a7454dbb9365",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_eye_mon.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:7fc6ec6006aaa1fa9695ebf7be35a2e4443be851b971224b78fbfea7fd8e5345",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_loopback.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:fa8134e136b3924e975272ca91298e2bb64aa756b424388b552dee05374bc4be",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_prbs_chk.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:9ed28fd9770ec7ec3e797710f0b7f8819149f6e7140f0f1f27d05d38f10182ab",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/serdes_prbs_gen.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:f8b26fa9171298d08f4259ed0a0a3cc8ebc3a3e7bd7a454c328149c0283f3ff8",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/synth/request.json",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:9e458a64c7e13a66d84d11b560e167aabaa6a123364d9df6b3d3f7bd08a6a3f4",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/synth/serdes_digital_top.synth.json",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:382131ffe82b868f18aec974b2bef769bcec844da82900949d264feba64f56c3",
+              "status": "verified"
+            },
+            {
+              "path": {
+                "path": "rtl/synth/serdes_digital_top_synth.v",
+                "scope": "repo"
+              },
+              "content_hash": "sha256:08b90805a96b63df1e768a0055cf664b94796e26108ff1ada66ba285d709c7d8",
+              "status": "verified"
             }
-          ]
+          ],
+          "summary": "T1 item 1 (Design sources): 73/73 attestation checks passed (klt signoff --attest)",
+          "source": "design/inventory.item1.json",
+          "attestation": {
+            "producer": "klt signoff --attest",
+            "inventory_schema_version": 1,
+            "check_count": 73,
+            "passed_count": 73
+          }
         }
       }
     },
@@ -449,17 +1393,33 @@
       "partition_boundary": "design/tx and design/rx CML cells (HBT CML from the serial pad down to the 625 MHz word boundary, including the CML-to-CMOS level converter design/rx/lvl_cml2cmos and its TX counterpart); the pads and ESD",
       "text": "every claimed measurement's testbench committed, with a documented cold-start invocation a third party can run; pinned PDK revision.",
       "notes": [],
-      "status": "unmet",
-      "reason": "stale_evidence",
+      "status": "met",
+      "reason": null,
       "graded_by_build": true,
-      "citation": null,
-      "detail": {
-        "content_hash_pin": "stale",
-        "hash_check": {
-          "field": "provenance.input.content_hash",
-          "expected": "sha256:5f68f3b0037410e8c37ec50dbedbc7d75b602f7a7141d41b128b962800be8eb0",
-          "actual": "sha256:d7ddf90f5e3924311529a39e50bd198cd8bc19b1347f00e2dbfba476955c4870",
-          "match": false
+      "citation": {
+        "file": "manifests/evidence/item9.json",
+        "command": null,
+        "kind": "generic",
+        "check_status": "pass",
+        "content_hash": "sha256:d7ddf90f5e3924311529a39e50bd198cd8bc19b1347f00e2dbfba476955c4870",
+        "input_verified": true,
+        "exit_status": 0,
+        "artifact_binding": {
+          "t1_item": 9,
+          "path": {
+            "path": "verification/testbench-inventory.json",
+            "scope": "repo"
+          },
+          "content_hash": "sha256:d7ddf90f5e3924311529a39e50bd198cd8bc19b1347f00e2dbfba476955c4870",
+          "input_verified": true,
+          "summary": "T1 item 9 (Testbenches shipped): 66/66 attestation checks passed (klt signoff --attest)",
+          "source": "verification/testbench-inventory.json",
+          "attestation": {
+            "producer": "klt signoff --attest",
+            "inventory_schema_version": 1,
+            "check_count": 66,
+            "passed_count": 66
+          }
         }
       }
     },
@@ -471,17 +1431,33 @@
       "partition_boundary": "rtl/serdes_digital_top.v hierarchy (CMOS from the 625 MHz word boundary down): ports tx_word[15:0] (to the CML serialiser), rx_data_word[15:0], rx_edge_word[15:0] (from the CML deserialiser), pi_code, eye_ph_off, eye_smp_off, ser_lb, and the SPI/clk/rst_n pins. Seam per spec/decisions/DR-008-stage-boundaries.md; level conversion is unresolved there (DR-008 consequence 3).",
       "text": "every claimed measurement's testbench committed, with a documented cold-start invocation a third party can run; pinned PDK revision.",
       "notes": [],
-      "status": "unmet",
-      "reason": "stale_evidence",
+      "status": "met",
+      "reason": null,
       "graded_by_build": true,
-      "citation": null,
-      "detail": {
-        "content_hash_pin": "stale",
-        "hash_check": {
-          "field": "provenance.input.content_hash",
-          "expected": "sha256:5f68f3b0037410e8c37ec50dbedbc7d75b602f7a7141d41b128b962800be8eb0",
-          "actual": "sha256:d7ddf90f5e3924311529a39e50bd198cd8bc19b1347f00e2dbfba476955c4870",
-          "match": false
+      "citation": {
+        "file": "manifests/evidence/item9.json",
+        "command": null,
+        "kind": "generic",
+        "check_status": "pass",
+        "content_hash": "sha256:d7ddf90f5e3924311529a39e50bd198cd8bc19b1347f00e2dbfba476955c4870",
+        "input_verified": true,
+        "exit_status": 0,
+        "artifact_binding": {
+          "t1_item": 9,
+          "path": {
+            "path": "verification/testbench-inventory.json",
+            "scope": "repo"
+          },
+          "content_hash": "sha256:d7ddf90f5e3924311529a39e50bd198cd8bc19b1347f00e2dbfba476955c4870",
+          "input_verified": true,
+          "summary": "T1 item 9 (Testbenches shipped): 66/66 attestation checks passed (klt signoff --attest)",
+          "source": "verification/testbench-inventory.json",
+          "attestation": {
+            "producer": "klt signoff --attest",
+            "inventory_schema_version": 1,
+            "check_count": 66,
+            "passed_count": 66
+          }
         }
       }
     },

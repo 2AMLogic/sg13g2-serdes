@@ -16,10 +16,11 @@ import importlib.util
 import json
 import math
 import pathlib
-import re
 import sys
 
 import numpy as np
+
+import loop_inputs
 
 try:
     from scipy.special import erfc as _erfc
@@ -68,26 +69,11 @@ serdes_ref = load_module("rtl/tests/serdes_ref.py", "serdes_ref")
 
 
 # ---- inputs read from the repo, never re-typed -------------------------------------------
-def rtl_loop_params():
-    """KP/KI/FMAX/PHASE_INIT defaults of rtl/serdes_cdr_filter.v."""
-    src = (REPO / "rtl/serdes_cdr_filter.v").read_text()
-
-    def num(name):
-        m = re.search(rf"parameter\s+(?:signed\s+)?(?:\[[^\]]*\]\s+)?{name}\s*=\s*(?:\d+'s?([dh]))?([0-9a-fA-F]+)", src)
-        if not m:
-            raise SystemExit(f"linkcore: cannot read {name} from rtl/serdes_cdr_filter.v")
-        return int(m.group(2), 16 if m.group(1) == "h" else 10)
-    return {"KP": num("KP"), "KI": num("KI"), "FMAX": num("FMAX"), "PHASE_INIT": num("PHASE_INIT")}
-
-
-def dr007_delays():
-    """Digital delay (clocks) from DR-007's table; analog delay is the ASSUMED value stated there."""
-    src = (REPO / "spec/decisions/DR-007-cdr-loop-analysis.md").read_text()
-    d = re.search(r"\|\s*Digital\s*\|\s*\*\*(\d+)\*\*", src)
-    a = re.search(r"\|\s*Analog[^|]*\|\s*\*\*(\d+)\*\*\s*\|\s*\*\*ASSUMED", src)
-    if not (d and a):
-        raise SystemExit("linkcore: cannot read the delay table of DR-007")
-    return {"digital": int(d.group(1)), "analog_assumed": int(a.group(1))}
+# The parsers live in loop_inputs.py so scripts/cdr-loop-analysis.py can read the same
+# values without importing the eye model (issue #154). Re-exported here: the benches and
+# cdrmodel.py keep calling lc.rtl_loop_params() / lc.dr007_delays().
+rtl_loop_params = loop_inputs.rtl_loop_params
+dr007_delays = loop_inputs.dr007_delays
 
 
 def latest_rx_record():
