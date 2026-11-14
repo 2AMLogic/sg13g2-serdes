@@ -91,8 +91,12 @@ model -> `spec/channel/channel_model.py` (R14) pulse response -> statistical eye
 -> dual-Dirac Q-scale wall/amplitude fit to 1e-12. The time-domain CDR uses `rtl/tests/serdes_ref.CdrFilter`
 (bit-exact against the RTL) with KP/KI/FMAX parsed from `rtl/serdes_cdr_filter.v` and the delay parsed from
 DR-007; its recovered-clock error feeds the R15 eye. Every printed figure carries its DR-002 label and the record
-it is fitted to. **The latch records carry only the q swing: no sampler offset/noise statistics and no regeneration
-times (all `latch_t_regen_*` are `error`).** Sampler offset/noise, RJ/DJ, PD decision noise and the analog loop delay
-are therefore printed as `UNFITTED ASSUMPTION`s; they are inputs, not results. Fit validation on held-out corners
+it is fitted to. **The latch records carry the q swing and regeneration times, but no sampler offset/noise statistics.**
+`sim/rx/records/20261114-050716-eb34d10` is the first latch record with no `error` corner: regeneration is measured
+to two fixed \|q\| levels, and every corner returns a time to the 0.10 V floor level (1.5-17.5 ps) plus either a
+time to the 0.25 V decision level or an explicit `not_reached` verdict. The six 1.080 V corners are `not_reached`
+at the decision level -- a swing limit, not a speed limit; no corner in the grid misses the 100 ps first-look limit
+(`sim/rx/README.md` § "Regeneration at low supply"). Sampler offset/noise, RJ/DJ, PD decision noise and the analog
+loop delay are still printed as `UNFITTED ASSUMPTION`s; they are inputs, not results. Fit validation on held-out corners
 (DR-002 step 3) is not done. PVT-edge for R11/R13 is corner-independent in this model (no per-corner PI/sampler
 record); the latch/CTLE fits enter R12 through the per-corner eye.
