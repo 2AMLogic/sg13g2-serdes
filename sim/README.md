@@ -75,7 +75,7 @@ rather than re-running them).
 
 ### Behavioural link benches (R8, R11, R12, R13, R15; issue #93, DR-002)
 
-Cold start, one command per row (numpy only; scipy's `erfc` is used when present; one local process, no fleet,
+Cold start, one command per row (numpy only -- installed into `.venv` by `scripts/setup-env.sh` at the `bench_install` pin in `layout/toolchain.json`, which `run-bench.sh` resolves by path so the pin holds even inside `klt signoff --attest 9`'s sanitized cold-start environment; scipy's `erfc` is used when present; one local process, no fleet,
 no `-j`/`-n`); add `--quick` for a short configuration. The cold start exits 0 whenever the bench ran (the verdict, e.g.
 `NOT MET`, is in the output and is never relaxed); `--strict` makes a missed threshold exit 3:
 
