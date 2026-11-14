@@ -2,7 +2,8 @@
 # The CI gate. .github/workflows/ci.yml and package.json (check:ci, test, lint)
 # both run this script, so local and CI checks cannot diverge.
 #   scripts/check-ci.sh [json|links|harness|signoff|all]   (default: all)
-#   scripts/check-ci.sh --regen    re-attest items 9 and 10, regenerate the committed signoff record
+#   scripts/check-ci.sh --regen    re-attest items 1, 9 and 10, refresh their manifest
+#                                  content_hash pins, regenerate the committed signoff record
 set -uo pipefail
 cd "$(dirname "$0")/.."
 # shellcheck source=scripts/klt-pin.env
@@ -15,10 +16,35 @@ ITEM10_INVENTORY=manifests/evidence/item10.inventory.json
 ITEM10_ENVELOPE=manifests/evidence/item10.json
 ITEM9_INVENTORY=verification/testbench-inventory.json
 ITEM9_ENVELOPE=manifests/evidence/item9.json
+ITEM1_INVENTORY=design/inventory.item1.json
+ITEM1_ENVELOPE=manifests/evidence/item1.json
 
 klt_signoff() {
   uvx --from "klayout-tools==${KLT_VERSION}" klt signoff \
     --manifest "$MANIFEST" --tiers-doc "$TIERS" --format json
+}
+
+# refresh_pin <t1-item-id> <envelope> -- rewrite evidence[<id>].content_hash in
+# $MANIFEST to the value the grader hash_checks it against.
+#
+# That value is the envelope's own provenance.input.content_hash, which is NOT
+# always the sha256 of the envelope's `source` file: for an inventory that
+# declares `sources` (item 1 does), klt 0.9.0 renders a multi-input provenance
+# whose content_hash is an aggregate over every declared path. Reading the pin
+# back out of the envelope therefore keeps items 1, 9 and 10 on one code path
+# and cannot go stale when an inventory gains or loses entries.
+refresh_pin() {
+  local id=$1 envelope=$2 want tmp
+  want=$(jq -er '.provenance.input.content_hash' "$envelope") || {
+    echo "::error file=$envelope::no provenance.input.content_hash to pin" >&2; return 1; }
+  jq -e --arg id "$id" '(.evidence // {}) | has($id)' "$MANIFEST" >/dev/null || {
+    echo "::error file=$MANIFEST::no evidence[\"$id\"] entry to pin" >&2; return 1; }
+  tmp=$(mktemp)
+  if jq --arg id "$id" --arg h "$want" '.evidence[$id].content_hash = $h' "$MANIFEST" > "$tmp"; then
+    mv "$tmp" "$MANIFEST"
+  else
+    rm -f "$tmp"; echo "::error file=$MANIFEST::could not rewrite evidence[\"$id\"].content_hash" >&2; return 1
+  fi
 }
 
 check_json() {
@@ -87,10 +113,19 @@ check_signoff() {
     --attest 9 --inventory "$ITEM9_INVENTORY" --check "$ITEM9_ENVELOPE" --format json >/dev/null \
     || { echo "::error::item 9 attestation drifted or failed: re-attest with scripts/check-ci.sh --regen"; return 1; }
   echo "signoff: item 9 attestation holds"
+  # Item 1: the inventory's netlist/synth freshness commands are local_only
+  # (they need PDK_ROOT and xschem), so --check re-hashes the sources and
+  # carries those command results instead of re-running them.
+  uvx --from "klayout-tools==${KLT_VERSION}" klt signoff \
+    --attest 1 --inventory "$ITEM1_INVENTORY" --check "$ITEM1_ENVELOPE" --format json >/dev/null \
+    || { echo "::error::item 1 attestation drifted or failed: re-attest with scripts/check-ci.sh --regen"; return 1; }
+  echo "signoff: item 1 attestation holds"
 }
 
 case "${1:-all}" in
   --regen)
+    # Item 10 first: its hygiene inventory lists this script, so re-attesting it
+    # last would miss an edit made in the same change.
     uvx --from "klayout-tools==${KLT_VERSION}" klt signoff \
       --attest 10 --inventory "$ITEM10_INVENTORY" -o "$ITEM10_ENVELOPE" --format json >/dev/null \
       || { echo "item 10 attestation failed" >&2; exit 1; }
@@ -98,6 +133,17 @@ case "${1:-all}" in
     uvx --from "klayout-tools==${KLT_VERSION}" klt signoff \
       --attest 9 --inventory "$ITEM9_INVENTORY" -o "$ITEM9_ENVELOPE" --format json >/dev/null \
       || { echo "item 9 attestation failed" >&2; exit 1; }
+    # Item 1 runs the netlist/synth freshness commands its inventory declares,
+    # so this step needs a provisioned local tree (source scripts/env.sh).
+    uvx --from "klayout-tools==${KLT_VERSION}" klt signoff \
+      --attest 1 --inventory "$ITEM1_INVENTORY" -o "$ITEM1_ENVELOPE" --format json >/dev/null \
+      || { echo "item 1 attestation failed (provisioned tree needed: source scripts/env.sh)" >&2; exit 1; }
+    # Pins BEFORE the record: the grader reads evidence[*].content_hash, so
+    # regenerating the verdict first and pinning second commits a record that
+    # still grades the items just re-attested stale_evidence.
+    refresh_pin 10 "$ITEM10_ENVELOPE" || exit 1
+    refresh_pin 9 "$ITEM9_ENVELOPE" || exit 1
+    refresh_pin 1 "$ITEM1_ENVELOPE" || exit 1
     out=$(mktemp); rc=0; klt_signoff > "$out" || rc=$?
     [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ] || { echo "klt signoff exited $rc" >&2; exit 1; }
     mv "$out" "$RECORD" ;;
