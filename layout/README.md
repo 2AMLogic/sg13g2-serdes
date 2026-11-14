@@ -50,7 +50,7 @@
 
 | Partition | Report | status | violations |
 |---|---|---|---|
-| digital | `layout/digital/records/2026-11-10-f6fe587/drc.json` | `clean` | 0 |
+| digital | `layout/digital/records/2026-11-14-d19ba10/drc.json` | `clean` | 0 |
 | analog | `layout/analog/top/records/2026-11-12-0193777/drc.json` | `clean` | 0 |
 
 **Digital** is routed by `klt place-and-route`; `clean` means no violations under this deck's scope and coverage below, graded `met` by `klt signoff`.

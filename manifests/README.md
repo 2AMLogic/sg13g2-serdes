@@ -4,9 +4,15 @@
   `partition_boundary` is declared from `spec/decisions/DR-008-stage-boundaries.md`
   (the spec itself, issue #2, is still PROPOSED, so re-check on ratification).
   Evidence `2.digital` is the routed digital GDS attestation
-  (`evidence/item2.json`, made with `klt signoff --attest 2`, which the pinned
-  klt 0.8.0 lacks; it was produced with a throwaway klt 0.9.1 and graded by
-  the pinned 0.8.0). Evidence `2.analog` is the analog top GDS attestation (`evidence/item2.analog-top.json`, issue #113).
+  (`evidence/item2.json`, made with `klt signoff --attest 2` on the pinned klt
+  0.9.0, which has that subcommand, and graded by the same 0.9.0; earlier
+  copies were produced with a throwaway 0.9.1 against the pinned 0.8.0, which
+  lacked it). Evidence `2.analog` is the analog top GDS attestation (`evidence/item2.analog-top.json`, issue #113).
+  Evidence `3.digital` and `4.digital` cite the digital DRC report and the
+  gate-level LVS verdict beside the newest place-and-route record; refreshing
+  them means a new `scripts/pnr-regen.sh` record, a `klt drc` beside it and a
+  new `scripts/lvs-regen.sh` record, then re-pinning these three by hand
+  (`scripts/check-ci.sh --regen` does not touch them).
 - `design-evidence-tiers.md` — vendored verbatim from
   `2AMLogic/klayout-tools` `docs/design-evidence-tiers.md` at tag `v0.8.0`,
   commit `c572046be644e0407f693f2410f3abb799d68a3a`.
