@@ -11,6 +11,11 @@ over the R14 channel -> dual-Dirac tail extrapolation.
                 gain at 0.1 / 2.5 / 5 GHz; -20 dB/dec beyond 5 GHz (UNFITTED).
   * sampler   : input-referred noise and offset sigma are UNFITTED ASSUMPTIONS: no
                 record carries a sampler Monte Carlo (rx latch records hold q swing only).
+
+Both link benches (link_bench.py and link_sensitivity.py) compose their figures from the
+primitives here, so the compositions and grading rules they share -- the per-corner eye
+(corner_eye), the R11 lock rule (lock_word) and the R12 SJ mask (r12_mask) -- have exactly one
+definition, in this file. A bench that re-states one of them puts a graded value in two places.
 """
 import importlib.util
 import json
@@ -243,6 +248,54 @@ def amp_extrapolate(amps, bers, target=1e-12, lo=1e-9, hi=1e-4):
     if a <= 0:
         return None, "Q does not grow with amplitude", None
     return (qinv(target) - b) / a, "", float(np.sqrt(np.mean((np.polyval([a, b], np.asarray(amps)[idx]) - q) ** 2)))
+
+
+# ---- compositions and rules shared by the link benches -----------------------------------
+def eye_kernel(rj_ui, dj_uipp, extra_rj_ui=0.0):
+    """Jitter kernel for the statistical eye. extra_rj_ui (the recovered clock's rms error) enters in
+    quadrature with the sampler's own random jitter -- the one place that convention is written down;
+    link_bench r15 and the sensitivity sweep both fold the CDR in this way."""
+    return jitter_kernel(float(np.hypot(rj_ui, extra_rj_ui)), dj_uipp)
+
+
+def corner_eye(pmfs, amp_v, sigma_v, offset_v, kernel):
+    """One corner's jitter-convolved bathtub plus its dual-Dirac wall extrapolation: the two-step
+    composition every graded eye figure in this repo comes from. The best phase is rolled to the centre
+    of the UI first, so tau is the one UI centred on it (wall_extrapolate's contract).
+    Returns (ber over the 1/M UI phase grid, wall_extrapolate dict)."""
+    ber = bathtub(pmfs, amp_v, sigma_v, offset_v, kernel)
+    order = np.roll(np.arange(M), M // 2 - int(np.argmin(ber)))        # centre the best phase
+    tau = (np.arange(M) - M // 2) / M
+    return ber, wall_extrapolate(tau, ber[order])
+
+
+# ---- R11 lock rule: one definition (link_bench r11 grades it, link_sensitivity reports it) ----
+LOCK_AVG_WORDS = 64        # moving-average window of the lock rule, words
+LOCK_THRESH_UI = 0.05      # the averaged |phase error| must stay inside this band to the end of the run
+
+
+def lock_word(e_ui):
+    """Word at which the loop counts as locked: the last word whose LOCK_AVG_WORDS-word mean error is
+    still outside +-LOCK_THRESH_UI, plus half a window (mode='same' puts the average at its window's
+    centre, and the half window at each end is unusable); 0 if the band is never left.
+    e_ui is the per-word phase error in UI."""
+    half = LOCK_AVG_WORDS // 2
+    m = np.convolve(e_ui, np.ones(LOCK_AVG_WORDS) / LOCK_AVG_WORDS, mode="same")
+    out = np.nonzero(np.abs(m[half:-half]) >= LOCK_THRESH_UI)[0]
+    return int(out[-1]) + half + 1 if len(out) else 0
+
+
+def lock_limit(n_words):
+    """R11's pass limit: the loop must be locked within the first half of the run."""
+    return n_words // 2
+
+
+# ---- R12 sinusoidal-jitter mask ----------------------------------------------------------
+def r12_mask(f_hz):
+    """Proposed R12 SJ tolerance mask, UIpp: a 1.5 UIpp.MHz slope down to a 0.15 UIpp floor. The single
+    source of truth for a ratified grading value -- link_bench r12 grades tolerance against it and
+    link_sensitivity's slew table is ratioed to it, so neither may re-state the amplitudes."""
+    return max(0.15, 1.5e6 / f_hz)
 
 
 def label_fit(rec_id, extra=""):
