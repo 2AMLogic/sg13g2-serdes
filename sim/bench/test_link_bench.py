@@ -8,6 +8,7 @@ Includes the negative controls: the benches must be able to fail.
 import contextlib
 import io
 import pathlib
+import re
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
@@ -20,6 +21,8 @@ import linkcore as lc  # noqa: E402
 import loop_inputs as li  # noqa: E402
 
 CORNER = "hbt_typ/1.200V/27C"
+
+REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def run_bench(*argv):
@@ -41,14 +44,33 @@ def test_cdr_loop_analysis_reads_its_inputs_from_the_repo():
 
     Importing it runs both parsers, so an RTL or DR-007 edit that breaks a regex fails
     here instead of leaving the DR-007 / DR-010 script silently reporting stale bounds,
-    and the comparison fails if anyone re-introduces a literal.
+    and the comparison fails if anyone re-introduces a literal with a wrong value
+    (a re-typed *identical* literal is caught by the source-text guard below).
     """
     ana = lc.load_module("scripts/cdr-loop-analysis.py", "cdr_loop_analysis")
     p, d = li.rtl_loop_params(), li.dr007_delays()
     assert (ana.KP, ana.KI, ana.FMAX, ana.PHASE_INIT) == (p["KP"], p["KI"], p["FMAX"], p["PHASE_INIT"])
     assert (ana.DIGITAL, ana.ANALOG_ASSUMED) == (d["digital"], d["analog_assumed"])
+    assert (ana.UI, ana.HALF_UI, ana.PPM_LSB) == (li.UI, li.HALF_UI, li.PPM_LSB)   # shared scalars (issue #167)
     # simulate() steps the RTL-checked reference filter, not a second recurrence
     assert ana.serdes_ref.CdrFilter is lc.serdes_ref.CdrFilter
+
+
+def test_cdr_constants_are_not_re_typed():
+    """UI/HALF_UI/PPM_LSB/UI_PER_WORD are defined once, in loop_inputs.py (issue #167).
+
+    A source-text guard, not a value comparison: value equality passes a re-typed
+    identical literal, which is exactly the drift this must prevent.
+    """
+    # the whole approach depends on the derivation being bit-identical to the old literal
+    assert li.UI == 8192.0 and li.HALF_UI == 4096.0 and li.UI_PER_WORD == 16
+    assert li.PPM_LSB == 0.131072
+    # cdrmodel keeps the names at module level (14 cm.UI call sites), via import only
+    assert (cm.UI, cm.HALF_UI, cm.PPM_LSB, cm.UI_PER_WORD) == (li.UI, li.HALF_UI, li.PPM_LSB, li.UI_PER_WORD)
+    for rel in ("sim/bench/cdrmodel.py", "scripts/cdr-loop-analysis.py"):
+        src = (REPO / rel).read_text()
+        for name in ("UI", "HALF_UI", "PPM_LSB", "UI_PER_WORD"):
+            assert not re.search(rf"(?m)^{name}\s*=", src), (rel, name)
 
 
 def test_entry_points_run():

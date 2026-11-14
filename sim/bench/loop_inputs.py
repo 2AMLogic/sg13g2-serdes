@@ -1,4 +1,4 @@
-"""CDR loop inputs read from the repo, never re-typed.
+"""CDR loop inputs read from the repo, never re-typed, plus the loop's derived scalars.
 
 The single implementation of the two parsers that give the CDR loop its
 authoritative parameters, so no consumer has to copy them:
@@ -11,13 +11,27 @@ authoritative parameters, so no consumer has to copy them:
     single source of truth for both ("it must read this value and cite this
     record").
 
-Consumers: ``sim/bench/linkcore.py`` (re-exported, so the link benches and
-``sim/bench/cdrmodel.py`` keep their existing call sites) and
-``scripts/cdr-loop-analysis.py`` (the DR-007 / DR-010 loop analysis).
+The module also exports the loop's four derived scalars, each defined here
+exactly once so no consumer re-types them (issue #167):
+
+  * ``UI``          -- 8192.0, phase LSB per UI (1 LSB = 1/16384 clock
+    period, half-rate; DR-007's phase unit).
+  * ``HALF_UI``     -- UI / 2, the slip threshold.
+  * ``UI_PER_WORD`` -- 16, the 16:1 serialisation (ratified spec, via DR-007).
+  * ``PPM_LSB``     -- LSB per word per ppm, DERIVED as
+    ``UI_PER_WORD * 1e-6 * UI`` rather than typed: DR-007 states the value
+    only to three decimals ("1 ppm = 0.131 LSB per word"), so the exact
+    0.131072 cannot be parsed from the record.  DR-007 is cited for the
+    unit; the arithmetic is the source of the value.
+
+Consumers: ``sim/bench/linkcore.py`` (re-exports the parsers, so the link
+benches and ``sim/bench/cdrmodel.py`` keep their existing call sites),
+``sim/bench/cdrmodel.py`` and ``scripts/cdr-loop-analysis.py`` (which import
+these scalars).
 
 Stdlib only, deliberately: a consumer that wants nothing but these six
-integers must not have to import numpy, scipy, the channel model or the
-statistical eye to get them.
+integers and four scalars must not have to import numpy, scipy, the channel
+model or the statistical eye to get them.
 """
 import pathlib
 import re
@@ -26,6 +40,15 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 
 RTL_SOURCE = "rtl/serdes_cdr_filter.v"
 DR007_SOURCE = "spec/decisions/DR-007-cdr-loop-analysis.md"
+
+# Derived scalars, defined exactly once here (issue #167).  PPM_LSB is derived,
+# not typed: DR-007 states "1 ppm = 0.131 LSB per word" (3 dp), so the exact
+# value cannot be parsed from the record -- DR-007 is the unit's source, the
+# arithmetic the value's.
+UI = 8192.0                          # phase LSB per UI (1 LSB = 1/16384 clock period, half-rate; DR-007)
+HALF_UI = UI / 2                     # slip threshold (|e| >= 0.5 UI)
+UI_PER_WORD = 16                     # 16:1 serialisation (ratified spec, via DR-007)
+PPM_LSB = UI_PER_WORD * 1e-6 * UI    # LSB per word per ppm; == 0.131072, DR-007 states it as 0.131
 
 
 def rtl_loop_params():

@@ -11,12 +11,9 @@ import math
 import numpy as np
 
 import linkcore as lc
+from loop_inputs import HALF_UI, PPM_LSB, UI, UI_PER_WORD  # defined once in loop_inputs (issue #167)
 
-UI = 8192.0
-HALF_UI = UI / 2
-PPM_LSB = 0.131072                 # LSB per word per ppm (DR-007)
 WORD_S = 1.6e-9                    # 625 MHz word clock
-UI_PER_WORD = 16
 
 
 @functools.lru_cache(maxsize=4)
