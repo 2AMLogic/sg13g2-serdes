@@ -2,10 +2,10 @@
   "schema_version": 2,
   "engine": "klayout",
   "layout": {
-    "path": "layout/digital/lvs-records/2026-11-12-7fd70b1/serdes_digital_top.gate.spice",
+    "path": "layout/digital/lvs-records/2026-11-14-d19ba10/serdes_digital_top.gate.spice",
     "scope": "repo"
   },
-  "reference": "../../records/2026-11-10-f6fe587/serdes_digital_top_postroute.v",
+  "reference": "../../records/2026-11-14-d19ba10/serdes_digital_top_postroute.v",
   "top": "SERDES_DIGITAL_TOP",
   "reference_top": "SERDES_DIGITAL_TOP",
   "reference_conversion": {
@@ -95,7 +95,7 @@
       "corroborated": true,
       "reason": null
     },
-    "instance_count": 33482,
+    "instance_count": 33481,
     "expected_nets": {
       "VDD": "VDD",
       "VSS": "VSS"
@@ -123,9 +123,9 @@
   "category_error_counts": {},
   "counts": {
     "nets": {
-      "layout": 5223,
-      "reference": 5221,
-      "matched": 5399
+      "layout": 5234,
+      "reference": 5232,
+      "matched": 5410
     },
     "devices": {
       "layout": 0,
@@ -133,9 +133,9 @@
       "matched": 0
     },
     "pins": {
-      "layout": 5214,
+      "layout": 5225,
       "reference": 93,
-      "matched": 5390
+      "matched": 5401
     }
   },
   "device_classes": null,
@@ -143,8 +143,8 @@
     "engine": "klayout",
     "engine_version": "0.30.13",
     "netgen_binary": null,
-    "layout_sha256": "b42acd704f26cc204eaeca37a29f90fe6e28a4c4cb04d469ae1eb88a06146a4d",
-    "reference_sha256": "99f47700db35d9ea4fc4e48c4dec2a7eed65c0112a029bda380be240fc978932",
+    "layout_sha256": "aba8e150c9de82a354b18c745b766d5e8683cb27a9f49acc6aeeeb072ca2ebed",
+    "reference_sha256": "5030bb0b18727dbd0a96779df11ee185165d45f9927b31952619e6d43b1528ab",
     "extracted_netlist": null
   },
   "provenance": {
@@ -162,14 +162,14 @@
     },
     "deck": null,
     "input": {
-      "content_hash": "sha256:b42acd704f26cc204eaeca37a29f90fe6e28a4c4cb04d469ae1eb88a06146a4d",
+      "content_hash": "sha256:aba8e150c9de82a354b18c745b766d5e8683cb27a9f49acc6aeeeb072ca2ebed",
       "role": "netlist"
     },
     "klayout_version_mismatch": true,
     "pin_order_sources": [
       {
         "library": "sg13g2_stdcell",
-        "path": "/home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-27/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_stdcell/spice/sg13g2_stdcell.spice",
+        "path": "/home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-151/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_stdcell/spice/sg13g2_stdcell.spice",
         "cells": 84
       }
     ]
@@ -2995,32 +2995,38 @@
       "heuristic": false
     },
     {
-      "layout": "NET699",
-      "reference": "NET699",
+      "layout": "NET696",
+      "reference": "NET696",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "NET771",
-      "reference": "NET771",
+      "layout": "NET768",
+      "reference": "NET768",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "NET784",
-      "reference": "NET784",
+      "layout": "NET781",
+      "reference": "NET781",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "NET817",
+      "reference": "NET817",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "NET818",
+      "reference": "NET818",
       "pin": true,
       "heuristic": false
     },
     {
       "layout": "NET819",
       "reference": "NET819",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "NET820",
-      "reference": "NET820",
       "pin": true,
       "heuristic": false
     },
@@ -3055,8 +3061,8 @@
       "heuristic": false
     },
     {
-      "layout": "NET826",
-      "reference": "NET826",
+      "layout": "NET830",
+      "reference": "NET830",
       "pin": true,
       "heuristic": false
     },
@@ -3067,14 +3073,14 @@
       "heuristic": false
     },
     {
-      "layout": "NET832",
-      "reference": "NET832",
+      "layout": "NET834",
+      "reference": "NET834",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "NET835",
-      "reference": "NET835",
+      "layout": "NET849",
+      "reference": "NET849",
       "pin": true,
       "heuristic": false
     },
@@ -3085,20 +3091,26 @@
       "heuristic": false
     },
     {
-      "layout": "NET851",
-      "reference": "NET851",
-      "pin": true,
-      "heuristic": false
-    },
-    {
       "layout": "NET857",
       "reference": "NET857",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "NET912",
-      "reference": "NET912",
+      "layout": "NET918",
+      "reference": "NET918",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "NET921",
+      "reference": "NET921",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "NET949",
+      "reference": "NET949",
       "pin": true,
       "heuristic": false
     },
@@ -4417,6 +4429,168 @@
       "heuristic": false
     },
     {
+      "layout": "U_CHK/MODE[0]_BIT_[0]_TA",
+      "reference": "U_CHK/MODE[0]_BIT_[0]_TA",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[0]_BIT_[0]_TB",
+      "reference": "U_CHK/MODE[0]_BIT_[0]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[0]_BIT_[1]_TB",
+      "reference": "U_CHK/MODE[0]_BIT_[1]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[0]_BIT_[2]_TB",
+      "reference": "U_CHK/MODE[0]_BIT_[2]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[0]_BIT_[3]_TB",
+      "reference": "U_CHK/MODE[0]_BIT_[3]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[0]_BIT_[4]_TB",
+      "reference": "U_CHK/MODE[0]_BIT_[4]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[0]_BIT_[5]_TB",
+      "reference": "U_CHK/MODE[0]_BIT_[5]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[0]_TA",
+      "reference": "U_CHK/MODE[1]_BIT_[0]_TA",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[0]_TB",
+      "reference": "U_CHK/MODE[1]_BIT_[0]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[10]_TA",
+      "reference": "U_CHK/MODE[1]_BIT_[10]_TA",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[10]_TB",
+      "reference": "U_CHK/MODE[1]_BIT_[10]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[11]_TA",
+      "reference": "U_CHK/MODE[1]_BIT_[11]_TA",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[11]_TB",
+      "reference": "U_CHK/MODE[1]_BIT_[11]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[12]_TA",
+      "reference": "U_CHK/MODE[1]_BIT_[12]_TA",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[12]_TB",
+      "reference": "U_CHK/MODE[1]_BIT_[12]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[13]_TB",
+      "reference": "U_CHK/MODE[1]_BIT_[13]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[14]_TB",
+      "reference": "U_CHK/MODE[1]_BIT_[14]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[15]_TB",
+      "reference": "U_CHK/MODE[1]_BIT_[15]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[1]_TA",
+      "reference": "U_CHK/MODE[1]_BIT_[1]_TA",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[1]_TB",
+      "reference": "U_CHK/MODE[1]_BIT_[1]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[2]_TA",
+      "reference": "U_CHK/MODE[1]_BIT_[2]_TA",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[2]_TB",
+      "reference": "U_CHK/MODE[1]_BIT_[2]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[3]_TB",
+      "reference": "U_CHK/MODE[1]_BIT_[3]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[4]_TB",
+      "reference": "U_CHK/MODE[1]_BIT_[4]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[5]_TB",
+      "reference": "U_CHK/MODE[1]_BIT_[5]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/MODE[1]_BIT_[6]_TB",
+      "reference": "U_CHK/MODE[1]_BIT_[6]_TB",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET613",
+      "reference": "U_CHK/NET613",
+      "pin": true,
+      "heuristic": false
+    },
+    {
       "layout": "U_CHK/NET614",
       "reference": "U_CHK/NET614",
       "pin": true,
@@ -4453,20 +4627,20 @@
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET620",
-      "reference": "U_CHK/NET620",
+      "layout": "U_CHK/NET637",
+      "reference": "U_CHK/NET637",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET621",
-      "reference": "U_CHK/NET621",
+      "layout": "U_CHK/NET638",
+      "reference": "U_CHK/NET638",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET622",
-      "reference": "U_CHK/NET622",
+      "layout": "U_CHK/NET639",
+      "reference": "U_CHK/NET639",
       "pin": true,
       "heuristic": false
     },
@@ -4477,20 +4651,20 @@
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET641",
-      "reference": "U_CHK/NET641",
+      "layout": "U_CHK/NET677",
+      "reference": "U_CHK/NET677",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET642",
-      "reference": "U_CHK/NET642",
+      "layout": "U_CHK/NET678",
+      "reference": "U_CHK/NET678",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET643",
-      "reference": "U_CHK/NET643",
+      "layout": "U_CHK/NET679",
+      "reference": "U_CHK/NET679",
       "pin": true,
       "heuristic": false
     },
@@ -4579,20 +4753,20 @@
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET694",
-      "reference": "U_CHK/NET694",
+      "layout": "U_CHK/NET754",
+      "reference": "U_CHK/NET754",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET695",
-      "reference": "U_CHK/NET695",
+      "layout": "U_CHK/NET755",
+      "reference": "U_CHK/NET755",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET696",
-      "reference": "U_CHK/NET696",
+      "layout": "U_CHK/NET756",
+      "reference": "U_CHK/NET756",
       "pin": true,
       "heuristic": false
     },
@@ -4609,20 +4783,20 @@
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET759",
-      "reference": "U_CHK/NET759",
+      "layout": "U_CHK/NET782",
+      "reference": "U_CHK/NET782",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET760",
-      "reference": "U_CHK/NET760",
+      "layout": "U_CHK/NET783",
+      "reference": "U_CHK/NET783",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET761",
-      "reference": "U_CHK/NET761",
+      "layout": "U_CHK/NET784",
+      "reference": "U_CHK/NET784",
       "pin": true,
       "heuristic": false
     },
@@ -4801,14 +4975,8 @@
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET814",
-      "reference": "U_CHK/NET814",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/NET815",
-      "reference": "U_CHK/NET815",
+      "layout": "U_CHK/NET826",
+      "reference": "U_CHK/NET826",
       "pin": true,
       "heuristic": false
     },
@@ -4831,8 +4999,8 @@
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET830",
-      "reference": "U_CHK/NET830",
+      "layout": "U_CHK/NET832",
+      "reference": "U_CHK/NET832",
       "pin": true,
       "heuristic": false
     },
@@ -4843,50 +5011,14 @@
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET834",
-      "reference": "U_CHK/NET834",
+      "layout": "U_CHK/NET835",
+      "reference": "U_CHK/NET835",
       "pin": true,
       "heuristic": false
     },
     {
       "layout": "U_CHK/NET836",
       "reference": "U_CHK/NET836",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/NET837",
-      "reference": "U_CHK/NET837",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/NET893",
-      "reference": "U_CHK/NET893",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/NET894",
-      "reference": "U_CHK/NET894",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/NET895",
-      "reference": "U_CHK/NET895",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/NET896",
-      "reference": "U_CHK/NET896",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/NET897",
-      "reference": "U_CHK/NET897",
       "pin": true,
       "heuristic": false
     },
@@ -4975,6 +5107,12 @@
       "heuristic": false
     },
     {
+      "layout": "U_CHK/NET912",
+      "reference": "U_CHK/NET912",
+      "pin": true,
+      "heuristic": false
+    },
+    {
       "layout": "U_CHK/NET913",
       "reference": "U_CHK/NET913",
       "pin": true,
@@ -5005,110 +5143,98 @@
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET918",
-      "reference": "U_CHK/NET918",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/NET919",
-      "reference": "U_CHK/NET919",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/NET920",
-      "reference": "U_CHK/NET920",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/NET921",
-      "reference": "U_CHK/NET921",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/NET922",
-      "reference": "U_CHK/NET922",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/NET923",
-      "reference": "U_CHK/NET923",
-      "pin": true,
-      "heuristic": false
-    },
-    {
       "layout": "U_CHK/NET924",
       "reference": "U_CHK/NET924",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET943",
-      "reference": "U_CHK/NET943",
+      "layout": "U_CHK/NET925",
+      "reference": "U_CHK/NET925",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET944",
-      "reference": "U_CHK/NET944",
+      "layout": "U_CHK/NET926",
+      "reference": "U_CHK/NET926",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET945",
-      "reference": "U_CHK/NET945",
+      "layout": "U_CHK/NET927",
+      "reference": "U_CHK/NET927",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET946",
-      "reference": "U_CHK/NET946",
+      "layout": "U_CHK/NET928",
+      "reference": "U_CHK/NET928",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET947",
-      "reference": "U_CHK/NET947",
+      "layout": "U_CHK/NET929",
+      "reference": "U_CHK/NET929",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET948",
-      "reference": "U_CHK/NET948",
+      "layout": "U_CHK/NET930",
+      "reference": "U_CHK/NET930",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET949",
-      "reference": "U_CHK/NET949",
+      "layout": "U_CHK/NET931",
+      "reference": "U_CHK/NET931",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET950",
-      "reference": "U_CHK/NET950",
+      "layout": "U_CHK/NET932",
+      "reference": "U_CHK/NET932",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET951",
-      "reference": "U_CHK/NET951",
+      "layout": "U_CHK/NET933",
+      "reference": "U_CHK/NET933",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET952",
-      "reference": "U_CHK/NET952",
+      "layout": "U_CHK/NET934",
+      "reference": "U_CHK/NET934",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CHK/NET953",
-      "reference": "U_CHK/NET953",
+      "layout": "U_CHK/NET935",
+      "reference": "U_CHK/NET935",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET936",
+      "reference": "U_CHK/NET936",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET937",
+      "reference": "U_CHK/NET937",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET938",
+      "reference": "U_CHK/NET938",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET939",
+      "reference": "U_CHK/NET939",
       "pin": true,
       "heuristic": false
     },
@@ -5127,6 +5253,66 @@
     {
       "layout": "U_CHK/NET956",
       "reference": "U_CHK/NET956",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET957",
+      "reference": "U_CHK/NET957",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET958",
+      "reference": "U_CHK/NET958",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET959",
+      "reference": "U_CHK/NET959",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET960",
+      "reference": "U_CHK/NET960",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET961",
+      "reference": "U_CHK/NET961",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET962",
+      "reference": "U_CHK/NET962",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET963",
+      "reference": "U_CHK/NET963",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET964",
+      "reference": "U_CHK/NET964",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET965",
+      "reference": "U_CHK/NET965",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CHK/NET966",
+      "reference": "U_CHK/NET966",
       "pin": true,
       "heuristic": false
     },
@@ -5173,12 +5359,6 @@
       "heuristic": false
     },
     {
-      "layout": "U_CHK/RR[0]",
-      "reference": "U_CHK/RR[0]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
       "layout": "U_CHK/RR[10]",
       "reference": "U_CHK/RR[10]",
       "pin": true,
@@ -5187,120 +5367,6 @@
     {
       "layout": "U_CHK/RR[11]",
       "reference": "U_CHK/RR[11]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[12]",
-      "reference": "U_CHK/RR[12]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[13]",
-      "reference": "U_CHK/RR[13]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[14]",
-      "reference": "U_CHK/RR[14]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[15]",
-      "reference": "U_CHK/RR[15]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[16]",
-      "reference": "U_CHK/RR[16]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[17]",
-      "reference": "U_CHK/RR[17]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[18]",
-      "reference": "U_CHK/RR[18]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[19]",
-      "reference": "U_CHK/RR[19]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[20]",
-      "reference": "U_CHK/RR[20]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[21]",
-      "reference": "U_CHK/RR[21]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[22]",
-      "reference": "U_CHK/RR[22]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[23]",
-      "reference": "U_CHK/RR[23]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[24]",
-      "reference": "U_CHK/RR[24]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[25]",
-      "reference": "U_CHK/RR[25]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[26]",
-      "reference": "U_CHK/RR[26]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[27]",
-      "reference": "U_CHK/RR[27]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[28]",
-      "reference": "U_CHK/RR[28]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[29]",
-      "reference": "U_CHK/RR[29]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RR[30]",
-      "reference": "U_CHK/RR[30]",
       "pin": true,
       "heuristic": false
     },
@@ -5325,36 +5391,6 @@
     {
       "layout": "U_CHK/RXA[0]",
       "reference": "U_CHK/RXA[0]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RXA[10]",
-      "reference": "U_CHK/RXA[10]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RXA[11]",
-      "reference": "U_CHK/RXA[11]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RXA[12]",
-      "reference": "U_CHK/RXA[12]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RXA[13]",
-      "reference": "U_CHK/RXA[13]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RXA[14]",
-      "reference": "U_CHK/RXA[14]",
       "pin": true,
       "heuristic": false
     },
@@ -5403,12 +5439,6 @@
     {
       "layout": "U_CHK/RXA[8]",
       "reference": "U_CHK/RXA[8]",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CHK/RXA[9]",
-      "reference": "U_CHK/RXA[9]",
       "pin": true,
       "heuristic": false
     },
@@ -12157,8 +12187,8 @@
       "heuristic": false
     },
     {
-      "layout": "U_CTRL/MOSI_S[1]",
-      "reference": "U_CTRL/MOSI_S[1]",
+      "layout": "U_CTRL/MOSI_V",
+      "reference": "U_CTRL/MOSI_V",
       "pin": true,
       "heuristic": false
     },
@@ -12217,6 +12247,12 @@
       "heuristic": false
     },
     {
+      "layout": "U_CTRL/NET603",
+      "reference": "U_CTRL/NET603",
+      "pin": true,
+      "heuristic": false
+    },
+    {
       "layout": "U_CTRL/NET604",
       "reference": "U_CTRL/NET604",
       "pin": true,
@@ -12271,8 +12307,20 @@
       "heuristic": false
     },
     {
-      "layout": "U_CTRL/NET613",
-      "reference": "U_CTRL/NET613",
+      "layout": "U_CTRL/NET632",
+      "reference": "U_CTRL/NET632",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CTRL/NET633",
+      "reference": "U_CTRL/NET633",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CTRL/NET634",
+      "reference": "U_CTRL/NET634",
       "pin": true,
       "heuristic": false
     },
@@ -12289,20 +12337,20 @@
       "heuristic": false
     },
     {
-      "layout": "U_CTRL/NET637",
-      "reference": "U_CTRL/NET637",
+      "layout": "U_CTRL/NET651",
+      "reference": "U_CTRL/NET651",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CTRL/NET638",
-      "reference": "U_CTRL/NET638",
+      "layout": "U_CTRL/NET652",
+      "reference": "U_CTRL/NET652",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CTRL/NET639",
-      "reference": "U_CTRL/NET639",
+      "layout": "U_CTRL/NET653",
+      "reference": "U_CTRL/NET653",
       "pin": true,
       "heuristic": false
     },
@@ -12445,20 +12493,32 @@
       "heuristic": false
     },
     {
-      "layout": "U_CTRL/NET677",
-      "reference": "U_CTRL/NET677",
+      "layout": "U_CTRL/NET720",
+      "reference": "U_CTRL/NET720",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CTRL/NET678",
-      "reference": "U_CTRL/NET678",
+      "layout": "U_CTRL/NET721",
+      "reference": "U_CTRL/NET721",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CTRL/NET679",
-      "reference": "U_CTRL/NET679",
+      "layout": "U_CTRL/NET722",
+      "reference": "U_CTRL/NET722",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CTRL/NET723",
+      "reference": "U_CTRL/NET723",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CTRL/NET724",
+      "reference": "U_CTRL/NET724",
       "pin": true,
       "heuristic": false
     },
@@ -12637,44 +12697,26 @@
       "heuristic": false
     },
     {
-      "layout": "U_CTRL/NET754",
-      "reference": "U_CTRL/NET754",
+      "layout": "U_CTRL/NET777",
+      "reference": "U_CTRL/NET777",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CTRL/NET755",
-      "reference": "U_CTRL/NET755",
+      "layout": "U_CTRL/NET778",
+      "reference": "U_CTRL/NET778",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_CTRL/NET756",
-      "reference": "U_CTRL/NET756",
+      "layout": "U_CTRL/NET779",
+      "reference": "U_CTRL/NET779",
       "pin": true,
       "heuristic": false
     },
     {
       "layout": "U_CTRL/NET780",
       "reference": "U_CTRL/NET780",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CTRL/NET781",
-      "reference": "U_CTRL/NET781",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CTRL/NET782",
-      "reference": "U_CTRL/NET782",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_CTRL/NET783",
-      "reference": "U_CTRL/NET783",
       "pin": true,
       "heuristic": false
     },
@@ -12873,6 +12915,36 @@
     {
       "layout": "U_CTRL/NET892",
       "reference": "U_CTRL/NET892",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CTRL/NET893",
+      "reference": "U_CTRL/NET893",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CTRL/NET894",
+      "reference": "U_CTRL/NET894",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CTRL/NET895",
+      "reference": "U_CTRL/NET895",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CTRL/NET896",
+      "reference": "U_CTRL/NET896",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_CTRL/NET897",
+      "reference": "U_CTRL/NET897",
       "pin": true,
       "heuristic": false
     },
@@ -19177,8 +19249,26 @@
       "heuristic": false
     },
     {
-      "layout": "U_EYE/NET634",
-      "reference": "U_EYE/NET634",
+      "layout": "U_EYE/NET631",
+      "reference": "U_EYE/NET631",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_EYE/NET646",
+      "reference": "U_EYE/NET646",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_EYE/NET647",
+      "reference": "U_EYE/NET647",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_EYE/NET648",
+      "reference": "U_EYE/NET648",
       "pin": true,
       "heuristic": false
     },
@@ -19195,20 +19285,20 @@
       "heuristic": false
     },
     {
-      "layout": "U_EYE/NET651",
-      "reference": "U_EYE/NET651",
+      "layout": "U_EYE/NET697",
+      "reference": "U_EYE/NET697",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_EYE/NET652",
-      "reference": "U_EYE/NET652",
+      "layout": "U_EYE/NET698",
+      "reference": "U_EYE/NET698",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_EYE/NET653",
-      "reference": "U_EYE/NET653",
+      "layout": "U_EYE/NET699",
+      "reference": "U_EYE/NET699",
       "pin": true,
       "heuristic": false
     },
@@ -19333,32 +19423,20 @@
       "heuristic": false
     },
     {
-      "layout": "U_EYE/NET720",
-      "reference": "U_EYE/NET720",
+      "layout": "U_EYE/NET770",
+      "reference": "U_EYE/NET770",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_EYE/NET721",
-      "reference": "U_EYE/NET721",
+      "layout": "U_EYE/NET771",
+      "reference": "U_EYE/NET771",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_EYE/NET722",
-      "reference": "U_EYE/NET722",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_EYE/NET723",
-      "reference": "U_EYE/NET723",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_EYE/NET724",
-      "reference": "U_EYE/NET724",
+      "layout": "U_EYE/NET772",
+      "reference": "U_EYE/NET772",
       "pin": true,
       "heuristic": false
     },
@@ -19383,24 +19461,6 @@
     {
       "layout": "U_EYE/NET776",
       "reference": "U_EYE/NET776",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_EYE/NET777",
-      "reference": "U_EYE/NET777",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_EYE/NET778",
-      "reference": "U_EYE/NET778",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_EYE/NET779",
-      "reference": "U_EYE/NET779",
       "pin": true,
       "heuristic": false
     },
@@ -22813,26 +22873,44 @@
       "heuristic": false
     },
     {
-      "layout": "U_FLT/NET603",
-      "reference": "U_FLT/NET603",
+      "layout": "U_FLT/NET602",
+      "reference": "U_FLT/NET602",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_FLT/NET631",
-      "reference": "U_FLT/NET631",
+      "layout": "U_FLT/NET628",
+      "reference": "U_FLT/NET628",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_FLT/NET632",
-      "reference": "U_FLT/NET632",
+      "layout": "U_FLT/NET629",
+      "reference": "U_FLT/NET629",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_FLT/NET633",
-      "reference": "U_FLT/NET633",
+      "layout": "U_FLT/NET630",
+      "reference": "U_FLT/NET630",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_FLT/NET642",
+      "reference": "U_FLT/NET642",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_FLT/NET643",
+      "reference": "U_FLT/NET643",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_FLT/NET644",
+      "reference": "U_FLT/NET644",
       "pin": true,
       "heuristic": false
     },
@@ -22843,26 +22921,26 @@
       "heuristic": false
     },
     {
-      "layout": "U_FLT/NET646",
-      "reference": "U_FLT/NET646",
+      "layout": "U_FLT/NET695",
+      "reference": "U_FLT/NET695",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_FLT/NET647",
-      "reference": "U_FLT/NET647",
+      "layout": "U_FLT/NET764",
+      "reference": "U_FLT/NET764",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_FLT/NET648",
-      "reference": "U_FLT/NET648",
+      "layout": "U_FLT/NET765",
+      "reference": "U_FLT/NET765",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_FLT/NET698",
-      "reference": "U_FLT/NET698",
+      "layout": "U_FLT/NET766",
+      "reference": "U_FLT/NET766",
       "pin": true,
       "heuristic": false
     },
@@ -22873,26 +22951,20 @@
       "heuristic": false
     },
     {
-      "layout": "U_FLT/NET768",
-      "reference": "U_FLT/NET768",
-      "pin": true,
-      "heuristic": false
-    },
-    {
       "layout": "U_FLT/NET769",
       "reference": "U_FLT/NET769",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_FLT/NET770",
-      "reference": "U_FLT/NET770",
+      "layout": "U_FLT/NET820",
+      "reference": "U_FLT/NET820",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_FLT/NET772",
-      "reference": "U_FLT/NET772",
+      "layout": "U_FLT/NET844",
+      "reference": "U_FLT/NET844",
       "pin": true,
       "heuristic": false
     },
@@ -22921,8 +22993,8 @@
       "heuristic": false
     },
     {
-      "layout": "U_FLT/NET849",
-      "reference": "U_FLT/NET849",
+      "layout": "U_FLT/NET851",
+      "reference": "U_FLT/NET851",
       "pin": true,
       "heuristic": false
     },
@@ -27325,6 +27397,12 @@
       "heuristic": false
     },
     {
+      "layout": "U_GEN/NET599",
+      "reference": "U_GEN/NET599",
+      "pin": true,
+      "heuristic": false
+    },
+    {
       "layout": "U_GEN/NET600",
       "reference": "U_GEN/NET600",
       "pin": true,
@@ -27337,8 +27415,20 @@
       "heuristic": false
     },
     {
-      "layout": "U_GEN/NET602",
-      "reference": "U_GEN/NET602",
+      "layout": "U_GEN/NET620",
+      "reference": "U_GEN/NET620",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_GEN/NET621",
+      "reference": "U_GEN/NET621",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_GEN/NET622",
+      "reference": "U_GEN/NET622",
       "pin": true,
       "heuristic": false
     },
@@ -27373,44 +27463,32 @@
       "heuristic": false
     },
     {
-      "layout": "U_GEN/NET628",
-      "reference": "U_GEN/NET628",
+      "layout": "U_GEN/NET694",
+      "reference": "U_GEN/NET694",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_GEN/NET629",
-      "reference": "U_GEN/NET629",
+      "layout": "U_GEN/NET761",
+      "reference": "U_GEN/NET761",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_GEN/NET630",
-      "reference": "U_GEN/NET630",
+      "layout": "U_GEN/NET762",
+      "reference": "U_GEN/NET762",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_GEN/NET697",
-      "reference": "U_GEN/NET697",
+      "layout": "U_GEN/NET763",
+      "reference": "U_GEN/NET763",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_GEN/NET764",
-      "reference": "U_GEN/NET764",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_GEN/NET765",
-      "reference": "U_GEN/NET765",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_GEN/NET766",
-      "reference": "U_GEN/NET766",
+      "layout": "U_GEN/NET841",
+      "reference": "U_GEN/NET841",
       "pin": true,
       "heuristic": false
     },
@@ -27427,56 +27505,38 @@
       "heuristic": false
     },
     {
-      "layout": "U_GEN/NET844",
-      "reference": "U_GEN/NET844",
+      "layout": "U_GEN/NET919",
+      "reference": "U_GEN/NET919",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_GEN/NET925",
-      "reference": "U_GEN/NET925",
+      "layout": "U_GEN/NET920",
+      "reference": "U_GEN/NET920",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_GEN/NET926",
-      "reference": "U_GEN/NET926",
+      "layout": "U_GEN/NET922",
+      "reference": "U_GEN/NET922",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_GEN/NET927",
-      "reference": "U_GEN/NET927",
+      "layout": "U_GEN/NET923",
+      "reference": "U_GEN/NET923",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_GEN/NET928",
-      "reference": "U_GEN/NET928",
+      "layout": "U_GEN/NET947",
+      "reference": "U_GEN/NET947",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_GEN/NET929",
-      "reference": "U_GEN/NET929",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_GEN/NET936",
-      "reference": "U_GEN/NET936",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_GEN/NET937",
-      "reference": "U_GEN/NET937",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_GEN/NET938",
-      "reference": "U_GEN/NET938",
+      "layout": "U_GEN/NET948",
+      "reference": "U_GEN/NET948",
       "pin": true,
       "heuristic": false
     },
@@ -28699,14 +28759,20 @@
       "heuristic": false
     },
     {
-      "layout": "U_LB/NET762",
-      "reference": "U_LB/NET762",
+      "layout": "U_LB/NET759",
+      "reference": "U_LB/NET759",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_LB/NET763",
-      "reference": "U_LB/NET763",
+      "layout": "U_LB/NET760",
+      "reference": "U_LB/NET760",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_LB/NET837",
+      "reference": "U_LB/NET837",
       "pin": true,
       "heuristic": false
     },
@@ -28729,54 +28795,6 @@
       "heuristic": false
     },
     {
-      "layout": "U_LB/NET841",
-      "reference": "U_LB/NET841",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_LB/NET930",
-      "reference": "U_LB/NET930",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_LB/NET931",
-      "reference": "U_LB/NET931",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_LB/NET932",
-      "reference": "U_LB/NET932",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_LB/NET933",
-      "reference": "U_LB/NET933",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_LB/NET934",
-      "reference": "U_LB/NET934",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_LB/NET935",
-      "reference": "U_LB/NET935",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_LB/NET939",
-      "reference": "U_LB/NET939",
-      "pin": true,
-      "heuristic": false
-    },
-    {
       "layout": "U_LB/NET940",
       "reference": "U_LB/NET940",
       "pin": true,
@@ -28791,6 +28809,54 @@
     {
       "layout": "U_LB/NET942",
       "reference": "U_LB/NET942",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_LB/NET943",
+      "reference": "U_LB/NET943",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_LB/NET944",
+      "reference": "U_LB/NET944",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_LB/NET945",
+      "reference": "U_LB/NET945",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_LB/NET946",
+      "reference": "U_LB/NET946",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_LB/NET950",
+      "reference": "U_LB/NET950",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_LB/NET951",
+      "reference": "U_LB/NET951",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_LB/NET952",
+      "reference": "U_LB/NET952",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_LB/NET953",
+      "reference": "U_LB/NET953",
       "pin": true,
       "heuristic": false
     },
@@ -29941,8 +30007,20 @@
       "heuristic": false
     },
     {
-      "layout": "U_PD/NET644",
-      "reference": "U_PD/NET644",
+      "layout": "U_PD/NET641",
+      "reference": "U_PD/NET641",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_PD/NET814",
+      "reference": "U_PD/NET814",
+      "pin": true,
+      "heuristic": false
+    },
+    {
+      "layout": "U_PD/NET815",
+      "reference": "U_PD/NET815",
       "pin": true,
       "heuristic": false
     },
@@ -29953,44 +30031,32 @@
       "heuristic": false
     },
     {
-      "layout": "U_PD/NET817",
-      "reference": "U_PD/NET817",
+      "layout": "U_PD/NET967",
+      "reference": "U_PD/NET967",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_PD/NET818",
-      "reference": "U_PD/NET818",
+      "layout": "U_PD/NET968",
+      "reference": "U_PD/NET968",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_PD/NET957",
-      "reference": "U_PD/NET957",
+      "layout": "U_PD/NET969",
+      "reference": "U_PD/NET969",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_PD/NET958",
-      "reference": "U_PD/NET958",
+      "layout": "U_PD/NET970",
+      "reference": "U_PD/NET970",
       "pin": true,
       "heuristic": false
     },
     {
-      "layout": "U_PD/NET959",
-      "reference": "U_PD/NET959",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_PD/NET960",
-      "reference": "U_PD/NET960",
-      "pin": true,
-      "heuristic": false
-    },
-    {
-      "layout": "U_PD/NET961",
-      "reference": "U_PD/NET961",
+      "layout": "U_PD/NET971",
+      "reference": "U_PD/NET971",
       "pin": true,
       "heuristic": false
     },
@@ -32569,55 +32635,55 @@
       "heuristic": false
     },
     {
-      "layout": "\\$7123",
+      "layout": "\\$7551",
       "reference": "__NC_CLKLOAD0_X__",
       "pin": false,
       "heuristic": false
     },
     {
-      "layout": "\\$2150",
+      "layout": "\\$2209",
       "reference": "__NC_CLKLOAD1_X__",
       "pin": false,
       "heuristic": false
     },
     {
-      "layout": "\\$5533",
+      "layout": "\\$5178",
       "reference": "__NC_CLKLOAD2_X__",
       "pin": false,
       "heuristic": false
     },
     {
-      "layout": "\\$12004",
+      "layout": "\\$13030",
       "reference": "__NC_CLKLOAD3_X__",
       "pin": false,
       "heuristic": false
     },
     {
-      "layout": "\\$16455",
+      "layout": "\\$17022",
       "reference": "__NC_CLKLOAD4_X__",
       "pin": false,
       "heuristic": false
     },
     {
-      "layout": "\\$11234",
+      "layout": "\\$11286",
       "reference": "__NC_CLKLOAD5_X__",
       "pin": false,
       "heuristic": false
     },
     {
-      "layout": "\\$15078",
+      "layout": "\\$15224",
       "reference": "__NC_CLKLOAD6_X__",
       "pin": false,
       "heuristic": false
     },
     {
-      "layout": "\\$840",
+      "layout": "\\$1206",
       "reference": "__NC_CLKLOAD7_Y__",
       "pin": false,
       "heuristic": false
     },
     {
-      "layout": "\\$492",
+      "layout": "\\$1381",
       "reference": "__NC_CLKLOAD8_X__",
       "pin": false,
       "heuristic": false
