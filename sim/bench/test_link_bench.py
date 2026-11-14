@@ -117,6 +117,28 @@ def test_r13_reports_the_500ppm_stretch_column_ungraded():
     assert "stretch column, not graded" in out and "SLIPS (stretch" in out and "R13 (+-300 ppm, zero slips over 1e6 UI): MET" in out
 
 
+def test_graded_rules_have_one_definition():
+    """Issue #159: the R12 mask and the R11 lock rule are graded values, so they live in linkcore only.
+
+    The mask amplitudes are pinned to the proposed R12 numbers here, which is what makes the single
+    definition traceable: link_bench r12 grades tolerance against it and link_sensitivity ratios its
+    slew table to it, and neither may carry its own copy.
+    """
+    import link_sensitivity as ls
+    freqs = (1e5, 3e5, 1e6, 3e6, 1e7)
+    assert [lc.r12_mask(f) for f in freqs] == [15.0, 5.0, 1.5, 0.5, 0.15]      # 1.5 UIpp.MHz slope
+    assert lc.r12_mask(3e7) == 0.15 and lc.r12_mask(1e8) == 0.15               # ... onto the floor
+    assert ls.MASK_PTS == {f: lc.r12_mask(f) for f in freqs}                   # not a second copy
+    assert not hasattr(lb, "mask"), "link_bench must grade against lc.r12_mask"
+
+    # lock_word on a step: 0.4 UI for 2000 words, then 0. The 64-word mean (mode='same', so centred on
+    # its window) last leaves +-0.05 UI at word 2024, reported with the window's half-lag: 2024 + 1 + 32.
+    e = np.concatenate([np.full(2000, 0.4), np.zeros(8000)])
+    assert lc.lock_word(e) == 2025, lc.lock_word(e)
+    assert lc.lock_word(np.zeros(4000)) == 0            # never outside the band: locked from word 0
+    assert lc.lock_limit(40000) == 20000                # r11's pass limit, one definition
+
+
 def test_sensitivity_arch_section_runs():
     import link_sensitivity as ls
     buf = io.StringIO()
