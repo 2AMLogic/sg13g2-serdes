@@ -83,12 +83,30 @@
       "spice": ".meas tran latch_t_regen_up trig v(ck) val=0 fall=1 td=2.35n targ v(q) val=0.25 rise=1 td=2.35n",
       "limits": {
         "max": 1e-10
-      }
+      },
+      "on_unreached": "null"
     },
     {
       "name": "latch_t_regen_dn",
       "unit": "s",
       "spice": ".meas tran latch_t_regen_dn trig v(ck) val=0 fall=1 td=2.55n targ v(q) val=-0.25 fall=1 td=2.55n",
+      "limits": {
+        "max": 1e-10
+      },
+      "on_unreached": "null"
+    },
+    {
+      "name": "latch_t_regen_up_lo",
+      "unit": "s",
+      "spice": ".meas tran latch_t_regen_up_lo trig v(ck) val=0 fall=1 td=2.35n targ v(q) val=0.1 rise=1 td=2.35n",
+      "limits": {
+        "max": 1e-10
+      }
+    },
+    {
+      "name": "latch_t_regen_dn_lo",
+      "unit": "s",
+      "spice": ".meas tran latch_t_regen_dn_lo trig v(ck) val=0 fall=1 td=2.55n targ v(q) val=-0.1 fall=1 td=2.55n",
       "limits": {
         "max": 1e-10
       }

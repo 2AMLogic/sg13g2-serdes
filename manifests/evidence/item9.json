@@ -73,7 +73,7 @@
         "role": "testbench",
         "path": "sim/bench/benches.json",
         "passed": true,
-        "content_hash": "sha256:21c6edf01bb907adc08892dd60fdaf530ebc2653a62657636d9e2b68dbf1a76e"
+        "content_hash": "sha256:99cc0fc8544a638a1fd58edd6112e0340933f59221f506bcae7955756095c711"
       },
       {
         "check": "present",
@@ -150,7 +150,7 @@
         "role": "testbench",
         "path": "sim/rx/latch_regen.request.json",
         "passed": true,
-        "content_hash": "sha256:926fa39702f8961fb3e7e4307fda99869d7c14e2ef947c0232d1a7148e8cfe68"
+        "content_hash": "sha256:0dba1770a1e98ca2e2b897a8d89bc02ae4e06fcbcf251349defdbe055d610943"
       },
       {
         "check": "present",
