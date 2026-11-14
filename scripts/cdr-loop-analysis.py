@@ -12,16 +12,37 @@ Models the word-rate (625 MHz) digital bang-bang loop of rtl/serdes_cdr_filter.v
     The same D = L-1 is used by stable_gain_max() and simulate().
 Phase unit: 1 LSB = 1/16384 clock period = 1/8192 UI (half-rate).
 
+That recurrence is NOT re-implemented here: simulate() steps
+rtl/tests/serdes_ref.CdrFilter, the reference model rtl/tests/test_cdr.py checks
+bit-exact against the RTL, and KP/KI/FMAX/PHASE_INIT and the loop delays are read
+from the RTL and from DR-007 by sim/bench/loop_inputs.py -- the same inputs
+sim/bench/cdrmodel.py uses.  Nothing on this page is a re-typed copy (issue #154).
+
 Usage: python3 -I scripts/cdr-loop-analysis.py        (numpy only, ~20 s)
 """
+import pathlib
+import sys
+
 import numpy as np
 
-KP, KI, FMAX = 16, 1, 1023
+REPO = pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO / "sim/bench"))     # loop_inputs (python3 -I omits the script dir)
+sys.path.insert(0, str(REPO / "rtl/tests"))     # serdes_ref
+
+import loop_inputs  # noqa: E402
+import serdes_ref  # noqa: E402
+
+# ---- inputs read from the repo, never re-typed (sim/bench/linkcore.py's convention) ----
+_RTL = loop_inputs.rtl_loop_params()     # rtl/serdes_cdr_filter.v parameter defaults
+_DLY = loop_inputs.dr007_delays()        # spec/decisions/DR-007-cdr-loop-analysis.md
+KP, KI, FMAX = _RTL["KP"], _RTL["KI"], _RTL["FMAX"]
+PHASE_INIT = _RTL["PHASE_INIT"]
+DIGITAL = _DLY["digital"]                # RX reg 1 + PD 3 + filter->pi_code 3 (DR-006, via DR-007)
+ANALOG_ASSUMED = _DLY["analog_assumed"]  # words; ASSUMPTION, not traced (see DR-007)
+
 UI = 8192.0                      # LSB per UI
 HALF_UI = UI / 2
 PPM_LSB = 0.131072               # LSB per word per ppm  (16 UI * 1e-6 * 8192)
-DIGITAL = 7                      # RX reg 1 + PD 3 + filter->pi_code 3 (DR-006)
-ANALOG_ASSUMED = 1               # words; ASSUMPTION, not traced (see DR-007)
 CRIT_PK_UI = 0.05                # limit-cycle peak error criterion (builder's stated choice)
 NWORDS, SETTLE = 120000, 60000
 
@@ -49,13 +70,14 @@ def stable_gain_max(D):
 def simulate(L, ppm, mode, sigma_lsb=0.0, seed=1):
     rng = np.random.default_rng(seed)
     D = L - 1
-    phi, f = float(1 << 13), 0
-    theta0 = phi
+    flt = serdes_ref.CdrFilter(KP, KI, FMAX, PHASE_INIT)
+    phi = flt.phase              # unwrapped phase; flt.phase itself is masked to 14 bits
+    theta0 = float(phi)
     hist = [0] * D               # delay line: append then pop(0) yields corr[n-D]
     errs = []
     for n in range(NWORDS):
         theta = theta0 + ppm * PPM_LSB * n
-        applied = 128 * (int(phi) >> 7 & 127) + (int(phi) // 16384) * 16384
+        applied = 128 * (phi >> 7)   # = 16384*floor(phi/16384) + 128*pi_code
         e = theta - applied
         nt = 16 if mode == "all16" else rng.binomial(16, 0.5)
         if nt:
@@ -68,12 +90,15 @@ def simulate(L, ppm, mode, sigma_lsb=0.0, seed=1):
             corr = 0
         hist.append(corr)
         u = hist.pop(0)
-        phi = phi + KP * u + f
-        f = max(-FMAX, min(FMAX, f + KI * u))
+        prev = flt.phase
+        flt.update(u)
+        # Unwrap the masked phase: |KP*u + freq| <= KP*16 + FMAX = 1279 < 8192, so the
+        # 14-bit wrapped delta fixes the unwrapped step uniquely (cdrmodel.py:97-101).
+        phi += ((flt.phase - prev + 8192) % 16384) - 8192
         if n >= SETTLE:
             errs.append(e)
     errs = np.array(errs)
-    return np.max(np.abs(errs)), np.std(errs), f
+    return np.max(np.abs(errs)), np.std(errs), flt.freq
 
 
 def main():
