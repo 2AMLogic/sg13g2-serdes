@@ -104,8 +104,11 @@ bench exit 0, so `run_sizing.sh` exits 1. The report's aggregate status is
 `fail` (never an unqualified `pass`), and `coverage` carries 12 `skipped`
 entries with `reason: "not_reached"` for the unreached decision-level limits --
 recorded as found, not engineered around. A corner that is only `not_reached`
-and otherwise clean grades `pass_partial`, as the six 1.080 V corners do
-individually.
+and otherwise clean still grades `pass` at the corner level: each of the six
+1.080 V corners does, carrying two info-severity `measurement_not_reached`
+diagnostics. The unreached decision-level limits are therefore visible only in
+those diagnostics and in the 12 `skipped` coverage entries, never as a
+corner-level penalty -- read `coverage`, not the corner status, to see them.
 
 ## Constraints that shaped the benches
 
