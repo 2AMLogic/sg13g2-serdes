@@ -8,7 +8,7 @@ a spec result and not a measurement.**
 | `make_tb.py` | generates the decks and requests below from `design/tx/netlists/` |
 | `tx_sizing_ffe{0,1}_{typ,bcs,wcs}.sp` / `.request.json` | six `klt sim` requests, each 3 supplies (1.08/1.2/1.32 V) x 3 temperatures (-40/27/125 C) = 54 corners; FFE off or all three post-cursor slices on; HBT, capacitor and resistor corners move together |
 | `tx_mos_{mux2to1_cml,tx_lvl_cml2cmos,ffe_en}.sp` / `.request.json` | three MOS-cell `klt sim` requests (issue #80), each 5 process pairings x 3 supplies x 3 temperatures = 45 corners; PSP103 and the real `r3_cmc` resistors via `osdi_preload` |
-| `run_sizing.sh [mos]` | runs the six HBT requests, or with `mos` the three MOS requests (batch fleet via `KLT_SIM_BACKEND=batch`; no local fallback) and writes `records/<id>/` (`<id>-mos/` for the MOS set) |
+| `run_sizing.sh [mos\|ckswing]` | runs the six HBT requests, or with `ckswing` the three mux clock-swing requests (`tx_mosck_*`, issue #98, record id suffixed `-ckswing`), or with `mos` the three MOS requests (batch fleet via `KLT_SIM_BACKEND=batch`; no local fallback) and writes `records/<id>/` (`<id>-mos/` for the MOS set) |
 | `make_record.py` / `make_record_mos.py` | render `records/<id>/record.md` for the HBT / MOS set |
 | `records/<id>/` | append-only run records; never edited after the fact |
 
@@ -61,9 +61,12 @@ MOS-set run status:
     peak-to-peak); whether the sibling's 0.40 Vpp is per node or differential is not
     stated, so the bench is at or above that floor and is not shown to match it. The
     swing is kept as is and remains an assumption, no generator change and no re-run.
-    Open: the clock provider should state its swing at the mux input (per node or
-    differential, with its buffer load), after which `mux2to1_cml` should be re-run at
-    that swing on the fleet in a new append-only record.
+    Outcome (issue #98, DR-009): swept 0.1/0.2/0.3 V per side on the fleet, record
+    `records/20261110-232100-f7361f7-ckswing/` (`run_sizing.sh ckswing`, decks
+    `tx_mosck_*`). The output keeps rising with swing up to 0.4 V per side, so no
+    minimum for full switching was found; 0.4 V per side is a lower bound and does not
+    switch the mux at `ss_wcs`/1.08 V (4 mV at -40 C, 31 mV at 27 C). The bench swing
+    is unchanged. The requirement is in `spec/clock-requirement.md` (Level / load).
   - Request bound: each 45-unit job finished in about 100 s, so the 45 x 1800 s
     `timeout_s` bound warning was advisory. `timeout_s` is now 75 s per unit in the MOS
     requests (45 x 75 s = 3375 s, under the fleet's 3600 s ceiling); per-unit runtime was
