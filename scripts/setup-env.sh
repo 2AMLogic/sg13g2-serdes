@@ -129,18 +129,27 @@ for row in "${HARNESS_ROWS[@]}"; do
   verify_or_remove "${dest}" "${sha}" "${from}@${commit:0:7}:${upstream}"
 done
 
-# ---- klt (layout/toolchain.json): repo-local venv, never a host tool -------
+# ---- klt + bench deps (layout/toolchain.json): repo-local venv, never a host tool ----
 KLT_INSTALL="$(json_get "${REPO_DIR}/layout/toolchain.json" "d['klt_install']")"
-if [[ ${CHECK_ONLY} -eq 0 && ! -x "${REPO_DIR}/.venv/bin/klt" ]]; then
+BENCH_INSTALL="$(json_get "${REPO_DIR}/layout/toolchain.json" "d['bench_install']")"
+if [[ ${CHECK_ONLY} -eq 0 ]]; then
   command -v uv >/dev/null 2>&1 || die "'uv' not found on PATH; needed to build the repo-local .venv (not installing it)." 3
-  # Build on the host python3 (already floor-checked above) and keep its
-  # site-packages visible: scripts/env.sh puts .venv/bin FIRST on PATH, so a
-  # self-contained venv would shadow the host interpreter and hide numpy --
-  # which the behavioural link benches need ("numpy only", sim/README.md), and
-  # which `klt signoff --attest 9` runs as cold_start checks. The venv exists to
-  # pin klt, not to replace the host python.
-  uv venv --python "$(command -v python3)" --system-site-packages "${REPO_DIR}/.venv"
-  uv pip install --python "${REPO_DIR}/.venv/bin/python" "${KLT_INSTALL}"
+  # Build on the host python3 (already floor-checked above), self-contained:
+  # the pinned numpy lives IN the venv, so nothing depends on what the host
+  # happens to carry. `klt signoff --attest 9` runs the behavioural benches as
+  # cold_start checks in a sanitized environment (no .venv/bin on PATH, no
+  # VIRTUAL_ENV), where scripts/run-bench.sh resolves this interpreter by path.
+  # The venv pins the tools; it does not replace the host python.
+  if [[ ! -x "${REPO_DIR}/.venv/bin/klt" ]]; then
+    uv venv --python "$(command -v python3)" "${REPO_DIR}/.venv"
+    uv pip install --python "${REPO_DIR}/.venv/bin/python" "${KLT_INSTALL}"
+  fi
+  # NOT inside the klt guard: a tree provisioned before bench_install existed
+  # already has .venv/bin/klt, and a numpy install placed in there would
+  # silently skip every already-provisioned checkout (issue #158).
+  if ! "${REPO_DIR}/.venv/bin/python" -c 'import numpy' >/dev/null 2>&1; then
+    uv pip install --python "${REPO_DIR}/.venv/bin/python" "${BENCH_INSTALL}"
+  fi
 fi
 [[ -x "${REPO_DIR}/.venv/bin/klt" ]] || die ".venv/bin/klt missing -- run scripts/setup-env.sh (without --check)." 3
 # A PyPI install has no direct_url.json vcs_info, so verify the pinned version.
@@ -151,6 +160,25 @@ KLT_ACTUAL="$("${REPO_DIR}/.venv/bin/klt" --version 2>/dev/null || true)"
 [[ "${KLT_ACTUAL}" == "klt ${KLT_WANT}" ]] \
   || die "klt in .venv reports '${KLT_ACTUAL:-unknown}', pin is 'klt ${KLT_WANT}'; remove .venv and re-run." 4
 echo "setup-env.sh: ${KLT_ACTUAL} in .venv"
+# Import gate, the way the benches run it (issue #158): the venv interpreter
+# when present, else PATH python3 -- always isolated, because `-I` drops the
+# user site dir, so a ~/.local numpy cannot mask a missing install here.
+if [[ -x "${REPO_DIR}/.venv/bin/python3" ]]; then
+  BENCH_PY="${REPO_DIR}/.venv/bin/python3"
+else
+  BENCH_PY="python3"
+fi
+"${BENCH_PY}" -I -c 'import numpy' >/dev/null 2>&1 \
+  || die "numpy not importable the way the behavioural benches run it ('${BENCH_PY} -I') -- run scripts/setup-env.sh (without --check)." 3
+# Same discipline for the bench dependency (issue #158): the attested benches
+# run on it, so the version must be the pin -- "whatever uv resolved last" is
+# not a version the evidence can cite.
+BENCH_WANT="${BENCH_INSTALL#numpy==}"
+[[ "${BENCH_WANT}" != "${BENCH_INSTALL}" ]] \
+  || die "layout/toolchain.json bench_install '${BENCH_INSTALL}' is not a 'numpy==X.Y.Z' pin." 4
+NUMPY_ACTUAL="$("${REPO_DIR}/.venv/bin/python" -c 'import numpy; print(numpy.__version__)' 2>/dev/null || true)"
+[[ "${NUMPY_ACTUAL}" == "${BENCH_WANT}" ]] \
+  || die "numpy in .venv reports '${NUMPY_ACTUAL:-nothing}', pin is 'numpy ${BENCH_WANT}'; remove .venv and re-run." 4
 
 echo
 echo "setup-env.sh: OK. Next:  source scripts/env.sh   then   sim/smoke/run_smoke.sh"

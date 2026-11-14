@@ -43,9 +43,18 @@ B="$(jq -c --arg id "${ID}" '.benches[] | select(.id==$id)' "${MAN}")"
 if [[ "$(jq -r .partition <<<"${B}")" == "behavioural" ]]; then
   # DR-002 behavioural/statistical benches: numpy only, one local process, no fleet. --strict (passed through) exits 3 when a
   # proposed spec threshold is not met (reported, never relaxed).
-  command -v python3 >/dev/null 2>&1 || die "python3 not on PATH" 3
+  # Resolve the interpreter by path, not from PATH: `klt signoff --attest 9` runs
+  # cold_start commands in a sanitized environment -- no ${REPO}/.venv/bin on
+  # PATH and no VIRTUAL_ENV -- so a bare `python3` would be the host interpreter
+  # and its numpy would be whatever that host happens to carry (issue #158).
+  if [[ -x "${REPO}/.venv/bin/python3" ]]; then
+    BENCH_PY="${REPO}/.venv/bin/python3"
+  else
+    command -v python3 >/dev/null 2>&1 || die "python3 not on PATH (and no ${REPO}/.venv/bin/python3; run scripts/setup-env.sh)" 3
+    BENCH_PY="python3"
+  fi
   mapfile -t BARGS < <(jq -r '.args[]' <<<"${B}")
-  exec python3 -I "${REPO}/$(jq -r .entry <<<"${B}")" "${BARGS[@]}" "${QUICK[@]}"
+  exec "${BENCH_PY}" -I "${REPO}/$(jq -r .entry <<<"${B}")" "${BARGS[@]}" "${QUICK[@]}"
 fi
 if [[ "$(jq -r .partition <<<"${B}")" == "digital" ]]; then
   [[ "${MODE}" == "check" ]] || die "--run applies to analog benches; the digital bench always runs"
