@@ -16,15 +16,15 @@
     },
     "2.digital": {
       "file": "manifests/evidence/item2.json",
-      "content_hash": "sha256:24be966f1f92c9d0355a8325d5e8e00c07b90dfcd5f53ad305d439529d4fdf23"
+      "content_hash": "sha256:1ad0ea6b707cfa50cce60525ceb99c4cd77b347ace6b6c551d8e88b074400ae0"
     },
     "2.analog": {
       "file": "manifests/evidence/item2.analog-top.json",
       "content_hash": "sha256:17f981b294eb2daf015fc7abe249d07680a65c73c619aa57f2565aee2856985e"
     },
     "3.digital": {
-      "file": "layout/digital/records/2026-11-10-f6fe587/drc.json",
-      "content_hash": "sha256:24be966f1f92c9d0355a8325d5e8e00c07b90dfcd5f53ad305d439529d4fdf23"
+      "file": "layout/digital/records/2026-11-14-d19ba10/drc.json",
+      "content_hash": "sha256:1ad0ea6b707cfa50cce60525ceb99c4cd77b347ace6b6c551d8e88b074400ae0"
     },
     "3.analog": {
       "file": "layout/analog/top/records/2026-11-12-0193777/drc.json",
@@ -32,7 +32,7 @@
     },
     "4.digital": {
       "file": "manifests/evidence/item4.json",
-      "content_hash": "sha256:b42acd704f26cc204eaeca37a29f90fe6e28a4c4cb04d469ae1eb88a06146a4d"
+      "content_hash": "sha256:aba8e150c9de82a354b18c745b766d5e8683cb27a9f49acc6aeeeb072ca2ebed"
     }
   },
   "partition_boundary": {
