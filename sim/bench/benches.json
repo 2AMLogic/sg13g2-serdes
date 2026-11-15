@@ -163,10 +163,12 @@
       "required_measurements": [
         "latch_t_regen_up",
         "latch_t_regen_dn",
+        "latch_t_regen_up_lo",
+        "latch_t_regen_dn_lo",
         "latch_q_max_v",
         "latch_q_min_v"
       ],
-      "limitations": "Regeneration time only: sampler offset/noise Monte Carlo is not in this bench; no record carries those statistics. The statistical eye (R8, R15) is link-r8-sensitivity / link-r15-method, which print the sampler offset/noise as UNFITTED ASSUMPTIONS"
+      "limitations": "Regeneration time only: sampler offset/noise Monte Carlo is not in this bench; no record carries those statistics. The statistical eye (R8, R15) is link-r8-sensitivity / link-r15-method, which print the sampler offset/noise as UNFITTED ASSUMPTIONS. Regeneration is measured to two fixed absolute levels of |q|, neither swing-relative (a .meas card cannot reference an earlier .meas result and expr is unusable on the fleet runner, klayout-tools#4217): 0.25 V (the decision level the DR-002 fits need) and a 0.10 V floor level every corner crosses. At the six 1.080 V corners peak |q| asymptotes below 0.25 V, so latch_t_regen_up/dn are graded not_reached there (on_unreached: null) rather than erroring the corner -- a swing limit, not a speed limit: the same corners reach the 0.10 V floor in 6.6-17.5 ps. No corner in the grid misses the 100 ps first-look limit at either level. The request still exits 3 because the nine 1.320 V corners exceed the DR-003 collector limit; that is a separate, recorded finding and is not relaxed here. Newest record: sim/rx/records/20261114-050716-eb34d10 (errored 0, not_reached 12)"
     },
     {
       "id": "rx-term-pad",

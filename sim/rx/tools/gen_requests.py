@@ -229,18 +229,58 @@ def latch_body(extra=()):
     return "\n".join(L) + "\n"
 
 
+# Regeneration decision levels, in volts of |q|. Two fixed absolute levels are
+# measured at every corner; neither is swing-relative (a `.meas` card cannot
+# reference an earlier `.meas` result -- ngspice rejects it with "Undefined
+# parameter" and aborts the whole deck -- and `measurements[].expr` is not
+# usable on the fleet runner, klayout-tools#4217. See sim/rx/README.md).
+#
+# DECISION_LEVEL_V is the level the link benches care about: the sampler
+# decision threshold the downstream CMOS stage needs. It is NOT a fixed
+# fraction of the swing -- peak |q| over this grid runs 0.148 V to 0.569 V, so
+# 0.25 V is 96 % of peak |q| at the weakest corner that reaches it and 44 % at
+# the strongest. At the six 1.080 V corners peak |q| never reaches it at all,
+# which `on_unreached: "null"` records as `not_reached` rather than an error.
+DECISION_LEVEL_V = 0.25
+# FLOOR_LEVEL_V is a low fixed level every corner in the grid crosses, so a
+# regeneration *speed* is returned even where the decision level is not
+# reached. Chosen against the measured worst-case peak |q| in the 27-point grid
+# (0.1482 V at hbt_wcs/1.080V/-40C, record 20261110-222737-506b37e), which
+# leaves ~1.5x margin; validated at both grid extremes (hbt_wcs/1.080V/-40C and
+# hbt_bcs/1.320V/125C) to cross after the trigger edge, inside the intended
+# hold phase.
+FLOOR_LEVEL_V = 0.10
+
+
 def latch_meas():
     # Regeneration time: from the clock edge that closes the sample phase (ck
-    # falling through 0) to |q| reaching 0.25 V, about 85 % of the +-0.3 V
-    # swing. The hold pair regenerates only during that phase. First-look
-    # limit: the half period at 5 GHz (100 ps), after which the next sample
-    # phase opens. Cycle selection is by td= (data toggles at 250 ps + 400 ps k).
+    # falling through 0) to |q| reaching a decision level. The hold pair
+    # regenerates only during that phase. First-look limit for both levels: the
+    # half period at 5 GHz (100 ps), after which the next sample phase opens.
+    # Cycle selection is by td= (data toggles at 250 ps + 400 ps k).
+    #
+    # Two levels per edge, both plain `.meas` cards:
+    #   *_up / *_dn      at DECISION_LEVEL_V, `on_unreached: "null"` so a
+    #                    corner whose swing never reaches it is recorded as
+    #                    `not_reached` (an explicit "does not regenerate to the
+    #                    decision level" verdict) instead of erroring the corner.
+    #   *_up_lo / *_dn_lo at FLOOR_LEVEL_V, which every corner crosses, so a
+    #                    regeneration speed is always returned. This separates
+    #                    "too slow" from "too weak": a corner that misses the
+    #                    decision level but returns a fast floor-level time is
+    #                    swing-limited, not speed-limited.
     m = [
         {"name": "latch_t_regen_up", "unit": "s",
-         "spice": ".meas tran latch_t_regen_up trig v(ck) val=0 fall=1 td=2.35n targ v(q) val=0.25 rise=1 td=2.35n",
-         "limits": {"max": 100e-12}},
+         "spice": ".meas tran latch_t_regen_up trig v(ck) val=0 fall=1 td=2.35n targ v(q) val=%g rise=1 td=2.35n" % DECISION_LEVEL_V,
+         "limits": {"max": 100e-12}, "on_unreached": "null"},
         {"name": "latch_t_regen_dn", "unit": "s",
-         "spice": ".meas tran latch_t_regen_dn trig v(ck) val=0 fall=1 td=2.55n targ v(q) val=-0.25 fall=1 td=2.55n",
+         "spice": ".meas tran latch_t_regen_dn trig v(ck) val=0 fall=1 td=2.55n targ v(q) val=%g fall=1 td=2.55n" % -DECISION_LEVEL_V,
+         "limits": {"max": 100e-12}, "on_unreached": "null"},
+        {"name": "latch_t_regen_up_lo", "unit": "s",
+         "spice": ".meas tran latch_t_regen_up_lo trig v(ck) val=0 fall=1 td=2.35n targ v(q) val=%g rise=1 td=2.35n" % FLOOR_LEVEL_V,
+         "limits": {"max": 100e-12}},
+        {"name": "latch_t_regen_dn_lo", "unit": "s",
+         "spice": ".meas tran latch_t_regen_dn_lo trig v(ck) val=0 fall=1 td=2.55n targ v(q) val=%g fall=1 td=2.55n" % -FLOOR_LEVEL_V,
          "limits": {"max": 100e-12}},
         {"name": "latch_q_max_v", "unit": "V", "spice": ".meas tran latch_q_max_v max v(q) from=2n to=3n"},
         {"name": "latch_q_min_v", "unit": "V", "spice": ".meas tran latch_q_min_v min v(q) from=2n to=3n"},

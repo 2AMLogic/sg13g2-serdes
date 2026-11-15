@@ -10,9 +10,14 @@
 # the host openroad; installs nothing. PDK from $PDK_ROOT or .cache/pdk.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-# shellcheck source=scripts/synth-lib.sh
-. "$ROOT/scripts/synth-lib.sh"
-synth_env
+# shellcheck source=scripts/klt-lib.sh
+. "$ROOT/scripts/klt-lib.sh"
+klt_env
+require_tool openroad "sta-paths: openroad missing (worker-spec gap; do not install here)"
+require_pdk_file ihp-sg13g2/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p20V_25C.lib \
+  "sta-paths: SG13G2 stdcell liberty not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
+require_pdk_file ihp-sg13g2/libs.ref/sg13g2_stdcell/lef/sg13g2_stdcell.lef \
+  "sta-paths: SG13G2 stdcell LEF not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
 OUT="${1:-$ROOT/.cache/sta}"; mkdir -p "$OUT"
 REQ="$ROOT/rtl/synth/request.json"
 TOP="$(jq -r .hdl_toplevel "$REQ")"

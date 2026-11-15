@@ -1078,19 +1078,19 @@
         "command": null,
         "kind": "generic",
         "check_status": "pass",
-        "content_hash": "sha256:24be966f1f92c9d0355a8325d5e8e00c07b90dfcd5f53ad305d439529d4fdf23",
+        "content_hash": "sha256:1ad0ea6b707cfa50cce60525ceb99c4cd77b347ace6b6c551d8e88b074400ae0",
         "input_verified": true,
         "exit_status": 0,
         "artifact_binding": {
           "t1_item": 2,
           "path": {
-            "path": "layout/digital/records/2026-11-10-f6fe587/serdes_digital_top.gds",
+            "path": "layout/digital/records/2026-11-14-d19ba10/serdes_digital_top.gds",
             "scope": "repo"
           },
-          "content_hash": "sha256:24be966f1f92c9d0355a8325d5e8e00c07b90dfcd5f53ad305d439529d4fdf23",
+          "content_hash": "sha256:1ad0ea6b707cfa50cce60525ceb99c4cd77b347ace6b6c551d8e88b074400ae0",
           "input_verified": true,
           "summary": "T1 item 2 (Layout): 3/3 attestation checks passed (klt signoff --attest)",
-          "source": "layout/digital/records/2026-11-10-f6fe587/serdes_digital_top.gds",
+          "source": "layout/digital/records/2026-11-14-d19ba10/serdes_digital_top.gds",
           "attestation": {
             "producer": "klt signoff --attest",
             "inventory_schema_version": null,
@@ -1186,11 +1186,11 @@
       "reason": null,
       "graded_by_build": true,
       "citation": {
-        "file": "layout/digital/records/2026-11-10-f6fe587/drc.json",
+        "file": "layout/digital/records/2026-11-14-d19ba10/drc.json",
         "command": null,
         "kind": "drc",
         "check_status": "clean",
-        "content_hash": "sha256:24be966f1f92c9d0355a8325d5e8e00c07b90dfcd5f53ad305d439529d4fdf23",
+        "content_hash": "sha256:1ad0ea6b707cfa50cce60525ceb99c4cd77b347ace6b6c551d8e88b074400ae0",
         "input_verified": true,
         "exit_status": 0,
         "coverage": {
@@ -1268,7 +1268,7 @@
         "command": null,
         "kind": "lvs",
         "check_status": "match",
-        "content_hash": "sha256:b42acd704f26cc204eaeca37a29f90fe6e28a4c4cb04d469ae1eb88a06146a4d",
+        "content_hash": "sha256:aba8e150c9de82a354b18c745b766d5e8683cb27a9f49acc6aeeeb072ca2ebed",
         "input_verified": true,
         "exit_status": 0
       }
