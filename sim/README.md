@@ -77,11 +77,15 @@ rather than re-running them).
 
 ### Behavioural link benches (R8, R11, R12, R13, R15; issue #93, DR-002)
 
-Cold start, one command per row (numpy only -- installed into `.venv` by `scripts/setup-env.sh` at the `bench_install` pin in `layout/toolchain.json`, which `run-bench.sh` resolves by path so the pin holds even inside `klt signoff --attest 9`'s sanitized cold-start environment; scipy's `erfc` is used when present; one local process, no fleet,
-no `-j`/`-n`); add `--quick` for a short configuration. The cold start exits 0 whenever the bench ran (the verdict, e.g.
+Cold start, one command per row (numpy + a pinned scipy -- installed into `.venv` by `scripts/setup-env.sh`
+at the `bench_install` pins in `layout/toolchain.json`, which `run-bench.sh` resolves by path so the pins hold
+even inside `klt signoff --attest 9`'s sanitized cold-start environment; `linkcore.py` prefers scipy's compiled
+`erfc` and falls back to `math.erfc` without it, but scipy is a pinned dependency and that fallback is a
+per-element Python loop, ~5x slower -- a degraded fallback, not an equivalent option (issue #170); one local
+process, no fleet, no `-j`/`-n`); add `--quick` for a short configuration. The cold start exits 0 whenever the bench ran (the verdict, e.g.
 `NOT MET`, is in the output and is never relaxed); `--strict` makes a missed threshold exit 3:
 
-    scripts/run-bench.sh link-r8-sensitivity     # python3 -I sim/bench/link_r8.py   (~1 min, 27 corners x 16 offset draws)
+    scripts/run-bench.sh link-r8-sensitivity     # python3 -I sim/bench/link_r8.py   (27 corners x 16 offset draws; 59 s wall with the pinned scipy, 363 s without it -- measured 2026-11-15 on a 16-vCPU Xeon 8488C shared worker at load 15-27, issue #170)
     scripts/run-bench.sh link-r11-cdr-lock       # r11
     scripts/run-bench.sh link-r12-jtol           # r12 (SJ sweep, 4 edge corners)
     scripts/run-bench.sh link-r13-offset         # r13 (+-300 ppm, 1e6 UI)
