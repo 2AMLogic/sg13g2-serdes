@@ -24,6 +24,35 @@ for name in ("ctle_ac", "ctle_op", "pad_ac", "latch_regen"):
 
 val = rc.val
 
+def regen_levels(request_path):
+    """(decision, floor) |q| levels in volts of the latch regeneration cards.
+
+    Read out of the request's `.meas` cards rather than restated here, so this
+    table can never disagree with the deck that produced the numbers.
+    """
+    req = json.loads(pathlib.Path(request_path).read_text())
+    lv = {}
+    for m in req.get("measurements", []):
+        if not m["name"].startswith("latch_t_regen_"):
+            continue
+        hit = re.search(r"targ v\(q\) val=(-?[0-9.eE+-]+)", m.get("spice", ""))
+        if hit:
+            lv["floor" if m["name"].endswith("_lo") else "decision"] = abs(float(hit.group(1)))
+    return lv.get("decision"), lv.get("floor")
+
+
+# Decision and floor levels of the two regeneration cards, read from the
+# request rather than restated, so the table can never disagree with the deck.
+DEC_V, FLOOR_V = regen_levels(rx / "latch_regen.request.json")
+
+
+def mstatus(c, name):
+    """klt grading status of measurement `name` in a corner dict, or None."""
+    for m in c.get("measurements", []):
+        if m["name"] == name:
+            return m.get("status")
+    return None
+
 
 def peak(c, k):
     hi, lo = val(c, f"ctle_c{k}_g5g_db"), val(c, f"ctle_c{k}_g0p1g_db")
@@ -99,21 +128,57 @@ if op:
                 viol.append((c["corner_id"], m["name"], m["value"]))
 lr = reports["latch_regen"]
 if lr:
+    def ps(c, n):
+        v = val(c, n)
+        return None if v is None else v * 1e12
+
+    def peak_abs(c):
+        hi, lo = val(c, "latch_q_max_v"), val(c, "latch_q_min_v")
+        return None if hi is None or lo is None else min(hi, -lo)
+
     L += ["", "## Latch regeneration at 5 GHz (clock buffer + latch, ps)", "",
-          "Time from the clock edge that closes the sample phase to |q| = 0.25 V (about 85 % of the swing), +-10 mV differential input. First-look limit: 100 ps (half period).", "",
-          "| corner | t_regen up | t_regen down | q swing (V) |", "|---|---|---|---|"]
+          f"Time from the clock edge that closes the sample phase to |q| reaching a fixed level, +-10 mV differential input. "
+          f"First-look limit: 100 ps (half period at 5 GHz). Two fixed absolute levels, neither swing-relative:", "",
+          f"- **{DEC_V:.2f} V (decision level)** -- the level the behavioural link benches need the sampler to resolve to. "
+          f"A corner whose |q| asymptotes below it is recorded `not reached` (`on_unreached: \"null\"`), which is a swing verdict, not a timing one.",
+          f"- **{FLOOR_V:.2f} V (floor level)** -- low enough that every corner in this grid crosses it, so a regeneration *speed* is returned even where the decision level is not reached.", "",
+          "`verdict` compares the corner against the 100 ps limit and names the cause: `swing` = the decision level is never reached "
+          "(the floor-level time shows the latch is not slow), `speed` = a level is reached but later than 100 ps.", "",
+          rf"| corner | up @{DEC_V:.2f} V | dn @{DEC_V:.2f} V | up @{FLOOR_V:.2f} V | dn @{FLOOR_V:.2f} V | peak \|q\| (V) | q swing (V) | verdict |",
+          "|---|---|---|---|---|---|---|---|"]
+    nr, slow, slow_lo = [], [], []
     for c in lr["corners"]:
-        up, dn = val(c, "latch_t_regen_up"), val(c, "latch_t_regen_dn")
-        L.append(f"| {c['corner_id']} | {f(None if up is None else up*1e12,'{:.1f}', 'not reached')} | {f(None if dn is None else dn*1e12,'{:.1f}', 'not reached')} | {f(None if val(c,'latch_q_max_v') is None else val(c,'latch_q_max_v')-val(c,'latch_q_min_v'))} |")
+        up, dn = ps(c, "latch_t_regen_up"), ps(c, "latch_t_regen_dn")
+        ulo, dlo = ps(c, "latch_t_regen_up_lo"), ps(c, "latch_t_regen_dn_lo")
+        pk = peak_abs(c)
+        unreached = (mstatus(c, "latch_t_regen_up") == "not_reached"
+                     or mstatus(c, "latch_t_regen_dn") == "not_reached")
+        reached = [t for t in (up, dn) if t is not None]
+        reached_lo = [t for t in (ulo, dlo) if t is not None]
+        why = []
+        if unreached:
+            nr.append(c["corner_id"])
+            why.append(rf"swing: peak \|q\| {f(pk, '{:.3f}')} V < {DEC_V:.2f} V")
+        if reached and max(reached) > 100.0:
+            slow.append(c["corner_id"])
+            why.append(f"speed: {max(reached):.1f} ps > 100 ps at {DEC_V:.2f} V")
+        if reached_lo and max(reached_lo) > 100.0:
+            slow_lo.append(c["corner_id"])
+            why.append(f"speed: {max(reached_lo):.1f} ps > 100 ps at {FLOOR_V:.2f} V")
+        L.append(f"| {c['corner_id']} | {f(up,'{:.1f}','not reached')} | {f(dn,'{:.1f}','not reached')} | "
+                 f"{f(ulo,'{:.1f}','not reached')} | {f(dlo,'{:.1f}','not reached')} | {f(pk,'{:.3f}')} | "
+                 f"{f(None if val(c,'latch_q_max_v') is None else val(c,'latch_q_max_v')-val(c,'latch_q_min_v'))} | "
+                 f"{'; '.join(why) if why else 'ok'} |")
     for c in lr["corners"]:
         for m in c["measurements"]:
             if m.get("status") == "fail":
                 viol.append((c["corner_id"], m["name"], m["value"]))
-    nr = [c["corner_id"] for c in lr["corners"] if val(c, "latch_t_regen_up") is None or val(c, "latch_t_regen_dn") is None]
-    slow = [c["corner_id"] for c in lr["corners"] if c["corner_id"] not in nr and max(val(c, "latch_t_regen_up"), val(c, "latch_t_regen_dn")) > 100e-12]
-    L += ["", f"- Corners where |q| never reached 0.25 V (no regeneration within the 3 ns run): {len(nr)}" + (" -- " + ", ".join(nr) if nr else ""),
-          f"- Corners that regenerated but slower than 100 ps: {len(slow)}" + (" -- " + ", ".join(slow) if slow else "")]
-    latch_summary = (nr, slow)
+    L += ["",
+          f"- Corners where |q| never reached the {DEC_V:.2f} V decision level (recorded `not_reached`, a swing limit -- the floor-level time at the same corner shows the latch still regenerates): {len(nr)}" + (" -- " + ", ".join(nr) if nr else ""),
+          f"- Corners that reached {DEC_V:.2f} V but slower than 100 ps (a speed limit): {len(slow)}" + (" -- " + ", ".join(slow) if slow else ""),
+          f"- Corners slower than 100 ps to the {FLOOR_V:.2f} V floor level: {len(slow_lo)}" + (" -- " + ", ".join(slow_lo) if slow_lo else ""),
+          f"- Top-level `not_reached` measurement count in the report: {lr.get('not_reached', 0)}; `errored`: {lr['errored']}."]
+    latch_summary = (nr, slow, slow_lo)
 pad = reports["pad_ac"]
 if pad:
     L += ["", "## Termination + pad first-look |Zdiff| (ohm, placeholder 50 fF pads)", "", "| corner | 0.1 GHz | 5 GHz |", "|---|---|---|"]
@@ -154,7 +219,7 @@ if nodes:
 L.append("- Per-node values for every HBT, corner and CTLE code are in the `*.report.json` files in this directory.")
 other = [v for v in viol if v not in stress_fail]
 L += ["", "## Limits missed (first-look comparisons)", ""]
-L += [f"- {a}: `{b}` = {c}" for a, b, c in other] or ["- none recorded as `fail` (measurement errors for the latch are listed above as `not reached`)"]
+L += [f"- {a}: `{b}` = {c}" for a, b, c in other] or ["- none recorded as `fail` (the latch corners that do not reach the decision level are graded `not_reached`, not `fail` or `error`; they are listed above)"]
 L += ["", "## Not simulated",
       "",
       "- `lvl_cml2cmos` (thin-oxide MOS, PSP103 via OSDI): not simulated; the host ngspice cannot load OSDI v0.4 and batch jobs staging `.osdi` inputs fail (klayout-tools#3818, #3819; sim/README.md; blocked on #3).",

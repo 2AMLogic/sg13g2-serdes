@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # The CI gate. .github/workflows/ci.yml and package.json (check:ci, test, lint)
 # both run this script, so local and CI checks cannot diverge.
-#   scripts/check-ci.sh [json|links|harness|signoff|all]   (default: all)
+#   scripts/check-ci.sh [json|links|fresh|harness|signoff|all]   (default: all)
 #   scripts/check-ci.sh --regen    re-attest items 1, 9 and 10, refresh their manifest
 #                                  content_hash pins, regenerate the committed signoff record
 set -uo pipefail
@@ -82,6 +82,141 @@ check_harness() {
   echo "harness not present: nothing to self-test yet"
 }
 
+# check_fresh -- the committed evidence records still describe the committed
+# artifacts they name, on four axes that need only jq and sha256sum (no klt,
+# no openroad, no yosys, nothing under PDK_ROOT):
+#   1. rtl/synth/<top>.synth.json .netlist_sha256 == sha256sum of the committed
+#      gate-level netlist (the want/got block check-synth-fresh.sh runs behind
+#      synth_env).
+#   2. newest layout/digital/records/*/report.json
+#      .provenance.input.content_hash (sha256: prefix stripped) == that same
+#      .netlist_sha256. This is the seam issue #151 slipped through: klt
+#      signoff grades each envelope against its own cited artifact, so a
+#      record built from a superseded netlist still graded met.
+#   3. newest layout/digital/lvs-records/*/lvs.report.json
+#      .environment.reference_sha256 == sha256sum of the newest P&R record's
+#      post-route netlist -- mirrors check-lvs-fresh.sh, which compares
+#      against the newest place-and-route record, not the path the LVS
+#      report's own reference field names (a newer P&R record makes LVS stale).
+#   4. same report's .environment.layout_sha256 == sha256sum of
+#      <top>.gate.spice committed in that same lvs-record dir.
+# This is the PDK-free subset of check-pnr-fresh.sh / check-lvs-fresh.sh; they
+# stay the full local gates (the liberty/deck axis hashes a file under
+# PDK_ROOT and remains local-only).
+# A missing record or artifact fails rather than passes: records are
+# committed, so their absence is a repo defect -- exit 0 means verified,
+# never skipped (.loom/docs/ci-principles.md rule 6).
+# Newest-record selection uses git ls-files (committed state, not worktree
+# residue) and is spelled locally because pnr_latest_record reads $PNR_RECORDS
+# from pnr_env, whose require_tool openroad exits 3 on this runner.
+# CHECK_FRESH_PNR_RECORD / CHECK_FRESH_LVS_RECORD override the newest-record
+# selection for negative testing only; CI never sets them.
+check_fresh() {
+  local rc=0 top ok synth_report synth_netlist want got
+  local prec prec_report rec_hash lrec lvs_report postroute layout_netlist ref_hash
+  [ -f rtl/synth/request.json ] || { echo "::error file=rtl/synth/request.json::missing"; return 1; }
+  top=$(jq -er '.hdl_toplevel' rtl/synth/request.json 2>/dev/null) \
+    || { echo "::error file=rtl/synth/request.json::cannot read .hdl_toplevel"; return 1; }
+
+  # Axis 1: the synthesized netlist is the one its own report describes.
+  synth_report="rtl/synth/${top}.synth.json"
+  synth_netlist="rtl/synth/${top}_synth.v"
+  [ -f "$synth_report" ] || { echo "::error file=$synth_report::missing (run scripts/synth-regen.sh)"; return 1; }
+  [ -f "$synth_netlist" ] || { echo "::error file=$synth_netlist::missing (run scripts/synth-regen.sh)"; return 1; }
+  want=$(jq -er '.netlist_sha256' "$synth_report" 2>/dev/null) \
+    || { echo "::error file=$synth_report::cannot read .netlist_sha256"; return 1; }
+  got=$(sha256sum "$synth_netlist" | awk '{print $1}')
+  if [ "$want" != "$got" ]; then
+    echo "::error file=$synth_netlist::fresh axis 1 (synth): ${top}_synth.v hash $got != $synth_report .netlist_sha256 $want"
+    rc=1
+  fi
+
+  # Axis 2: the newest place-and-route record was built from that netlist.
+  if [ -n "${CHECK_FRESH_PNR_RECORD:-}" ]; then
+    prec=$CHECK_FRESH_PNR_RECORD
+  else
+    prec=$(git ls-files 'layout/digital/records/*/report.json' | sed 's:/report\.json$::' | sort | tail -1)
+  fi
+  prec_report="$prec/report.json"
+  [ -n "$prec" ] && [ -f "$prec_report" ] \
+    || { echo "::error file=$prec_report::no committed place-and-route record (run scripts/pnr-regen.sh)"; return 1; }
+  ok=1
+  if rec_hash=$(jq -er '.provenance.input.content_hash' "$prec_report" 2>/dev/null); then
+    case $rec_hash in
+      sha256:*) rec_hash=${rec_hash#sha256:} ;;
+      *)
+        echo "::error file=$prec_report::fresh axis 2 (pnr): .provenance.input.content_hash '$rec_hash' has no sha256: prefix"
+        ok=0 ;;
+    esac
+  else
+    echo "::error file=$prec_report::fresh axis 2 (pnr): cannot read .provenance.input.content_hash"
+    ok=0
+  fi
+  if [ "$ok" = 1 ] && [ "$rec_hash" != "$want" ]; then
+    echo "::error file=$prec_report::fresh axis 2 (pnr): .provenance.input.content_hash $rec_hash != $synth_report .netlist_sha256 $want"
+    ok=0
+  fi
+  [ "$ok" = 1 ] || rc=1
+
+  # Axes 3-4: the newest LVS record against that P&R record and its own
+  # committed extraction.
+  if [ -n "${CHECK_FRESH_LVS_RECORD:-}" ]; then
+    lrec=$CHECK_FRESH_LVS_RECORD
+  else
+    lrec=$(git ls-files 'layout/digital/lvs-records/*/lvs.report.json' | sed 's:/lvs\.report\.json$::' | sort | tail -1)
+  fi
+  lvs_report="$lrec/lvs.report.json"
+  [ -n "$lrec" ] && [ -f "$lvs_report" ] \
+    || { echo "::error file=$lvs_report::no committed LVS record (run scripts/lvs-regen.sh)"; return 1; }
+
+  # Axis 3: the LVS record compared the newest P&R record's post-route netlist.
+  postroute="$prec/${top}_postroute.v"
+  ok=1
+  if ref_hash=$(jq -er '.environment.reference_sha256' "$lvs_report" 2>/dev/null); then
+    if [ -f "$postroute" ]; then
+      got=$(sha256sum "$postroute" | awk '{print $1}')
+      if [ "$ref_hash" != "$got" ]; then
+        echo "::error file=$lvs_report::fresh axis 3 (lvs): newest place-and-route record's ${top}_postroute.v hash $got != $lvs_report .environment.reference_sha256 $ref_hash"
+        ok=0
+      fi
+    else
+      echo "::error file=$postroute::fresh axis 3 (lvs): newest place-and-route record's post-route netlist missing"
+      ok=0
+    fi
+  else
+    echo "::error file=$lvs_report::fresh axis 3 (lvs): cannot read .environment.reference_sha256"
+    ok=0
+  fi
+  [ "$ok" = 1 ] || rc=1
+
+  # Axis 4: the LVS extraction is of the netlist committed beside it.
+  layout_netlist="$lrec/${top}.gate.spice"
+  ok=1
+  if ref_hash=$(jq -er '.environment.layout_sha256' "$lvs_report" 2>/dev/null); then
+    if [ -f "$layout_netlist" ]; then
+      got=$(sha256sum "$layout_netlist" | awk '{print $1}')
+      if [ "$ref_hash" != "$got" ]; then
+        echo "::error file=$lvs_report::fresh axis 4 (lvs): $layout_netlist hash $got != $lvs_report .environment.layout_sha256 $ref_hash"
+        ok=0
+      fi
+    else
+      echo "::error file=$layout_netlist::fresh axis 4 (lvs): extracted netlist missing from the LVS record dir"
+      ok=0
+    fi
+  else
+    echo "::error file=$lvs_report::fresh axis 4 (lvs): cannot read .environment.layout_sha256"
+    ok=0
+  fi
+  [ "$ok" = 1 ] || rc=1
+
+  if [ "$rc" = 0 ]; then
+    echo "fresh: 4 axis(es) verified (pnr=$prec lvs=$lrec)"
+  else
+    echo "fresh: FAILED (pnr=$prec lvs=$lrec)" >&2
+  fi
+  return $rc
+}
+
 check_signoff() {
   local fresh rc=0
   fresh=$(mktemp)
@@ -149,14 +284,16 @@ case "${1:-all}" in
     mv "$out" "$RECORD" ;;
   json) check_json ;;
   links) check_links ;;
+  fresh) check_fresh ;;
   harness) check_harness ;;
   signoff) check_signoff ;;
   all)
     rc=0
     check_json || rc=1
     check_links || rc=1
+    check_fresh || rc=1
     check_harness
     check_signoff || rc=1
     exit $rc ;;
-  *) echo "usage: $0 [json|links|harness|signoff|all|--regen]" >&2; exit 2 ;;
+  *) echo "usage: $0 [json|links|fresh|harness|signoff|all|--regen]" >&2; exit 2 ;;
 esac

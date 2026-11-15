@@ -39,14 +39,12 @@ class Eye:
             self.pm[cid] = lc.isi_pmfs(p, c0)
 
     def width(self, cdr_rms, rj, dj, sn_mv, offset_mv):
-        """(worst width UI or None, #failed extrapolations, best floor BER)."""
-        ker = lc.jitter_kernel(float(np.hypot(rj, cdr_rms)), dj)
+        """Worst 1e-12 eye width over the loaded corners: the over-corners loop around lc.corner_eye.
+        Returns (worst width UI or None, #failed extrapolations, worst floor BER)."""
+        ker = lc.eye_kernel(rj, dj, cdr_rms)
         worst, fail, floor = None, 0, 0.0
         for pm in self.pm.values():
-            ber = lc.bathtub(pm, SWING_MVPPD / 2e3, sn_mv / 1e3, offset_mv / 1e3, ker)
-            order = np.roll(np.arange(lc.M), lc.M // 2 - int(np.argmin(ber)))
-            tau = (np.arange(lc.M) - lc.M // 2) / lc.M
-            ext = lc.wall_extrapolate(tau, ber[order])
+            _, ext = lc.corner_eye(pm, SWING_MVPPD / 2e3, sn_mv / 1e3, offset_mv / 1e3, ker)
             floor = max(floor, ext["floor"])
             if ext["ok"]:
                 worst = ext["width"] if worst is None else min(worst, ext["width"])
@@ -55,60 +53,68 @@ class Eye:
         return worst, fail, floor
 
 
-def row(eye, n, label, **kv):
-    c = dict(BASE, **kv)
-    kw = dict(kp=c["kp"], ki=c["ki"], analog_delay=c["ad"], vote_noise_ui=c["vn"])
-    e = cm.run(n, **kw)[n // 2:] / cm.UI
-    rms, pk = float(np.std(e)), float(np.max(np.abs(e)))
-    sl = {}
-    for ppm in (300, -300):
-        r = cm.run(n // 2 + 20000, ppm=ppm, **kw)
-        sl[ppm] = cm.slips(r, 20000)
-    # slew margin: peak error with the R12 mask amplitude at 100 kHz (15 UIpp), the steepest point of the mask
-    sj = float(np.max(np.abs(cm.run(30000, sj_uipp=15.0, sj_hz=1e5, **kw)[10000:])) / cm.UI)
-    w, fail, floor = eye.width(rms, c["rj"], c["dj"], c["sn"], c["so"])
-    ws = f"{w:+.3f}" if w is not None else "  n/a "
-    nc = len(eye.pm)
-    print(f"{label:34s} {rms:7.4f} {pk:7.4f}   {ws:>7s} UI  {nc - fail:2d}/{nc}  {floor:8.1e}   {sl[300]:3d}/{sl[-300]:3d}   {sj:7.3f}")
-    return rms, pk, w, fail
-
-
 LOCK_N = 40000
 MARGIN_UI = 0.10      # record-defined margin threshold on the worst 1e-12 width (NOT a spec row; R15 only requires > 0)
+SJ_PROBE_HZ = 1e5     # steepest point of the R12 mask: where the slew proxy below is taken
+SJ_PROBE_N, SJ_PROBE_SETTLE = 30000, 10000
+
+
+def sj_peak_ui(kw, arch):
+    """Slew proxy both row tables report: peak recovered-clock error (UI) at the R12 mask's own amplitude
+    for SJ_PROBE_HZ, the steepest point of the mask. The amplitude comes from lc.r12_mask, never re-typed."""
+    e = cm.run(SJ_PROBE_N, sj_uipp=lc.r12_mask(SJ_PROBE_HZ), sj_hz=SJ_PROBE_HZ, **kw, **arch)
+    return float(np.max(np.abs(e[SJ_PROBE_SETTLE:])) / cm.UI)
 
 
 def lock_words(arch, kw):
-    """Words to lock from a 0.4 UI offset (link_bench r11 definition: 64-word mean within 0.05 UI to the end); 0/+300/-300 ppm."""
-    out = []
-    for ppm in (0, 300, -300):
-        e = cm.run(LOCK_N, ppm=ppm, init_offset_ui=0.4, **kw, **arch) / cm.UI
-        m = np.convolve(e, np.ones(64) / 64, mode="same")
-        o = np.nonzero(np.abs(m[32:-32]) >= 0.05)[0]
-        out.append(int(o[-1]) + 33 if len(o) else 0)
-    return out
+    """Words to lock from a 0.4 UI offset (lc.lock_word, the rule link_bench r11 grades); 0/+300/-300 ppm."""
+    return [lc.lock_word(cm.run(LOCK_N, ppm=ppm, init_offset_ui=0.4, **kw, **arch) / cm.UI)
+            for ppm in (0, 300, -300)]
 
 
-def arow(eye, n, label, arch=None, **kv):
-    """DR-011 candidate row: dither, R15 width (27 corners), slips at +-300 (ratified R13) and +-500 ppm (stretch),
-    slew proxy at the R12 mask's steepest point, lock time. `ok` = width > 0 in every corner, no slip at +-300 ppm and the
-    15 UIpp / 100 kHz peak error within half the no-CDR-jitter eye width (r12's rule; a PROXY for the full mask, which
-    link_bench r12 grades), and lock within r11's limit (< 20000 words) at 0 / +300 / -300 ppm.
-    'pass+margin' additionally has worst width >= MARGIN_UI."""
-    arch = arch or {}
-    c = dict(BASE, **kv)
+def measure(eye, n, kv, arch=None, ppms=(300, -300)):
+    """The computation behind both row tables, run once: CDR dither (rms/peak, 0 ppm, locked), slips at
+    each ppm in `ppms`, the slew proxy, and the worst 1e-12 width over the loaded corners. `kv` overrides
+    one BASE input; `arch` holds the DR-011 model-only loop options (empty = the RTL structure)."""
+    c, arch = dict(BASE, **kv), arch or {}
     kw = dict(kp=c["kp"], ki=c["ki"], analog_delay=c["ad"], vote_noise_ui=c["vn"])
     e = cm.run(n, **kw, **arch)[n // 2:] / cm.UI
     rms, pk = float(np.std(e)), float(np.max(np.abs(e)))
-    sl = {ppm: cm.slips(cm.run(n // 2 + 20000, ppm=ppm, **kw, **arch), 20000) for ppm in (300, -300, 500, -500)}
-    sj = float(np.max(np.abs(cm.run(30000, sj_uipp=15.0, sj_hz=1e5, **kw, **arch)[10000:])) / cm.UI)
-    w, fail, _ = eye.width(rms, c["rj"], c["dj"], c["sn"], c["so"])
-    nc = len(eye.pm)
+    sl = {ppm: cm.slips(cm.run(n // 2 + 20000, ppm=ppm, **kw, **arch), 20000) for ppm in ppms}
+    sj = sj_peak_ui(kw, arch)
+    w, fail, floor = eye.width(rms, c["rj"], c["dj"], c["sn"], c["so"])
+    return dict(c=c, kw=kw, arch=arch, rms=rms, pk=pk, sl=sl, sj=sj, w=w, fail=fail, floor=floor,
+                nc=len(eye.pm))
+
+
+def width_str(w):
+    """Worst-width column of both row tables; an all-corner extrapolation failure prints as n/a."""
+    return f"{w:+.3f}" if w is not None else "  n/a "
+
+
+def row(eye, n, label, **kv):
+    """Section A-D row: one input changed from the baseline, slips at the ratified +-300 ppm only."""
+    m = measure(eye, n, kv)
+    sl, nc = m["sl"], m["nc"]
+    print(f"{label:34s} {m['rms']:7.4f} {m['pk']:7.4f}   {width_str(m['w']):>7s} UI  {nc - m['fail']:2d}/{nc}  "
+          f"{m['floor']:8.1e}   {sl[300]:3d}/{sl[-300]:3d}   {m['sj']:7.3f}")
+    return m["rms"], m["pk"], m["w"], m["fail"]
+
+
+def arow(eye, n, label, arch=None, **kv):
+    """DR-011 candidate row: the same measurement as `row` plus the +-500 ppm stretch column, lock time and
+    a verdict. `ok` = width > 0 in every corner, no slip at +-300 ppm and the mask-amplitude peak error
+    within half the no-CDR-jitter eye width (r12's rule; a PROXY for the full mask, which link_bench r12
+    grades), and lock within r11's limit at 0 / +300 / -300 ppm.
+    'pass+margin' additionally has worst width >= MARGIN_UI."""
+    m = measure(eye, n, kv, arch=arch, ppms=(300, -300, 500, -500))
+    c, sl, nc, w, sj = m["c"], m["sl"], m["nc"], m["w"], m["sj"]
     w0, _, _ = eye.width(0.0, c["rj"], c["dj"], c["sn"], c["so"])        # eye without CDR jitter: the r12 bench's grading eye
-    lk = lock_words(arch, kw)
-    ok = (w is not None and w > 0 and not fail and sl[300] == 0 and sl[-300] == 0 and w0 is not None and sj <= w0 / 2
-          and max(lk) < LOCK_N // 2)
-    ws = f"{w:+.3f}" if w is not None else "  n/a "
-    print(f"{label:46s} {rms:6.4f} {pk:6.4f} {ws:>7s} {nc - fail:2d}/{nc} {sl[300]:5d}/{sl[-300]:<5d} {sl[500]:5d}/{sl[-500]:<5d}"
+    lk = lock_words(m["arch"], m["kw"])
+    ok = (w is not None and w > 0 and not m["fail"] and sl[300] == 0 and sl[-300] == 0 and w0 is not None
+          and sj <= w0 / 2 and max(lk) < lc.lock_limit(LOCK_N))
+    print(f"{label:46s} {m['rms']:6.4f} {m['pk']:6.4f} {width_str(w):>7s} {nc - m['fail']:2d}/{nc} "
+          f"{sl[300]:5d}/{sl[-300]:<5d} {sl[500]:5d}/{sl[-500]:<5d}"
           f" {sj:6.3f}  {lk[0]:5d}/{lk[1]:5d}/{lk[2]:5d}  {('pass+margin' if w >= MARGIN_UI else 'pass') if ok else 'FAIL'}")
     return ok, w
 
@@ -120,7 +126,8 @@ def ahead(title):
 
 def head(title):
     print(f"\n{title}")
-    print(f"{'row (one input changed)':34s} {'rms UI':>7s} {'pk UI':>7s}   {'worst w@1e-12':>13s}  extrap  worst floor   slips +300/-300 ppm  pk@15UIpp,100k")
+    print(f"{'row (one input changed)':34s} {'rms UI':>7s} {'pk UI':>7s}   {'worst w@1e-12':>13s}  extrap  worst floor   slips +300/-300 ppm  "
+          f"pk@{lc.r12_mask(SJ_PROBE_HZ):g}UIpp,{SJ_PROBE_HZ / 1e3:g}k")
 
 
 DR009 = dict(kp=8, ki=0)
@@ -128,7 +135,7 @@ A2 = dict(kp=8, ki=1)                                    # recommended: centre o
 ARCH2 = dict(frac=6, decim=16, fmax=1023)
 
 
-MASK_PTS = {1e5: 15.0, 3e5: 5.0, 1e6: 1.5, 3e6: 0.5, 1e7: 0.15}     # link_bench.mask() amplitudes
+MASK_PTS = {f: lc.r12_mask(f) for f in (1e5, 3e5, 1e6, 3e6, 1e7)}   # the R12 mask, evaluated not re-typed
 
 
 def sj_slip_free_bound(f, arch, kw):

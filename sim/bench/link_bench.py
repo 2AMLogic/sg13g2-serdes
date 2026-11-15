@@ -76,15 +76,10 @@ def corner_pmfs(args, fits, cid):
 
 
 def eye(args, pmfs, offset_v=0.0, extra_rj=0.0):
-    """Bathtub at the pad swing; returns (ber array, extrapolation dict)."""
-    rj = float(np.hypot(A["rj_ui"], extra_rj))
-    ker = lc.jitter_kernel(rj, A["dj_uipp"])
-    amp = args.swing_mvppd / 2e3
-    ber = lc.bathtub(pmfs, amp, A["sigma_noise_mv"] / 1e3, offset_v, ker)
-    order = np.roll(np.arange(lc.M), lc.M // 2 - int(np.argmin(ber)))        # centre the best phase
-    tau = (np.arange(lc.M) - lc.M // 2) / lc.M
-    ext = lc.wall_extrapolate(tau, ber[order])
-    return ber, ext
+    """Bathtub at the pad swing: the args/ASSUMPTIONS binding of lc.corner_eye (extra_rj is the recovered
+    clock's rms error, added as RJ). Returns (ber array, extrapolation dict)."""
+    ker = lc.eye_kernel(A["rj_ui"], A["dj_uipp"], extra_rj)
+    return lc.corner_eye(pmfs, args.swing_mvppd / 2e3, A["sigma_noise_mv"] / 1e3, offset_v, ker)
 
 
 # ---- R15 ---------------------------------------------------------------------------------
@@ -175,17 +170,16 @@ def r8(args, fits, rec_id):
 # ---- R11 / R13 ---------------------------------------------------------------------------
 def r11(args, fits, rec_id):
     n = 15000 if args.quick else 40000
-    print("\nLock/hold of the behavioural CDR from a 0.4 UI initial phase offset (lock = 64-word mean of e within 0.05 UI for the rest of the run)")
+    print(f"\nLock/hold of the behavioural CDR from a 0.4 UI initial phase offset (lock = {lc.LOCK_AVG_WORDS}-word "
+          f"mean of e within {lc.LOCK_THRESH_UI:g} UI for the rest of the run)")
     print("ppm     lock after (words)   hold: peak |e| UI   rms UI   slips   label")
     bad = 0
     for ppm in (0, 300, -300):
         e = cm.run(n, ppm=ppm, init_offset_ui=0.4, vote_noise_ui=args.vote_noise_ui, **loop_kw(args)) / cm.UI
-        mavg = np.convolve(e, np.ones(64) / 64, mode="same")
-        out = np.nonzero(np.abs(mavg[32:-32]) >= 0.05)[0]
-        lock = int(out[-1]) + 33 if len(out) else 0
+        lock = lc.lock_word(e)
         tail = e[n // 2:]
         sl = int(np.count_nonzero(np.abs(e[lock:]) >= 0.5))
-        ok = lock < n // 2 and sl == 0
+        ok = lock < lc.lock_limit(n) and sl == 0
         bad += not ok
         print(f"{ppm:+5d}   {lock:10d}           {np.max(np.abs(tail)):.4f}              {np.std(tail):.4f}   {sl:3d}    "
               f"simulated (behavioural bang-bang) {'locks+holds' if ok else 'DOES NOT LOCK/HOLD'}")
@@ -215,17 +209,13 @@ def r13(args, fits, rec_id):
 
 
 # ---- R12 ---------------------------------------------------------------------------------
-def mask(f_hz):
-    return max(0.15, 1.5e6 / f_hz)
-
-
 def r12(args, fits, rec_id):
     freqs = [1e5, 3e5, 1e6, 3e6, 1e7, 3e7, 1e8]
     grid = np.geomspace(0.05, 30.0, 12 if args.quick else 18)
     print("\nSJ sweep through the behavioural CDR: peak recovered-clock error vs SJ amplitude (UIpp), per frequency")
     peaks, grids = {}, {}
     for f in freqs:
-        grids[f] = np.unique(np.append(grid, mask(f)))      # the mask amplitude itself is always on the grid
+        grids[f] = np.unique(np.append(grid, lc.r12_mask(f)))      # the mask amplitude itself is always on the grid
         n = int(min(40000, max(15000, 4 / (f * cm.WORD_S))))
         settle = n // 3
         peaks[f] = [float(np.max(np.abs(cm.run(n, sj_uipp=a, sj_hz=f, vote_noise_ui=args.vote_noise_ui, **loop_kw(args))[settle:])) / cm.UI)
@@ -250,7 +240,7 @@ def r12(args, fits, rec_id):
                     break
                 t = a
             tol.append(t)
-        ok = all(t >= mask(f) for t, f in zip(tol, freqs))
+        ok = all(t >= lc.r12_mask(f) for t, f in zip(tol, freqs))
         bad += not ok
         print(f"{cid:22s} {ext['width']:+.3f} UI  " + "  ".join(f"{t:7.2f}" for t in tol)
               + f"   {'meets' if ok else 'BELOW MASK'}")
@@ -263,7 +253,7 @@ def r12(args, fits, rec_id):
             t = a
         sf.append(t)
     print("slip-free bound (corner-independent)  " + "  ".join(f"{t:7.2f}" for t in sf))
-    print("mask UIpp  " + " " * 24 + "  ".join(f"{mask(f):7.2f}" for f in freqs))
+    print("mask UIpp  " + " " * 24 + "  ".join(f"{lc.r12_mask(f):7.2f}" for f in freqs))
     print("labels: eye width = extrapolated (dual-Dirac Q-scale wall fit, BER 1e-9..1e-4) over "
           + lc.label_fit(rec_id) + "; tolerance = simulated (behavioural bang-bang). Not measured. "
           "Grid ceiling 30 UIpp: a value of 30 means 'at least'.")

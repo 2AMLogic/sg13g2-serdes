@@ -12,6 +12,7 @@
   ],
   "checks": [
     {"name": "ci-json", "argv": ["scripts/check-ci.sh", "json"]},
-    {"name": "ci-links", "argv": ["scripts/check-ci.sh", "links"]}
+    {"name": "ci-links", "argv": ["scripts/check-ci.sh", "links"]},
+    {"name": "ci-fresh", "argv": ["scripts/check-ci.sh", "fresh"]}
   ]
 }

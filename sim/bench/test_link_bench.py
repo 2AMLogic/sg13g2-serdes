@@ -8,6 +8,7 @@ Includes the negative controls: the benches must be able to fail.
 import contextlib
 import io
 import pathlib
+import re
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
@@ -20,6 +21,8 @@ import linkcore as lc  # noqa: E402
 import loop_inputs as li  # noqa: E402
 
 CORNER = "hbt_typ/1.200V/27C"
+
+REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def run_bench(*argv):
@@ -41,14 +44,33 @@ def test_cdr_loop_analysis_reads_its_inputs_from_the_repo():
 
     Importing it runs both parsers, so an RTL or DR-007 edit that breaks a regex fails
     here instead of leaving the DR-007 / DR-010 script silently reporting stale bounds,
-    and the comparison fails if anyone re-introduces a literal.
+    and the comparison fails if anyone re-introduces a literal with a wrong value
+    (a re-typed *identical* literal is caught by the source-text guard below).
     """
     ana = lc.load_module("scripts/cdr-loop-analysis.py", "cdr_loop_analysis")
     p, d = li.rtl_loop_params(), li.dr007_delays()
     assert (ana.KP, ana.KI, ana.FMAX, ana.PHASE_INIT) == (p["KP"], p["KI"], p["FMAX"], p["PHASE_INIT"])
     assert (ana.DIGITAL, ana.ANALOG_ASSUMED) == (d["digital"], d["analog_assumed"])
+    assert (ana.UI, ana.HALF_UI, ana.PPM_LSB) == (li.UI, li.HALF_UI, li.PPM_LSB)   # shared scalars (issue #167)
     # simulate() steps the RTL-checked reference filter, not a second recurrence
     assert ana.serdes_ref.CdrFilter is lc.serdes_ref.CdrFilter
+
+
+def test_cdr_constants_are_not_re_typed():
+    """UI/HALF_UI/PPM_LSB/UI_PER_WORD are defined once, in loop_inputs.py (issue #167).
+
+    A source-text guard, not a value comparison: value equality passes a re-typed
+    identical literal, which is exactly the drift this must prevent.
+    """
+    # the whole approach depends on the derivation being bit-identical to the old literal
+    assert li.UI == 8192.0 and li.HALF_UI == 4096.0 and li.UI_PER_WORD == 16
+    assert li.PPM_LSB == 0.131072
+    # cdrmodel keeps the names at module level (14 cm.UI call sites), via import only
+    assert (cm.UI, cm.HALF_UI, cm.PPM_LSB, cm.UI_PER_WORD) == (li.UI, li.HALF_UI, li.PPM_LSB, li.UI_PER_WORD)
+    for rel in ("sim/bench/cdrmodel.py", "scripts/cdr-loop-analysis.py"):
+        src = (REPO / rel).read_text()
+        for name in ("UI", "HALF_UI", "PPM_LSB", "UI_PER_WORD"):
+            assert not re.search(rf"(?m)^{name}\s*=", src), (rel, name)
 
 
 def test_entry_points_run():
@@ -133,6 +155,28 @@ def test_arch_options_run_and_are_model_only():
 def test_r13_reports_the_500ppm_stretch_column_ungraded():
     rc, out = run_bench("r13", "--quick", "--kp", "8", "--ki", "0")
     assert "stretch column, not graded" in out and "SLIPS (stretch" in out and "R13 (+-300 ppm, zero slips over 1e6 UI): MET" in out
+
+
+def test_graded_rules_have_one_definition():
+    """Issue #159: the R12 mask and the R11 lock rule are graded values, so they live in linkcore only.
+
+    The mask amplitudes are pinned to the proposed R12 numbers here, which is what makes the single
+    definition traceable: link_bench r12 grades tolerance against it and link_sensitivity ratios its
+    slew table to it, and neither may carry its own copy.
+    """
+    import link_sensitivity as ls
+    freqs = (1e5, 3e5, 1e6, 3e6, 1e7)
+    assert [lc.r12_mask(f) for f in freqs] == [15.0, 5.0, 1.5, 0.5, 0.15]      # 1.5 UIpp.MHz slope
+    assert lc.r12_mask(3e7) == 0.15 and lc.r12_mask(1e8) == 0.15               # ... onto the floor
+    assert ls.MASK_PTS == {f: lc.r12_mask(f) for f in freqs}                   # not a second copy
+    assert not hasattr(lb, "mask"), "link_bench must grade against lc.r12_mask"
+
+    # lock_word on a step: 0.4 UI for 2000 words, then 0. The 64-word mean (mode='same', so centred on
+    # its window) last leaves +-0.05 UI at word 2024, reported with the window's half-lag: 2024 + 1 + 32.
+    e = np.concatenate([np.full(2000, 0.4), np.zeros(8000)])
+    assert lc.lock_word(e) == 2025, lc.lock_word(e)
+    assert lc.lock_word(np.zeros(4000)) == 0            # never outside the band: locked from word 0
+    assert lc.lock_limit(40000) == 20000                # r11's pass limit, one definition
 
 
 def test_sensitivity_arch_section_runs():
