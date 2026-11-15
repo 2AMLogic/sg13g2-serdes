@@ -3,7 +3,7 @@
 `sg13g2-serdes` is a single-lane 10 Gb/s-class SerDes on IHP SG13G2: HBT
 current-mode logic at the serial edge, CMOS behind it.
 
-Status as of 2026-11-14, `main` @ `84cb5d6`.
+Status as of 2026-11-15, `main` @ `15dcde0`.
 
 ## Where it stands
 
@@ -18,7 +18,7 @@ read from the verdict of record `manifests/sg13g2-serdes.signoff.json`
 | Item | Analog | Digital | Evidence or reason |
 |---|---|---|---|
 | 1 Design sources | met | met | `manifests/evidence/item1.json` re-attested against the current netlist `08b90805…`, 73/73 checks pass (#157) |
-| 2 Layout | met | met | `layout/analog/top/records/2026-11-12-0193777/`, `layout/digital/records/2026-11-10-f6fe587/` |
+| 2 Layout | met | met | `layout/analog/top/records/2026-11-12-0193777/`, `layout/digital/records/2026-11-14-d19ba10/` |
 | 3 DRC clean | met | met | `drc.json` beside each GDS; coverage gaps listed in `layout/README.md` |
 | 4 LVS clean | unmet | met | digital: `manifests/evidence/item4.json` (#136); analog: #128 |
 | 5 Corner verification vs a ratified spec | unmet | unmet | no ratified spec (#2) |
@@ -34,12 +34,16 @@ Three qualifications the table does not show:
 - **The analog layout is placed, not routed.** Item 2 and item 3 are met for the
   geometry that exists; nets with an HBT terminal are deliberately left unrouted
   (`layout/README.md`). Routing is #127.
-- **The digital layout describes an older netlist.** The routed GDS, its DRC and
-  its LVS were built from the synthesized netlist with sha256 `d6591244…`; the
-  netlist on `main` is `08b90805…` since the klt 0.9.0 regeneration (`506b37e`).
-- **Post-route timing is not closed.** The 2026-11-10 record reports setup slack
-  of -0.033 ns (typ), -0.048 ns (slow 1.35 V) and -0.992 ns (slow 1.08 V, 125 C)
-  at the 1.6 ns word clock; hold is met everywhere.
+- **Digital layout lineage.** The superseded 2026-11-10 record
+  (`layout/digital/records/2026-11-10-f6fe587/`) was built from the
+  synthesized netlist with sha256 `d6591244…`; the current record
+  (`layout/digital/records/2026-11-14-d19ba10/`, #151 via PR #166) re-ran
+  place-and-route, DRC and LVS on the netlist now on `main`, `08b90805…`, and
+  items 2, 3 and 4 (digital) cite it.
+- **Post-route timing is not closed.** The 2026-11-14 record reports setup
+  slack of -0.0318 ns (typ), -0.0258 ns (slow 1.35 V, 125 C) and -1.007 ns
+  (slow 1.08 V, 125 C) at the 1.6 ns word clock, one violating endpoint; hold
+  is met in all six corners.
 
 Outside the checklist:
 
@@ -54,38 +58,34 @@ Outside the checklist:
 
 ## Now
 
-Startable today. None has an issue yet; drafts accompany this roadmap.
+Startable today. Each item names its issue and PR, so an entry stays true as
+its PR lands; items whose deliverable is already committed are dropped, not
+carried. The two prior Now items landed on `main` since the last snapshot:
+the digital P&R/DRC/LVS re-run (#151, PR #166) and the latch-regeneration
+record (#152, PR #156).
 
-1. **Re-run digital place-and-route, DRC and LVS on the current netlist.**
-   Done when a new dated record under `layout/digital/records/` reports the
-   committed netlist hash, `scripts/check-pnr-fresh.sh` and
-   `scripts/check-lvs-fresh.sh` exit 0, and items 2, 3 and 4 (digital) are cited
-   from the new records and still graded `met`.
-2. **Make the RX latch regeneration record complete.**
-   The newest RX record (`sim/rx/records/20261110-222737-506b37e/`) has
-   `latch_regen` at 12 of 27 corners passing with 6 in error and "not reached"
-   at 1.08 V (all three temperatures). Done when a new append-only record has
-   no `error` corner and `sim/rx/README.md` says, per failing corner, whether
-   regeneration is slow or the output swing never reaches the threshold. No
-   resizing in this step.
-3. **Correct the status text.** README ("nothing is designed yet", "pre-spec"),
-   `spec/README.md` (decision list stops at DR-008), `manifests/README.md`
-   (names klt 0.8.0 as the pin) and the pad sentence in `sim/README.md`.
-   Done when each statement matches `main` and `scripts/check-ci.sh` passes.
+1. **Correct the status text** — #153, PR #160 approved and awaiting merge.
+   README still opens "Nothing is designed yet", `spec/README.md` stops its
+   decision list at DR-008, `manifests/README.md` does not yet mark its 0.8.0
+   sentences historical (the pin is 0.9.0), and `sim/README.md` does not yet
+   separate the extracted R6 pad model from the R9 placeholder (#143). Done
+   when each statement matches `main` and `scripts/check-ci.sh` passes.
+2. **G3 verdict on post-route timing** — the record it grades now exists:
+   `layout/digital/records/2026-11-14-d19ba10/` (#151, PR #166). The gate's
+   stop condition is negative slack after one restructure round, and DR-006
+   was that round. Done when a decision record states the multi-corner
+   post-route slack of that record and which branch of G3 applies.
 
 ## Next
 
-- **G3 verdict on post-route timing** (after Now 1). The gate's stop condition
-  is negative slack after one restructure round, and DR-006 was that round.
-  Done when a decision record states the multi-corner post-route slack of the
-  refreshed record and which branch of G3 applies.
-- **Item 11, digital half** (after Now 1). #29 covers both partitions and is
-  parked on the analog one. Done when a `klt erc` supply report for the routed
-  digital GDS is committed and `11.digital` is cited; the curator's note on #29
-  about the missing tap cell in `sg13g2_stdcell` has to be settled against the
-  grader first.
+- **Item 11, digital half** (#29 covers both partitions and is parked on the
+  analog one). Done when a `klt erc` supply report for the routed digital GDS
+  (`layout/digital/records/2026-11-14-d19ba10/`) is committed and `11.digital`
+  is cited; the curator's note on #29 about the missing tap cell in
+  `sg13g2_stdcell` has to be settled against the grader first.
 - **Second-order CDR loop in RTL**, #134 (after the DR-011 ruling below). It
-  regenerates synthesis, so Now 1 repeats after it.
+  regenerates synthesis, so the digital P&R/DRC/LVS re-run (#151, PR #166)
+  repeats after it.
 - **Analog routing, then LVS, then power**: #127, then #128 and #143, then the
   analog half of #29. All wait on the router gap `2AMLogic/klayout-tools#1962`.
 - **Items 5 to 8** (after ratification). Not filed; there are no ratified rows
@@ -117,9 +117,11 @@ Startable today. None has an issue yet; drafts accompany this roadmap.
 | Upstream tool | Routing stubs landing inside the `npn13G2` via array | `klayout-tools#5398` |
 | #127 | Analog LVS, RX pad bench on the extracted pad, power delivery | #128, #143, #29 |
 
-On the tracker as read today, **no open issue is ready to build**: each one is
-held, blocked or has an approved PR waiting. The Now items are the dispatchable
-work once filed.
+The forge, not this document, is the source of truth for what is ready to
+build; a snapshot of a moving tracker decays in hours. The live queues are
+`gh issue list --label loom:issue` and `gh pr list`, and the entries above
+carry their issue and PR numbers so each claim can be checked against them
+instead of trusted.
 
 ## Not planned
 
