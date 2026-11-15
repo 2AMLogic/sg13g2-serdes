@@ -6,8 +6,11 @@
 #                                  content_hash pins, regenerate the committed signoff record
 set -uo pipefail
 cd "$(dirname "$0")/.."
-# shellcheck source=scripts/klt-pin.env
-. scripts/klt-pin.env
+# The klt pin lives in exactly one place: layout/toolchain.json's klt_install.
+KLT_VERSION=$(jq -r '.klt_install // empty' layout/toolchain.json)
+KLT_VERSION=${KLT_VERSION#klayout-tools==}
+[ -n "$KLT_VERSION" ] \
+  || { echo "::error file=layout/toolchain.json::klt_install missing or empty" >&2; exit 1; }
 
 MANIFEST=manifests/sg13g2-serdes.json
 TIERS=manifests/design-evidence-tiers.md
@@ -55,14 +58,6 @@ check_json() {
   done < <(git ls-files 'sim/*.json' 'sim/**/*.json' 'manifests/*.json' \
              reuse.lock.json layout/toolchain.json 2>/dev/null | sort -u)
   echo "json: validated $n file(s)"
-  # The klt version is pinned in two places (this script's klt-pin.env and the
-  # layout/sim flows' toolchain.json); a bump that touches only one must fail here.
-  local layout_pin
-  layout_pin=$(jq -r '.klt_install // empty' layout/toolchain.json 2>/dev/null)
-  if [ "$layout_pin" != "klayout-tools==${KLT_VERSION}" ]; then
-    echo "::error file=layout/toolchain.json::klt_install '${layout_pin}' != klayout-tools==${KLT_VERSION} (scripts/klt-pin.env)"
-    rc=1
-  fi
   return $rc
 }
 
@@ -237,7 +232,7 @@ check_signoff() {
     return 1
   fi
   if ! cmp -s "$fresh" "$RECORD"; then
-    echo "::error::fresh klt signoff differs from $RECORD (klt pinned at ${KLT_VERSION} in scripts/klt-pin.env)"
+    echo "::error::fresh klt signoff differs from $RECORD (klt pinned at ${KLT_VERSION} in layout/toolchain.json)"
     echo "Regenerate in the same PR: scripts/check-ci.sh --regen"
     diff <(python3 -m json.tool "$fresh") <(python3 -m json.tool "$RECORD") || true
     return 1

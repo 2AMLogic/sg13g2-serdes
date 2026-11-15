@@ -103,7 +103,7 @@ smoke grid is run on the `klt sim` batch fleet instead (see
 Each recorded result appends the exact command that reproduces it here.
 
 Repo checks (JSON validity, README links, signoff record): `npm run check:ci`
-(runs `scripts/check-ci.sh`; klt is pinned in `scripts/klt-pin.env`, which must match `layout/toolchain.json`).
+(runs `scripts/check-ci.sh`; klt is pinned once, as `klt_install` in `layout/toolchain.json`).
 
 Testbenches (T1 item 9, against the PROPOSED draft rows): `scripts/run-bench.sh --list`, then
 `scripts/run-bench.sh <id>` from a fresh clone (analog: validates the `klt sim` request and expands the
