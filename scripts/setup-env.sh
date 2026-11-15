@@ -136,6 +136,8 @@ BENCH_INSTALL="$(json_get "${REPO_DIR}/layout/toolchain.json" "d['bench_install'
 # into .venv and validated per pin below -- no check names a package, so adding
 # a bench dependency is a toolchain.json edit, not a script edit (issue #170).
 IFS=',' read -ra BENCH_PINS <<<"${BENCH_INSTALL}"
+[[ ${#BENCH_PINS[@]} -gt 0 ]] \
+  || die "layout/toolchain.json bench_install is empty; it must carry at least one '<name>==<version>' pin." 4
 for pin in "${BENCH_PINS[@]}"; do
   [[ "${pin}" == *==* && -n "${pin%%==*}" && -n "${pin##*==}" ]] \
     || die "layout/toolchain.json bench_install '${BENCH_INSTALL}' carries a pin that is not '<name>==<version>': '${pin}'." 4
