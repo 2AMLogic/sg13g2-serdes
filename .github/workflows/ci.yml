@@ -23,6 +23,8 @@ jobs:
         run: scripts/check-ci.sh json
       - name: README relative links
         run: scripts/check-ci.sh links
+      - name: Evidence-record freshness
+        run: scripts/check-ci.sh fresh
       - name: Harness self-test
         run: scripts/check-ci.sh harness
       - name: Signoff drift

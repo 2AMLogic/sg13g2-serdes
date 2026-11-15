@@ -12,7 +12,7 @@
     },
     "10": {
       "file": "manifests/evidence/item10.json",
-      "content_hash": "sha256:0ae256afaa7bd7ec2e913a54da8703f403df6c8fa172cf1fac0404f1d8b0447e"
+      "content_hash": "sha256:e5a8c246822a4629db6f708b7f09420cafe8c10e9922db8616716a1bda4842c4"
     },
     "2.digital": {
       "file": "manifests/evidence/item2.json",
