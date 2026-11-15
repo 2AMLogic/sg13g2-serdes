@@ -132,6 +132,14 @@ done
 # ---- klt + bench deps (layout/toolchain.json): repo-local venv, never a host tool ----
 KLT_INSTALL="$(json_get "${REPO_DIR}/layout/toolchain.json" "d['klt_install']")"
 BENCH_INSTALL="$(json_get "${REPO_DIR}/layout/toolchain.json" "d['bench_install']")"
+# bench_install is a comma-separated set of '<name>==<version>' pins, installed
+# into .venv and validated per pin below -- no check names a package, so adding
+# a bench dependency is a toolchain.json edit, not a script edit (issue #170).
+IFS=',' read -ra BENCH_PINS <<<"${BENCH_INSTALL}"
+for pin in "${BENCH_PINS[@]}"; do
+  [[ "${pin}" == *==* && -n "${pin%%==*}" && -n "${pin##*==}" ]] \
+    || die "layout/toolchain.json bench_install '${BENCH_INSTALL}' carries a pin that is not '<name>==<version>': '${pin}'." 4
+done
 if [[ ${CHECK_ONLY} -eq 0 ]]; then
   command -v uv >/dev/null 2>&1 || die "'uv' not found on PATH; needed to build the repo-local .venv (not installing it)." 3
   # Build on the host python3 (already floor-checked above), self-contained:
@@ -145,10 +153,17 @@ if [[ ${CHECK_ONLY} -eq 0 ]]; then
     uv pip install --python "${REPO_DIR}/.venv/bin/python" "${KLT_INSTALL}"
   fi
   # NOT inside the klt guard: a tree provisioned before bench_install existed
-  # already has .venv/bin/klt, and a numpy install placed in there would
-  # silently skip every already-provisioned checkout (issue #158).
-  if ! "${REPO_DIR}/.venv/bin/python" -c 'import numpy' >/dev/null 2>&1; then
-    uv pip install --python "${REPO_DIR}/.venv/bin/python" "${BENCH_INSTALL}"
+  # already has .venv/bin/klt, and an install placed in there would silently
+  # skip every already-provisioned checkout (issue #158; scipy hit exactly that
+  # trap in issue #170). The guard tests what it is about to install, at the
+  # version it is about to install it at, per pin:
+  BENCH_INSTALL_NEEDED=0
+  for pin in "${BENCH_PINS[@]}"; do
+    got="$("${REPO_DIR}/.venv/bin/python" -c "import ${pin%%==*}; print(${pin%%==*}.__version__)" 2>/dev/null || true)"
+    [[ "${got}" == "${pin##*==}" ]] || BENCH_INSTALL_NEEDED=1
+  done
+  if [[ ${BENCH_INSTALL_NEEDED} -eq 1 ]]; then
+    uv pip install --python "${REPO_DIR}/.venv/bin/python" "${BENCH_PINS[@]}"
   fi
 fi
 [[ -x "${REPO_DIR}/.venv/bin/klt" ]] || die ".venv/bin/klt missing -- run scripts/setup-env.sh (without --check)." 3
@@ -162,23 +177,22 @@ KLT_ACTUAL="$("${REPO_DIR}/.venv/bin/klt" --version 2>/dev/null || true)"
 echo "setup-env.sh: ${KLT_ACTUAL} in .venv"
 # Import gate, the way the benches run it (issue #158): the venv interpreter
 # when present, else PATH python3 -- always isolated, because `-I` drops the
-# user site dir, so a ~/.local numpy cannot mask a missing install here.
+# user site dir, so a ~/.local package cannot mask a missing install here.
 if [[ -x "${REPO_DIR}/.venv/bin/python3" ]]; then
   BENCH_PY="${REPO_DIR}/.venv/bin/python3"
 else
   BENCH_PY="python3"
 fi
-"${BENCH_PY}" -I -c 'import numpy' >/dev/null 2>&1 \
-  || die "numpy not importable the way the behavioural benches run it ('${BENCH_PY} -I') -- run scripts/setup-env.sh (without --check)." 3
-# Same discipline for the bench dependency (issue #158): the attested benches
-# run on it, so the version must be the pin -- "whatever uv resolved last" is
-# not a version the evidence can cite.
-BENCH_WANT="${BENCH_INSTALL#numpy==}"
-[[ "${BENCH_WANT}" != "${BENCH_INSTALL}" ]] \
-  || die "layout/toolchain.json bench_install '${BENCH_INSTALL}' is not a 'numpy==X.Y.Z' pin." 4
-NUMPY_ACTUAL="$("${REPO_DIR}/.venv/bin/python" -c 'import numpy; print(numpy.__version__)' 2>/dev/null || true)"
-[[ "${NUMPY_ACTUAL}" == "${BENCH_WANT}" ]] \
-  || die "numpy in .venv reports '${NUMPY_ACTUAL:-nothing}', pin is 'numpy ${BENCH_WANT}'; remove .venv and re-run." 4
+for pin in "${BENCH_PINS[@]}"; do
+  "${BENCH_PY}" -I -c "import ${pin%%==*}" >/dev/null 2>&1 \
+    || die "${pin%%==*} not importable the way the behavioural benches run it ('${BENCH_PY} -I') -- run scripts/setup-env.sh (without --check)." 3
+  # Same discipline for every bench dependency (issue #158 numpy, issue #170
+  # scipy): the attested benches run on them, so each version must be its pin
+  # -- "whatever uv resolved last" is not a version the evidence can cite.
+  actual="$("${REPO_DIR}/.venv/bin/python" -c "import ${pin%%==*}; print(${pin%%==*}.__version__)" 2>/dev/null || true)"
+  [[ "${actual}" == "${pin##*==}" ]] \
+    || die "${pin%%==*} in .venv reports '${actual:-nothing}', pin is '${pin}'; remove .venv and re-run." 4
+done
 
 echo
 echo "setup-env.sh: OK. Next:  source scripts/env.sh   then   sim/smoke/run_smoke.sh"
