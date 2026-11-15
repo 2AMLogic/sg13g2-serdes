@@ -83,6 +83,8 @@ check_harness() {
   bench_install=$(python3 -I -c 'import json,sys; print(json.load(open(sys.argv[1]))["bench_install"])' \
                     layout/toolchain.json) || {
     echo "::error file=layout/toolchain.json::cannot read bench_install" >&2; return 1; }
+  [[ -n "${bench_install}" ]] || {
+    echo "::error file=layout/toolchain.json::bench_install is empty" >&2; return 1; }
   echo "harness: sim/bench/test_link_bench.py under ${bench_install}"
   uv run --no-project --with "${bench_install}" -- \
     python -I sim/bench/test_link_bench.py || {
