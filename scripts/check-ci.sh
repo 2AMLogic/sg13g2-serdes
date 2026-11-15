@@ -79,7 +79,14 @@ check_links() {
 }
 
 check_harness() {
-  echo "harness not present: nothing to self-test yet"
+  local bench_install
+  bench_install=$(python3 -I -c 'import json,sys; print(json.load(open(sys.argv[1]))["bench_install"])' \
+                    layout/toolchain.json) || {
+    echo "::error file=layout/toolchain.json::cannot read bench_install" >&2; return 1; }
+  echo "harness: sim/bench/test_link_bench.py under ${bench_install}"
+  uv run --no-project --with "${bench_install}" -- \
+    python -I sim/bench/test_link_bench.py || {
+    echo "::error file=sim/bench/test_link_bench.py::bench self-test failed" >&2; return 1; }
 }
 
 # check_fresh -- the committed evidence records still describe the committed
@@ -292,7 +299,7 @@ case "${1:-all}" in
     check_json || rc=1
     check_links || rc=1
     check_fresh || rc=1
-    check_harness
+    check_harness || rc=1
     check_signoff || rc=1
     exit $rc ;;
   *) echo "usage: $0 [json|links|fresh|harness|signoff|all|--regen]" >&2; exit 2 ;;

@@ -14,7 +14,7 @@ klt_env() { # needs $ROOT (the repo root, as set by the sourcing script)
   pin="$(jq -r .klt_install "$ROOT/layout/toolchain.json")"
   KLT=(uvx --quiet --from "$pin" klt)
   if [ -z "${PDK_ROOT:-}" ]; then
-    PDK_ROOT="$(pdk_default_root "$ROOT")"
+    PDK_ROOT="$(pdk_default_root "$ROOT")" || exit 3
   fi
   export PDK_ROOT PDK=ihp-sg13g2
   mkdir -p "$ROOT/.cache"
@@ -35,5 +35,10 @@ require_pdk_file() { # require_pdk_file <relpath-under-$PDK_ROOT> [message]
 }
 
 pdk_default_root() { # pdk_default_root <repo-root> -- the $PDK_ROOT fallback
-  echo "$1/.cache/pdk/$(jq -r .extracted_dir "$1/sim/pdk.json")"
+  # return (not exit): env.sh sources this library and must survive the refusal.
+  # Exit-code contract is unchanged: the caller turns the non-zero into exit 3.
+  local v
+  v="$(jq -r .extracted_dir "$1/sim/pdk.json")" || return 3
+  [ -n "$v" ] && [ "$v" != null ] || return 3
+  echo "$1/.cache/pdk/$v"
 }

@@ -18,6 +18,7 @@ TOOLS="$ROOT/layout/tools.json"
 die() { echo "run.sh: $*" >&2; exit 2; }
 # shellcheck source=scripts/klt-lib.sh
 . "$ROOT/scripts/klt-lib.sh"
+require_tool jq "run.sh: jq missing from PATH (a declared prerequisite; run scripts/setup-env.sh --check)"
 
 COCOTB_VER="$(jq -r .cocotb.version "$TOOLS")"
 COCOTB_PY="$(jq -r .cocotb.python "$TOOLS")"

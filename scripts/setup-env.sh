@@ -53,7 +53,7 @@ verify_or_remove() {
 # json_get <file> <python-expression-on-d>
 json_get() { python3 -I -c 'import json,sys; d=json.load(open(sys.argv[1])); print(eval(sys.argv[2]))' "$1" "$2"; }
 
-for tool in python3 curl tar ngspice; do
+for tool in python3 curl tar ngspice jq; do
   command -v "${tool}" >/dev/null 2>&1 \
     || die "'${tool}' not found on PATH. This script does not install host tools; report the gap (worker spec) instead." 3
 done
