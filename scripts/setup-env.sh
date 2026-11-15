@@ -28,7 +28,7 @@ case "${1:-}" in
   *) echo "setup-env.sh: unknown argument '$1'" >&2; exit 2 ;;
 esac
 
-die() { echo "setup-env.sh: $*" >&2; exit "${2:-1}"; }
+die() { echo "setup-env.sh: $1" >&2; exit "${2:-1}"; }
 
 sha256_of() {
   if command -v sha256sum >/dev/null 2>&1; then sha256sum "$1" | awk '{print $1}'

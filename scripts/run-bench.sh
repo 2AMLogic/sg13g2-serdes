@@ -20,7 +20,7 @@
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 MAN="${REPO}/sim/bench/benches.json"
-die() { echo "run-bench.sh: $*" >&2; exit "${2:-2}"; }
+die() { echo "run-bench.sh: $1" >&2; exit "${2:-2}"; }
 command -v jq >/dev/null 2>&1 || die "jq not on PATH" 3
 [[ $# -ge 1 ]] || die "usage: run-bench.sh --list | <id> [--run]"
 if [[ "$1" == "--list" ]]; then
