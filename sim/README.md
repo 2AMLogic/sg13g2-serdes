@@ -42,7 +42,9 @@ request is validated, the corner set expanded and the declared measurements asse
 so it runs from a fresh clone. `--run` submits the full grid with `klt sim --wait-for-capacity 600`
 (batch fleet) after `scripts/setup-env.sh` and `source scripts/env.sh`. Digital benches run the cocotb
 test for real. Every printed figure is simulated, never measured, and no bench result is recorded by
-this item (recording is T1 item 5).
+this item (recording is T1 item 5). Analog checks grade with the klt pinned in `layout/toolchain.json`:
+`run-bench.sh` resolves `.venv/bin/klt` by path (installed by `scripts/setup-env.sh`), so the pin holds even
+inside `klt signoff --attest 9`'s sanitized cold-start environment; with no `.venv` it falls back to PATH `klt` (#176).
 
 | Bench id | Rows | Corner set | Deck |
 |---|---|---|---|

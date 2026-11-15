@@ -61,7 +61,21 @@ if [[ "$(jq -r .partition <<<"${B}")" == "digital" ]]; then
   exec "${REPO}/rtl/tests/run.sh" "$(jq -r .rtl_bench <<<"${B}")"
 fi
 
-command -v klt >/dev/null 2>&1 || die "klt not on PATH (source scripts/env.sh)" 3
+# Resolve klt by path, not from PATH: `klt signoff --attest 9` runs cold_start
+# commands in a sanitized environment -- no ${REPO}/.venv/bin on PATH and no
+# VIRTUAL_ENV -- so a bare `klt` grades these checks with whatever klt the host
+# happens to carry, while the evidence envelope asserts klayout-tools==0.9.0
+# twice and neither assertion describes it (issue #176; upstream:
+# 2AMLogic/klayout-tools#5565). The .venv binary is already a verified pin:
+# scripts/setup-env.sh refuses to finish unless `.venv/bin/klt --version`
+# equals layout/toolchain.json's klt_install, so this resolution adds no
+# second, weaker version check of its own.
+if [[ -x "${REPO}/.venv/bin/klt" ]]; then
+  BENCH_KLT="${REPO}/.venv/bin/klt"
+else
+  command -v klt >/dev/null 2>&1 || die "klt not on PATH (and no ${REPO}/.venv/bin/klt; run scripts/setup-env.sh)" 3
+  BENCH_KLT="klt"
+fi
 want_units="$(jq -r .units_per_request <<<"${B}")"
 rc=0
 seen=0
@@ -71,11 +85,11 @@ while IFS= read -r req; do
   dir="$(dirname "${REPO}/${req}")"; base="$(basename "${req}")"
   if [[ "${MODE}" == "--run" ]]; then
     [[ -n "${PDK_ROOT:-}" ]] || die "PDK_ROOT unset: run scripts/setup-env.sh, then source scripts/env.sh" 3
-    ( cd "${dir}" && klt sim --wait-for-capacity 600 "${base}" ); e=$?
+    ( cd "${dir}" && "${BENCH_KLT}" sim --wait-for-capacity 600 "${base}" ); e=$?
     [[ ${e} -eq 0 || ${e} -eq 3 ]] || rc=1   # 3 = a declared limit failed; the report is still complete
     continue
   fi
-  out="$(cd "${dir}" && klt sim --dry-run --format json "${base}")" || { echo "run-bench.sh: ${req}: dry-run failed" >&2; rc=1; continue; }
+  out="$(cd "${dir}" && "${BENCH_KLT}" sim --dry-run --format json "${base}")" || { echo "run-bench.sh: ${req}: dry-run failed" >&2; rc=1; continue; }
   got="$(jq -r .unit_count <<<"${out}")"
   [[ "${got}" == "${want_units}" ]] || { echo "run-bench.sh: ${req}: expands to ${got} units, bench declares ${want_units}" >&2; rc=1; }
   while IFS= read -r m; do
