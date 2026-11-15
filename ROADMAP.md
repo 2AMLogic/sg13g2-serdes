@@ -114,7 +114,6 @@ record (#152, PR #156).
 | Operator | Accept DR-011's loop, and renumber one of the two records named DR-005 and one of the two named DR-011 | #134 |
 | Operator | Merge decision on the mux clock swing requirement | #98, PR #99 |
 | Upstream tool | Multi-layer routing for composed analog cells | #127, `klayout-tools#1962` |
-| Upstream tool | Routing stubs landing inside the `npn13G2` via array | `klayout-tools#5398` |
 | #127 | Analog LVS, RX pad bench on the extracted pad, power delivery | #128, #143, #29 |
 
 The forge, not this document, is the source of truth for what is ready to
