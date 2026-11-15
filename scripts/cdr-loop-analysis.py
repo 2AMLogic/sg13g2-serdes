@@ -31,6 +31,7 @@ sys.path.insert(0, str(REPO / "rtl/tests"))     # serdes_ref
 
 import loop_inputs  # noqa: E402
 import serdes_ref  # noqa: E402
+from loop_inputs import HALF_UI, PPM_LSB, UI  # noqa: E402  (defined once in loop_inputs, issue #167)
 
 # ---- inputs read from the repo, never re-typed (sim/bench/linkcore.py's convention) ----
 _RTL = loop_inputs.rtl_loop_params()     # rtl/serdes_cdr_filter.v parameter defaults
@@ -40,9 +41,6 @@ PHASE_INIT = _RTL["PHASE_INIT"]
 DIGITAL = _DLY["digital"]                # RX reg 1 + PD 3 + filter->pi_code 3 (DR-006, via DR-007)
 ANALOG_ASSUMED = _DLY["analog_assumed"]  # words; ASSUMPTION, not traced (see DR-007)
 
-UI = 8192.0                      # LSB per UI
-HALF_UI = UI / 2
-PPM_LSB = 0.131072               # LSB per word per ppm  (16 UI * 1e-6 * 8192)
 CRIT_PK_UI = 0.05                # limit-cycle peak error criterion (builder's stated choice)
 NWORDS, SETTLE = 120000, 60000
 
