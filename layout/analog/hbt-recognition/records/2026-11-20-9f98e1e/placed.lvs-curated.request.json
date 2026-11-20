@@ -1,0 +1,11 @@
+{
+  "layout": {
+    "file": "../../../rx/records/2026-11-12-0193777/ctle/XQa0.gds",
+    "top": "ctle_XQa0",
+    "deck": "sg13g2"
+  },
+  "reference": {
+    "netlist": "placed.ref.cir",
+    "top": "ctle_XQa0"
+  }
+}
