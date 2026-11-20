@@ -19,25 +19,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SIM = os.path.join(HERE, "..")
 NET = os.path.join(SIM, "..", "..", "design", "rx", "netlists")
 
-HBT_LIB = "libs.tech/ngspice/models/cornerHBT.lib"
-CAP_LIB = "libs.tech/ngspice/models/cornerCAP.lib"
-DIO_LIB = "libs.tech/ngspice/models/cornerDIO.lib"
-
-# HBT-family PVT grid: 3 HBT corners (ganged with CAP and DIO sections, the
-# spec's own ganging proposal) x 3 supplies x 3 temperatures = 27 points. It is
-# a crossed grid, not `corners.units`: the fleet runner (klt 0.7.0) silently
-# ignores `corners.units` and runs one default corner.
-PROCESS = [
-    {"name": "hbt_typ", "sections": [{"lib": HBT_LIB, "section": "hbt_typ"},
-                                     {"lib": CAP_LIB, "section": "cap_typ"},
-                                     {"lib": DIO_LIB, "section": "dio_tt"}]},
-    {"name": "hbt_bcs", "sections": [{"lib": HBT_LIB, "section": "hbt_bcs"},
-                                     {"lib": CAP_LIB, "section": "cap_bcs"},
-                                     {"lib": DIO_LIB, "section": "dio_ff"}]},
-    {"name": "hbt_wcs", "sections": [{"lib": HBT_LIB, "section": "hbt_wcs"},
-                                     {"lib": CAP_LIB, "section": "cap_wcs"},
-                                     {"lib": DIO_LIB, "section": "dio_ss"}]},
-]
+sys.path.insert(0, os.path.join(SIM, "..", "tools"))
+from hbt_corners import HBT_LIB, corner_axes  # noqa: E402
 
 VC_MAX = 1.32   # DR-003: no HBT collector node above this
 VBE_REV = 1.0   # DR-003: no reverse Vbe above this
@@ -105,13 +88,6 @@ def request(netlist, analysis, measurements, corners, extra_options=None):
         "measurements": measurements,
         "options": opts,
     }
-
-
-def corner_axes(debug):
-    if debug:
-        return {"process": PROCESS[:1], "temperature_c": [27], "supply_v": {"vdd": [1.2]}}
-    return {"process": PROCESS, "temperature_c": [-40, 27, 125],
-            "supply_v": {"vdd": [1.08, 1.2, 1.32]}}
 
 
 # ---------------------------------------------------------------- CTLE bench

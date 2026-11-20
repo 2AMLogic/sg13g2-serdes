@@ -23,30 +23,15 @@ changed, nothing is recorded. All figures are simulated.
 import json
 import os
 import re
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.join(HERE, "..", "..")
 TXNET = os.path.join(REPO, "design", "tx", "netlists")
 RXNET = os.path.join(REPO, "design", "rx", "netlists")
 
-HBT_LIB = "libs.tech/ngspice/models/cornerHBT.lib"
-CAP_LIB = "libs.tech/ngspice/models/cornerCAP.lib"
-DIO_LIB = "libs.tech/ngspice/models/cornerDIO.lib"
-
-# Same ganged HBT/CAP/DIO grid as sim/rx/pad_ac.request.json (see sim/rx/tools/gen_requests.py).
-PROCESS = [
-    {"name": "hbt_typ", "sections": [{"lib": HBT_LIB, "section": "hbt_typ"},
-                                     {"lib": CAP_LIB, "section": "cap_typ"},
-                                     {"lib": DIO_LIB, "section": "dio_tt"}]},
-    {"name": "hbt_bcs", "sections": [{"lib": HBT_LIB, "section": "hbt_bcs"},
-                                     {"lib": CAP_LIB, "section": "cap_bcs"},
-                                     {"lib": DIO_LIB, "section": "dio_ff"}]},
-    {"name": "hbt_wcs", "sections": [{"lib": HBT_LIB, "section": "hbt_wcs"},
-                                     {"lib": CAP_LIB, "section": "cap_wcs"},
-                                     {"lib": DIO_LIB, "section": "dio_ss"}]},
-]
-CORNERS = {"process": PROCESS, "temperature_c": [-40, 27, 125],
-           "supply_v": {"vdd": [1.08, 1.2, 1.32]}}
+sys.path.insert(0, os.path.join(HERE, "..", "tools"))
+from hbt_corners import HBT_LIB, corner_axes  # noqa: E402
 
 # Per-leg pad-metal capacitance, extracted: `klt extract --deck sg13g2 --parasitics` on pad_esd.gds, net padp,
 # with the bondpad TM2 (layout/analog/pads/records/2026-11-12-fc8a7fa/record.md; padn identical). The PDK
@@ -185,7 +170,7 @@ def request(netlist, analysis, measurements, timeout_s):
         "engine": "ngspice",
         "netlist": netlist,
         "models": {"pdk": "ihp-sg13g2", "lib": HBT_LIB},
-        "corners": CORNERS,
+        "corners": corner_axes(),
         "analysis": analysis,
         "measurements": measurements,
         "options": {"stage_model_inputs": True, "timeout_s": timeout_s, "keep_artifacts": False},
