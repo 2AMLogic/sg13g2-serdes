@@ -104,20 +104,29 @@ check_harness() {
 #      report's own reference field names (a newer P&R record makes LVS stale).
 #   4. same report's .environment.layout_sha256 == sha256sum of
 #      <top>.gate.spice committed in that same lvs-record dir.
-# This is the PDK-free subset of check-pnr-fresh.sh / check-lvs-fresh.sh; they
-# stay the full local gates (the liberty/deck axis hashes a file under
-# PDK_ROOT and remains local-only).
+#   5. newest layout/digital/erc-records/*/erc.report.json
+#      .provenance.input.content_hash (sha256: prefix stripped) == sha256sum
+#      of the newest P&R record's routed GDS, and .provenance.spec.content_hash
+#      == sha256sum of the erc.spec.json committed beside it -- mirrors
+#      check-erc-fresh.sh (a newer P&R record makes ERC stale, and a spec
+#      edited after the run must not silently widen what the record graded).
+# This is the PDK-free subset of check-pnr-fresh.sh / check-lvs-fresh.sh /
+# check-erc-fresh.sh; they stay the full local gates (the liberty/deck axis
+# hashes a file under PDK_ROOT and remains local-only; the ERC local gate
+# additionally re-runs klt erc --check over the pinned klt).
 # A missing record or artifact fails rather than passes: records are
 # committed, so their absence is a repo defect -- exit 0 means verified,
 # never skipped (.loom/docs/ci-principles.md rule 6).
 # Newest-record selection uses git ls-files (committed state, not worktree
 # residue) and is spelled locally because pnr_latest_record reads $PNR_RECORDS
 # from pnr_env, whose require_tool openroad exits 3 on this runner.
-# CHECK_FRESH_PNR_RECORD / CHECK_FRESH_LVS_RECORD override the newest-record
-# selection for negative testing only; CI never sets them.
+# CHECK_FRESH_PNR_RECORD / CHECK_FRESH_LVS_RECORD / CHECK_FRESH_ERC_RECORD
+# override the newest-record selection for negative testing only; CI never
+# sets them.
 check_fresh() {
   local rc=0 top ok synth_report synth_netlist want got
   local prec prec_report rec_hash lrec lvs_report postroute layout_netlist ref_hash
+  local erec erc_report gds spec_hash
   [ -f rtl/synth/request.json ] || { echo "::error file=rtl/synth/request.json::missing"; return 1; }
   top=$(jq -er '.hdl_toplevel' rtl/synth/request.json 2>/dev/null) \
     || { echo "::error file=rtl/synth/request.json::cannot read .hdl_toplevel"; return 1; }
@@ -213,10 +222,70 @@ check_fresh() {
   fi
   [ "$ok" = 1 ] || rc=1
 
-  if [ "$rc" = 0 ]; then
-    echo "fresh: 4 axis(es) verified (pnr=$prec lvs=$lrec)"
+  # Axis 5: the newest ERC record checked the newest P&R record's routed GDS,
+  # with the spec copy it graded still committed beside it.
+  if [ -n "${CHECK_FRESH_ERC_RECORD:-}" ]; then
+    erec=$CHECK_FRESH_ERC_RECORD
   else
-    echo "fresh: FAILED (pnr=$prec lvs=$lrec)" >&2
+    erec=$(git ls-files 'layout/digital/erc-records/*/erc.report.json' | sed 's:/erc\.report\.json$::' | sort | tail -1)
+  fi
+  erc_report="$erec/erc.report.json"
+  [ -n "$erec" ] && [ -f "$erc_report" ] \
+    || { echo "::error file=$erc_report::no committed ERC record (run scripts/erc-regen.sh)"; return 1; }
+  ok=1
+  gds="$prec/$top.gds"
+  if ref_hash=$(jq -er '.provenance.input.content_hash' "$erc_report" 2>/dev/null); then
+    case $ref_hash in
+      sha256:*) ref_hash=${ref_hash#sha256:} ;;
+      *)
+        echo "::error file=$erc_report::fresh axis 5 (erc): .provenance.input.content_hash '$ref_hash' has no sha256: prefix"
+        ok=0 ;;
+    esac
+  else
+    echo "::error file=$erc_report::fresh axis 5 (erc): cannot read .provenance.input.content_hash"
+    ok=0
+  fi
+  if [ "$ok" = 1 ]; then
+    if [ -f "$gds" ]; then
+      got=$(sha256sum "$gds" | awk '{print $1}')
+      if [ "$ref_hash" != "$got" ]; then
+        echo "::error file=$erc_report::fresh axis 5 (erc): newest place-and-route record's $top.gds hash $got != $erc_report .provenance.input.content_hash $ref_hash"
+        ok=0
+      fi
+    else
+      echo "::error file=$gds::fresh axis 5 (erc): newest place-and-route record's routed GDS missing"
+      ok=0
+    fi
+  fi
+  if spec_hash=$(jq -er '.provenance.spec.content_hash' "$erc_report" 2>/dev/null); then
+    case $spec_hash in
+      sha256:*) spec_hash=${spec_hash#sha256:} ;;
+      *)
+        echo "::error file=$erc_report::fresh axis 5 (erc): .provenance.spec.content_hash '$spec_hash' has no sha256: prefix"
+        ok=0 ;;
+    esac
+  else
+    echo "::error file=$erc_report::fresh axis 5 (erc): cannot read .provenance.spec.content_hash"
+    ok=0
+  fi
+  if [ "$ok" = 1 ]; then
+    if [ -f "$erec/erc.spec.json" ]; then
+      got=$(sha256sum "$erec/erc.spec.json" | awk '{print $1}')
+      if [ "$spec_hash" != "$got" ]; then
+        echo "::error file=$erec/erc.spec.json::fresh axis 5 (erc): erc.spec.json hash $got != $erc_report .provenance.spec.content_hash $spec_hash"
+        ok=0
+      fi
+    else
+      echo "::error file=$erec/erc.spec.json::fresh axis 5 (erc): spec copy missing from the ERC record dir"
+      ok=0
+    fi
+  fi
+  [ "$ok" = 1 ] || rc=1
+
+  if [ "$rc" = 0 ]; then
+    echo "fresh: 5 axis(es) verified (pnr=$prec lvs=$lrec erc=$erec)"
+  else
+    echo "fresh: FAILED (pnr=$prec lvs=$lrec erc=$erec)" >&2
   fi
   return $rc
 }

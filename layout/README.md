@@ -16,6 +16,16 @@
     `lvs-records/<date>-<sha>/`. `scripts/check-lvs-fresh.sh` is the `klt lvs --check`
     freshness gate (exit 3 = a newer place-and-route record or drifted inputs). Analog
     LVS is #128.
+  - `erc/digital.erc.json` is the `klt erc` supply spec for the routed digital
+    GDS (T1 item 11, Digital column, `11.digital`). `scripts/erc-regen.sh`
+    runs `klt erc --findings-only --omit-antenna-tables --deck sg13g2` against
+    the newest place-and-route record into a new dated, append-only
+    `erc-records/<date>-<sha>/`, with the spec copy it graded committed beside
+    the report (the document `klt signoff` re-reads). `scripts/check-erc-fresh.sh`
+    is the `klt erc --check` freshness gate (exit 3 = a newer place-and-route
+    record or drifted inputs). Neither needs the PDK or `openroad`; the
+    PDK-free hash axes are mirrored in `scripts/check-ci.sh`'s `fresh` mode.
+    Analog supply ERC stays on #29.
 - `analog/rx/` — RX core analog cells (`ctle`, `latch_cml`, `clk_buf_quad`,
   `lvl_cml2cmos`), T1 item 2, Analog column (#112, part of #24).
   `gen_rx_cells.py` reads `design/rx/netlists/rx_top.spice`, builds each device
