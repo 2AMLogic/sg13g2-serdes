@@ -1,0 +1,7 @@
+{
+  "schema": "klt.extract.request/1",
+  "file": "../../../rx/records/2026-11-12-0193777/ctle/XQa0.gds",
+  "deck": "sg13g2",
+  "top": "ctle_XQa0",
+  "output": "placed.extract.spice"
+}
