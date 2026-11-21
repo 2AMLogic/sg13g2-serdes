@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # run_sizing.sh -- TX sizing grids through `klt sim`; commits an append-only record.
 #
-#   source scripts/env.sh && python3 -I sim/tx/make_tb.py && sim/tx/run_sizing.sh [mos]
+#   source scripts/env.sh && python3 -I sim/tx/make_tb.py && sim/tx/run_sizing.sh [mos|ckswing]
 #
+# `ckswing`: the mux clock-swing sweep (tx_mosck_*, issue #98), record id suffixed -ckswing.
 # No argument: the six HBT requests (tx_sizing_*). `mos`: the three MOS-cell requests
 # (tx_mos_*: mux2to1_cml, tx_lvl_cml2cmos, ffe_en; issue #80), record id suffixed -mos.
 #
@@ -18,7 +19,8 @@ SET="${1:-hbt}"
 case "${SET}" in
   hbt) PREFIX=tx_sizing; SUFFIX=""; RECORD=make_record.py ;;
   mos) PREFIX=tx_mos; SUFFIX="-mos"; RECORD=make_record_mos.py ;;
-  *) echo "run_sizing.sh: unknown set '${SET}' (hbt|mos)" >&2; exit 2 ;;
+  ckswing) PREFIX=tx_mosck; SUFFIX="-ckswing"; RECORD=make_record_ckswing.py ;;
+  *) echo "run_sizing.sh: unknown set '${SET}' (hbt|mos|ckswing)" >&2; exit 2 ;;
 esac
 ID="$(date -u +%Y%m%d-%H%M%S)-$(git -C "${REPO_DIR}" rev-parse --short HEAD)${SUFFIX}"
 OUT="${HERE}/records/${ID}"

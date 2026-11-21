@@ -16,7 +16,7 @@ sibling candidates by name and commit. It does not edit the manifest.
 | Random jitter | ≤ 0.5 ps rms, integrated above the CDR high-pass corner (≈ 1 MHz) to 2.5 GHz | ≤ 0.8 ps rms | proposal: about half the ≈ 1 ps rms total-link RJ that leaves a 14σ ≈ 14 % UI budget at 1e-12 |
 | Deterministic jitter (clock path) | ≤ 3 ps peak-peak (3 % UI) | ≤ 5 ps | proposal |
 | Frequency accuracy | ±300 ppm tracking range (target-spec R13) | ±100 ppm | R13 |
-| Level / load | differential CML levels into the clock buffer; load stated by the receiver and graded at the interface | | to be fixed with the sibling |
+| Level / load | differential CML levels into the clock buffer; load stated by the receiver and graded at the interface. **TX mux clock input: >= 0.4 V per side (0.8 V differential peak-to-peak), centred near 0.6 V, into the `mux2to1_cml` self-biased squarers; a lower bound only, the mux output is not switched at `ss_wcs`/1.08 V with 0.4 V per side** | | [DR-009](decisions/DR-009-mux-clock-swing.md); no sibling states or meets it |
 | Supply | separate filtered rail, ≤ 1 mV rms noise in 100 kHz–100 MHz *(proposal)* | | DR-003 |
 
 ## Sibling comparison (refreshed 2026-11-02)
