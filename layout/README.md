@@ -42,6 +42,13 @@
   routing, so no DRC/LVS/extraction claim** (#26, #27). `records/<date>-<sha>/`
   is append-only; `scripts/tx-core-regen.sh` re-runs into a new record.
   Attestation: `manifests/evidence/item2.analog-tx-core.json`.
+- `analog/hbt-recognition/` — routing-independent `npn13G2` recognition
+  probe (#196): `klt lvs` (curated deck and the pinned `klayout-runset`)
+  and `klt extract` (curated) on the bare PDK cell and the smallest placed
+  HBT cell. Outcome (2026-11-20): curated engines extract no HBT (documented
+  deck gap); the runset recognises it with C/B/E/S terminals and
+  `we/le/Nx/m` parameters — the runset is item 4 analog's engine path
+  (#128). `records/<date>-<sha>/` is append-only.
 - `toolchain.json` pins klt; `tools.json` pins the RTL-flow tool versions.
 
 ## DRC, T1 item 3 (#26)
