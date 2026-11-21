@@ -214,8 +214,6 @@ for a, b, c in stress_fail:
 L.append(f"- Over a DR-003 limit: {len(stress_fail)} (corner, node) pairs across {len(nodes)} nodes. Worst per node:")
 for b, (c, a) in sorted(nodes.items(), key=lambda kv: -kv[1][0]):
     L.append(f"  - `{b}` = {c:.3f} V at {a}")
-if nodes:
-    L.append("- All violations are at the 1.32 V supply point (+10 %), where the latch and last clock-buffer stage collectors overshoot the rail (transient maximum over the run); no reverse-Vbe violation. DR-003 sets the limit at 1.32 V per collector node (BVCEO min 1.4 V, open base, not simulated). The spec is not relaxed here; a DR is proposed in the PR.")
 L.append("- Per-node values for every HBT, corner and CTLE code are in the `*.report.json` files in this directory.")
 other = [v for v in viol if v not in stress_fail]
 L += ["", "## Limits missed (first-look comparisons)", ""]
