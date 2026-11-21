@@ -29,8 +29,8 @@ stage="$(jq -r .stage_reached "$TMP/report.json")"
 
 SHA="$(git -C "$ROOT" rev-parse --short=7 HEAD)"
 DEST="$PNR_RECORDS/$(date -u +%Y-%m-%d)-$SHA"
-[ ! -e "$DEST" ] || { echo "pnr-regen.sh: $DEST exists (records are append-only)" >&2; exit 1; }
-mkdir -p "$DEST"
+mkdir -p "$(dirname "$DEST")"
+mkdir "$DEST" 2>/dev/null || { echo "pnr-regen.sh: $DEST exists (records are append-only)" >&2; exit 1; }
 BUILD="$ROOT/layout/digital/.klt/place-and-route"
 cp "$BUILD/$TOP.gds" "$DEST/$TOP.gds"
 cp "$BUILD/$TOP.def" "$DEST/$TOP.def"
