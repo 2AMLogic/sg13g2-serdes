@@ -33,7 +33,21 @@
     "4.digital": {
       "file": "manifests/evidence/item4.json",
       "content_hash": "sha256:aba8e150c9de82a354b18c745b766d5e8683cb27a9f49acc6aeeeb072ca2ebed"
-    }
+    },
+    "11.digital": [
+      {
+        "file": "layout/digital/erc-records/2026-11-20-9f98e1e/erc.report.json",
+        "content_hash": "sha256:1ad0ea6b707cfa50cce60525ceb99c4cd77b347ace6b6c551d8e88b074400ae0"
+      },
+      {
+        "file": "layout/digital/records/2026-11-14-d19ba10/report.json",
+        "content_hash": "sha256:08b90805a96b63df1e768a0055cf664b94796e26108ff1ada66ba285d709c7d8"
+      },
+      {
+        "file": "manifests/evidence/item4.json",
+        "content_hash": "sha256:aba8e150c9de82a354b18c745b766d5e8683cb27a9f49acc6aeeeb072ca2ebed"
+      }
+    ]
   },
   "partition_boundary": {
     "analog": "design/tx and design/rx CML cells (HBT CML from the serial pad down to the 625 MHz word boundary, including the CML-to-CMOS level converter design/rx/lvl_cml2cmos and its TX counterpart); the pads and ESD",

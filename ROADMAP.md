@@ -27,7 +27,7 @@ read from the verdict of record `manifests/sg13g2-serdes.signoff.json`
 | 8 Characterization report | unmet | unmet | not started |
 | 9 Testbenches shipped | met | met | `manifests/evidence/item9.json` pins the current `verification/testbench-inventory.json`, 66/66 checks pass (#157) |
 | 10 Repo hygiene | met | met | `manifests/evidence/item10.json` |
-| 11 Power delivery | unmet | unmet | #29 |
+| 11 Power delivery | unmet | met | digital: `layout/digital/erc-records/2026-11-20-9f98e1e/` (#198); analog: #29 |
 
 Three qualifications the table does not show:
 
@@ -78,11 +78,6 @@ record (#152, PR #156).
 
 ## Next
 
-- **Item 11, digital half** (#29 covers both partitions and is parked on the
-  analog one). Done when a `klt erc` supply report for the routed digital GDS
-  (`layout/digital/records/2026-11-14-d19ba10/`) is committed and `11.digital`
-  is cited; the curator's note on #29 about the missing tap cell in
-  `sg13g2_stdcell` has to be settled against the grader first.
 - **Second-order CDR loop in RTL**, #134 (after the DR-011 ruling below). It
   regenerates synthesis, so the digital P&R/DRC/LVS re-run (#151, PR #166)
   repeats after it.

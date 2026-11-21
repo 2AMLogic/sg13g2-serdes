@@ -45,7 +45,7 @@
         "role": "hygiene",
         "path": "scripts/check-ci.sh",
         "passed": true,
-        "content_hash": "sha256:dd8c52a2f8bbce128ef0fee3d0cf98faefaf6d29a5bb1f8a11759260f1016b0b"
+        "content_hash": "sha256:ab11402cb4db0bb1b8b28e2cef73e0c91bf7b620e1acefba3f00ac33424a3fa0"
       },
       {
         "check": "command",
