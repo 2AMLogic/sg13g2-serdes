@@ -86,6 +86,9 @@ check_harness() {
   uv run --no-project --with "${bench_install}" -- \
     python -I sim/bench/test_link_bench.py || {
     echo "::error file=sim/bench/test_link_bench.py::bench self-test failed" >&2; return 1; }
+  echo "harness: sim/tools/test-record-dir.sh"
+  bash sim/tools/test-record-dir.sh || {
+    echo "::error file=sim/tools/test-record-dir.sh::record-dir reservation self-test failed" >&2; return 1; }
 }
 
 # check_fresh -- the committed evidence records still describe the committed
