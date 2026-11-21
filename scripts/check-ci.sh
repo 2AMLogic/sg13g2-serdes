@@ -5,7 +5,9 @@
 #   scripts/check-ci.sh --regen    re-attest items 1, 9 and 10, refresh their manifest
 #                                  content_hash pins, regenerate the committed signoff record
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit 1
+# shellcheck source=scripts/erc-fresh-lib.sh
+. scripts/erc-fresh-lib.sh
 # The klt pin lives in exactly one place: layout/toolchain.json's klt_install.
 KLT_VERSION=$(jq -r '.klt_install // empty' layout/toolchain.json)
 KLT_VERSION=${KLT_VERSION#klayout-tools==}
@@ -87,7 +89,7 @@ check_harness() {
 }
 
 # check_fresh -- the committed evidence records still describe the committed
-# artifacts they name, on five axes that need only jq, sha256sum, cmp and
+# artifacts they name, on six axes that need only jq, sha256sum, cmp and
 # python3 (no klt, no openroad, no yosys, nothing under PDK_ROOT):
 #   1. rtl/synth/<top>.synth.json .netlist_sha256 == sha256sum of the committed
 #      gate-level netlist (the want/got block check-synth-fresh.sh runs behind
@@ -109,17 +111,23 @@ check_harness() {
 #      emits (fresh_sim_decks below). A parsed JSON compare is not enough:
 #      record manifests pin *.request.json by sha256, so key order and
 #      indentation are part of the contract.
-# This is the PDK-free subset of check-pnr-fresh.sh / check-lvs-fresh.sh; they
-# stay the full local gates (the liberty/deck axis hashes a file under
-# PDK_ROOT and remains local-only).
+#   6. item 11.digital cites the newest clean ERC report. Its GDS path and
+#      hash match the newest P&R record, and its spec hash matches both the
+#      canonical supply spec and the archived copy that signoff reads.
+# This is the PDK-free subset of check-pnr-fresh.sh / check-lvs-fresh.sh /
+# check-erc-fresh.sh; they stay the full local gates (the liberty/deck axis
+# hashes a file under PDK_ROOT and remains local-only; the ERC local gate
+# additionally re-runs klt erc --check over the pinned klt).
 # A missing record or artifact fails rather than passes: records are
 # committed, so their absence is a repo defect -- exit 0 means verified,
 # never skipped (.loom/docs/ci-principles.md rule 6).
 # Newest-record selection uses git ls-files (committed state, not worktree
 # residue) and is spelled locally because pnr_latest_record reads $PNR_RECORDS
 # from pnr_env, whose require_tool openroad exits 3 on this runner.
-# CHECK_FRESH_PNR_RECORD / CHECK_FRESH_LVS_RECORD override the newest-record
-# selection for negative testing only; CI never sets them.
+# CHECK_FRESH_PNR_RECORD / CHECK_FRESH_LVS_RECORD / CHECK_FRESH_ERC_RECORD
+# override the newest-record selection for negative testing only; CI never
+# sets them.
+#
 # fresh_sim_decks -- axis 5 of check_fresh (issue #204): the committed sim
 # decks and `klt sim` requests are generated artifacts -- sim/rx/{ctle_ac,
 # ctle_op,pad_ac,latch_regen} and sim/bench/r{6,20}_*, 14 files from
@@ -186,6 +194,7 @@ fresh_sim_decks() (
 check_fresh() {
   local rc=0 top ok synth_report synth_netlist want got
   local prec prec_report rec_hash lrec lvs_report postroute layout_netlist ref_hash
+  local erec erc_report
   [ -f rtl/synth/request.json ] || { echo "::error file=rtl/synth/request.json::missing"; return 1; }
   top=$(jq -er '.hdl_toplevel' rtl/synth/request.json 2>/dev/null) \
     || { echo "::error file=rtl/synth/request.json::cannot read .hdl_toplevel"; return 1; }
@@ -205,7 +214,8 @@ check_fresh() {
 
   # Axis 2: the newest place-and-route record was built from that netlist.
   if [ -n "${CHECK_FRESH_PNR_RECORD:-}" ]; then
-    prec=$CHECK_FRESH_PNR_RECORD
+    prec=$(CDPATH='' cd -- "$CHECK_FRESH_PNR_RECORD" && pwd) || return 1
+    prec=${prec#"$PWD"/}
   else
     prec=$(git ls-files 'layout/digital/records/*/report.json' | sed 's:/report\.json$::' | sort | tail -1)
   fi
@@ -284,10 +294,30 @@ check_fresh() {
   # Axis 5: the committed sim decks and requests match their generators.
   fresh_sim_decks || rc=1
 
-  if [ "$rc" = 0 ]; then
-    echo "fresh: 5 axis(es) verified (pnr=$prec lvs=$lrec; sim decks match generators)"
+  # Axis 6: the ERC evidence cited by signoff is clean and current.
+  if [ -n "${CHECK_FRESH_ERC_RECORD:-}" ]; then
+    erec=$(CDPATH='' cd -- "$CHECK_FRESH_ERC_RECORD" && pwd) || return 1
+    erec=${erec#"$PWD"/}
   else
-    echo "fresh: FAILED (pnr=$prec lvs=$lrec)" >&2
+    erec=$(git ls-files 'layout/digital/erc-records/*/erc.report.json' | sed 's:/erc\.report\.json$::' | sort | tail -1)
+  fi
+  erc_report="$erec/erc.report.json"
+  [ -n "$erec" ] && [ -f "$erc_report" ] \
+    || { echo "::error file=$erc_report::no committed ERC record (run scripts/erc-regen.sh)"; return 1; }
+  erc_check_inputs "$erc_report" "$prec/$top.gds" || rc=1
+  if ! jq -e --arg file "$erc_report" --slurpfile report "$erc_report" '
+      .evidence["11.digital"] | map(select(.file | startswith("layout/digital/erc-records/"))) |
+      length == 1 and .[0].file == $file and
+      .[0].content_hash == $report[0].provenance.input.content_hash
+    ' "$MANIFEST" >/dev/null; then
+    echo "::error file=$MANIFEST::fresh axis 6 (erc): 11.digital must cite $erc_report with its recorded input hash"
+    rc=1
+  fi
+
+  if [ "$rc" = 0 ]; then
+    echo "fresh: 6 axis(es) verified (pnr=$prec lvs=$lrec erc=$erec; sim decks match generators)"
+  else
+    echo "fresh: FAILED (pnr=$prec lvs=$lrec erc=$erec)" >&2
   fi
   return $rc
 }
