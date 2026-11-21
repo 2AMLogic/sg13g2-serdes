@@ -22,9 +22,11 @@
   with `klt gen` and composes each subckt with `klt gen-compose`;
   `regen.sh` re-runs it into a new dated, append-only `records/<date>-<sha>/`
   (`rx_core.gds` holds all four cells; per-cell GDS and compose requests/reports
-  alongside). Devices are placed and labelled; intra-cell routing is partial
-  (see each record's `summary.json`); nets with an HBT terminal are left unrouted (#26). DRC is in the section below; no LVS/extraction claim yet (#27).
-  Evidence: `manifests/evidence/item2.rx.json`.
+  alongside). `lvl_cml2cmos` composes from an explicit per-net route plan
+  (issue #199, see "Per-cell analog route plans" below) and is DRC clean +
+  LVS match per record; the HBT cells are placed and labelled, intra-cell
+  routing partial, nets with an HBT terminal left unrouted (#26). Evidence:
+  `manifests/evidence/item2.rx.json`.
 - `analog/pads/` — pad/ESD cells `pad_esd` and `rx_term_pad` (issue #113):
   PDK bondpad/ESD-diode cells and `klt gen res_array` resistors, placed and
   net-labelled only (no routing, DRC, LVS or capacitance claim).
@@ -37,12 +39,69 @@
 - `analog/tx/` — analog layout of the TX CML core cells (`bias`, `ffe_en`,
   `mux2to1_cml`, `predriver`, `driver_ffe`, `tx_lvl_cml2cmos`), T1 item 2,
   Analog column. `gen_tx_core.py` builds one GDS per subckt (cell name = subckt
-  name) from `design/tx/netlists/tx_top.spice`: `klt gen` device cells, shelf
-  placed, with port-named Metal2 boundary pins. **Placement and pins only: no
-  routing, so no DRC/LVS/extraction claim** (#26, #27). `records/<date>-<sha>/`
-  is append-only; `scripts/tx-core-regen.sh` re-runs into a new record.
-  Attestation: `manifests/evidence/item2.analog-tx-core.json`.
+  name) from `design/tx/netlists/tx_top.spice`: `klt gen` device cells.
+  `tx_lvl_cml2cmos` composes from an explicit per-net route plan (issue #199,
+  see "Per-cell analog route plans" below) and is DRC clean + LVS match per
+  record; the other five cells are shelf-packed with port-named Metal2
+  boundary pins — **placement and pins only, no routing** (#26, #27).
+  `records/<date>-<sha>/` is append-only; `scripts/tx-core-regen.sh` re-runs
+  into a new record. Attestation: `manifests/evidence/item2.analog-tx-core.json`.
 - `toolchain.json` pins klt; `tools.json` pins the RTL-flow tool versions.
+
+## Per-cell analog route plans and per-cell LVS (issue #199, first split of #127)
+
+Two cells are routed end-to-end from a **hand-specified multi-layer plan**:
+RX `lvl_cml2cmos` and TX `tx_lvl_cml2cmos` (records `2026-11-21-4ff16d8`,
+source commit `4ff16d8`). Per cell: every multi-terminal net drawn connected,
+`klt drc --deck sg13g2` `clean`, `klt lvs` against the cell's standalone
+subckt (`reference.form: subckt-call`, `options.anchor_top_level_pins: true`)
+`match` with the subckt's port set — both supplies included — anchored, and a
+scratch negative control (one removed device; one routing plane erased)
+yielding `mismatch`. `scripts/analog-lvs-regen.sh` writes the DRC+LVS evidence
+into the newest records; `scripts/check-analog-lvs-fresh.sh` is the
+`klt lvs --check` freshness gate (exit 3 = a newer generator record without
+LVS evidence). This is per-cell evidence under
+`manifests/design-evidence-tiers.md` item 4, **not** a partition-level LVS
+claim: T1 item 4 (analog) stays with #128 and the unrouted cells stay with
+#127.
+
+The recipe for the next cell (what worked, in order):
+
+1. **Floorplan**: two rows of `klt gen` device blocks in columns — nfets in
+   row A, pfets (and the well-tie strap) in row B above a channel; a supply
+   trunk on each side of the rows; long passives above/below the trunks.
+   Body ties: `layout_common.draw_tie_strap` draws the pSD/nSD-marked Activ
+   the curated deck derives substrate/well ties from (mos_array has no bulk
+   port at klt 0.9.0), and `overlay_nwell_merge` merges the pfet wells with
+   the well-tie strap; `assert_ties` fails the build if a tie sits on the
+   wrong side of a well.
+2. **Plan**: every net gets `layer_role` + `legs[]` (`from_pin`/`to_pin`,
+   `waypoints_um` through free corridors). Two planes suffice for these
+   cells: put the nets whose trunks must *cross* row-spanning verticals on
+   the other plane from them. Supply rails: one leg anchors the trunk (tie
+   strap → first device), every other device joins pin-to-trunk.
+3. **Pad geometry (what did not work)**: `mos_array`/`res_array` port pads
+   are Metal2. (a) A trunk lane offset from the pad centre it feeds draws a
+   sliver facing the pad edge — 0.02–0.06 um `metal2/metal3.space.1` markers;
+   put trunk lanes **exactly on pad centres** (TX co-aligns each column's
+   pfet so its pads share the nfet's x). (b) A supply leg that runs
+   horizontally *at pad level* to its drop lane collides with the
+   neighbouring S/D pad at the same y; drop vertically off the pad first,
+   then run at rail level. (c) A seeded leg whose staircase crosses or
+   approaches an already-drawn net (< spacing) is rejected and the router
+   silently re-plans that net — the net still reports `routed`, the rejected
+   leg carries `reason` in `compose.response.json`; check `legs[]` for
+   `reason` to know the plan as written was not what got drawn. All three
+   posted as generic data points on `2AMLogic/klayout-tools#1962`
+   ([comment](https://github.com/2AMLogic/klayout-tools/issues/1962#issuecomment-7054026274),
+   2026-11-21).
+4. **Evidence**: run the partition's regen script (new dated record), then
+   `scripts/analog-lvs-regen.sh` (DRC + LVS into the record), then the
+   negative controls on scratch copies (never committed as evidence), then
+   `scripts/check-analog-lvs-fresh.sh`. Fold `options.combine_devices: true`
+   into the LVS request when the netlist uses `ng>1` fingers or drawn
+   resistors (they extract per-primitive).
+
 
 ## DRC, T1 item 3 (#26)
 

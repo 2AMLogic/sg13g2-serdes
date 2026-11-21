@@ -1,0 +1,195 @@
+[
+ {
+  "cell": "ctle",
+  "devices": 38,
+  "orientation": {},
+  "nets_routed": [
+   "vcm",
+   "vdd",
+   "vss"
+  ],
+  "nets_unrouted": [],
+  "pins_labelled": [
+   "inp",
+   "inn",
+   "vcm",
+   "vdd",
+   "vss",
+   "c0",
+   "c0b",
+   "c1",
+   "c1b",
+   "c2",
+   "c2b",
+   "outp",
+   "outn"
+  ],
+  "ports_without_pin": []
+ },
+ {
+  "cell": "latch_cml",
+  "devices": 10,
+  "orientation": {},
+  "nets_routed": [
+   "vdd",
+   "vss"
+  ],
+  "nets_unrouted": [],
+  "pins_labelled": [
+   "dp",
+   "dn",
+   "clkp",
+   "clkn",
+   "vdd",
+   "vss",
+   "qp",
+   "qn"
+  ],
+  "ports_without_pin": []
+ },
+ {
+  "cell": "clk_buf_quad",
+  "devices": 20,
+  "orientation": {
+   "XQi1b": "mirror_x",
+   "RLi1b": "mirror_x",
+   "XQi2b": "mirror_x",
+   "RLi2b": "mirror_x",
+   "XQq1b": "mirror_x",
+   "RLq1b": "mirror_x",
+   "XQq2b": "mirror_x",
+   "RLq2b": "mirror_x"
+  },
+  "nets_routed": [
+   "vdd"
+  ],
+  "nets_unrouted": [
+   {
+    "net": "vss",
+    "reason": null
+   }
+  ],
+  "pins_labelled": [
+   "ck0",
+   "ck180",
+   "ck90",
+   "ck270",
+   "vdd",
+   "vss",
+   "b0",
+   "b180",
+   "b90",
+   "b270"
+  ],
+  "ports_without_pin": []
+ },
+ {
+  "cell": "lvl_cml2cmos",
+  "devices": 9,
+  "explicit_route_plan": true,
+  "planes": {
+   "vdd": "metal3",
+   "vss": "metal2",
+   "tl": "metal3",
+   "op": "metal2",
+   "x": "metal2",
+   "y": "metal2",
+   "z": "metal2"
+  },
+  "nets_routed": [
+   "vdd",
+   "vss",
+   "tl",
+   "op",
+   "x",
+   "y",
+   "z"
+  ],
+  "nets_unrouted": [],
+  "legs": [
+   {
+    "net": "vdd",
+    "status": "routed",
+    "routed": true,
+    "legs": [
+     "TIE_VDD.TAP-XMp1.U0_S=ok",
+     "XMp2.U0_S-XMp1.U0_S=ok",
+     "XMpi1.U0_S-XMp1.U0_S=ok",
+     "XMpi2.U0_S-XMp1.U0_S=ok",
+     "XMnt.U0_G-TIE_VDD.TAP=ok"
+    ]
+   },
+   {
+    "net": "vss",
+    "status": "routed",
+    "routed": true,
+    "legs": [
+     "TIE_VSS.TAP-XMnt.U0_S=ok",
+     "XMni1.U0_S-XMnt.U0_S=ok",
+     "XMni2.U0_S-XMnt.U0_S=ok"
+    ]
+   },
+   {
+    "net": "tl",
+    "status": "routed",
+    "routed": true,
+    "legs": [
+     "XMn1.U0_S-XMnt.U0_D=crosses already-routed net 'vdd'",
+     "XMn2.U0_S-XMn1.U0_S=ok",
+     "XMn2.U0_S-XMnt.U0_D=ok"
+    ]
+   },
+   {
+    "net": "op",
+    "status": "routed",
+    "routed": true,
+    "legs": [
+     "XMni2.U0_D-XMpi2.U0_D=ok"
+    ]
+   },
+   {
+    "net": "x",
+    "status": "routed",
+    "routed": true,
+    "legs": [
+     "XMn1.U0_D-XMp1.U0_D=ok",
+     "XMp1.U0_G-XMp1.U0_D=ok",
+     "XMp2.U0_G-XMp1.U0_D=ok"
+    ]
+   },
+   {
+    "net": "y",
+    "status": "routed",
+    "routed": true,
+    "legs": [
+     "XMn2.U0_D-XMp2.U0_D=ok",
+     "XMni1.U0_G-XMn2.U0_D=ok",
+     "XMpi1.U0_G-XMn2.U0_D=ok"
+    ]
+   },
+   {
+    "net": "z",
+    "status": "routed",
+    "routed": true,
+    "legs": [
+     "XMni1.U0_D-XMpi1.U0_D=ok",
+     "XMpi2.U0_G-XMni2.U0_G=ok",
+     "XMni2.U0_G-XMni1.U0_D=ok"
+    ]
+   }
+  ],
+  "body_ties": {
+   "substrate_ties": 1,
+   "well_ties": 1,
+   "merged_nwell_polygons": 1
+  },
+  "pins_labelled": [
+   "ip",
+   "in",
+   "vdd",
+   "vss",
+   "op"
+  ],
+  "ports_without_pin": []
+ }
+]
