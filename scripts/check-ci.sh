@@ -5,7 +5,9 @@
 #   scripts/check-ci.sh --regen    re-attest items 1, 9 and 10, refresh their manifest
 #                                  content_hash pins, regenerate the committed signoff record
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit 1
+# shellcheck source=scripts/erc-fresh-lib.sh
+. scripts/erc-fresh-lib.sh
 # The klt pin lives in exactly one place: layout/toolchain.json's klt_install.
 KLT_VERSION=$(jq -r '.klt_install // empty' layout/toolchain.json)
 KLT_VERSION=${KLT_VERSION#klayout-tools==}
@@ -109,12 +111,9 @@ check_harness() {
 #      emits (fresh_sim_decks below). A parsed JSON compare is not enough:
 #      record manifests pin *.request.json by sha256, so key order and
 #      indentation are part of the contract.
-#   6. newest layout/digital/erc-records/*/erc.report.json
-#      .provenance.input.content_hash (sha256: prefix stripped) == sha256sum
-#      of the newest P&R record's routed GDS, and .provenance.spec.content_hash
-#      == sha256sum of the erc.spec.json committed beside it -- mirrors
-#      check-erc-fresh.sh (a newer P&R record makes ERC stale, and a spec
-#      edited after the run must not silently widen what the record graded).
+#   6. item 11.digital cites the newest clean ERC report. Its GDS path and
+#      hash match the newest P&R record, and its spec hash matches both the
+#      canonical supply spec and the archived copy that signoff reads.
 # This is the PDK-free subset of check-pnr-fresh.sh / check-lvs-fresh.sh /
 # check-erc-fresh.sh; they stay the full local gates (the liberty/deck axis
 # hashes a file under PDK_ROOT and remains local-only; the ERC local gate
@@ -195,7 +194,7 @@ fresh_sim_decks() (
 check_fresh() {
   local rc=0 top ok synth_report synth_netlist want got
   local prec prec_report rec_hash lrec lvs_report postroute layout_netlist ref_hash
-  local erec erc_report gds spec_hash
+  local erec erc_report
   [ -f rtl/synth/request.json ] || { echo "::error file=rtl/synth/request.json::missing"; return 1; }
   top=$(jq -er '.hdl_toplevel' rtl/synth/request.json 2>/dev/null) \
     || { echo "::error file=rtl/synth/request.json::cannot read .hdl_toplevel"; return 1; }
@@ -215,7 +214,8 @@ check_fresh() {
 
   # Axis 2: the newest place-and-route record was built from that netlist.
   if [ -n "${CHECK_FRESH_PNR_RECORD:-}" ]; then
-    prec=$CHECK_FRESH_PNR_RECORD
+    prec=$(CDPATH='' cd -- "$CHECK_FRESH_PNR_RECORD" && pwd) || return 1
+    prec=${prec#"$PWD"/}
   else
     prec=$(git ls-files 'layout/digital/records/*/report.json' | sed 's:/report\.json$::' | sort | tail -1)
   fi
@@ -294,65 +294,25 @@ check_fresh() {
   # Axis 5: the committed sim decks and requests match their generators.
   fresh_sim_decks || rc=1
 
-  # Axis 6: the newest ERC record checked the newest P&R record's routed GDS,
-  # with the spec copy it graded still committed beside it.
+  # Axis 6: the ERC evidence cited by signoff is clean and current.
   if [ -n "${CHECK_FRESH_ERC_RECORD:-}" ]; then
-    erec=$CHECK_FRESH_ERC_RECORD
+    erec=$(CDPATH='' cd -- "$CHECK_FRESH_ERC_RECORD" && pwd) || return 1
+    erec=${erec#"$PWD"/}
   else
     erec=$(git ls-files 'layout/digital/erc-records/*/erc.report.json' | sed 's:/erc\.report\.json$::' | sort | tail -1)
   fi
   erc_report="$erec/erc.report.json"
   [ -n "$erec" ] && [ -f "$erc_report" ] \
     || { echo "::error file=$erc_report::no committed ERC record (run scripts/erc-regen.sh)"; return 1; }
-  ok=1
-  gds="$prec/$top.gds"
-  if ref_hash=$(jq -er '.provenance.input.content_hash' "$erc_report" 2>/dev/null); then
-    case $ref_hash in
-      sha256:*) ref_hash=${ref_hash#sha256:} ;;
-      *)
-        echo "::error file=$erc_report::fresh axis 6 (erc): .provenance.input.content_hash '$ref_hash' has no sha256: prefix"
-        ok=0 ;;
-    esac
-  else
-    echo "::error file=$erc_report::fresh axis 6 (erc): cannot read .provenance.input.content_hash"
-    ok=0
+  erc_check_inputs "$erc_report" "$prec/$top.gds" || rc=1
+  if ! jq -e --arg file "$erc_report" --slurpfile report "$erc_report" '
+      .evidence["11.digital"] | map(select(.file | startswith("layout/digital/erc-records/"))) |
+      length == 1 and .[0].file == $file and
+      .[0].content_hash == $report[0].provenance.input.content_hash
+    ' "$MANIFEST" >/dev/null; then
+    echo "::error file=$MANIFEST::fresh axis 6 (erc): 11.digital must cite $erc_report with its recorded input hash"
+    rc=1
   fi
-  if [ "$ok" = 1 ]; then
-    if [ -f "$gds" ]; then
-      got=$(sha256sum "$gds" | awk '{print $1}')
-      if [ "$ref_hash" != "$got" ]; then
-        echo "::error file=$erc_report::fresh axis 6 (erc): newest place-and-route record's $top.gds hash $got != $erc_report .provenance.input.content_hash $ref_hash"
-        ok=0
-      fi
-    else
-      echo "::error file=$gds::fresh axis 6 (erc): newest place-and-route record's routed GDS missing"
-      ok=0
-    fi
-  fi
-  if spec_hash=$(jq -er '.provenance.spec.content_hash' "$erc_report" 2>/dev/null); then
-    case $spec_hash in
-      sha256:*) spec_hash=${spec_hash#sha256:} ;;
-      *)
-        echo "::error file=$erc_report::fresh axis 6 (erc): .provenance.spec.content_hash '$spec_hash' has no sha256: prefix"
-        ok=0 ;;
-    esac
-  else
-    echo "::error file=$erc_report::fresh axis 6 (erc): cannot read .provenance.spec.content_hash"
-    ok=0
-  fi
-  if [ "$ok" = 1 ]; then
-    if [ -f "$erec/erc.spec.json" ]; then
-      got=$(sha256sum "$erec/erc.spec.json" | awk '{print $1}')
-      if [ "$spec_hash" != "$got" ]; then
-        echo "::error file=$erec/erc.spec.json::fresh axis 6 (erc): erc.spec.json hash $got != $erc_report .provenance.spec.content_hash $spec_hash"
-        ok=0
-      fi
-    else
-      echo "::error file=$erec/erc.spec.json::fresh axis 6 (erc): spec copy missing from the ERC record dir"
-      ok=0
-    fi
-  fi
-  [ "$ok" = 1 ] || rc=1
 
   if [ "$rc" = 0 ]; then
     echo "fresh: 6 axis(es) verified (pnr=$prec lvs=$lrec erc=$erec; sim decks match generators)"
