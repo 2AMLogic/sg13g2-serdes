@@ -30,8 +30,12 @@ LEF="$PDK_ROOT/ihp-sg13g2/libs.ref/sg13g2_stdcell/lef/sg13g2_stdcell.lef"
 
 SHA="$(git -C "$ROOT" rev-parse --short=7 HEAD)"
 DEST="$ROOT/layout/digital/lvs-records/$(date -u +%Y-%m-%d)-$SHA"
-[ ! -e "$DEST" ] || { echo "lvs-regen: $DEST exists (records are append-only)" >&2; exit 1; }
-mkdir -p "$DEST"
+mkdir -p "$(dirname "$DEST")"
+if ! mkerr="$(mkdir "$DEST" 2>&1)"; then
+  # The exclusive mkdir is the reservation; only an occupied destination is a duplicate.
+  if [ -e "$DEST" ] || [ -L "$DEST" ]; then echo "lvs-regen: $DEST exists (records are append-only)" >&2; else echo "lvs-regen: $mkerr" >&2; fi
+  exit 1
+fi
 
 "${KLT[@]}" extract "$REC/$TOP.gds" --deck sg13g2 --abstract-cells 'sg13g2_*' \
   --abstract-cell-lef "$LEF" --def-net-names -o "$DEST/$TOP.gate.spice" --format json >"$DEST/extract.json"

@@ -8,6 +8,7 @@
     "LICENSE",
     ".github/workflows/ci.yml",
     "scripts/check-ci.sh",
+    "scripts/erc-fresh-lib.sh",
     "package.json"
   ],
   "checks": [
