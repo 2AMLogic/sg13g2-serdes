@@ -1,0 +1,1494 @@
+{
+ "schema": "klt.gen_compose.request/1",
+ "pdk": {
+  "variant": "ihp-sg13g2"
+ },
+ "blocks": [
+  {
+   "id": "XMN1",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "mos_array",
+    "cell_name": "tx_lvl_cml2cmos_XMN1",
+    "gds_path": "./tx_lvl_cml2cmos/XMN1.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 1.76,
+     "y1": 6.46
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "U0_S",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21000000000000002,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 180
+     },
+     {
+      "name": "U0_D",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 1.5500000000000003,
+      "y_um": 5.430000000000001,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 0
+     },
+     {
+      "name": "U0_G",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.8800000000000001,
+      "y_um": 6.250000000000001,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.4,
+     "matched_group_id": "mos_array:1x1:array",
+     "snapped_to_grid": false,
+     "notes": [
+      "gate length below 0.28um (this generator's own default): the S/D local-metal pads are automatically padded clear of the gate (issue #1187), so no S/D metal minimum-spacing violation results from this alone -- but params.l_um itself may still violate the target PDK's own poly minimum-width rule (e.g. sky130's poly.width.1 floor is 0.15um), which this generator does not check",
+      "family 'sg13g2' declares no S/D implant role ('nplus') for flavor 'nfet' -- no implant mask was drawn"
+     ],
+     "voltage_flavor": null,
+     "voltage_flavor_mark_present": false,
+     "sd_implant_present": false
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "XMN2",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "mos_array",
+    "cell_name": "tx_lvl_cml2cmos_XMN2",
+    "gds_path": "./tx_lvl_cml2cmos/XMN2.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 1.76,
+     "y1": 6.46
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "U0_S",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21000000000000002,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 180
+     },
+     {
+      "name": "U0_D",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 1.5500000000000003,
+      "y_um": 5.430000000000001,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 0
+     },
+     {
+      "name": "U0_G",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.8800000000000001,
+      "y_um": 6.250000000000001,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.4,
+     "matched_group_id": "mos_array:1x1:array",
+     "snapped_to_grid": false,
+     "notes": [
+      "gate length below 0.28um (this generator's own default): the S/D local-metal pads are automatically padded clear of the gate (issue #1187), so no S/D metal minimum-spacing violation results from this alone -- but params.l_um itself may still violate the target PDK's own poly minimum-width rule (e.g. sky130's poly.width.1 floor is 0.15um), which this generator does not check",
+      "family 'sg13g2' declares no S/D implant role ('nplus') for flavor 'nfet' -- no implant mask was drawn"
+     ],
+     "voltage_flavor": null,
+     "voltage_flavor_mark_present": false,
+     "sd_implant_present": false
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "XMP1",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "mos_array",
+    "cell_name": "tx_lvl_cml2cmos_XMP1",
+    "gds_path": "./tx_lvl_cml2cmos/XMP1.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": -0.15,
+     "y0": -0.15,
+     "x1": 1.9100000000000001,
+     "y1": 6.61
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "U0_S",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21000000000000002,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 180
+     },
+     {
+      "name": "U0_D",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 1.5500000000000003,
+      "y_um": 5.430000000000001,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 0
+     },
+     {
+      "name": "U0_G",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.8800000000000001,
+      "y_um": 6.250000000000001,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.4,
+     "matched_group_id": "mos_array:1x1:array",
+     "snapped_to_grid": false,
+     "notes": [
+      "gate length below 0.28um (this generator's own default): the S/D local-metal pads are automatically padded clear of the gate (issue #1187), so no S/D metal minimum-spacing violation results from this alone -- but params.l_um itself may still violate the target PDK's own poly minimum-width rule (e.g. sky130's poly.width.1 floor is 0.15um), which this generator does not check",
+      "family 'sg13g2' declares no S/D implant role ('pplus') for flavor 'pfet' -- no implant mask was drawn"
+     ],
+     "voltage_flavor": null,
+     "voltage_flavor_mark_present": false,
+     "sd_implant_present": false
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "XMP2",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "mos_array",
+    "cell_name": "tx_lvl_cml2cmos_XMP2",
+    "gds_path": "./tx_lvl_cml2cmos/XMP2.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": -0.15,
+     "y0": -0.15,
+     "x1": 1.9100000000000001,
+     "y1": 6.61
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "U0_S",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21000000000000002,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 180
+     },
+     {
+      "name": "U0_D",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 1.5500000000000003,
+      "y_um": 5.430000000000001,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 0
+     },
+     {
+      "name": "U0_G",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.8800000000000001,
+      "y_um": 6.250000000000001,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.4,
+     "matched_group_id": "mos_array:1x1:array",
+     "snapped_to_grid": false,
+     "notes": [
+      "gate length below 0.28um (this generator's own default): the S/D local-metal pads are automatically padded clear of the gate (issue #1187), so no S/D metal minimum-spacing violation results from this alone -- but params.l_um itself may still violate the target PDK's own poly minimum-width rule (e.g. sky130's poly.width.1 floor is 0.15um), which this generator does not check",
+      "family 'sg13g2' declares no S/D implant role ('pplus') for flavor 'pfet' -- no implant mask was drawn"
+     ],
+     "voltage_flavor": null,
+     "voltage_flavor_mark_present": false,
+     "sd_implant_present": false
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "XMNt",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "mos_array",
+    "cell_name": "tx_lvl_cml2cmos_XMNt",
+    "gds_path": "./tx_lvl_cml2cmos/XMNt.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 1.76,
+     "y1": 6.46
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "U0_S",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21000000000000002,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 180
+     },
+     {
+      "name": "U0_D",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 1.5500000000000003,
+      "y_um": 5.430000000000001,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 0
+     },
+     {
+      "name": "U0_G",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.8800000000000001,
+      "y_um": 6.250000000000001,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.4,
+     "matched_group_id": "mos_array:1x1:array",
+     "snapped_to_grid": false,
+     "notes": [
+      "gate length below 0.28um (this generator's own default): the S/D local-metal pads are automatically padded clear of the gate (issue #1187), so no S/D metal minimum-spacing violation results from this alone -- but params.l_um itself may still violate the target PDK's own poly minimum-width rule (e.g. sky130's poly.width.1 floor is 0.15um), which this generator does not check",
+      "family 'sg13g2' declares no S/D implant role ('nplus') for flavor 'nfet' -- no implant mask was drawn"
+     ],
+     "voltage_flavor": null,
+     "voltage_flavor_mark_present": false,
+     "sd_implant_present": false
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "XMNb",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "mos_array",
+    "cell_name": "tx_lvl_cml2cmos_XMNb",
+    "gds_path": "./tx_lvl_cml2cmos/XMNb.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 1.09,
+     "y1": 2.92
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "U0_S",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 1.0,
+      "width_um": 2.0,
+      "direction_deg": 180
+     },
+     {
+      "name": "U0_D",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.8800000000000001,
+      "y_um": 1.0,
+      "width_um": 2.0,
+      "direction_deg": 0
+     },
+     {
+      "name": "U0_G",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.545,
+      "y_um": 2.71,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.4,
+     "matched_group_id": "mos_array:1x1:array",
+     "snapped_to_grid": false,
+     "notes": [
+      "gate length below 0.28um (this generator's own default): the S/D local-metal pads are automatically padded clear of the gate (issue #1187), so no S/D metal minimum-spacing violation results from this alone -- but params.l_um itself may still violate the target PDK's own poly minimum-width rule (e.g. sky130's poly.width.1 floor is 0.15um), which this generator does not check",
+      "family 'sg13g2' declares no S/D implant role ('nplus') for flavor 'nfet' -- no implant mask was drawn"
+     ],
+     "voltage_flavor": null,
+     "voltage_flavor_mark_present": false,
+     "sd_implant_present": false
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "XRbm",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "tx_lvl_cml2cmos_XRbm",
+    "gds_path": "./tx_lvl_cml2cmos/XRbm.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 20.07,
+     "y1": 0.5
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.25,
+      "width_um": 0.5,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 19.86,
+      "y_um": 0.25,
+      "width_um": 0.5,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "XMP3",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "mos_array",
+    "cell_name": "tx_lvl_cml2cmos_XMP3",
+    "gds_path": "./tx_lvl_cml2cmos/XMP3.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": -0.15,
+     "y0": -0.15,
+     "x1": 1.24,
+     "y1": 5.07
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "U0_S",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 2.0,
+      "width_um": 4.0,
+      "direction_deg": 180
+     },
+     {
+      "name": "U0_D",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.8800000000000001,
+      "y_um": 2.0,
+      "width_um": 4.0,
+      "direction_deg": 0
+     },
+     {
+      "name": "U0_G",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.545,
+      "y_um": 4.71,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.4,
+     "matched_group_id": "mos_array:1x1:array",
+     "snapped_to_grid": false,
+     "notes": [
+      "gate length below 0.28um (this generator's own default): the S/D local-metal pads are automatically padded clear of the gate (issue #1187), so no S/D metal minimum-spacing violation results from this alone -- but params.l_um itself may still violate the target PDK's own poly minimum-width rule (e.g. sky130's poly.width.1 floor is 0.15um), which this generator does not check",
+      "family 'sg13g2' declares no S/D implant role ('pplus') for flavor 'pfet' -- no implant mask was drawn"
+     ],
+     "voltage_flavor": null,
+     "voltage_flavor_mark_present": false,
+     "sd_implant_present": false
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "XMN3",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "mos_array",
+    "cell_name": "tx_lvl_cml2cmos_XMN3",
+    "gds_path": "./tx_lvl_cml2cmos/XMN3.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 1.09,
+     "y1": 2.92
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "U0_S",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 1.0,
+      "width_um": 2.0,
+      "direction_deg": 180
+     },
+     {
+      "name": "U0_D",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.8800000000000001,
+      "y_um": 1.0,
+      "width_um": 2.0,
+      "direction_deg": 0
+     },
+     {
+      "name": "U0_G",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.545,
+      "y_um": 2.71,
+      "width_um": 0.42000000000000004,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.4,
+     "matched_group_id": "mos_array:1x1:array",
+     "snapped_to_grid": false,
+     "notes": [
+      "gate length below 0.28um (this generator's own default): the S/D local-metal pads are automatically padded clear of the gate (issue #1187), so no S/D metal minimum-spacing violation results from this alone -- but params.l_um itself may still violate the target PDK's own poly minimum-width rule (e.g. sky130's poly.width.1 floor is 0.15um), which this generator does not check",
+      "family 'sg13g2' declares no S/D implant role ('nplus') for flavor 'nfet' -- no implant mask was drawn"
+     ],
+     "voltage_flavor": null,
+     "voltage_flavor_mark_present": false,
+     "sd_implant_present": false
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "TIE_VDD",
+   "cell": {
+    "gds_path": "./tx_lvl_cml2cmos/tie_vdd.gds",
+    "cell_name": "tx_lvl_cml2cmos_tie_vdd",
+    "ports": [
+     {
+      "name": "TAP",
+      "layer": {
+       "layer": 8,
+       "datatype": 0
+      },
+      "x_um": 0.75,
+      "y_um": 1.5,
+      "width_um": 1.5,
+      "direction_deg": 90
+     }
+    ]
+   }
+  },
+  {
+   "id": "TIE_VSS",
+   "cell": {
+    "gds_path": "./tx_lvl_cml2cmos/tie_vss.gds",
+    "cell_name": "tx_lvl_cml2cmos_tie_vss",
+    "ports": [
+     {
+      "name": "TAP",
+      "layer": {
+       "layer": 8,
+       "datatype": 0
+      },
+      "x_um": 0.75,
+      "y_um": 1.25,
+      "width_um": 1.5,
+      "direction_deg": 90
+     }
+    ]
+   }
+  }
+ ],
+ "placement": {
+  "strategy": "explicit",
+  "order": [
+   "XMN1",
+   "XMN2",
+   "XMP1",
+   "XMP2",
+   "XMNt",
+   "XMNb",
+   "XRbm",
+   "XMP3",
+   "XMN3",
+   "TIE_VDD",
+   "TIE_VSS"
+  ],
+  "origins_um": {
+   "XMNt": {
+    "x": 8.0,
+    "y": -0.0
+   },
+   "TIE_VDD": {
+    "x": 8.0,
+    "y": 12.5
+   },
+   "XMN1": {
+    "x": 14.76,
+    "y": -0.0
+   },
+   "XMP1": {
+    "x": 14.76,
+    "y": 12.65
+   },
+   "XMN2": {
+    "x": 21.82,
+    "y": -0.0
+   },
+   "XMP2": {
+    "x": 21.82,
+    "y": 12.65
+   },
+   "XMNb": {
+    "x": 28.88,
+    "y": -0.0
+   },
+   "XMN3": {
+    "x": 34.97,
+    "y": -0.0
+   },
+   "XMP3": {
+    "x": 34.97,
+    "y": 12.65
+   },
+   "TIE_VSS": {
+    "x": 0.5,
+    "y": -6.5
+   },
+   "XRbm": {
+    "x": 21.82,
+    "y": 24.6
+   }
+  }
+ },
+ "connectivity": [
+  {
+   "net": "vdd",
+   "pins": [
+    {
+     "block": "XMP1",
+     "port": "U0_S"
+    },
+    {
+     "block": "XMP2",
+     "port": "U0_S"
+    },
+    {
+     "block": "XMP3",
+     "port": "U0_S"
+    },
+    {
+     "block": "XRbm",
+     "port": "R0_A"
+    },
+    {
+     "block": "TIE_VDD",
+     "port": "TAP"
+    }
+   ],
+   "layer_role": "metal3",
+   "legs": [
+    {
+     "from_pin": {
+      "block": "TIE_VDD",
+      "port": "TAP"
+     },
+     "to_pin": {
+      "block": "XMP1",
+      "port": "U0_S"
+     },
+     "waypoints_um": [
+      [
+       8.8,
+       22.1
+      ],
+      [
+       6.0,
+       22.1
+      ]
+     ]
+    },
+    {
+     "from_pin": {
+      "block": "XMP2",
+      "port": "U0_S"
+     },
+     "to_pin": {
+      "block": "XMP1",
+      "port": "U0_S"
+     },
+     "waypoints_um": [
+      [
+       22.03,
+       22.1
+      ],
+      [
+       6.0,
+       22.1
+      ]
+     ]
+    },
+    {
+     "from_pin": {
+      "block": "XMP3",
+      "port": "U0_S"
+     },
+     "to_pin": {
+      "block": "XMP1",
+      "port": "U0_S"
+     },
+     "waypoints_um": [
+      [
+       35.18,
+       22.1
+      ],
+      [
+       6.0,
+       22.1
+      ]
+     ]
+    },
+    {
+     "from_pin": {
+      "block": "XRbm",
+      "port": "R0_A"
+     },
+     "to_pin": {
+      "block": "XMP1",
+      "port": "U0_S"
+     },
+     "waypoints_um": [
+      [
+       20.9,
+       24.85
+      ],
+      [
+       20.9,
+       22.1
+      ],
+      [
+       6.0,
+       22.1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "net": "vss",
+   "pins": [
+    {
+     "block": "XMNt",
+     "port": "U0_S"
+    },
+    {
+     "block": "XMNb",
+     "port": "U0_S"
+    },
+    {
+     "block": "XMN3",
+     "port": "U0_S"
+    },
+    {
+     "block": "TIE_VSS",
+     "port": "TAP"
+    }
+   ],
+   "layer_role": "metal2",
+   "legs": [
+    {
+     "from_pin": {
+      "block": "TIE_VSS",
+      "port": "TAP"
+     },
+     "to_pin": {
+      "block": "XMNt",
+      "port": "U0_S"
+     },
+     "waypoints_um": [
+      [
+       1.2,
+       -2.5
+      ],
+      [
+       8.21,
+       -2.5
+      ]
+     ]
+    },
+    {
+     "from_pin": {
+      "block": "XMNb",
+      "port": "U0_S"
+     },
+     "to_pin": {
+      "block": "XMNt",
+      "port": "U0_S"
+     },
+     "waypoints_um": [
+      [
+       29.09,
+       -2.5
+      ],
+      [
+       8.21,
+       -2.5
+      ]
+     ]
+    },
+    {
+     "from_pin": {
+      "block": "XMN3",
+      "port": "U0_S"
+     },
+     "to_pin": {
+      "block": "XMNt",
+      "port": "U0_S"
+     },
+     "waypoints_um": [
+      [
+       35.18,
+       -2.5
+      ],
+      [
+       8.21,
+       -2.5
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "net": "s",
+   "pins": [
+    {
+     "block": "XMNt",
+     "port": "U0_D"
+    },
+    {
+     "block": "XMN1",
+     "port": "U0_S"
+    },
+    {
+     "block": "XMN2",
+     "port": "U0_S"
+    }
+   ],
+   "layer_role": "metal2",
+   "legs": [
+    {
+     "from_pin": {
+      "block": "XMN1",
+      "port": "U0_S"
+     },
+     "to_pin": {
+      "block": "XMNt",
+      "port": "U0_D"
+     },
+     "waypoints_um": [
+      [
+       14.97,
+       -1.4
+      ],
+      [
+       9.55,
+       -1.4
+      ]
+     ]
+    },
+    {
+     "from_pin": {
+      "block": "XMN2",
+      "port": "U0_S"
+     },
+     "to_pin": {
+      "block": "XMN1",
+      "port": "U0_S"
+     },
+     "waypoints_um": [
+      [
+       22.03,
+       -1.4
+      ],
+      [
+       14.97,
+       -1.4
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "net": "d1",
+   "pins": [
+    {
+     "block": "XMN1",
+     "port": "U0_D"
+    },
+    {
+     "block": "XMP1",
+     "port": "U0_D"
+    },
+    {
+     "block": "XMP1",
+     "port": "U0_G"
+    },
+    {
+     "block": "XMP2",
+     "port": "U0_G"
+    }
+   ],
+   "layer_role": "metal2",
+   "legs": [
+    {
+     "from_pin": {
+      "block": "XMN1",
+      "port": "U0_D"
+     },
+     "to_pin": {
+      "block": "XMP1",
+      "port": "U0_D"
+     },
+     "waypoints_um": [
+      [
+       16.31,
+       6.7
+      ]
+     ]
+    },
+    {
+     "from_pin": {
+      "block": "XMP1",
+      "port": "U0_G"
+     },
+     "to_pin": {
+      "block": "XMP1",
+      "port": "U0_D"
+     },
+     "waypoints_um": [
+      [
+       16.31,
+       20.1
+      ]
+     ]
+    },
+    {
+     "from_pin": {
+      "block": "XMP2",
+      "port": "U0_G"
+     },
+     "to_pin": {
+      "block": "XMP1",
+      "port": "U0_D"
+     },
+     "waypoints_um": [
+      [
+       16.31,
+       20.1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "net": "o1",
+   "pins": [
+    {
+     "block": "XMN2",
+     "port": "U0_D"
+    },
+    {
+     "block": "XMP2",
+     "port": "U0_D"
+    },
+    {
+     "block": "XMN3",
+     "port": "U0_G"
+    },
+    {
+     "block": "XMP3",
+     "port": "U0_G"
+    }
+   ],
+   "layer_role": "metal2",
+   "legs": [
+    {
+     "from_pin": {
+      "block": "XMN2",
+      "port": "U0_D"
+     },
+     "to_pin": {
+      "block": "XMP2",
+      "port": "U0_D"
+     },
+     "waypoints_um": [
+      [
+       23.37,
+       6.7
+      ]
+     ]
+    },
+    {
+     "from_pin": {
+      "block": "XMN3",
+      "port": "U0_G"
+     },
+     "to_pin": {
+      "block": "XMP2",
+      "port": "U0_D"
+     },
+     "waypoints_um": [
+      [
+       35.5,
+       3.5
+      ],
+      [
+       23.37,
+       3.5
+      ]
+     ]
+    },
+    {
+     "from_pin": {
+      "block": "XMP3",
+      "port": "U0_G"
+     },
+     "to_pin": {
+      "block": "XMP2",
+      "port": "U0_D"
+     },
+     "waypoints_um": [
+      [
+       35.52,
+       20.9
+      ],
+      [
+       23.37,
+       20.9
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "net": "vbm",
+   "pins": [
+    {
+     "block": "XMNt",
+     "port": "U0_G"
+    },
+    {
+     "block": "XMNb",
+     "port": "U0_G"
+    },
+    {
+     "block": "XMNb",
+     "port": "U0_D"
+    },
+    {
+     "block": "XRbm",
+     "port": "R0_B"
+    }
+   ],
+   "layer_role": "metal3",
+   "legs": [
+    {
+     "from_pin": {
+      "block": "XRbm",
+      "port": "R0_B"
+     },
+     "to_pin": {
+      "block": "XMNt",
+      "port": "U0_G"
+     },
+     "waypoints_um": [
+      [
+       42.2,
+       24.85
+      ],
+      [
+       42.2,
+       8.7
+      ],
+      [
+       8.88,
+       8.7
+      ]
+     ]
+    },
+    {
+     "from_pin": {
+      "block": "XMNb",
+      "port": "U0_G"
+     },
+     "to_pin": {
+      "block": "XMNt",
+      "port": "U0_G"
+     },
+     "waypoints_um": [
+      [
+       30.5,
+       8.7
+      ],
+      [
+       8.88,
+       8.7
+      ]
+     ]
+    },
+    {
+     "from_pin": {
+      "block": "XMNb",
+      "port": "U0_D"
+     },
+     "to_pin": {
+      "block": "XMNt",
+      "port": "U0_G"
+     },
+     "waypoints_um": [
+      [
+       30.5,
+       0.9
+      ],
+      [
+       8.88,
+       8.7
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "net": "out",
+   "pins": [
+    {
+     "block": "XMP3",
+     "port": "U0_D"
+    },
+    {
+     "block": "XMN3",
+     "port": "U0_D"
+    }
+   ],
+   "layer_role": "metal2",
+   "legs": [
+    {
+     "from_pin": {
+      "block": "XMN3",
+      "port": "U0_D"
+     },
+     "to_pin": {
+      "block": "XMP3",
+      "port": "U0_D"
+     },
+     "waypoints_um": [
+      [
+       35.85,
+       6.7
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "pins": [
+  {
+   "net": "vdd",
+   "block": "TIE_VDD",
+   "port": "TAP"
+  },
+  {
+   "net": "vss",
+   "block": "TIE_VSS",
+   "port": "TAP"
+  },
+  {
+   "net": "inp",
+   "block": "XMN1",
+   "port": "U0_G"
+  },
+  {
+   "net": "inn",
+   "block": "XMN2",
+   "port": "U0_G"
+  },
+  {
+   "net": "out",
+   "block": "XMP3",
+   "port": "U0_D"
+  }
+ ],
+ "routing": {
+  "layer_role": "metal3",
+  "width_um": 0.2
+ },
+ "options": {
+  "cell_name": "tx_lvl_cml2cmos",
+  "output": "./tx_lvl_cml2cmos.gds"
+ }
+}

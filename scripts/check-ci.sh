@@ -87,7 +87,7 @@ check_harness() {
 }
 
 # check_fresh -- the committed evidence records still describe the committed
-# artifacts they name, on four axes that need only jq and sha256sum (no klt,
+# artifacts they name, on six axes that need only jq and sha256sum (no klt,
 # no openroad, no yosys, nothing under PDK_ROOT):
 #   1. rtl/synth/<top>.synth.json .netlist_sha256 == sha256sum of the committed
 #      gate-level netlist (the want/got block check-synth-fresh.sh runs behind
@@ -104,6 +104,9 @@ check_harness() {
 #      report's own reference field names (a newer P&R record makes LVS stale).
 #   4. same report's .environment.layout_sha256 == sha256sum of
 #      <top>.gate.spice committed in that same lvs-record dir.
+#   5/6. the newest per-cell analog LVS records (issue #199: rx lvl_cml2cmos,
+#      tx tx_lvl_cml2cmos) are `match`, were run on their own record's GDS and
+#      against the cell's standalone subckt in design/.
 # This is the PDK-free subset of check-pnr-fresh.sh / check-lvs-fresh.sh; they
 # stay the full local gates (the liberty/deck axis hashes a file under
 # PDK_ROOT and remains local-only).
@@ -213,8 +216,45 @@ check_fresh() {
   fi
   [ "$ok" = 1 ] || rc=1
 
+  # Axes 5-6: the newest per-cell analog LVS evidence (issue #199) against its
+  # own record's GDS and the standalone subckt reference. PDK-free subset of
+  # scripts/check-analog-lvs-fresh.sh (which adds the klt-powered --check).
+  local cell_part cell_gds cell_ref arec arep
+  for cell_spec in "rx lvl_cml2cmos design/rx/netlists/lvl_cml2cmos.spice" \
+                   "tx tx_lvl_cml2cmos design/tx/netlists/tx_lvl_cml2cmos.spice"; do
+    read -r cell_part cell cell_ref <<<"$cell_spec"
+    arec=$(git ls-files "layout/analog/$cell_part/records/*/$cell/lvs.report.json" \
+             | sed "s:/$cell/lvs\.report\.json$::" | sort | tail -1)
+    arep="$arec/$cell/lvs.report.json"
+    [ -n "$arec" ] && [ -f "$arep" ] \
+      || { echo "::error file=$arep::no committed $cell LVS record (run scripts/analog-lvs-regen.sh)"; rc=1; continue; }
+    ok=1
+    [ "$(jq -r .status "$arep")" = match ] \
+      || { echo "::error file=$arep::fresh axis 5/6 (analog): status is not match"; ok=0; }
+    cell_gds="$arec/$cell.gds"
+    if ref_hash=$(jq -er '.environment.layout_sha256' "$arep" 2>/dev/null); then
+      if [ -f "$cell_gds" ]; then
+        got=$(sha256sum "$cell_gds" | awk '{print $1}')
+        [ "$ref_hash" = "$got" ] \
+          || { echo "::error file=$arep::fresh axis 5/6 (analog): $cell.gds hash $got != .environment.layout_sha256 $ref_hash"; ok=0; }
+      else
+        echo "::error file=$cell_gds::fresh axis 5/6 (analog): routed GDS missing from the record dir"; ok=0
+      fi
+    else
+      echo "::error file=$arep::fresh axis 5/6 (analog): cannot read .environment.layout_sha256"; ok=0
+    fi
+    if ref_hash=$(jq -er '.environment.reference_sha256' "$arep" 2>/dev/null); then
+      got=$(sha256sum "$cell_ref" | awk '{print $1}')
+      [ "$ref_hash" = "$got" ] \
+        || { echo "::error file=$arep::fresh axis 5/6 (analog): $cell_ref hash $got != .environment.reference_sha256 $ref_hash"; ok=0; }
+    else
+      echo "::error file=$arep::fresh axis 5/6 (analog): cannot read .environment.reference_sha256"; ok=0
+    fi
+    [ "$ok" = 1 ] || rc=1
+  done
+
   if [ "$rc" = 0 ]; then
-    echo "fresh: 4 axis(es) verified (pnr=$prec lvs=$lrec)"
+    echo "fresh: 6 axis(es) verified (pnr=$prec lvs=$lrec)"
   else
     echo "fresh: FAILED (pnr=$prec lvs=$lrec)" >&2
   fi

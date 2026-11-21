@@ -1,0 +1,7 @@
+{
+  "schema": "klt.drc.request/1",
+  "deck": "sg13g2",
+  "engine": "curated",
+  "file": "../lvl_cml2cmos.gds",
+  "top": "lvl_cml2cmos"
+}
