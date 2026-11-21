@@ -87,8 +87,8 @@ check_harness() {
 }
 
 # check_fresh -- the committed evidence records still describe the committed
-# artifacts they name, on six axes that need only jq and sha256sum (no klt,
-# no openroad, no yosys, nothing under PDK_ROOT):
+# artifacts they name, on seven axes that need only jq, sha256sum, cmp and
+# python3 (no klt, no openroad, no yosys, nothing under PDK_ROOT):
 #   1. rtl/synth/<top>.synth.json .netlist_sha256 == sha256sum of the committed
 #      gate-level netlist (the want/got block check-synth-fresh.sh runs behind
 #      synth_env).
@@ -104,9 +104,14 @@ check_harness() {
 #      report's own reference field names (a newer P&R record makes LVS stale).
 #   4. same report's .environment.layout_sha256 == sha256sum of
 #      <top>.gate.spice committed in that same lvs-record dir.
-#   5/6. the newest per-cell analog LVS records (issue #199: rx lvl_cml2cmos,
-#      tx tx_lvl_cml2cmos) are `match`, were run on their own record's GDS and
-#      against the cell's standalone subckt in design/.
+#   5. every committed sim deck and `klt sim` request under the sim/rx and
+#      sim/bench r6_*/r20_* patterns is byte-identical to what its generator
+#      emits (fresh_sim_decks below). A parsed JSON compare is not enough:
+#      record manifests pin *.request.json by sha256, so key order and
+#      indentation are part of the contract.
+#   6. the newest RX and TX converter LVS records both report a match.
+#   7. each converter's LVS report identifies the GDS in its record and
+#      the standalone reference subcircuit in design/ by their hashes.
 # This is the PDK-free subset of check-pnr-fresh.sh / check-lvs-fresh.sh; they
 # stay the full local gates (the liberty/deck axis hashes a file under
 # PDK_ROOT and remains local-only).
@@ -118,6 +123,69 @@ check_harness() {
 # from pnr_env, whose require_tool openroad exits 3 on this runner.
 # CHECK_FRESH_PNR_RECORD / CHECK_FRESH_LVS_RECORD override the newest-record
 # selection for negative testing only; CI never sets them.
+# fresh_sim_decks -- axis 5 of check_fresh (issue #204): the committed sim
+# decks and `klt sim` requests are generated artifacts -- sim/rx/{ctle_ac,
+# ctle_op,pad_ac,latch_regen} and sim/bench/r{6,20}_*, 14 files from
+# sim/rx/tools/gen_requests.py and sim/bench/gen_r6_r20.py -- and nothing
+# else in CI re-derives them, so a generator edit could land green with the
+# committed decks stale. Stage working-tree copies of both generators, the
+# sim/tools Python support modules and both exported netlist directories in a
+# scratch tree at repository-relative paths (the generators locate their
+# inputs relative to their own script), leave the generated outputs absent,
+# run each default entry point with python3 -I (sim/rx's --debug changes the
+# grid), and compare the generated and checked-in path sets, then each
+# matching pair, with cmp. The whole body runs in a subshell so the EXIT trap
+# removes the scratch tree on success and failure alike; the checkout itself
+# is only ever read, so locally edited generated files survive the check.
+fresh_sim_decks() (
+  local scratch gen f rc=0 committed generated
+  scratch=$(mktemp -d) \
+    || { echo "::error::fresh axis 5 (sim decks): cannot create scratch tree"; return 1; }
+  trap 'rm -rf "$scratch"' EXIT
+  mkdir -p "$scratch/sim/rx/tools" "$scratch/sim/bench" "$scratch/sim/tools" \
+           "$scratch/design/rx/netlists" "$scratch/design/tx/netlists" \
+    || { echo "::error::fresh axis 5 (sim decks): cannot populate scratch tree"; return 1; }
+  cp sim/rx/tools/gen_requests.py "$scratch/sim/rx/tools/" \
+    && cp sim/bench/gen_r6_r20.py "$scratch/sim/bench/" \
+    && cp design/rx/netlists/*.spice "$scratch/design/rx/netlists/" \
+    && cp design/tx/netlists/*.spice "$scratch/design/tx/netlists/" \
+    || { echo "::error::fresh axis 5 (sim decks): cannot stage generator inputs"; return 1; }
+  for f in sim/tools/*.py; do          # shared support modules; none is fine
+    [ -f "$f" ] && cp "$f" "$scratch/sim/tools/"
+  done
+  for gen in sim/rx/tools/gen_requests.py sim/bench/gen_r6_r20.py; do
+    (cd "$scratch" && python3 -I "$gen") \
+      || { echo "::error file=$gen::fresh axis 5 (sim decks): generator failed (run it from the repo root for the traceback)"; rc=1; }
+  done
+  committed=$(git ls-files -- ':(glob)sim/rx/*.sp' ':(glob)sim/rx/*.request.json' \
+                          ':(glob)sim/bench/r6_*.sp' ':(glob)sim/bench/r6_*.request.json' \
+                          ':(glob)sim/bench/r20_*.sp' ':(glob)sim/bench/r20_*.request.json' | sort)
+  generated=$(cd "$scratch" && shopt -s nullglob && for f in sim/rx/*.sp sim/rx/*.request.json \
+      sim/bench/r6_*.sp sim/bench/r6_*.request.json \
+      sim/bench/r20_*.sp sim/bench/r20_*.request.json; do echo "$f"; done | sort)
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    echo "::error file=$f::fresh axis 5 (sim decks): generator emitted nothing for committed $f"
+    rc=1
+  done < <(comm -23 <(printf '%s\n' "$committed") <(printf '%s\n' "$generated"))
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    echo "::error file=$f::fresh axis 5 (sim decks): generator output $f has no committed counterpart"
+    rc=1
+  done < <(comm -13 <(printf '%s\n' "$committed") <(printf '%s\n' "$generated"))
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    if [ ! -f "$f" ]; then
+      echo "::error file=$f::fresh axis 5 (sim decks): committed $f missing from the checkout"
+      rc=1
+    elif ! cmp -s "$f" "$scratch/$f"; then
+      echo "::error file=$f::fresh axis 5 (sim decks): $f differs from its generator output (regenerate: python3 -I <generator> from the repo root)"
+      rc=1
+    fi
+  done < <(comm -12 <(printf '%s\n' "$committed") <(printf '%s\n' "$generated"))
+  return "$rc"
+)
+
 check_fresh() {
   local rc=0 top ok synth_report synth_netlist want got
   local prec prec_report rec_hash lrec lvs_report postroute layout_netlist ref_hash
@@ -216,7 +284,10 @@ check_fresh() {
   fi
   [ "$ok" = 1 ] || rc=1
 
-  # Axes 5-6: the newest per-cell analog LVS evidence (issue #199) against its
+  # Axis 5: the committed sim decks and requests match their generators.
+  fresh_sim_decks || rc=1
+
+  # Axes 6-7: the newest per-cell analog LVS evidence (issue #199) against its
   # own record's GDS and the standalone subckt reference. PDK-free subset of
   # scripts/check-analog-lvs-fresh.sh (which adds the klt-powered --check).
   local cell_part cell_gds cell_ref arec arep
@@ -230,31 +301,31 @@ check_fresh() {
       || { echo "::error file=$arep::no committed $cell LVS record (run scripts/analog-lvs-regen.sh)"; rc=1; continue; }
     ok=1
     [ "$(jq -r .status "$arep")" = match ] \
-      || { echo "::error file=$arep::fresh axis 5/6 (analog): status is not match"; ok=0; }
+      || { echo "::error file=$arep::fresh axis 6 (analog): status is not match"; ok=0; }
     cell_gds="$arec/$cell.gds"
     if ref_hash=$(jq -er '.environment.layout_sha256' "$arep" 2>/dev/null); then
       if [ -f "$cell_gds" ]; then
         got=$(sha256sum "$cell_gds" | awk '{print $1}')
         [ "$ref_hash" = "$got" ] \
-          || { echo "::error file=$arep::fresh axis 5/6 (analog): $cell.gds hash $got != .environment.layout_sha256 $ref_hash"; ok=0; }
+          || { echo "::error file=$arep::fresh axis 7 (analog): $cell.gds hash $got != .environment.layout_sha256 $ref_hash"; ok=0; }
       else
-        echo "::error file=$cell_gds::fresh axis 5/6 (analog): routed GDS missing from the record dir"; ok=0
+        echo "::error file=$cell_gds::fresh axis 7 (analog): routed GDS missing from the record dir"; ok=0
       fi
     else
-      echo "::error file=$arep::fresh axis 5/6 (analog): cannot read .environment.layout_sha256"; ok=0
+      echo "::error file=$arep::fresh axis 7 (analog): cannot read .environment.layout_sha256"; ok=0
     fi
     if ref_hash=$(jq -er '.environment.reference_sha256' "$arep" 2>/dev/null); then
       got=$(sha256sum "$cell_ref" | awk '{print $1}')
       [ "$ref_hash" = "$got" ] \
-        || { echo "::error file=$arep::fresh axis 5/6 (analog): $cell_ref hash $got != .environment.reference_sha256 $ref_hash"; ok=0; }
+        || { echo "::error file=$arep::fresh axis 7 (analog): $cell_ref hash $got != .environment.reference_sha256 $ref_hash"; ok=0; }
     else
-      echo "::error file=$arep::fresh axis 5/6 (analog): cannot read .environment.reference_sha256"; ok=0
+      echo "::error file=$arep::fresh axis 7 (analog): cannot read .environment.reference_sha256"; ok=0
     fi
     [ "$ok" = 1 ] || rc=1
   done
 
   if [ "$rc" = 0 ]; then
-    echo "fresh: 6 axis(es) verified (pnr=$prec lvs=$lrec)"
+    echo "fresh: 7 axis(es) verified (pnr=$prec lvs=$lrec; sim decks match generators)"
   else
     echo "fresh: FAILED (pnr=$prec lvs=$lrec)" >&2
   fi
