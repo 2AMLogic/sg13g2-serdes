@@ -77,35 +77,50 @@ env)
   ;;
 
 micro)
-  [ $# -ge 3 ] || die "micro <parent-dir> <rounds> [pin]"
-  parent="$2"; rounds="$3"; pin="${4:-}"
+  [ $# -ge 3 ] || die "micro <parent-dir> <rounds> [pin|python|pin-python]"
+  parent="$2"; rounds="$3"; opt="${4:-}"
   [ -d "$parent" ] || die "$parent is not a directory"
   [ "$rounds" -gt 0 ] || die "rounds must be positive"
+  case "$opt" in
+    *pin*) pin=1 ;; *) pin= ;;
+    esac
+  case "$opt" in
+    *python*) impl=python ;; *) impl=coreutils ;;
+    esac
   mkdir_bin="$(command -v mkdir)" || die "no mkdir on PATH"
   base="$(mktemp -d "$parent/probe-micro.XXXXXX")" || die "mktemp -d under $parent failed"
   both=0
-  run_one() { # run_one <target> -- one side of a concurrent mkdir pair
-    if [ -n "$pin" ] && command -v taskset >/dev/null 2>&1; then
-      taskset -c 0 mkdir -- "$1" 2>/dev/null
+  # one side of a concurrent pair; `python` calls os.mkdir directly, i.e. the
+  # bare mkdir(2) syscall -- the control that separates a coreutils bug from
+  # a filesystem/kernel one
+  run_one() { # run_one <target>
+    local cmd
+    if [ "$impl" = python ]; then
+      cmd=(python3 -c 'import os,sys; os.mkdir(sys.argv[1])' "$1")
     else
-      mkdir -- "$1" 2>/dev/null
+      cmd=(mkdir -- "$1")
+    fi
+    if [ -n "$pin" ] && command -v taskset >/dev/null 2>&1; then
+      taskset -c 0 "${cmd[@]}"
+    else
+      "${cmd[@]}"
     fi
   }
   i=0
   while [ "$i" -lt "$rounds" ]; do
     i=$((i + 1))
     t="$base/r$i"; mkdir -- "$t" || die "cannot mkdir round dir"
-    run_one "$t/x" && : > "$t/a" &
-    run_one "$t/x" && : > "$t/b" &
+    run_one "$t/x" 2>/dev/null && : > "$t/a" &
+    run_one "$t/x" 2>/dev/null && : > "$t/b" &
     wait
     if [ -f "$t/a" ] && [ -f "$t/b" ]; then
-      both=$((both + 1))    # both mkdirs reported success: the anomaly
+      both=$((both + 1))    # both reported success: the anomaly
     else
       rm -rf -- "$t"
     fi
   done
   echo "probe micro: parent=$parent fstype=$(stat -f -c %T "$parent") rounds=$rounds" \
-       "pin=${pin:+taskset-c0}mkdir=$(readlink -f "$mkdir_bin") both-succeeded=$both"
+       "impl=$impl pin=${pin:+taskset-c0} mkdir=$(readlink -f "$mkdir_bin") both-succeeded=$both"
   keep_dir "$base"
   ;;
 

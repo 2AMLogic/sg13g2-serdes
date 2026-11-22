@@ -28,17 +28,21 @@ jobs:
           git worktree add "$RUNNER_TEMP/guarded" 4367f60
       - name: runner environment
         run: bash sim/tools/record-dir-race-probe.sh env "$RUNNER_TEMP/pre"
-      - name: mkdir atomicity micro-benchmark (/tmp and workspace overlay)
+      - name: mkdir atomicity micro-benchmark (/tmp and workspace)
         run: |
-          bash sim/tools/record-dir-race-probe.sh micro /tmp 1000
-          bash sim/tools/record-dir-race-probe.sh micro /tmp 1000 pin
-          bash sim/tools/record-dir-race-probe.sh micro "$RUNNER_TEMP" 1000
-          bash sim/tools/record-dir-race-probe.sh micro "$RUNNER_TEMP" 1000 pin
-      - name: full reservation contract once per pinned revision
-        run: |
-          bash "$RUNNER_TEMP/pre/sim/tools/test-record-dir.sh"
-          bash "$RUNNER_TEMP/guarded/sim/tools/test-record-dir.sh"
+          for parent in /tmp "$RUNNER_TEMP"; do
+            for opt in "" pin python pin-python; do
+              bash sim/tools/record-dir-race-probe.sh micro "$parent" 1000 "$opt"
+            done
+          done
+      - name: full reservation contract, pre-guard (d436b53)
+        continue-on-error: true
+        run: bash "$RUNNER_TEMP/pre/sim/tools/test-record-dir.sh"
+      - name: full reservation contract, guarded (4367f60)
+        continue-on-error: true
+        run: bash "$RUNNER_TEMP/guarded/sim/tools/test-record-dir.sh"
       - name: bounded race repeat, pre-guard (d436b53)
+        continue-on-error: true
         run: |
           for c in rx smoke tx-hbt tx-mos; do
             bash sim/tools/record-dir-race-probe.sh race "$RUNNER_TEMP/pre" "$c" 150
