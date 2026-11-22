@@ -106,7 +106,8 @@ L += ["## Not simulated", "",
       "- `pad_esd` cell: not inlined; each output sees a 4 ohm series stand-in, the extracted "
       "70.66 fF pad-metal C (layout/analog/pads/records/2026-11-12-fc8a7fa, quasi-static, no bondwire/package) "
       "and the PDK clamp diodes. PDK dantenna/dpantenna equivalence to the diodevdd_2kv clamp is not "
-      "established (LVS #27, DR-013); only the TX padp leg is covered. R6 is in sim/bench/.",
+      "established (LVS #27, DR-013); both TX legs carry the same extracted per-leg capacitance "
+      "(the extraction covers the padp leg and takes padn as identical). R6 is in sim/bench/.",
       "- PDK `rsil` is an OSDI (`r3_cmc`) model, so the deck uses a behavioural resistor "
       "from the PDK symbol's own value formula, with the corner's sheet-resistance scale "
       "(6.02/7.0/7.98 ohm/sq) and tc1 = 3.1e-3. Resistor current-density limits are not checked.",
