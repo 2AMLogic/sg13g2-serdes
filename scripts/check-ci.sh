@@ -89,6 +89,9 @@ check_harness() {
   echo "harness: sim/tools/test-record-dir.sh"
   bash sim/tools/test-record-dir.sh || {
     echo "::error file=sim/tools/test-record-dir.sh::record-dir reservation self-test failed" >&2; return 1; }
+  echo "harness: scripts/test-reserve-record-dir.sh"
+  bash scripts/test-reserve-record-dir.sh || {
+    echo "::error file=scripts/test-reserve-record-dir.sh::record-dir reservation self-test failed" >&2; return 1; }
 }
 
 # check_fresh -- the committed evidence records still describe the committed

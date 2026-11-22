@@ -42,8 +42,7 @@ GDS="$REC/$TOP.gds"
 
 SHA="$(git -C "$ROOT" rev-parse --short=7 HEAD)"
 DEST="$ERC_RECORDS/$(date -u +%Y-%m-%d)-$SHA"
-[ ! -e "$DEST" ] || { echo "erc-regen: $DEST exists (records are append-only)" >&2; exit 1; }
-mkdir -p "$DEST"
+reserve_record_dir "$DEST" "erc-regen" || exit 1
 cp -p "$SPEC" "$DEST/erc.spec.json"
 
 rc=0
