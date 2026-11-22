@@ -10,6 +10,44 @@ permissions:
   contents: read
 
 jobs:
+  # TEMPORARY (issue #220 live run; reverted after the probe completes): manual
+  # dispatch of this workflow also runs the record-dir race probe. push/PR
+  # events never trigger it. Permanent home of the probe is
+  # .github/workflows/record-dir-race-probe.yml (dispatchable once on main).
+  race-probe:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: pinned revisions as worktrees (d436b53 pre-guard, 4367f60 guarded)
+        run: |
+          git worktree add "$RUNNER_TEMP/pre" d436b53
+          git worktree add "$RUNNER_TEMP/guarded" 4367f60
+      - name: runner environment
+        run: bash sim/tools/record-dir-race-probe.sh env "$RUNNER_TEMP/pre"
+      - name: mkdir atomicity micro-benchmark (/tmp and workspace overlay)
+        run: |
+          bash sim/tools/record-dir-race-probe.sh micro /tmp 1000
+          bash sim/tools/record-dir-race-probe.sh micro /tmp 1000 pin
+          bash sim/tools/record-dir-race-probe.sh micro "$RUNNER_TEMP" 1000
+          bash sim/tools/record-dir-race-probe.sh micro "$RUNNER_TEMP" 1000 pin
+      - name: full reservation contract once per pinned revision
+        run: |
+          bash "$RUNNER_TEMP/pre/sim/tools/test-record-dir.sh"
+          bash "$RUNNER_TEMP/guarded/sim/tools/test-record-dir.sh"
+      - name: bounded race repeat, pre-guard (d436b53)
+        run: |
+          for c in rx smoke tx-hbt tx-mos; do
+            bash sim/tools/record-dir-race-probe.sh race "$RUNNER_TEMP/pre" "$c" 150
+          done
+      - name: bounded race repeat, guarded (4367f60)
+        run: |
+          for c in rx smoke tx-hbt tx-mos; do
+            bash sim/tools/record-dir-race-probe.sh race "$RUNNER_TEMP/guarded" "$c" 150
+          done
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 15
