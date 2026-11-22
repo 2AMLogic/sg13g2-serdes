@@ -9,6 +9,8 @@
     ".github/workflows/ci.yml",
     "scripts/check-ci.sh",
     "scripts/erc-fresh-lib.sh",
+    "sim/bench/gen_inventory.py",
+    "sim/bench/test_link_bench.py",
     "package.json"
   ],
   "checks": [
