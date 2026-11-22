@@ -45,26 +45,21 @@ pdk_default_root() { # pdk_default_root <repo-root> -- the $PDK_ROOT fallback
   echo "$1/.cache/pdk/$v"
 }
 
-reserve_record_dir() { # reserve_record_dir <dest> <diag-prefix> -- exclusive
-  # reservation of a dated record directory, the append-only evidence contract
-  # of every regen writer (#208, #219): mkdir -p of the parent, then a bare
-  # `mkdir <dest>` -- the mkdir itself is the atomic reservation, so two
-  # racing writers cannot both pass a check-then-create test and write the
-  # same record. Only an occupied destination (file, directory or symlink,
-  # even a dangling one) is an append-only duplicate; any other failure is a
-  # filesystem error. Both refuse with a <diag-prefix>: diagnostic and return
-  # nonzero (the caller exits 1) without touching what is already there.
-  local dest="$1" prefix="$2" mkerr
-  if ! mkerr="$(mkdir -p "$(dirname "$dest")" 2>&1)"; then
-    echo "$prefix: $mkerr" >&2
-    return 1
-  fi
-  if ! mkerr="$(mkdir "$dest" 2>&1)"; then
-    if [ -e "$dest" ] || [ -L "$dest" ]; then
-      echo "$prefix: $dest exists (records are append-only)" >&2
-    else
-      echo "$prefix: $mkerr" >&2
-    fi
-    return 1
-  fi
+reserve_record_dir() { # reserve_record_dir <dest> <diag-prefix>
+  # uutils mkdir can report success to both racing callers. Read the mkdir
+  # syscall result directly so only the writer that created the record proceeds.
+  python3 -I - "$1" "$2" <<'PY'
+import os
+import sys
+
+dest, prefix = sys.argv[1:]
+try:
+    os.makedirs(os.path.dirname(dest) or ".", exist_ok=True)
+    try:
+        os.mkdir(dest)
+    except FileExistsError:
+        sys.exit(f"{prefix}: {dest} exists (records are append-only)")
+except OSError as error:
+    sys.exit(f"{prefix}: mkdir: {error}")
+PY
 }

@@ -23,7 +23,7 @@
 #   dangling symlink at the destination each refuse with a diagnostic; the
 #   occupied-destination refusal keeps a sentinel intact; two concurrent
 #   reservations of one destination admit exactly one writer.
-# bash, git and jq only. Exit 0 = the contract holds.
+# Requires bash, git, jq and python3. Exit 0 = the contract holds.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SRC="$(cd "${HERE}/.." && pwd)"
