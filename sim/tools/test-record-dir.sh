@@ -123,8 +123,21 @@ check_runner() { # check_runner <name> <script> [set-arg] [id-suffix] [sim-calls
   pb=$!
   wait "$pa"; wait "$pb"
   [ -d "$rec" ] || fail "$name: concurrent launches reserved no record"
-  [ "$(sim_calls)" -eq "$sims" ] \
-    || fail "$name: concurrent launches made $(sim_calls) klt sim calls, expected exactly $sims (one launcher)"
+  if [ "$(sim_calls)" -ne "$sims" ]; then
+    # artifacts die with the CI runner, so make the red self-explaining
+    {
+      echo "--- race diagnostics: $name (a/b = the two concurrent launches)"
+      echo "--- klt log:"; cat "$KLT_LOG"
+      echo "--- ls -la $dir:"; ls -la "$dir"
+      echo "--- exit-codes files:"; find "$dir" -name exit-codes.txt -print -exec cat {} \;
+      for p in a b; do
+        echo "--- launch $p stdout:"; cat "$out.$p"
+        echo "--- launch $p stderr:"; cat "$err.$p"
+      done
+      echo "--- HEAD short sha now: $(git -C "$TMP/repo" rev-parse --short HEAD 2>&1) (fixture: $SHA)"
+    } >&2
+    fail "$name: concurrent launches made $(sim_calls) klt sim calls, expected exactly $sims (one launcher)"
+  fi
   echo "test-record-dir: PASS: $name (naming, retry refused untouched, race: one launcher)"
 }
 

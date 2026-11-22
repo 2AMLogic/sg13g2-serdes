@@ -28,5 +28,12 @@ reserve_record_dir() { # reserve_record_dir <records-root> [id-suffix]
     fi
     return 1
   fi
+  # Second, independent exclusive claim inside the directory (noclobber `>`
+  # is O_EXCL): if two launches ever both get past the mkdir above, only the
+  # one that creates .reserved proceeds; the other refuses before `klt sim`.
+  if ! ( set -C; printf '%s\n' "$$" > "${out}/.reserved" ) 2>/dev/null; then
+    echo "record-dir: '${out}' is already claimed by another launch (.reserved exists); records are append-only, nothing was changed" >&2
+    return 1
+  fi
   printf '%s\n' "${out}"
 }
