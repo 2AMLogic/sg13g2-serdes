@@ -5,9 +5,14 @@
 #   scripts/check-ci.sh --regen    re-attest items 1, 9 and 10, refresh their manifest
 #                                  content_hash pins, regenerate the committed signoff record
 set -uo pipefail
-cd "$(dirname "$0")/.."
-# shellcheck source=scripts/klt-pin.env
-. scripts/klt-pin.env
+cd "$(dirname "$0")/.." || exit 1
+# shellcheck source=scripts/erc-fresh-lib.sh
+. scripts/erc-fresh-lib.sh
+# The klt pin lives in exactly one place: layout/toolchain.json's klt_install.
+KLT_VERSION=$(jq -r '.klt_install // empty' layout/toolchain.json)
+KLT_VERSION=${KLT_VERSION#klayout-tools==}
+[ -n "$KLT_VERSION" ] \
+  || { echo "::error file=layout/toolchain.json::klt_install missing or empty" >&2; exit 1; }
 
 MANIFEST=manifests/sg13g2-serdes.json
 TIERS=manifests/design-evidence-tiers.md
@@ -55,14 +60,6 @@ check_json() {
   done < <(git ls-files 'sim/*.json' 'sim/**/*.json' 'manifests/*.json' \
              reuse.lock.json layout/toolchain.json 2>/dev/null | sort -u)
   echo "json: validated $n file(s)"
-  # The klt version is pinned in two places (this script's klt-pin.env and the
-  # layout/sim flows' toolchain.json); a bump that touches only one must fail here.
-  local layout_pin
-  layout_pin=$(jq -r '.klt_install // empty' layout/toolchain.json 2>/dev/null)
-  if [ "$layout_pin" != "klayout-tools==${KLT_VERSION}" ]; then
-    echo "::error file=layout/toolchain.json::klt_install '${layout_pin}' != klayout-tools==${KLT_VERSION} (scripts/klt-pin.env)"
-    rc=1
-  fi
   return $rc
 }
 
@@ -83,15 +80,23 @@ check_harness() {
   bench_install=$(python3 -I -c 'import json,sys; print(json.load(open(sys.argv[1]))["bench_install"])' \
                     layout/toolchain.json) || {
     echo "::error file=layout/toolchain.json::cannot read bench_install" >&2; return 1; }
+  [[ -n "${bench_install}" ]] || {
+    echo "::error file=layout/toolchain.json::bench_install is empty" >&2; return 1; }
   echo "harness: sim/bench/test_link_bench.py under ${bench_install}"
   uv run --no-project --with "${bench_install}" -- \
     python -I sim/bench/test_link_bench.py || {
     echo "::error file=sim/bench/test_link_bench.py::bench self-test failed" >&2; return 1; }
+  echo "harness: sim/tools/test-record-dir.sh"
+  bash sim/tools/test-record-dir.sh || {
+    echo "::error file=sim/tools/test-record-dir.sh::record-dir reservation self-test failed" >&2; return 1; }
+  echo "harness: scripts/test-reserve-record-dir.sh"
+  bash scripts/test-reserve-record-dir.sh || {
+    echo "::error file=scripts/test-reserve-record-dir.sh::record-dir reservation self-test failed" >&2; return 1; }
 }
 
 # check_fresh -- the committed evidence records still describe the committed
-# artifacts they name, on four axes that need only jq and sha256sum (no klt,
-# no openroad, no yosys, nothing under PDK_ROOT):
+# artifacts they name, on six axes that need only jq, sha256sum, cmp and
+# python3 (no klt, no openroad, no yosys, nothing under PDK_ROOT):
 #   1. rtl/synth/<top>.synth.json .netlist_sha256 == sha256sum of the committed
 #      gate-level netlist (the want/got block check-synth-fresh.sh runs behind
 #      synth_env).
@@ -107,20 +112,95 @@ check_harness() {
 #      report's own reference field names (a newer P&R record makes LVS stale).
 #   4. same report's .environment.layout_sha256 == sha256sum of
 #      <top>.gate.spice committed in that same lvs-record dir.
-# This is the PDK-free subset of check-pnr-fresh.sh / check-lvs-fresh.sh; they
-# stay the full local gates (the liberty/deck axis hashes a file under
-# PDK_ROOT and remains local-only).
+#   5. every committed sim deck and `klt sim` request under the sim/rx and
+#      sim/bench r6_*/r20_* patterns is byte-identical to what its generator
+#      emits (fresh_sim_decks below). A parsed JSON compare is not enough:
+#      record manifests pin *.request.json by sha256, so key order and
+#      indentation are part of the contract.
+#   6. item 11.digital cites the newest clean ERC report. Its GDS path and
+#      hash match the newest P&R record, and its spec hash matches both the
+#      canonical supply spec and the archived copy that signoff reads.
+# This is the PDK-free subset of check-pnr-fresh.sh / check-lvs-fresh.sh /
+# check-erc-fresh.sh; they stay the full local gates (the liberty/deck axis
+# hashes a file under PDK_ROOT and remains local-only; the ERC local gate
+# additionally re-runs klt erc --check over the pinned klt).
 # A missing record or artifact fails rather than passes: records are
 # committed, so their absence is a repo defect -- exit 0 means verified,
 # never skipped (.loom/docs/ci-principles.md rule 6).
 # Newest-record selection uses git ls-files (committed state, not worktree
 # residue) and is spelled locally because pnr_latest_record reads $PNR_RECORDS
 # from pnr_env, whose require_tool openroad exits 3 on this runner.
-# CHECK_FRESH_PNR_RECORD / CHECK_FRESH_LVS_RECORD override the newest-record
-# selection for negative testing only; CI never sets them.
+# CHECK_FRESH_PNR_RECORD / CHECK_FRESH_LVS_RECORD / CHECK_FRESH_ERC_RECORD
+# override the newest-record selection for negative testing only; CI never
+# sets them.
+#
+# fresh_sim_decks -- axis 5 of check_fresh (issue #204): the committed sim
+# decks and `klt sim` requests are generated artifacts -- sim/rx/{ctle_ac,
+# ctle_op,pad_ac,latch_regen} and sim/bench/r{6,20}_*, 14 files from
+# sim/rx/tools/gen_requests.py and sim/bench/gen_r6_r20.py -- and nothing
+# else in CI re-derives them, so a generator edit could land green with the
+# committed decks stale. Stage working-tree copies of both generators, the
+# sim/tools Python support modules and both exported netlist directories in a
+# scratch tree at repository-relative paths (the generators locate their
+# inputs relative to their own script), leave the generated outputs absent,
+# run each default entry point with python3 -I (sim/rx's --debug changes the
+# grid), and compare the generated and checked-in path sets, then each
+# matching pair, with cmp. The whole body runs in a subshell so the EXIT trap
+# removes the scratch tree on success and failure alike; the checkout itself
+# is only ever read, so locally edited generated files survive the check.
+fresh_sim_decks() (
+  local scratch gen f rc=0 committed generated
+  scratch=$(mktemp -d) \
+    || { echo "::error::fresh axis 5 (sim decks): cannot create scratch tree"; return 1; }
+  trap 'rm -rf "$scratch"' EXIT
+  mkdir -p "$scratch/sim/rx/tools" "$scratch/sim/bench" "$scratch/sim/tools" \
+           "$scratch/design/rx/netlists" "$scratch/design/tx/netlists" \
+    || { echo "::error::fresh axis 5 (sim decks): cannot populate scratch tree"; return 1; }
+  cp sim/rx/tools/gen_requests.py "$scratch/sim/rx/tools/" \
+    && cp sim/bench/gen_r6_r20.py "$scratch/sim/bench/" \
+    && cp design/rx/netlists/*.spice "$scratch/design/rx/netlists/" \
+    && cp design/tx/netlists/*.spice "$scratch/design/tx/netlists/" \
+    || { echo "::error::fresh axis 5 (sim decks): cannot stage generator inputs"; return 1; }
+  for f in sim/tools/*.py; do          # shared support modules; none is fine
+    [ -f "$f" ] && cp "$f" "$scratch/sim/tools/"
+  done
+  for gen in sim/rx/tools/gen_requests.py sim/bench/gen_r6_r20.py; do
+    (cd "$scratch" && python3 -I "$gen") \
+      || { echo "::error file=$gen::fresh axis 5 (sim decks): generator failed (run it from the repo root for the traceback)"; rc=1; }
+  done
+  committed=$(git ls-files -- ':(glob)sim/rx/*.sp' ':(glob)sim/rx/*.request.json' \
+                          ':(glob)sim/bench/r6_*.sp' ':(glob)sim/bench/r6_*.request.json' \
+                          ':(glob)sim/bench/r20_*.sp' ':(glob)sim/bench/r20_*.request.json' | sort)
+  generated=$(cd "$scratch" && shopt -s nullglob && for f in sim/rx/*.sp sim/rx/*.request.json \
+      sim/bench/r6_*.sp sim/bench/r6_*.request.json \
+      sim/bench/r20_*.sp sim/bench/r20_*.request.json; do echo "$f"; done | sort)
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    echo "::error file=$f::fresh axis 5 (sim decks): generator emitted nothing for committed $f"
+    rc=1
+  done < <(comm -23 <(printf '%s\n' "$committed") <(printf '%s\n' "$generated"))
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    echo "::error file=$f::fresh axis 5 (sim decks): generator output $f has no committed counterpart"
+    rc=1
+  done < <(comm -13 <(printf '%s\n' "$committed") <(printf '%s\n' "$generated"))
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    if [ ! -f "$f" ]; then
+      echo "::error file=$f::fresh axis 5 (sim decks): committed $f missing from the checkout"
+      rc=1
+    elif ! cmp -s "$f" "$scratch/$f"; then
+      echo "::error file=$f::fresh axis 5 (sim decks): $f differs from its generator output (regenerate: python3 -I <generator> from the repo root)"
+      rc=1
+    fi
+  done < <(comm -12 <(printf '%s\n' "$committed") <(printf '%s\n' "$generated"))
+  return "$rc"
+)
+
 check_fresh() {
   local rc=0 top ok synth_report synth_netlist want got
   local prec prec_report rec_hash lrec lvs_report postroute layout_netlist ref_hash
+  local erec erc_report
   [ -f rtl/synth/request.json ] || { echo "::error file=rtl/synth/request.json::missing"; return 1; }
   top=$(jq -er '.hdl_toplevel' rtl/synth/request.json 2>/dev/null) \
     || { echo "::error file=rtl/synth/request.json::cannot read .hdl_toplevel"; return 1; }
@@ -140,7 +220,8 @@ check_fresh() {
 
   # Axis 2: the newest place-and-route record was built from that netlist.
   if [ -n "${CHECK_FRESH_PNR_RECORD:-}" ]; then
-    prec=$CHECK_FRESH_PNR_RECORD
+    prec=$(CDPATH='' cd -- "$CHECK_FRESH_PNR_RECORD" && pwd) || return 1
+    prec=${prec#"$PWD"/}
   else
     prec=$(git ls-files 'layout/digital/records/*/report.json' | sed 's:/report\.json$::' | sort | tail -1)
   fi
@@ -216,10 +297,33 @@ check_fresh() {
   fi
   [ "$ok" = 1 ] || rc=1
 
-  if [ "$rc" = 0 ]; then
-    echo "fresh: 4 axis(es) verified (pnr=$prec lvs=$lrec)"
+  # Axis 5: the committed sim decks and requests match their generators.
+  fresh_sim_decks || rc=1
+
+  # Axis 6: the ERC evidence cited by signoff is clean and current.
+  if [ -n "${CHECK_FRESH_ERC_RECORD:-}" ]; then
+    erec=$(CDPATH='' cd -- "$CHECK_FRESH_ERC_RECORD" && pwd) || return 1
+    erec=${erec#"$PWD"/}
   else
-    echo "fresh: FAILED (pnr=$prec lvs=$lrec)" >&2
+    erec=$(git ls-files 'layout/digital/erc-records/*/erc.report.json' | sed 's:/erc\.report\.json$::' | sort | tail -1)
+  fi
+  erc_report="$erec/erc.report.json"
+  [ -n "$erec" ] && [ -f "$erc_report" ] \
+    || { echo "::error file=$erc_report::no committed ERC record (run scripts/erc-regen.sh)"; return 1; }
+  erc_check_inputs "$erc_report" "$prec/$top.gds" || rc=1
+  if ! jq -e --arg file "$erc_report" --slurpfile report "$erc_report" '
+      .evidence["11.digital"] | map(select(.file | startswith("layout/digital/erc-records/"))) |
+      length == 1 and .[0].file == $file and
+      .[0].content_hash == $report[0].provenance.input.content_hash
+    ' "$MANIFEST" >/dev/null; then
+    echo "::error file=$MANIFEST::fresh axis 6 (erc): 11.digital must cite $erc_report with its recorded input hash"
+    rc=1
+  fi
+
+  if [ "$rc" = 0 ]; then
+    echo "fresh: 6 axis(es) verified (pnr=$prec lvs=$lrec erc=$erec; sim decks match generators)"
+  else
+    echo "fresh: FAILED (pnr=$prec lvs=$lrec erc=$erec)" >&2
   fi
   return $rc
 }
@@ -235,7 +339,7 @@ check_signoff() {
     return 1
   fi
   if ! cmp -s "$fresh" "$RECORD"; then
-    echo "::error::fresh klt signoff differs from $RECORD (klt pinned at ${KLT_VERSION} in scripts/klt-pin.env)"
+    echo "::error::fresh klt signoff differs from $RECORD (klt pinned at ${KLT_VERSION} in layout/toolchain.json)"
     echo "Regenerate in the same PR: scripts/check-ci.sh --regen"
     diff <(python3 -m json.tool "$fresh") <(python3 -m json.tool "$RECORD") || true
     return 1

@@ -26,7 +26,10 @@ def build():
     tools = json.loads((REPO / "sim/toolchain.json").read_text())
     rtl = json.loads((REPO / "layout/tools.json").read_text())
     lock = json.loads((REPO / "reuse.lock.json").read_text())["imports"][0]
-    klt = (REPO / "scripts/klt-pin.env").read_text().split("=")[1].strip()
+    klt_install = json.loads((REPO / "layout/toolchain.json").read_text())["klt_install"]
+    klt = klt_install.removeprefix("klayout-tools==")
+    if not klt:
+        sys.exit("layout/toolchain.json: klt_install missing or empty")
     benches = []
     for b in man["benches"]:
         if b["partition"] == "digital":

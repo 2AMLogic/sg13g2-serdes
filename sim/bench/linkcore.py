@@ -1,7 +1,10 @@
 """Statistical-eye core and fit inputs for the link benches (DR-002 step c).
 
-Everything here is SIMULATED / EXTRAPOLATED. Nothing is measured. numpy only
-(scipy.special.erfc is used when present, else math.erfc).
+Everything here is SIMULATED / EXTRAPOLATED. Nothing is measured. numpy plus a
+pinned scipy (bench_install in layout/toolchain.json): scipy.special.erfc below
+is the compiled path; the math.erfc fallback is kept so the bench still runs on
+a bare host, but it is a per-element Python loop, ~5x slower on the r8 hot path
+-- a degraded fallback, not an equivalent option (issue #170).
 
 Chain (DR-002): transistor-level record -> behavioural model -> statistical eye
 over the R14 channel -> dual-Dirac tail extrapolation.

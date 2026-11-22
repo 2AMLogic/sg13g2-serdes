@@ -8,6 +8,8 @@ reproduce steps.
 | `pdk.json` | PDK pin (IHP-Open-PDK v0.3.0, tarball sha256) |
 | `toolchain.json` | simulator floors |
 | `tools/build-osdi.sh` | compiles the PDK's Verilog-A sources (PSP103, r3_cmc, mosvar) with a checksum-pinned OpenVAF-Reloaded; exit 5 = built, but the host ngspice cannot load OSDI v0.4 |
+| `tools/record-dir.sh` | record-directory reservation shared by the rx/tx/smoke runners: two exclusive claims (`mkdir` of the record dir, then an O_EXCL `.reserved` marker inside it), so a same-second relaunch, a retry, or a double reservation refuses instead of overwriting saved evidence (issues #202, #220); `tools/test-record-dir.sh` proves it with a fixed clock and a mock klt |
+| `tools/record-dir-race-probe.sh` | manual probe (issue #220): repeats the concurrent-launch race on a pinned revision and races raw `mkdir` pairs; run on a hosted runner via `.github/workflows/record-dir-race-probe.yml` (workflow_dispatch only, not the PR gate) -- findings in `tools/record-dir-race-investigation.md` |
 | `smoke/` | toolchain smoke grid: HBT Gummel at every HBT corner section, MOS inverter DC at `tt/ff/ss/fs/sf`, and a mixed MOS+HBT transient. Placeholder devices, not design values |
 | `smoke/records/<id>/` | append-only run records (reports, `record.md`); never edited after the fact |
 | `rx/` | RX sizing benches (CTLE AC per setting, latch regeneration at 5 GHz, HBT node stress, termination first look). `rx/tools/gen_requests.py` writes the bench bodies and `klt sim` requests; `rx/run_sizing.sh` submits the 27-point HBT PVT grid to the batch fleet and writes `rx/records/<id>/` (append-only). Sizing evidence, not spec results |
@@ -42,7 +44,9 @@ request is validated, the corner set expanded and the declared measurements asse
 so it runs from a fresh clone. `--run` submits the full grid with `klt sim --wait-for-capacity 600`
 (batch fleet) after `scripts/setup-env.sh` and `source scripts/env.sh`. Digital benches run the cocotb
 test for real. Every printed figure is simulated, never measured, and no bench result is recorded by
-this item (recording is T1 item 5).
+this item (recording is T1 item 5). Analog checks grade with the klt pinned in `layout/toolchain.json`:
+`run-bench.sh` resolves `.venv/bin/klt` by path (installed by `scripts/setup-env.sh`), so the pin holds even
+inside `klt signoff --attest 9`'s sanitized cold-start environment; with no `.venv` it falls back to PATH `klt` (#176).
 
 | Bench id | Rows | Corner set | Deck |
 |---|---|---|---|
@@ -81,11 +85,15 @@ rather than re-running them).
 
 ### Behavioural link benches (R8, R11, R12, R13, R15; issue #93, DR-002)
 
-Cold start, one command per row (numpy only -- installed into `.venv` by `scripts/setup-env.sh` at the `bench_install` pin in `layout/toolchain.json`, which `run-bench.sh` resolves by path so the pin holds even inside `klt signoff --attest 9`'s sanitized cold-start environment; scipy's `erfc` is used when present; one local process, no fleet,
-no `-j`/`-n`); add `--quick` for a short configuration. The cold start exits 0 whenever the bench ran (the verdict, e.g.
+Cold start, one command per row (numpy + a pinned scipy -- installed into `.venv` by `scripts/setup-env.sh`
+at the `bench_install` pins in `layout/toolchain.json`, which `run-bench.sh` resolves by path so the pins hold
+even inside `klt signoff --attest 9`'s sanitized cold-start environment; `linkcore.py` prefers scipy's compiled
+`erfc` and falls back to `math.erfc` without it, but scipy is a pinned dependency and that fallback is a
+per-element Python loop, ~5x slower -- a degraded fallback, not an equivalent option (issue #170); one local
+process, no fleet, no `-j`/`-n`); add `--quick` for a short configuration. The cold start exits 0 whenever the bench ran (the verdict, e.g.
 `NOT MET`, is in the output and is never relaxed); `--strict` makes a missed threshold exit 3:
 
-    scripts/run-bench.sh link-r8-sensitivity     # python3 -I sim/bench/link_r8.py   (~1 min, 27 corners x 16 offset draws)
+    scripts/run-bench.sh link-r8-sensitivity     # python3 -I sim/bench/link_r8.py   (27 corners x 16 offset draws; 59 s wall with the pinned scipy, 363 s without it -- measured 2026-11-15 on a 16-vCPU Xeon 8488C shared worker at load 15-27, issue #170)
     scripts/run-bench.sh link-r11-cdr-lock       # r11
     scripts/run-bench.sh link-r12-jtol           # r12 (SJ sweep, 4 edge corners)
     scripts/run-bench.sh link-r13-offset         # r13 (+-300 ppm, 1e6 UI)

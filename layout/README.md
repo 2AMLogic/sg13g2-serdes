@@ -16,6 +16,16 @@
     `lvs-records/<date>-<sha>/`. `scripts/check-lvs-fresh.sh` is the `klt lvs --check`
     freshness gate (exit 3 = a newer place-and-route record or drifted inputs). Analog
     LVS is #128.
+  - `erc/digital.erc.json` is the `klt erc` supply spec for the routed digital
+    GDS (T1 item 11, Digital column, `11.digital`). `scripts/erc-regen.sh`
+    runs `klt erc --findings-only --omit-antenna-tables --deck sg13g2` against
+    the newest place-and-route record into a new dated, append-only
+    `erc-records/<date>-<sha>/`, with the spec copy it graded committed beside
+    the report (the document `klt signoff` re-reads). `scripts/check-erc-fresh.sh`
+    is the `klt erc --check` freshness gate (exit 3 = a newer place-and-route
+    record or drifted inputs). Neither needs the PDK or `openroad`; the
+    PDK-free hash axes are mirrored in `scripts/check-ci.sh`'s `fresh` mode.
+    Analog supply ERC stays on #29.
 - `analog/rx/` — RX core analog cells (`ctle`, `latch_cml`, `clk_buf_quad`,
   `lvl_cml2cmos`), T1 item 2, Analog column (#112, part of #24).
   `gen_rx_cells.py` reads `design/rx/netlists/rx_top.spice`, builds each device
@@ -42,6 +52,13 @@
   routing, so no DRC/LVS/extraction claim** (#26, #27). `records/<date>-<sha>/`
   is append-only; `scripts/tx-core-regen.sh` re-runs into a new record.
   Attestation: `manifests/evidence/item2.analog-tx-core.json`.
+- `analog/hbt-recognition/` — routing-independent `npn13G2` recognition
+  probe (#196): `klt lvs` (curated deck and the pinned `klayout-runset`)
+  and `klt extract` (curated) on the bare PDK cell and the smallest placed
+  HBT cell. Outcome (2026-11-20): curated engines extract no HBT (documented
+  deck gap); the runset recognises it with C/B/E/S terminals and
+  `we/le/Nx/m` parameters — the runset is item 4 analog's engine path
+  (#128). `records/<date>-<sha>/` is append-only.
 - `toolchain.json` pins klt; `tools.json` pins the RTL-flow tool versions.
 
 ## DRC, T1 item 3 (#26)
@@ -59,7 +76,7 @@
 
 The previous analog record (`2026-11-11-6b21302`, 830 violations, report kept) was not a deck false positive. Two layout defects caused it, fixed in `analog/rx/gen_rx_cells.py` and a new RX record plus a new top record (old records untouched):
 1. `clk_buf_quad`'s mirrored `b` devices overlapped their `a` partners: `gen-compose` `mirror_x` flips x (GDS `m90`), so a block placed at origin `x` occupied `[x - w, x]` (4 `gatpoly.space.1` and 4 `metal1.space.1` markers).
-2. `gen-compose` routing dropped via1/metal1 stubs inside the `npn13G2` cell's own via array, 15 nm from existing vias (826 `metal1/metal2/via1.space.1` markers, attributed to the foundry cell as `source_cell`). The same cells unrouted, and a single HBT device alone, are clean. Gap filed at `2AMLogic/klayout-tools#5398`. This corrects the earlier "possible deck false positive" reading (`klayout-tools#5386`, closed with the cause unverified, measured 0 markers on bare foundry cells).
+2. `gen-compose` routing dropped via1/metal1 stubs inside the `npn13G2` cell's own via array, 15 nm from existing vias (826 `metal1/metal2/via1.space.1` markers, attributed to the foundry cell as `source_cell`). The same cells unrouted, and a single HBT device alone, are clean. Gap filed at `2AMLogic/klayout-tools#5398`, which closed as completed 2026-11-12 via upstream PR #5399 — first released in `v0.9.2`, above this repo's pinned `0.9.0`, so the fix is not in effect at the pin; the underlying routing gap remains open (`klayout-tools#1962`, as of 2026-11-15). This corrects the earlier "possible deck false positive" reading (`klayout-tools#5386`, closed with the cause unverified, measured 0 markers on bare foundry cells).
 
 **Negative control**: `drc-negative-control.json` beside the analog report re-runs the same deck with the previous analog top as the control layout; the deck finds its 830 violations (`gatpoly.space.1`, `metal1.space.1`, `metal2.space.1`, `via1.space.1`), so `clean` is not vacuous. The deck did not fail on the layers listed under `layers_in_stream_without_rules` below, which it has no rules for; those are uncovered, not clean.
 
