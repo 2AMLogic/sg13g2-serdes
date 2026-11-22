@@ -94,7 +94,7 @@
         "role": "hygiene",
         "path": "scripts/test-reserve-record-dir.sh",
         "passed": true,
-        "content_hash": "sha256:7b1a4e3c1e19aa07b770c1dba9b4acab40e94727d058d2a39792409bb23f300c"
+        "content_hash": "sha256:57e736fae3b2c9f2e81c1a5626ab1548c42f3ca5b730b2f5bb8f91961c6d7ac0"
       },
       {
         "check": "present",

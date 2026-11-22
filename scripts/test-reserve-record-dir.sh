@@ -57,6 +57,13 @@ cat > "$TMP/bin/date" <<EOF
 if [ "\$*" = "-u +%Y-%m-%d" ]; then echo "$FIXED_DATE"; else exec /usr/bin/date "\$@"; fi
 EOF
 
+# PNR and LVS check for OpenROAD on PATH. Their tool calls go through mock uvx.
+cat > "$TMP/bin/openroad" <<'EOF'
+#!/bin/sh
+echo "test-reserve-record-dir: unexpected direct invocation of openroad" >&2
+exit 1
+EOF
+
 # mock uvx: klt stand-in. Logs each invocation (argv after the pin args) to
 # \$KLT_LOG, then serves the subcommand the writer under test expects. PNR_GATE
 # (a directory) turns place-and-route into a two-phase barrier: a call writes
@@ -107,7 +114,7 @@ case "$sub" in
   *) echo "mock uvx: unhandled klt subcommand ${sub:-<none>}" >&2; exit 9 ;;
 esac
 EOF
-chmod +x "$TMP/bin/date" "$TMP/bin/uvx"
+chmod +x "$TMP/bin/date" "$TMP/bin/openroad" "$TMP/bin/uvx"
 export PATH="$TMP/bin:$PATH" KLT_LOG="$TMP/klt.log" PDK_ROOT="$TMP/pdk"
 : > "$KLT_LOG"
 
