@@ -11,6 +11,8 @@
     "scripts/erc-fresh-lib.sh",
     "sim/bench/gen_inventory.py",
     "sim/bench/test_link_bench.py",
+    "sim/tools/test-record-dir.sh",
+    "sim/tools/record-dir.sh",
     "package.json"
   ],
   "checks": [
