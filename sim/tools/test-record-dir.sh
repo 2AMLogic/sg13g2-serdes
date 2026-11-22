@@ -71,7 +71,7 @@ tree_hash() { ( cd "$1" && find . -type f -print0 | sort -z | xargs -0r sha256su
 
 check_runner() { # check_runner <name> <script> [set-arg] [id-suffix] [sim-calls-per-launch]
   local name="$1" script="$2" arg="${3:-}" suffix="${4:-}" sims="${5:-}"
-  local dir rec out err h0 nerr bad e pa pb
+  local dir rec out err h0 nerr bad e pa pb sa sb
   local cmd=(bash "$TMP/repo/$script")
   [ -n "$arg" ] && cmd+=("$arg")
   dir="$TMP/repo/$(dirname "$script")/records"
@@ -121,14 +121,25 @@ check_runner() { # check_runner <name> <script> [set-arg] [id-suffix] [sim-calls
   pa=$!
   "${cmd[@]}" >"$out.b" 2>"$err.b" &
   pb=$!
-  wait "$pa"; wait "$pb"
+  wait "$pa"; sa=$?
+  wait "$pb"; sb=$?
   [ -d "$rec" ] || fail "$name: concurrent launches reserved no record"
   if [ "$(sim_calls)" -ne "$sims" ]; then
     # artifacts die with the CI runner, so make the red self-explaining
     {
       echo "--- race diagnostics: $name (a/b = the two concurrent launches)"
+      echo "--- launch pids/exits: a=$pa exit=$sa  b=$pb exit=$sb (loser must exit 3)"
       echo "--- klt log:"; cat "$KLT_LOG"
       echo "--- ls -la $dir:"; ls -la "$dir"
+      echo "--- ls -la $rec (record dir, hidden entries included):"
+      ls -la "$rec"
+      if [ -e "$rec/.reserved" ]; then
+        echo "--- .reserved marker pid: $(cat "$rec/.reserved") (equals launch a or b pid above on the guarded revision)"
+      else
+        echo "--- .reserved marker: absent (pre-guard revision, or neither claim reached the marker)"
+      fi
+      echo "--- mkdir resolution in this PATH: $(type -a mkdir 2>&1 | tr '\n' ' ')"
+      echo "--- fixture fs: $(stat -f -c %T "$TMP" 2>&1)"
       echo "--- exit-codes files:"; find "$dir" -name exit-codes.txt -print -exec cat {} \;
       for p in a b; do
         echo "--- launch $p stdout:"; cat "$out.$p"

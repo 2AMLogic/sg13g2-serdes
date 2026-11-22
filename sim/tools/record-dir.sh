@@ -2,12 +2,16 @@
 #
 # One copy of what sim/rx, sim/tx and sim/smoke each used to build: the record
 # id `<UTC yyyymmdd-HHMMSS>-<short HEAD SHA>` plus the caller's optional set
-# suffix, and the creation of records/<id>/. The record directory is created by
-# a single exclusive `mkdir`, so the first launch of a given second owns the
-# record and a same-second relaunch (or the retry of a failed run) refuses
-# instead of overwriting the stderr and exit logs already saved there
-# (issue #202): records are append-only evidence. Callers exit 3 (this repo's
-# preflight refusal) when reservation fails.
+# suffix, and the creation of records/<id>/. Reservation is two independent
+# exclusive claims: the `mkdir` of records/<id>/ itself, then -- noclobber `>`
+# opens with O_EXCL -- a `.reserved` marker inside it holding the winning
+# launcher's PID. Even if two same-second launches both get past the mkdir
+# (as a 2-core CI runner once showed, issue #220), only the marker's owner
+# proceeds; the first launch of a given second owns the record and a
+# same-second relaunch (or the retry of a failed run) refuses at one of the
+# two claims instead of overwriting the stderr and exit logs already saved
+# there (issue #202): records are append-only evidence. Callers exit 3 (this
+# repo's preflight refusal) when reservation fails.
 #
 # Needs $REPO_DIR (the repo root, as set by the sourcing runner).
 # shellcheck shell=bash

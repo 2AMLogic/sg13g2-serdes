@@ -1,0 +1,56 @@
+name: record-dir race probe
+
+# Manual diagnostic for issue #220 (double record reservation seen on a CI
+# runner, PR #216): repeats the concurrent-launch race and a raw-mkdir
+# atomicity micro-benchmark on a hosted runner, against the pinned revisions
+# named in the issue (pre-guard and guarded). NOT part of the PR gate:
+# workflow_dispatch only, bounded attempts -- no stress loop runs on push/PR.
+on:
+  workflow_dispatch:
+    inputs:
+      attempts:
+        description: "race attempts per case (bounded)"
+        required: false
+        default: "150"
+      micro_rounds:
+        description: "mkdir atomicity rounds per filesystem"
+        required: false
+        default: "1000"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: pinned revisions as worktrees (d436b53 pre-guard, 4367f60 guarded)
+        run: |
+          git worktree add "$RUNNER_TEMP/pre" d436b53
+          git worktree add "$RUNNER_TEMP/guarded" 4367f60
+      - name: runner environment
+        run: bash sim/tools/record-dir-race-probe.sh env "$RUNNER_TEMP/pre"
+      - name: mkdir atomicity micro-benchmark (/tmp and workspace overlay)
+        run: |
+          bash sim/tools/record-dir-race-probe.sh micro /tmp "${{ inputs.micro_rounds }}"
+          bash sim/tools/record-dir-race-probe.sh micro /tmp "${{ inputs.micro_rounds }}" pin
+          bash sim/tools/record-dir-race-probe.sh micro "$RUNNER_TEMP" "${{ inputs.micro_rounds }}"
+          bash sim/tools/record-dir-race-probe.sh micro "$RUNNER_TEMP" "${{ inputs.micro_rounds }}" pin
+      - name: full reservation contract once per pinned revision
+        run: |
+          bash "$RUNNER_TEMP/pre/sim/tools/test-record-dir.sh"
+          bash "$RUNNER_TEMP/guarded/sim/tools/test-record-dir.sh"
+      - name: bounded race repeat, pre-guard (d436b53)
+        run: |
+          for c in rx smoke tx-hbt tx-mos; do
+            bash sim/tools/record-dir-race-probe.sh race "$RUNNER_TEMP/pre" "$c" "${{ inputs.attempts }}"
+          done
+      - name: bounded race repeat, guarded (4367f60)
+        run: |
+          for c in rx smoke tx-hbt tx-mos; do
+            bash sim/tools/record-dir-race-probe.sh race "$RUNNER_TEMP/guarded" "$c" "${{ inputs.attempts }}"
+          done
