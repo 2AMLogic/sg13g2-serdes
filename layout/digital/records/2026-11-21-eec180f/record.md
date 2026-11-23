@@ -72,58 +72,87 @@ routing flag plus lower placement density made every corner worse (wirelength
 163855 um vs 156649 um), so they are not adopted. The floorplan
 (`utilization_pct: 40`), PDN and seed are unchanged in the committed request.
 
+Per-trial six-corner rows (setup WNS / setup TNS / hold WNS in ns, from each
+route's own `report.json` `corners[]`; every row `timing_status: constrained`).
+T2 is the committed `report.json`; T1 and T3 were re-run in scratch space
+outside the repository on the same netlist, seed 1, clock 1.6 ns with the
+pinned klt 0.9.0, and reproduce the headline values in the matrix above
+(T3 wirelength 163855 um, T1 147177 um, T2 156649 um).
+
+| corner | T1 status | T1 setup WNS | T1 setup TNS | T1 hold WNS | T2 status | T2 setup WNS | T2 setup TNS | T2 hold WNS | T3 status | T3 setup WNS | T3 setup TNS | T3 hold WNS |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| fast_1p32V_m40C | constrained | +0.55389 | 0 | +0.13276 | constrained | +0.63951 | 0 | +0.13524 | constrained | +0.60563 | 0 | +0.13318 |
+| fast_1p65V_m40C | constrained | +0.86609 | 0 | +0.09812 | constrained | +0.92507 | 0 | +0.09988 | constrained | +0.90678 | 0 | +0.09843 |
+| slow_1p08V_125C | constrained | -0.93288 | -224.504 | +0.31291 | constrained | -0.73221 | -108.556 | +0.31988 | constrained | -0.80868 | -126.405 | +0.31406 |
+| slow_1p35V_125C | constrained | +0.02089 | 0 | +0.20420 | constrained | +0.13260 | 0 | +0.20860 | constrained | +0.08285 | 0 | +0.20494 |
+| typ_1p20V_25C | constrained | +0.01463 | 0 | +0.19798 | constrained | +0.13280 | 0 | +0.20191 | constrained | +0.08115 | 0 | +0.19864 |
+| typ_1p50V_25C | constrained | +0.55293 | 0 | +0.13689 | constrained | +0.62616 | 0 | +0.13953 | constrained | +0.59561 | 0 | +0.13735 |
+
+Reading the table: T3 has a lower setup WNS and a lower hold WNS than T2 in
+every one of the six corners, so the "every corner worse" statement above holds
+for both metrics; T1 is lower than T2 in setup WNS at all six corners.
+
 ### Per-corner path report and what limits slow 1.08 V (issue #197 steps 1 and 6)
 
 `sta-corners.json` is a standalone `klt sta` (pinned 0.9.0) multi-corner run on
-this record's routed DEF (`sta-corners.request.json`; `constraints`:
-`clk` at 1.6 ns; **ideal** clock, matching the in-flow sweep's clock model;
-parasitics from the loaded LEF/DEF only — no SPEF, so no routed wire RC; the
-in-flow sweep cited above uses ideal clocks and global-routing RC estimates).
-Per corner (worst setup path identity, violating-endpoint count):
+this record's routed DEF (`sta-corners.request.json`, run from its committed
+location; `def` is the sibling file). Timing model of this report: `clk` at
+1.6 ns, **ideal** clock, `geometry_source: routed`, no SPEF and no wire-load
+model, i.e. cell delays and pin loading from the LEF/DEF only. The in-flow
+sweep in `report.json` is a different model (ideal clocks, `interconnect_corner:
+nom`, global-routing RC estimates). Its worst path is **not named** in
+`report.json`.
 
-| corner | worst setup path | standalone WNS | standalone TNS | violating endpoints |
+| corner | standalone worst setup path | standalone WNS | standalone TNS | violating endpoints |
 |---|---|---|---|---|
-| slow_1p08V_125C | `u_pd/_699_/Q -> u_pd/_721_/D` (setup) | -0.47660 | -39.1535 | 217 |
+| slow_1p08V_125C | `u_pd/_699_/Q -> u_pd/_721_/D` | -0.47660 | -39.1535 | 217 |
 | slow_1p35V_125C | `u_pd/_699_/Q -> u_pd/_721_/D` | +0.28679 | 0 | 0 |
 | typ_1p20V_25C | `u_pd/_699_/Q -> u_pd/_721_/D` | +0.28402 | 0 | 0 |
 | typ_1p50V_25C | `u_pd/_699_/Q -> u_pd/_721_/D` | +0.73045 | 0 | 0 |
 | fast_1p32V_m40C | `u_pd/_699_/Q -> u_pd/_721_/D` | +0.73587 | 0 | 0 |
 | fast_1p65V_m40C | `u_pd/_699_/Q -> u_pd/_721_/D` | +0.99410 | 0 | 0 |
 
-On the 2026-11-14 baseline DEF the same diagnostic reports worst path
-`u_flt/_1028_/Q -> u_flt/_1037_/D` at all six corners (316 violating endpoints
-at slow 1.08 V, WNS -0.65431): the slow-driven repair fixed the CDR filter
-path that used to be worst, and the residual critical structure is in the CDR
-phase detector (`u_pd`, `rtl/serdes_cdr_pd.v`) — not in the filter #134 will
-rewrite. `u_pd` had the third-best pre-layout margin (+0.19 ns typ,
-`rtl/synth/sta/serdes_digital_top.paths.txt`), so the miss there is
-cell-delay-at-1.08 V, not a wiring accident.
+**What was measured.**
 
-**What limits the slow 1.08 V corner** (issue #197 step 6 account):
+- At slow 1.08 V the standalone model gives WNS -0.47660 ns / TNS -39.1535 ns
+  / 217 violating endpoints; the in-flow model gives WNS -0.73221 ns / TNS
+  -108.556 ns / 394 violating endpoints (`report.json`
+  `setup_violation_count`). Both are register-to-register setup misses at the
+  1.6 ns constraint; hold is met in both.
+- On the 2026-11-14 baseline DEF the standalone model's worst path was
+  `u_flt/_1028_/Q -> u_flt/_1037_/D` at all six corners (316 violating
+  endpoints, WNS -0.65431 ns at slow 1.08 V).
+- In the standalone model the worst path at slow 1.08 V is in `u_pd`
+  (CDR phase detector, `rtl/serdes_cdr_pd.v`). Its slack at the five other
+  corners is positive (table above).
 
-- **Cell delay dominates, wires contribute ~0.26 ns of the 0.73 ns miss.**
-  Standalone STA on this DEF (no routed wire RC) reports WNS -0.47660 ns at
-  slow 1.08 V; the in-flow sweep (global-routing RC estimates) reports
-  -0.73221 ns. The 0.25561 ns delta is the wire-parasitics share of the worst
-  path; the remaining 0.47660 ns exists with no wire RC at all, i.e. logic
-  depth times 1.08 V cell delay.
-- **217 violating endpoints** (standalone count; 394 by the in-flow model,
-  `report.json` `setup_violation_count`, the implementation corner's own
-  count). All register-to-register inside the digital partition; hold met at
-  every one of them.
-- **Module split of the 217 endpoints is not measurable with the pinned klt
-  0.9.0**: `klt sta` reports one worst path per corner and a total count;
-  worst-N endpoint lists shipped upstream *after* 0.9.0
-  (2AMLogic/klayout-tools#5424, `worst_paths_by_group`), and per-stage
-  cell/wire increments likewise (2AMLogic/klayout-tools#5783, merged as
-  2AMLogic/klayout-tools#6014). A klt pin bump would unlock both; neither is
-  in scope for this round.
-- **Why no RTL restructure this round**: the residual worst path is in
-  `u_pd`, whose restructure is in scope per issue #197 — but with 217
-  endpoints and -39.15 ns standalone TNS spread across the partition, one
-  path's restructure cannot close the corner, and the #134 filter rewrite
-  (still open) will change the netlist underneath any restructure landed now.
-  The numbers above are the input to that decision.
+**What is not established by this record** (earlier text drew these
+conclusions; they are withdrawn):
+
+- *A wire-delay contribution.* The two WNS values come from different timing
+  models and, for the in-flow one, an unnamed path. Their 0.25561 ns difference
+  cannot be attributed to wire delay on `u_pd/_699_ -> _721_`: wire
+  capacitance also changes cell delay, and the models may disagree on other
+  inputs. No measurement here separates cell delay from wire delay.
+- *The old filter path's current slack.* The standalone model reports only the
+  single worst path per corner; whether the `u_flt` path that was worst on the
+  baseline is now repaired, or merely no longer worst, is unmeasured.
+- *Path types or module distribution of the failing endpoints.* 217 (or 394)
+  is a count only; klt 0.9.0 reports one worst path per corner plus totals, so
+  how the endpoints split across `u_pd`, `u_flt` or other modules is unmeasured.
+  Worst-N endpoint lists (2AMLogic/klayout-tools#5424) and per-stage cell/wire
+  increments (2AMLogic/klayout-tools#5783, merged as
+  2AMLogic/klayout-tools#6014) shipped after 0.9.0; a klt pin bump would give
+  the path-level data this account needs. That tooling gap is a fallback for
+  measurement, not evidence of closure.
+- *A cause for the residual miss.* This record therefore states no RTL
+  rationale. No RTL change was made in this round; the pre-layout `u_pd`
+  margin (+0.19 ns typ, `rtl/synth/sta/serdes_digital_top.paths.txt`) is from a
+  different model (synthesis STA) and is not evidence about the 1.08 V route.
+
+The -0.73221 ns slow 1.08 V miss remains unexplained at path level; this
+record claims partial closure only (typ and slow 1.35 V setup met, slow 1.08 V
+open per issue #197's allowance).
 
 ## DRC
 

@@ -1,6 +1,6 @@
 {
   "schema": "klt.sta.request/1",
-  "def": "../../layout/digital/records/2026-11-21-eec180f/serdes_digital_top.def",
+  "def": "serdes_digital_top.def",
   "hdl_toplevel": "serdes_digital_top",
   "pdk": {
     "cell_library": "sg13g2_stdcell",
