@@ -6,7 +6,7 @@ a spec result and not a measurement.**
 | Path | What |
 |---|---|
 | `make_tb.py` | generates the decks and requests below from `design/tx/netlists/` |
-| `tx_sizing_ffe{0,1}_{typ,bcs,wcs}.sp` / `.request.json` | six `klt sim` requests, each 3 supplies (1.08/1.2/1.32 V) x 3 temperatures (-40/27/125 C) = 54 corners; FFE off or all three post-cursor slices on; HBT, capacitor and resistor corners move together |
+| `tx_sizing_ffe{0,1}_{typ,bcs,wcs}.sp` / `.request.json` | six `klt sim` requests, each 3 supplies (1.08/1.2/1.32 V) x 3 temperatures (-40/27/125 C) = 9 corners (54 over the six); FFE off or all three post-cursor slices on; HBT, capacitor and resistor corners move together |
 | `tx_mos_{mux2to1_cml,tx_lvl_cml2cmos,ffe_en}.sp` / `.request.json` | three MOS-cell `klt sim` requests (issue #80), each 5 process pairings x 3 supplies x 3 temperatures = 45 corners; PSP103 and the real `r3_cmc` resistors via `osdi_preload` |
 | `run_sizing.sh [mos\|vce]` | runs the six HBT requests, `mos` the three MOS requests, `vce` the R3 per-device Vce set -- six HBT + mux2to1_cml + ffe_en, every TX bench with an HBT (batch fleet via `KLT_SIM_BACKEND=batch`; no local fallback) and writes `records/<id>/` (`<id>-mos/` / `<id>-vce/` for the MOS / VCE sets) |
 | `make_record.py` / `make_record_mos.py` / `make_record_vce.py` | render `records/<id>/record.md` for the HBT / MOS / VCE set |

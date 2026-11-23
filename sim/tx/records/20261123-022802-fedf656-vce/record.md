@@ -110,7 +110,7 @@ Limits: collector <= 1.32 V, Vce <= 1.4 V (open-base BVCEO, DR-003), reverse Vbe
 
 ## Grids and caveats
 
-- tx_sizing (HBT set): hbt typ/bcs/wcs ganged with cap + res and the matching resistor sheet scale, x 1.08/1.2/1.32 V x -40/27/125 C = 27 corners per deck, x 6 decks (FFE off / all three post slices on). tx_mos (mux, ffe_en): 5 MOS process pairings x 3 supplies x 3 temperatures = 45 corners. Both include the +10 % supply (1.32 V). Mismatch/Monte Carlo is not run.
+- tx_sizing (HBT set): hbt typ/bcs/wcs ganged with cap + res and the matching resistor sheet scale, one process per deck, x 1.08/1.2/1.32 V x -40/27/125 C = 9 corners per deck, x 6 decks (3 processes x FFE off / all three post slices on) = 54 corners. tx_mos (mux, ffe_en): 5 MOS process pairings x 3 supplies x 3 temperatures = 45 corners. Both include the +10 % supply (1.32 V). Mismatch/Monte Carlo is not run.
 - The mux numbers cite the bench's assumed clock swing: 0.4 V per side (0.8 V differential peak-to-peak), an assumption, not a spec value (#98 is the open spec question). If #98 changes the swing, the mux rows are re-recorded after it lands, not before.
 - The HBT decks' `rsil` is the behavioural stand-in with the corner sheet scale (see sim/tx/README.md); the mux and ffe_en decks use the real `r3_cmc` resistors via `osdi_preload`.
 - Collector (`vc_max_*`) is per node, so devices sharing a collector node (e.g. `driver_ffe.qm2` and `driver_ffe.qp0a` at `cop`) repeat that node's value; Vce and reverse Vbe are per device.

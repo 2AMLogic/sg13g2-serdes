@@ -159,8 +159,9 @@ L += ["", f"- cells over an R3 limit in these grids: **{viol}** "
 
 L += ["## Grids and caveats", "",
       "- tx_sizing (HBT set): hbt typ/bcs/wcs ganged with cap + res and the matching "
-      "resistor sheet scale, x 1.08/1.2/1.32 V x -40/27/125 C = 27 corners per deck, "
-      "x 6 decks (FFE off / all three post slices on). tx_mos (mux, ffe_en): 5 MOS "
+      "resistor sheet scale, one process per deck, x 1.08/1.2/1.32 V x -40/27/125 C "
+      "= 9 corners per deck, x 6 decks (3 processes x FFE off / all three post "
+      "slices on) = 54 corners. tx_mos (mux, ffe_en): 5 MOS "
       "process pairings x 3 supplies x 3 temperatures = 45 corners. Both include the "
       "+10 % supply (1.32 V). Mismatch/Monte Carlo is not run.",
       "- The mux numbers cite the bench's assumed clock swing: 0.4 V per side "
