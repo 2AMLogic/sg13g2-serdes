@@ -22,7 +22,8 @@ carried the temporary dispatch-gated probe job (reverted in the final PR; the
 standalone probe that followed it, `record-dir-race-probe.sh` and
 `.github/workflows/record-dir-race-probe.yml`, was removed on 2026-11-23 once
 this investigation concluded -- operator ruling on #234 -- and is retrievable
-from history at `42fd372`, the revision that produced every measurement below;
+from history at `42fd372`, the revision that produced the full evidence set
+(run 44969548534; run 44969040860's rows were taken at `de832e9`);
 see "Reproducing"):
 
 - Run [44969040860](https://github.com/2AMLogic/sg13g2-serdes/actions/runs/44969040860)
@@ -179,18 +180,22 @@ passes prove nothing, which is why the original reds looked irreproducible.
 2026-11-23: the probe was removed once this investigation concluded (operator
 ruling on #234). Nothing in the tree runs it and there is no workflow to
 dispatch; it is reproduced from history. `42fd372` is the revision that
-produced every measurement above:
+produced the full evidence set (run 44969548534); the first-reproduction rows
+of run 44969040860 (micro-benchmark rows 1-4 and the full-contract spot check)
+were taken at `de832e9`, whose 205-line script predates the `os.mkdir` control:
 
     git show 42fd372:sim/tools/record-dir-race-probe.sh
     git show 42fd372:.github/workflows/record-dir-race-probe.yml
 
-The script saw one further change before its removal: #245 (commit `597f1de`)
-taught it to classify the post-#244 delegated `record-dir.sh` shape and stage
+The script saw two further changes before its removal. `f9e563c` made it
+measure both the two-claim and the delegated revisions (220 -> 235 lines).
+Then #245 (commit `597f1de`, 235 -> 249 lines) taught it to classify the post-#244 delegated `record-dir.sh` shape and stage
 `scripts/klt-lib.sh` (see the Erratum below). That revision is retrieved the
 same way, `git show 597f1de:sim/tools/record-dir-race-probe.sh`; it produced no
 measurement recorded here, and the workflow did not change after `42fd372`.
 
-The workflow at `42fd372` is the recipe for the recorded runs. It only runs on a host whose
+The workflow at `42fd372` is the recipe for the recorded runs (the linked runs
+themselves went through a temporary dispatch-gated job, see below). It only runs on a host whose
 `mkdir --version` reports uutils coreutils (see "Runner environment" above; a
 GNU host does not reproduce): add the two pinned revisions as worktrees,
 `d436b53` (pre-guard) and `4367f60` (guarded), then run the script's modes
