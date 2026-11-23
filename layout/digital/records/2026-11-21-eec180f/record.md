@@ -181,3 +181,22 @@ deterministically: the fleet runner image reports
 ~9 s — a runner-image capability gap, not capacity; the known fleet gap, filed
 as 2AMLogic/2am#6548 — an OpenROAD executor for the Spot batch fleet, with the
 klt-side context in 2AMLogic/klayout-tools#4440 and its merged #4442).
+
+Clarification (2026-11-23, issue #239): the timing-model disclosure above
+(`sta-corners.json`: "ideal clock, `geometry_source: routed`, no SPEF and no
+wire-load model") and the "What is not established" list omit one limit of
+that standalone report. Every corner of `sta-corners.json` carries
+`constraint_completeness.status: incomplete`,
+`unconstrained_endpoints.count: 43`, `unclocked_registers.count: 0` — all six
+corners identical, re-measured from the committed file with
+`jq -r '.corners[] | [.corner, .constraint_completeness.status, .constraint_completeness.unconstrained_endpoints.count, .constraint_completeness.unclocked_registers.count] | @tsv'`.
+Read as: `unclocked_registers.count == 0` means no register escapes the setup
+check, so the register-to-register framing of the slow_1p08V_125C miss above
+holds; 43 endpoints — the report's sample is `eye_ph_off[*]`, `eye_smp_off[*]`,
+`pi_code[*]`, all top-level output ports (sample limited to 20,
+`truncated: true`) — carry no setup check in this model. The 217 violating
+endpoints above is therefore a count over the constrained endpoint set only.
+Nothing in the original text is corrected. In particular the record's decline
+to attribute the 217-vs-394 gap against the in-flow model stands: whether
+these 43 endpoints account for any of it is unmeasured. Appended per the
+append-only rule; the original text above is unchanged.

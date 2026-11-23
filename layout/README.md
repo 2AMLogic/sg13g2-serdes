@@ -9,6 +9,16 @@
   - `scripts/check-pnr-fresh.sh` checks the newest record against the netlist
     (exit 3 = stale). Needs the PDK (`scripts/setup-env.sh`) and `openroad`, so
     it is not part of `scripts/check-ci.sh`.
+  - Record convention for a standalone `klt sta` report (#239): a record that
+    cites one discloses, beside the clock / `geometry_source` /
+    SPEF-or-wire-load model, `constraint_completeness.status`,
+    `unconstrained_endpoints.count` and `unclocked_registers.count` per corner,
+    and states that a violating-endpoint count is taken over the constrained
+    endpoint set only. Read the fields as: `unclocked_registers.count == 0`
+    means no register escapes the setup check; a non-zero
+    `unconstrained_endpoints.count` means that many endpoints carry no setup
+    check in that model. Re-measure with
+    `jq -r '.corners[] | [.corner, .constraint_completeness.status, .constraint_completeness.unconstrained_endpoints.count, .constraint_completeness.unclocked_registers.count] | @tsv' <report>`.
   - `lvs.request.json` is the template for the gate-level LVS request (T1 item 4,
     Digital column, `4.digital`). `scripts/lvs-regen.sh` extracts the newest routed
     GDS with every standard cell abstracted (about 15 minutes, single process) and
