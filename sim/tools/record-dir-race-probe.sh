@@ -14,7 +14,11 @@
 #       launchers' exit codes and per-launcher klt logs (loser must exit 3
 #       having made zero klt sim calls).
 # The fixture recipe is test-record-dir.sh's, but every copied file comes from
-# the pinned revision under test, so a run measures that revision as-is.
+# the pinned revision under test, so a run measures that revision as-is. Both
+# record-dir.sh shapes are handled: the pre-#244 two-claim revision
+# (guarded=yes, `.reserved` second claim) and the post-#244 revision that
+# delegates to scripts/klt-lib.sh (guarded=no; reserved-refusals stays 0 by
+# construction, refusals count under mkdir-refusals).
 #   record-dir-race-probe.sh env    <pinned-repo>
 #   record-dir-race-probe.sh micro  <parent-dir> <rounds> [pin]   # pin = taskset -c 0
 #   record-dir-race-probe.sh race   <pinned-repo> <rx|smoke|tx-hbt|tx-mos> <attempts>
@@ -30,9 +34,12 @@ keep_dir() { echo "record-dir-race-probe: artifacts kept in $1"; }
 make_fixture() { # make_fixture <pinned-repo-root> <tmp-root>
   local pin="$1" tmp="$2"
   mkdir -p "$tmp/repo/sim/tools" "$tmp/repo/sim/rx/tools" "$tmp/repo/sim/tx" \
-           "$tmp/repo/sim/smoke" "$tmp/repo/design" "$tmp/repo/layout" "$tmp/bin"
+           "$tmp/repo/sim/smoke" "$tmp/repo/design" "$tmp/repo/layout" "$tmp/repo/scripts" "$tmp/bin"
   cp "$pin/sim/tools/record-dir.sh" "$pin/sim/tools/record_common.py" \
      "$pin/sim/tools/build-osdi.sh" "$tmp/repo/sim/tools/"
+  # post-#244 revisions source scripts/klt-lib.sh at record-dir.sh source time;
+  # pre-#244 (two-claim) pins have none, so stage it only where the pin has it
+  [ -f "$pin/scripts/klt-lib.sh" ] && cp "$pin/scripts/klt-lib.sh" "$tmp/repo/scripts/"
   cp "$pin/sim/pdk.json" "$tmp/repo/sim/"
   cp "$pin/layout/toolchain.json" "$tmp/repo/layout/"
   cp "$pin/design/check-netlists.sh" "$tmp/repo/design/"
@@ -136,7 +143,13 @@ race)
     tx-mos) script=sim/tx/run_sizing.sh   arg=mos suffix="-mos" sims=1 ;;
     *) die "unknown case $case (rx|smoke|tx-hbt|tx-mos)" ;;
   esac
-  if grep -q '\.reserved' "$pin/sim/tools/record-dir.sh"; then guarded=yes; else guarded=no; fi
+  [ -f "$pin/sim/tools/record-dir.sh" ] || die "$pin has no sim/tools/record-dir.sh"
+  # two-claim shape (pre-#244) = no delegation to klt-lib.sh; guarded=yes only
+  # for it (the `.reserved` second claim). A delegated pin reports guarded=no.
+  if grep -q 'klt-lib\.sh' "$pin/sim/tools/record-dir.sh"; then guarded=no; else guarded=yes; fi
+  if [ "$guarded" = no ] && [ ! -f "$pin/scripts/klt-lib.sh" ]; then
+    die "$pin: record-dir.sh delegates to scripts/klt-lib.sh, which is missing -- refusing to measure"
+  fi
   sha8="$(git -C "$pin" rev-parse --short HEAD)"
   tmp="$(mktemp -d)" || die "mktemp -d failed"
   make_fixture "$pin" "$tmp"
@@ -170,7 +183,7 @@ race)
     if grep -q "already claimed by another launch" "$err.a" "$err.b" 2>/dev/null; then
       this_reserved=1
     fi
-    if grep -q "already exists -- a same-second launch" "$err.a" "$err.b" 2>/dev/null; then
+    if grep -Eq "already exists -- a same-second launch|record-dir: .* exists \(records are append-only\)" "$err.a" "$err.b" 2>/dev/null; then
       this_mkdir=1
     fi
     # the refused launcher (zero klt sim calls) must have exited 3
@@ -192,10 +205,12 @@ race)
         echo "--- anomaly: case=$case attempt=$i/$attempts pids a=$pa exit=$sa b=$pb exit=$sb klt-sims a=$na b=$nb"
         echo "--- ls -la $dir:"; ls -la "$dir"
         echo "--- ls -la $rec:"; ls -la "$rec" 2>&1
-        if [ -e "$rec/.reserved" ]; then
-          echo "--- .reserved marker pid: $(cat "$rec/.reserved")"
-        else
-          echo "--- .reserved marker: absent"
+        if [ "$guarded" = yes ]; then
+          if [ -e "$rec/.reserved" ]; then
+            echo "--- .reserved marker pid: $(cat "$rec/.reserved")"
+          else
+            echo "--- .reserved marker: absent"
+          fi
         fi
         echo "--- mkdir resolution in fixture PATH: $(type -a mkdir 2>&1 | tr '\n' ' ')"
         echo "--- shim dir: $(find "$tmp/bin" -maxdepth 1 -type f -printf '%f ' 2>/dev/null)"
