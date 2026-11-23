@@ -202,3 +202,14 @@ Time from the clock edge that closes the sample phase to |q| reaching a fixed le
 - Sampler offset and noise (Monte Carlo, DR-002), CDR, link behaviour, clock duty/quadrature error (R20 +-1 %, +-2 deg) and mismatch: not simulated.
 - Full PVT-full grid (135 points): not run; only the 27-point HBT-family grid (MOS corners absent), `hbt_*` sections ganged with `cap_*` and `dio_*`. The spec's 7-point PVT-edge set is a subset of it.
 - Unconfirmed: the +-10 % supply tolerance is a proposal (DR-003); temperature -40/27/125 C is a proposal.
+
+## Erratum (2026-11-23, issue #256)
+
+The CTLE rows of the "HBT node stress versus DR-003" section above are
+**quiescent operating-point values** (`ctle_op` runs with `Vip`/`Vin` at
+`dc 0`), not transient maxima — a lower bound for a differential pair, whose
+off-side collector rises under signal. Transient maxima for all 22 `ctle.*`
+HBTs (Vc, Vce, reverse Vbe; both input levels, all codes, the same 27-corner
+grid) are in `records/20261123-102613-14d2158` (superseding `records/20261123-050201-5214c04`, whose single-polarity stimulus under-stressed half the pair; see its Erratum); nothing there exceeds a
+DR-003 limit. This paragraph is an appended pointer; the original text above
+is unchanged.
