@@ -17,7 +17,7 @@ pdk, tool = rc.load_pins(repo)
 codes = rc.exit_codes(out)
 
 reports = {}
-for name in ("ctle_ac", "ctle_op", "pad_ac", "latch_regen"):
+for name in ("ctle_ac", "ctle_op", "ctle_tran", "latch_regen", "pad_ac"):
     p = out / f"{name}.report.json"
     reports[name] = json.load(open(p)) if p.exists() else None
 
@@ -44,6 +44,18 @@ def regen_levels(request_path):
 # Decision and floor levels of the two regeneration cards, read from the
 # request rather than restated, so the table can never disagree with the deck.
 DEC_V, FLOOR_V = regen_levels(rx / "latch_regen.request.json")
+
+
+def tran_levels(sp_path):
+    """(lo, hi) differential pk-pk input amplitudes in volts of the ctle_tran
+    bench, read from its pulse sources (4x the single-ended half-swing), so
+    the record can never disagree with the deck that produced the numbers."""
+    amps = {}
+    for line in pathlib.Path(sp_path).read_text().splitlines():
+        t = line.split()
+        if len(t) > 4 and t[0] in ("Vip", "Vjp") and t[2] == "vcm" and t[3].startswith("pulse("):
+            amps["lo" if t[0] == "Vip" else "hi"] = 4.0 * abs(float(t[4]))
+    return amps.get("lo"), amps.get("hi")
 
 
 def mstatus(c, name):
@@ -126,6 +138,77 @@ if op:
         for m in c["measurements"]:
             if m.get("status") == "fail":
                 viol.append((c["corner_id"], m["name"], m["value"]))
+tr = reports["ctle_tran"]
+if tr:
+    LO_V, HI_V = tran_levels(rx / "ctle_tran.sp")
+    TRAN_METS = (("vc", "Vc", 1.32), ("vce", "Vce", 1.4), ("vbe_rev", "rev Vbe", 1.0))
+    L += ["", "## CTLE transient node stress (R3 per-device, issue #256)", "",
+          f"The `ctle_op` cards above are quiescent (inputs at dc 0); every number in this section is a",
+          f"`.meas tran` maximum over a driven run: 2 ns at one polarity (settled worst-case long run),",
+          "then 5 GHz alternation (200 ps period, 20 ps edges), all 8 peaking codes, 27-corner grid.",
+          "Limits: Vc <= 1.32 V, Vce <= 1.40 V (BVCEO), reverse Vbe <= 1.0 V (BVEBO) -- DR-003 and the",
+          "HBT breakdown table in `spec/target-spec.md`; not relaxed anywhere here.", "",
+          "The spec declares **no maximum RX input swing** (R8 gives only the minimum sensitivity), so",
+          "both input levels are bench bounds, named with their source -- not spec limits:",
+          f"- **lo = {LO_V * 1000:.0f} mVppd differential** -- R8 nominal RX input sensitivity (`spec/target-spec.md` R8):",
+          "  the smallest swing the RX must resolve, so the stress floor.",
+          f"- **hi = {HI_V * 1000:.0f} mVppd differential** -- the R4 stretch (maximum) TX output swing, taken as the pad",
+          "  amplitude at zero channel loss: the committed channel model (`spec/channel/`) has S11 = S22 = 0 and",
+          "  IL(f) -> 0 dB as f -> 0, so the largest pad amplitude it admits is the TX swing itself."]
+
+    def tran_worst(lvl):
+        """device -> metric -> (value, corner_id, code), worst over codes and corners."""
+        pat = re.compile(r"ctle_%s_c(\d+)_xd[lh]\d+_(.+?)_(vc|vce|vbe_rev)_max$" % lvl)
+        dev = {}
+        for c in tr["corners"]:
+            for m in c["measurements"]:
+                g = pat.match(m["name"])
+                if not g:
+                    continue
+                v = m.get("value")
+                if v is None:
+                    continue
+                d = dev.setdefault(g.group(2), {})
+                if g.group(3) not in d or v > d[g.group(3)][0]:
+                    d[g.group(3)] = (v, c["corner_id"], g.group(1))
+        return dev
+
+    for lvl, amp in (("lo", LO_V), ("hi", HI_V)):
+        dev = tran_worst(lvl)
+        L += ["", f"### level `{lvl}` ({amp * 1000:.0f} mVppd): worst over all 8 codes and all 27 corners, per device", "",
+              "| device | " + " | ".join(lab + " (V)" for _, lab, _ in TRAN_METS) + " | verdict |",
+              "|---|" + "---|" * (len(TRAN_METS) + 1)]
+        for d, mm in dev.items():
+            cells, why = [], []
+            for met, lab, lim in TRAN_METS:
+                e = mm.get(met)
+                cells.append(f(e[0] if e else None, "{:.3f}"))
+                if e and e[0] > lim:
+                    why.append(f"{lab} = {e[0]:.3f} V > {lim} V @ code {e[2]}, {e[1]}")
+            L.append(f"| {d} | " + " | ".join(cells) + f" | {'; '.join(why) if why else 'pass'} |")
+        for met, lab, lim in TRAN_METS:
+            top = max((mm[met] for mm in dev.values() if met in mm), default=None, key=lambda x: x[0])
+            if top:
+                L.append(f"- `{lvl}` worst {lab}: {top[0]:.3f} V (limit {lim} V) -- device `{[d for d, mm in dev.items() if mm.get(met) == top][0]}`, code {top[2]}, {top[1]}.")
+    bad = [c["corner_id"] for c in tr["corners"]
+           if c.get("status") != "pass" or any(m.get("value") is None for m in c.get("measurements", []))]
+    L.append(f"- Corners with an error or a measurement that returned no value (listed, not dropped): "
+             f"{len(bad)}" + (" -- " + ", ".join(bad) if bad else ""))
+    for c in tr["corners"]:
+        for m in c["measurements"]:
+            if m.get("status") == "fail":
+                viol.append((c["corner_id"], m["name"], m["value"]))
+    for lvl, amp in (("lo", LO_V), ("hi", HI_V)):
+        sw = []
+        for c in tr["corners"]:
+            for k in range(8):
+                hi_, lo_ = val(c, "ctle_%s_c%d_dif_max_v" % (lvl, k)), val(c, "ctle_%s_c%d_dif_min_v" % (lvl, k))
+                if hi_ is not None and lo_ is not None:
+                    sw.append(hi_ - lo_)
+        if sw:
+            L.append(f"- Nonzero swing reached the outputs at `{lvl}`: differential output swing "
+                     f"{min(sw) * 1000:.1f}-{max(sw) * 1000:.1f} mV pk-pk over the grid (input {amp * 1000:.0f} mVppd).")
+    L.append("- Per-device values for every corner and code are in `ctle_tran.report.json` in this directory.")
 lr = reports["latch_regen"]
 if lr:
     def ps(c, n):
@@ -185,28 +268,32 @@ if pad:
     for c in pad["corners"]:
         L.append(f"| {c['corner_id']} | {f(z(c,'pad_idiff_0p1g_a'),'{:.1f}')} | {f(z(c,'pad_idiff_5g_a'),'{:.1f}')} |")
 
-L += ["", "## HBT node stress versus DR-003 (collector <= 1.32 V, reverse Vbe <= 1.0 V)", ""]
+L += ["", "## HBT node stress versus DR-003 (collector <= 1.32 V, Vce <= 1.40 V, reverse Vbe <= 1.0 V)", ""]
 worst = {}
-for rname in ("ctle_op", "latch_regen"):
+for rname in ("ctle_op", "ctle_tran", "latch_regen"):
     r = reports[rname]
     if not r:
         continue
     for c in r["corners"]:
         for m in c["measurements"]:
             n = m["name"]
-            if n.endswith("_vc_max") or n.endswith("_vbe_rev_max"):
+            if n.endswith("_vc_max") or n.endswith("_vce_max") or n.endswith("_vbe_rev_max"):
                 v = m.get("value")
                 if v is not None and (n not in worst or v > worst[n][0]):
                     worst[n] = (v, c["corner_id"])
 vc = {n: w for n, w in worst.items() if n.endswith("_vc_max")}
+vce = {n: w for n, w in worst.items() if n.endswith("_vce_max")}
 vb = {n: w for n, w in worst.items() if n.endswith("_vbe_rev_max")}
 if vc:
     top = max(vc.items(), key=lambda kv: kv[1][0])
     L.append(f"- Highest collector node: `{top[0]}` = {top[1][0]:.3f} V at {top[1][1]}.")
+if vce:
+    top = max(vce.items(), key=lambda kv: kv[1][0])
+    L.append(f"- Highest Vce: `{top[0]}` = {top[1][0]:.3f} V at {top[1][1]} (ctle_tran only; BVCEO 1.4 V).")
 if vb:
     top = max(vb.items(), key=lambda kv: kv[1][0])
     L.append(f"- Largest reverse Vbe (Ve - Vb; negative = still forward biased): `{top[0]}` = {top[1][0]:.3f} V at {top[1][1]}.")
-stress_fail = [v for v in viol if v[1].endswith("_vc_max") or v[1].endswith("_vbe_rev_max")]
+stress_fail = [v for v in viol if v[1].endswith("_vc_max") or v[1].endswith("_vce_max") or v[1].endswith("_vbe_rev_max")]
 nodes = {}
 for a, b, c in stress_fail:
     if b not in nodes or c > nodes[b][0]:

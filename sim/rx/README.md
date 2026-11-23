@@ -8,10 +8,11 @@ pad capacitance and the CTLE load are placeholders, the clock source is ideal.
 |---|---|
 | `ctle_ac.sp` | 8 copies of `ctle`, one per peaking code; AC gain at 0.1, 2.5, 5 GHz |
 | `ctle_op.sp` | same circuit at its operating point: output common mode, max collector V and reverse Vbe per HBT |
+| `ctle_tran.sp` | 16 copies of `ctle` (8 codes x 2 input levels): transient max Vc, Vce and reverse Vbe per HBT over a driven run (2 ns long run, then 5 GHz alternation) |
 | `latch_regen.sp` | clock buffer + latch at 5 GHz: regeneration time to two fixed \|q\| levels (0.25 V decision, 0.10 V floor), collector/Vbe stress |
 | `pad_ac.sp` | termination + pad + CTLE: differential drive current, so \|Zdiff\| at 0.1 and 5 GHz |
 | `*.request.json` | `klt sim` requests: HBT corners (ganged with CAP and DIO sections) x 1.08/1.2/1.32 V x -40/27/125 C |
-| `run_sizing.sh` | submits the four requests (batch fleet) and writes `records/<id>/` |
+| `run_sizing.sh` | submits the five requests (batch fleet) and writes `records/<id>/` |
 | `tools/gen_requests.py` | generates the `.sp` bodies and requests; the node-stress `.meas` cards follow the exported netlists |
 | `tools/make_record.py` | renders `record.md` from the reports |
 
@@ -20,10 +21,15 @@ commit the output.
 
 ## Records (append-only)
 
-`records/20261114-050716-eb34d10` is the newest record and the one the
-behavioural link benches should fit to: it is the first with no `error` corner
-for `latch_regen`, so every corner carries a regeneration number or an explicit
-`not_reached` verdict. `records/20261110-222737-506b37e` is the previous
+`records/20261123-050201-5214c04` is the newest record and the one the
+behavioural link benches should fit to: it re-runs the four benches of
+`records/20261114-050716-eb34d10` (identical latch verdicts: 0 `error`
+corners, 12 `not_reached`, the nine 1.32 V collector findings unchanged) and
+adds the CTLE transient node-stress bench of issue #256 — see "CTLE transient
+node stress" below. `records/20261114-050716-eb34d10` is the previous record
+and the first with no `error` corner for `latch_regen`, so every corner
+carries a regeneration number or an explicit `not_reached` verdict.
+`records/20261110-222737-506b37e` is the previous
 complete record (6 `error` corners; see "Regeneration at low supply" below).
 `records/20261027-022309-00c2ed7` is the first complete record. The three
 earliest directories are failed submissions, kept as found:
@@ -109,6 +115,33 @@ and otherwise clean still grades `pass` at the corner level: each of the six
 diagnostics. The unreached decision-level limits are therefore visible only in
 those diagnostics and in the 12 `skipped` coverage entries, never as a
 corner-level penalty -- read `coverage`, not the corner status, to see them.
+
+## CTLE transient node stress
+
+**Sizing evidence from a simulation, never a measurement.** The `ctle_op`
+stress cards are quiescent (inputs at `dc 0`), so the R3 per-device table's
+CTLE rows were operating-point values — a lower bound for a differential pair,
+whose off-side collector rises under signal. The `ctle_tran` bench (issue
+#256, record `records/20261123-050201-5214c04`) replaces them with
+`.meas tran` maxima over a driven run: 2 ns at one polarity (settled
+worst-case long run), then 5 GHz alternation (200 ps period, 20 ps edges), all
+8 peaking codes, 27-corner grid, max Vc / Vce / reverse Vbe per HBT.
+
+The spec declares **no maximum RX input swing** (R8 gives only the minimum
+sensitivity), so the bench runs two named bounds rather than an invented one:
+
+- **50 mVppd** — R8 nominal RX input sensitivity, the stress floor.
+- **800 mVppd** — the R4 stretch (maximum) TX swing taken as the pad amplitude
+  at zero channel loss: the committed channel model (`spec/channel/`) has
+  S11 = S22 = 0 and IL(f) -> 0 dB as f -> 0, so the largest pad amplitude it
+  admits is the TX swing itself.
+
+Result over the whole grid, both levels, all codes: **no DR-003 violation**
+(limits Vc 1.32 V, Vce 1.40 V/BVCEO, reverse Vbe 1.0 V/BVEBO). Worst Vc is
+1.316 V (device `q2`, code 7, hbt_wcs/1.320V/-40C) — a 4 mV margin set by the
++10 % supply, not by the signal (`lo`-level worst Vc is 1.067 V). Worst Vce
+1.309 V; reverse Vbe never leaves forward bias anywhere (worst -0.333 V). The
+4 mV collector margin is a sizing finding for #22, not a spec relaxation.
 
 ## Constraints that shaped the benches
 
