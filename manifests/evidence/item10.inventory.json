@@ -10,7 +10,6 @@
     "scripts/check-ci.sh",
     "scripts/erc-fresh-lib.sh",
     "scripts/klt-lib.sh",
-    "scripts/pnr-lib.sh",
     "scripts/pnr-regen.sh",
     "scripts/lvs-regen.sh",
     "scripts/erc-regen.sh",

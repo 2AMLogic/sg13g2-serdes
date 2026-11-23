@@ -11,8 +11,8 @@
 # Exit 1: the record is missing or not clean.
 # Cheap mode (default) re-hashes only; --rerun re-runs the ERC and diffs the
 # verdict-bearing fields (about one minute, same flags as erc-regen.sh).
-# Like erc-regen.sh this sources klt-lib.sh, not pnr-lib.sh: no openroad, no
-# PDK_ROOT file checks -- `klt erc` needs neither.
+# Like erc-regen.sh this checks nothing under PDK_ROOT: `klt erc` needs no
+# PDK file and no openroad.
 set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # shellcheck source=scripts/klt-lib.sh
@@ -22,10 +22,10 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 klt_env
 cd "$ROOT" || exit 1
 
-EREC="$(ls -d layout/digital/erc-records/*/ 2>/dev/null | sort | tail -1 | sed 's:/$::')"
+EREC="$(latest_record_dir layout/digital/erc-records)"
 [ -n "$EREC" ] && [ -f "$EREC/erc.report.json" ] || { echo "check-erc-fresh: no committed record (run scripts/erc-regen.sh)" >&2; exit 1; }
 TOP="$(jq -r .hdl_toplevel layout/digital/place-and-route.request.json)"
-PREC="$(ls -d layout/digital/records/*/ 2>/dev/null | sort | tail -1 | sed 's:/$::')"
+PREC="$(latest_record_dir layout/digital/records)"
 erc_check_inputs "$EREC/erc.report.json" "$PREC/$TOP.gds" || exit $?
 
 # Run from the record dir: `klt erc --check` resolves the report's spec path
