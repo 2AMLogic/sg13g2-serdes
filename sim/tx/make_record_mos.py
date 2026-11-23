@@ -107,18 +107,34 @@ if "mux2to1_cml" in corners:
 
 if "tx_lvl_cml2cmos" in corners:
     ks = sorted(corners["tx_lvl_cml2cmos"], key=lambda k: k["corner_id"])
-    L += ["## tx_lvl_cml2cmos (625 MHz input, 20 fF load; DR-014)", "",
+    periods = {round(val(k, "t_period_s"), 15) for k in ks if val(k, "t_period_s")}
+    if len(periods) != 1:
+        sys.exit(f"tx_lvl_cml2cmos: reported t_period_s is not one value across corners "
+                 f"({sorted(periods)}); refusing to write a record with an unverifiable input rate")
+    period_s = periods.pop()
+    rate_hz = 1.0 / period_s
+    rate = f"{rate_hz / 1e9:g} GHz" if rate_hz >= 1e9 else f"{rate_hz / 1e6:g} MHz"
+    ref = "; DR-014" if abs(rate_hz - 625e6) < 1e3 else ""
+    L += [f"## tx_lvl_cml2cmos ({rate} input, period {period_s * 1e12:g} ps from the reports; 20 fF load{ref})", "",
           "| corner | out hi (V) | out lo (V) | duty (%) | tpd LH (ps) | tpd HL (ps) | Idd (mA) |",
           "|---|---|---|---|---|---|---|"]
+    n_bad = 0
     for k in ks:
         th, tp = val(k, "t_high_s"), val(k, "t_period_s")
         duty = None if th is None or not tp else 100.0 * th / tp
+        if duty is not None and not 0.0 <= duty <= 100.0:
+            duty, n_bad = None, n_bad + 1  # impossible value: edge pairing, not a duty
         L.append(f"| {k['corner_id']} | {fmt(val(k, 'out_hi'))} | {fmt(val(k, 'out_lo'))} | "
                  f"{fmt(duty)} | {fmt(val(k, 'tpd_lh_s'), 1e12)} | {fmt(val(k, 'tpd_hl_s'), 1e12)} | "
                  f"{fmt(val(k, 'idd_avg'), 1e3)} |")
-    L += ["", "Duty = time above vdd/2 over the period (`t_high_s` / `t_period_s`). Delay is from the "
-          "differential input zero crossing to the output vdd/2 crossing. 'n/a' = no crossing.", ""]
-
+    L += ["", "Delay is from the differential input zero crossing to the output vdd/2 crossing. "
+          "'n/a' = no crossing, or no valid duty.", ""]
+    if n_bad:
+        L += [f"Duty is n/a in {n_bad} of {len(ks)} corners: `t_high_s` / `t_period_s` came out outside "
+              "0..100 % (negative `t_high_s`). `t_high_s` pairs a `trig` and a `targ` edge that ngspice "
+              "searches independently from their own `td`; here the `targ` edge it finds precedes the "
+              "`trig` edge (different cycles), so the difference is not a pulse width. No same-cycle "
+              "duty is measured; tpd, out hi/lo and Idd are unaffected.", ""]
 if "ffe_en" in corners:
     ks = sorted(corners["ffe_en"], key=lambda k: k["corner_id"])
     L += ["## ffe_en (vbp0..2 minus vbn at each enable code; slices enabled = 0..3)", "",

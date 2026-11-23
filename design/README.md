@@ -77,8 +77,10 @@ Needs `source scripts/env.sh`. Not wired into CI here (coordinate with #4).
 - **Divided clock.** `ckdp/ckdn` is the CML 625 MHz word-boundary clock (5 GHz divided by
   8: 5 -> 2.5 -> 1.25 -> 0.625 GHz; DR-014, conditional on DR-008 B1 — DR-001 decision 3's
   "first divided clock" is not its rate). `Xlvl` turns it into the CMOS word clock
-  `ckd_cmos`, whose consumer is the future CMOS serializer (the digital partition's `clk`,
-  `rtl/serdes_digital_top.v`); nothing in `rtl/` consumes it today. Benched at 625 MHz:
+  `ckd_cmos`, which is meant to drive the digital partition's `clk` input
+  (`rtl/serdes_digital_top.v`, the word clock for the 16-bit `tx_word` it hands to the CML
+  serializer, DR-008: every serializer stage stays CML). That connection is not made
+  anywhere in the tree today: `ckd_cmos` is unloaded past the `tx_top` port. Benched at 625 MHz:
   record `sim/tx/records/20261123-035024-5214c04-mos/`; the earlier 2.5 GHz records are
   margin points (4x rate), not evidence at 625 MHz.
 

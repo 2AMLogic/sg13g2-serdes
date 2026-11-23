@@ -49,15 +49,17 @@ All proposed, conditional on DR-008 B1:
    output of the 5 -> 2.5 -> 1.25 -> 0.625 GHz chain, i.e. DR-008's "CML-to-CMOS clock edge
    at 625 MHz ... driving the CMOS word clock". DR-001 decision 3's "first divided clock"
    wording is not the rate of this clock.
-2. **Consumer of `ckd_cmos`**: the CMOS word interface of the serializer — the digital
-   partition's `clk` input and the word-rate serializer stages it clocks. **No consumer
-   exists today**: `rtl/` outputs a 16-bit parallel word and contains no CMOS serializer, so
-   `ckd_cmos` is unloaded past the `tx_top` port. Building that consumer is future work
-   (out of scope here, as is any serializer RTL).
+2. **Consumer of `ckd_cmos`**: the existing `clk` input of `serdes_digital_top`
+   (`rtl/serdes_digital_top.v`), the 625 MHz word clock of the digital partition that
+   supplies the 16-bit `tx_word` to the CML serializer. DR-008 keeps every serializer stage,
+   S1 included, in CML, so there is no CMOS serializer to clock. **The connection is not
+   made today**: `ckd_cmos` is unloaded past the `tx_top` port and nothing wires it to
+   `clk`. Making it belongs to top-level integration, out of scope here.
 3. **`Xlvl` stays in `tx_top`**: it is the TX's own clock-domain crossing (CML divider to
-   CMOS word clock) that DR-008 B1 places at the word boundary. With no consumer yet it is
-   the interface pin the future serializer will need; removing it would leave the digital
-   partition with no word-clock source.
+3. **`Xlvl` stays in `tx_top`**: it is the TX's own clock-domain crossing (CML divider to
+   CMOS word clock) that DR-008 B1 places at the word boundary. With no connection to `clk`
+   yet it is the interface pin the digital partition's word clock will come from; removing it
+   would leave that partition with no word-clock source.
 4. **Evidence at the intended rate**: the converter bench (`sim/tx/make_tb.py` `LV_T`) now
    runs at 625 MHz (1.6 ns period, was 400 ps), and the full 45-corner MOS set was re-run:
    record `sim/tx/records/20261123-035024-5214c04-mos/` (`tx_lvl_cml2cmos` 45/45 corners
@@ -83,16 +85,21 @@ All proposed, conditional on DR-008 B1:
   output high 1.087..1.349 V, output low -0.036..-0.015 V (rail-to-rail at every corner),
   propagation delay 60..216 ps (differential-input zero crossing to output vdd/2), supply
   0.20..0.49 mA. Sizing evidence only; no spec row is graded. Reading against the
-  validation plan's G2 trigger (delay spread vs the 1.6 ns word period): 60..216 ps is
-  about 14 % of the period, far from the "more than half" B3 trigger — but this is
-  sizing evidence at an ideal source, not a G2 pass claim (supply isolation, swing into a
-  real load and skew are not benched here).
-- Known measurement artifact, unchanged from the 2.5 GHz records: the duty column is a
-  single-period trig/targ edge-pairing result and is phase-luck (34..38 % at 2.5 GHz,
-  about -53 % at 625 MHz; ngspice searches `trig` and `targ` independently from their own
-  `td`). Do not read duty from these records. The tpd, out_hi/out_lo and Idd columns are
-  not affected. Fixing the duty measurement is a separate bench-methodology change, not
-  made here (the published 2.5 GHz record used the same measurement).
+  validation plan's G2 trigger (`spec/validation-plan.md`: delay spread vs the 1.6 ns word
+  period): the metric is the spread of the propagation delay over both edge directions and all
+  corners, 60.557..215.461 ps, i.e. 154.904 ps = **9.68 %** of the period (the maximum
+  absolute delay, 215.461 ps, is 13.47 %, which is not the G2 metric). Either is far from the
+  "more than half" B3 trigger — but this is sizing evidence at an ideal source, not a G2 pass
+  claim (supply isolation, swing into a real load and skew are not benched here).
+- Duty: the column is a single-period trig/targ edge-pairing result (ngspice searches `trig`
+  and `targ` independently from their own `td`). At 2.5 GHz it is a valid pulse width,
+  **27.30..39.22 %** over the 45 corners of the two archived records; it equals the 50 % input
+  duty plus the measured tpd skew (tpd HL - tpd LH) to within 0.001 percentage points at every
+  corner, so it is real pulse-width distortion of the converter and is not dismissed. At
+  625 MHz the `targ` edge is found in a different cycle than `trig`, `t_high_s` is negative
+  (-54.68..-53.03 % as a ratio) and the record marks duty n/a in all 45 corners: no same-cycle
+  duty is measured at 625 MHz. tpd, out_hi/out_lo and Idd are not affected. Measuring duty
+  at 625 MHz is a separate bench-methodology change, not made here.
 - Remaining historical wording: `design/tx/gen_schematics.py` still describes the cell as
   "CML-to-CMOS level conversion at the first divided clock (DR-001 decision 3)". It is
   committed schematic-generator text; regenerating schematics and netlists for a comment is

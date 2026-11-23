@@ -79,11 +79,17 @@ MOS-set run status:
   `20261110-224611-4092fc2-mos` (36 pass / 7 fail / 2 error, and 45/45). The 2.5 GHz
   converter records above are now margin data points (4x the intended rate, DR-014), not
   evidence at 625 MHz.
-  - Duty artifact (both rates): the duty column is a single-period trig/targ edge-pairing
-    result -- ngspice searches `trig` and `targ` independently from their own `td`, so the
-    pairing is phase luck (34..38 % at 2.5 GHz, about -53 % at 625 MHz; the true duty is
-    50 % up to the tpd skew). Do not read duty from these records; tpd, out hi/lo and Idd
-    are unaffected.
+  - Duty (both rates): the column is a single-period trig/targ edge-pairing result --
+    ngspice searches `trig` and `targ` independently from their own `td`. At 2.5 GHz it is
+    a valid pulse width: **27.30..39.22 %** over the 45 corners of the two archived records,
+    equal to the 50 % input duty plus the measured tpd skew (tpd HL - tpd LH) to within
+    0.001 percentage points at every corner, i.e. real pulse-width distortion, not an
+    artifact. At 625 MHz the `targ` edge is found in a different cycle than `trig`,
+    `t_high_s` is negative and the renderer marks duty n/a in all 45 corners; no same-cycle
+    duty is measured at 625 MHz. tpd, out hi/lo and Idd are unaffected.
+  - `make_record_mos.py` takes the converter input rate from the reported `t_period_s`
+    (heading included) and refuses to write when the corners disagree, so a record cannot
+    be re-rendered under a rate its reports do not show.
 
 ## Pad ESD benches (issue #94)
 
