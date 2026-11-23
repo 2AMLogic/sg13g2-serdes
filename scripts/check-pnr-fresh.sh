@@ -15,11 +15,25 @@
 # flow and diffs verdict-bearing fields (about 10 minutes; not for CI).
 set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-# shellcheck source=scripts/pnr-lib.sh
-. "$ROOT/scripts/pnr-lib.sh"
-pnr_env
+# shellcheck source=scripts/klt-lib.sh
+. "$ROOT/scripts/klt-lib.sh"
+klt_env
+PNR_REQ="$ROOT/layout/digital/place-and-route.request.json"
+# Cheap mode re-hashes the committed netlist and the liberty the report's
+# provenance names, so the liberty is the PDK sentinel it needs. That liberty is
+# the one the request routes: <cell_library>_<corner>.lib, never a fixed corner.
+# Only --rerun drives OpenROAD over the stdcell LEF.
+CELL_LIB="$(jq -r .pdk.cell_library "$PNR_REQ")"
+CORNER="$(jq -r .pdk.corner "$PNR_REQ")"
+require_pdk_file "ihp-sg13g2/libs.ref/$CELL_LIB/lib/${CELL_LIB}_${CORNER}.lib" \
+  "check-pnr-fresh: ${CELL_LIB}_${CORNER}.lib liberty not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
+if [ "${1:-}" = "--rerun" ]; then
+  require_tool openroad "check-pnr-fresh: openroad missing (worker-spec gap; do not install here)"
+  require_pdk_file ihp-sg13g2/libs.ref/sg13g2_stdcell/lef/sg13g2_stdcell.lef \
+    "check-pnr-fresh: SG13G2 stdcell LEF not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
+fi
 
-REC="$(pnr_latest_record)"
+REC="$(latest_record_dir "$ROOT/layout/digital/records")"
 [ -n "$REC" ] && [ -f "$REC/report.json" ] || { echo "check-pnr-fresh: no committed record (run scripts/pnr-regen.sh)" >&2; exit 1; }
 TOP="$(jq -r .hdl_toplevel "$PNR_REQ")"
 for f in "$TOP.gds" "$TOP.def" "${TOP}_postroute.v"; do

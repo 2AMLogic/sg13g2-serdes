@@ -14,9 +14,14 @@
 # Yosys run) with the pinned klt from layout/toolchain.json. Cheap enough for CI.
 set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-# shellcheck source=scripts/synth-lib.sh
-. "$ROOT/scripts/synth-lib.sh"
-synth_env
+# shellcheck source=scripts/klt-lib.sh
+. "$ROOT/scripts/klt-lib.sh"
+klt_env
+# No yosys check: `klt synthesize --check` hashes the sources and the liberty,
+# it never runs the synthesizer. The liberty sentinel is the one PDK file the
+# hash walk reads.
+require_pdk_file ihp-sg13g2/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p20V_25C.lib \
+  "check-synth-fresh: SG13G2 stdcell liberty not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
 
 REQ="$ROOT/rtl/synth/request.json"
 TOP="$(jq -r .hdl_toplevel "$REQ")"

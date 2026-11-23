@@ -94,6 +94,9 @@ check_harness() {
   echo "harness: scripts/test-reserve-record-dir.sh"
   bash scripts/test-reserve-record-dir.sh || {
     echo "::error file=scripts/test-reserve-record-dir.sh::record-dir reservation self-test failed" >&2; return 1; }
+  echo "harness: scripts/test-pnr-fresh-liberty.sh"
+  bash scripts/test-pnr-fresh-liberty.sh || {
+    echo "::error file=scripts/test-pnr-fresh-liberty.sh::P&R freshness Liberty-corner self-test failed" >&2; return 1; }
 }
 
 # check_fresh -- the committed evidence records still describe the committed
@@ -101,7 +104,7 @@ check_harness() {
 # python3 (no klt, no openroad, no yosys, nothing under PDK_ROOT):
 #   1. rtl/synth/<top>.synth.json .netlist_sha256 == sha256sum of the committed
 #      gate-level netlist (the want/got block check-synth-fresh.sh runs behind
-#      synth_env).
+#      klt_env).
 #   2. newest layout/digital/records/*/report.json
 #      .provenance.input.content_hash (sha256: prefix stripped) == that same
 #      .netlist_sha256. This is the seam issue #151 slipped through: klt
@@ -133,8 +136,8 @@ check_harness() {
 # committed, so their absence is a repo defect -- exit 0 means verified,
 # never skipped (.loom/docs/ci-principles.md rule 6).
 # Newest-record selection uses git ls-files (committed state, not worktree
-# residue) and is spelled locally because pnr_latest_record reads $PNR_RECORDS
-# from pnr_env, whose require_tool openroad exits 3 on this runner.
+# residue) rather than klt-lib.sh's latest_record_dir, which reads the
+# worktree.
 # CHECK_FRESH_PNR_RECORD / CHECK_FRESH_LVS_RECORD / CHECK_FRESH_ERC_RECORD
 # override the newest-record selection for negative testing only; CI never
 # sets them.

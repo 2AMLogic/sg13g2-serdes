@@ -14,4 +14,4 @@ else
 fi
 export PATH="${_serdes_repo}/.venv/bin:${PATH}"
 unset _serdes_repo _pdk_root
-unset -f klt_env pdk_default_root require_pdk_file require_tool
+unset -f klt_env latest_record_dir pdk_default_root require_pdk_file require_tool reserve_record_dir

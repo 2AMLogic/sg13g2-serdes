@@ -13,9 +13,14 @@
 # Single-unit, local, a few minutes at most.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-# shellcheck source=scripts/synth-lib.sh
-. "$ROOT/scripts/synth-lib.sh"
-synth_env
+# shellcheck source=scripts/klt-lib.sh
+. "$ROOT/scripts/klt-lib.sh"
+klt_env
+want="$(jq -r .yosys.version_prefix "$ROOT/layout/tools.json")"
+got="$(yosys -V 2>&1 | head -1)"
+case "$got" in "$want"*) ;; *) echo "synth-regen: yosys mismatch: pinned '$want', found '$got' (worker-spec gap; do not install here)" >&2; exit 3;; esac
+require_pdk_file ihp-sg13g2/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p20V_25C.lib \
+  "synth-regen: SG13G2 stdcell liberty not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
 
 OUT="$ROOT/rtl/synth"
 REQ="$OUT/request.json"

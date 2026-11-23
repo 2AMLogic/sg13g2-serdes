@@ -1,13 +1,13 @@
 # klt-lib.sh -- shared klt/PDK environment preflight (sourced).
-# One copy of what pnr-lib.sh and synth-lib.sh used to duplicate: the jq/uvx
-# preflight, the pinned klt runner (layout/toolchain.json via a throwaway uvx
-# env), the $PDK_ROOT fallback (sim/pdk.json -> .cache/pdk), and the
-# PDK_ROOT/PDK exports, plus reserve_record_dir, the exclusive record-directory
-# reservation every regen writer makes before its first record write (#208,
-# #219) and -- through the sim-side id builder sim/tools/record-dir.sh (#244)
-# -- the sim runners too: the one such reservation primitive. The per-flow
-# checks -- which tool the flow runs and which PDK sentinel it needs -- stay
-# with the caller through require_tool /
+# One copy of the jq/uvx preflight, the pinned klt runner
+# (layout/toolchain.json via a throwaway uvx env), the $PDK_ROOT fallback
+# (sim/pdk.json -> .cache/pdk), the PDK_ROOT/PDK exports, latest_record_dir
+# (the newest dated record directory), and reserve_record_dir, the exclusive
+# record-directory reservation every regen writer makes before its first record
+# write (#208, #219) and -- through the sim-side id builder
+# sim/tools/record-dir.sh (#244) -- the sim runners too: the one such
+# reservation primitive. The per-flow checks -- which tool the flow runs and
+# which PDK sentinel it needs -- stay with the caller through require_tool /
 # require_pdk_file; every refusal exits 3, this repo's tool-gap exit.
 # shellcheck shell=bash
 
@@ -36,6 +36,10 @@ require_pdk_file() { # require_pdk_file <relpath-under-$PDK_ROOT> [message]
     echo "${2:-klt-lib: required PDK file $1 not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)}" >&2
     exit 3
   }
+}
+
+latest_record_dir() { # latest_record_dir <records-dir> -- newest dated record dir
+  ls -d "$1"/*/ 2>/dev/null | sort | tail -1 | sed 's:/$::'
 }
 
 pdk_default_root() { # pdk_default_root <repo-root> -- the $PDK_ROOT fallback
