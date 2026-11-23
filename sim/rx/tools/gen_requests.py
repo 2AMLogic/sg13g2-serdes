@@ -7,8 +7,9 @@
         # local check; never the grid, never a recorded result
 
 Node-stress measurements are derived from the exported netlists in
-design/rx/netlists/, so they follow the schematics. Everything measured here is
-sizing evidence, not a spec result.
+design/rx/netlists/, so they follow the schematics: max collector voltage,
+max Vce (against BVCEO 1.4 V, issue #242) and max reverse Vbe of every HBT.
+Everything measured here is sizing evidence, not a spec result.
 """
 import json
 import os
@@ -24,6 +25,7 @@ from hbt_corners import HBT_LIB, corner_axes  # noqa: E402
 
 VC_MAX = 1.32   # DR-003: no HBT collector node above this
 VBE_REV = 1.0   # DR-003: no reverse Vbe above this
+VCE_MAX = 1.4   # DR-003: npn13G2 open-base BVCEO, hard limit (issue #242)
 
 
 def parse_subckt(cell):
@@ -44,7 +46,7 @@ def parse_subckt(cell):
 
 
 def stress_meas(inst, cell, portmap, prefix, kind):
-    """`.meas` cards for max collector V and max reverse Vbe of every HBT.
+    """`.meas` cards for max collector V, max Vce and max reverse Vbe of every HBT.
 
     kind "dc": operating-point value via a two-point dummy sweep (`at=0`);
     kind "tran": maximum over the run. Plain `spice` cards, because the fleet
@@ -65,8 +67,12 @@ def stress_meas(inst, cell, portmap, prefix, kind):
     for q, c, b, e in qs:
         base = "%s_%s_%s" % (prefix, inst.lower(), q.lower())
         vbe = base + "_vbe_node"
+        vce = base + "_vce_node"
         lines.append("B%s %s 0 V=v(%s)-v(%s)" % (vbe, vbe, node(e), node(b)))
-        for suffix, sig, lim in (("_vc_max", "v(%s)" % node(c), VC_MAX), ("_vbe_rev_max", "v(%s)" % vbe, VBE_REV)):
+        lines.append("B%s %s 0 V=v(%s)-v(%s)" % (vce, vce, node(c), node(e)))
+        for suffix, sig, lim in (("_vc_max", "v(%s)" % node(c), VC_MAX),
+                                 ("_vbe_rev_max", "v(%s)" % vbe, VBE_REV),
+                                 ("_vce_max", "v(%s)" % vce, VCE_MAX)):
             name = base + suffix
             if kind == "dc":
                 card = ".meas dc %s find %s at=0" % (name, sig)

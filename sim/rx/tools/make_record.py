@@ -185,7 +185,7 @@ if pad:
     for c in pad["corners"]:
         L.append(f"| {c['corner_id']} | {f(z(c,'pad_idiff_0p1g_a'),'{:.1f}')} | {f(z(c,'pad_idiff_5g_a'),'{:.1f}')} |")
 
-L += ["", "## HBT node stress versus DR-003 (collector <= 1.32 V, reverse Vbe <= 1.0 V)", ""]
+L += ["", "## HBT node stress versus DR-003 (collector <= 1.32 V, Vce <= 1.4 V, reverse Vbe <= 1.0 V)", ""]
 worst = {}
 for rname in ("ctle_op", "latch_regen"):
     r = reports[rname]
@@ -194,19 +194,23 @@ for rname in ("ctle_op", "latch_regen"):
     for c in r["corners"]:
         for m in c["measurements"]:
             n = m["name"]
-            if n.endswith("_vc_max") or n.endswith("_vbe_rev_max"):
+            if n.endswith("_vc_max") or n.endswith("_vbe_rev_max") or n.endswith("_vce_max"):
                 v = m.get("value")
                 if v is not None and (n not in worst or v > worst[n][0]):
                     worst[n] = (v, c["corner_id"])
 vc = {n: w for n, w in worst.items() if n.endswith("_vc_max")}
 vb = {n: w for n, w in worst.items() if n.endswith("_vbe_rev_max")}
+ve = {n: w for n, w in worst.items() if n.endswith("_vce_max")}
 if vc:
     top = max(vc.items(), key=lambda kv: kv[1][0])
     L.append(f"- Highest collector node: `{top[0]}` = {top[1][0]:.3f} V at {top[1][1]}.")
+if ve:
+    top = max(ve.items(), key=lambda kv: kv[1][0])
+    L.append(f"- Highest Vce (against open-base BVCEO 1.4 V): `{top[0]}` = {top[1][0]:.3f} V at {top[1][1]}.")
 if vb:
     top = max(vb.items(), key=lambda kv: kv[1][0])
     L.append(f"- Largest reverse Vbe (Ve - Vb; negative = still forward biased): `{top[0]}` = {top[1][0]:.3f} V at {top[1][1]}.")
-stress_fail = [v for v in viol if v[1].endswith("_vc_max") or v[1].endswith("_vbe_rev_max")]
+stress_fail = [v for v in viol if v[1].endswith(("_vc_max", "_vbe_rev_max", "_vce_max"))]
 nodes = {}
 for a, b, c in stress_fail:
     if b not in nodes or c > nodes[b][0]:
@@ -215,12 +219,54 @@ L.append(f"- Over a DR-003 limit: {len(stress_fail)} (corner, node) pairs across
 for b, (c, a) in sorted(nodes.items(), key=lambda kv: -kv[1][0]):
     L.append(f"  - `{b}` = {c:.3f} V at {a}")
 L.append("- Per-node values for every HBT, corner and CTLE code are in the `*.report.json` files in this directory.")
+
+# R3 per-device table (issue #242): one row per unique HBT of design/rx -- ctle
+# (22 devices, worst over the 8 peaking-code copies), clk_buf_quad (8) and
+# latch_cml (6); rx_term_pad and lvl_cml2cmos have no HBT. Instances differ
+# from devices in rx_top (4 latches), the cells do not.
+DEV_ALIAS = (
+    (re.compile(r"^ctle_c\d+_xd\d+_(q[a-z0-9]+)_(vc_max|vce_max|vbe_rev_max)$"), "ctle.%s"),
+    (re.compile(r"^clk_xclk_(q[a-z0-9]+)_(vc_max|vce_max|vbe_rev_max)$"), "clk_buf_quad.%s"),
+    (re.compile(r"^latch_xl_(q[a-z0-9]+)_(vc_max|vce_max|vbe_rev_max)$"), "latch_cml.%s"),
+)
+dev_worst = {}
+for n, (v, cid) in worst.items():
+    for rx_, fmt_ in DEV_ALIAS:
+        hit = rx_.match(n)
+        if hit:
+            key = (fmt_ % hit.group(1), hit.group(2))
+            if key not in dev_worst or v > dev_worst[key][0]:
+                dev_worst[key] = (v, cid)
+            break
+if dev_worst:
+    L += ["", "### R3 per-device table (worst over all corners; ctle over the 8 code copies)", "",
+          "Limits: collector <= 1.32 V, Vce <= 1.4 V (open-base BVCEO), reverse Vbe <= 1.0 V. "
+          "A value over its limit keeps its row -- violations are marked, not dropped.", "",
+          "| device | vc max (V) @ corner | Vce max (V) @ corner | vbe rev max (V) @ corner |",
+          "|---|---|---|---|"]
+    devs = sorted({d for d, _ in dev_worst})
+    for d in devs:
+        row = [d]
+        for metric, lim in (("vc_max", 1.32), ("vce_max", 1.4), ("vbe_rev_max", 1.0)):
+            w = dev_worst.get((d, metric))
+            if w is None:
+                row.append("n/a")
+            else:
+                flag = "" if w[0] <= lim else f" **>{lim}**"
+                row.append(f"{w[0]:.4f}{flag} ({w[1]})")
+        L.append("| " + " | ".join(row) + " |")
+    L += ["", f"- {len(devs)} unique HBT device rows: ctle 22, clk_buf_quad 8, latch_cml 6 "
+          f"(matches the npn13G2 instance count of design/rx/netlists/{{ctle,latch_cml,clk_buf_quad}}.spice; "
+          "rx_top instantiates the latch 4x, so 54 HBT instances exist in the top assembly).", ""]
 other = [v for v in viol if v not in stress_fail]
 L += ["", "## Limits missed (first-look comparisons)", ""]
 L += [f"- {a}: `{b}` = {c}" for a, b, c in other] or ["- none recorded as `fail` (the latch corners that do not reach the decision level are graded `not_reached`, not `fail` or `error`; they are listed above)"]
 L += ["", "## Not simulated",
       "",
-      "- `lvl_cml2cmos` (thin-oxide MOS, PSP103 via OSDI): not simulated; the host ngspice cannot load OSDI v0.4 and batch jobs staging `.osdi` inputs fail (klayout-tools#3818, #3819; sim/README.md; blocked on #3).",
+      "- `lvl_cml2cmos` (thin-oxide MOS, PSP103 via OSDI): not simulated -- no RX MOS bench "
+      "exists (the TX benches of issue #80 show the OSDI path works on the fleet since "
+      "PR #76). It has no HBT, so R3 Vce is not applicable to it; its CMOS levels need a "
+      "G3-class CMOS-evidence bench, not this record.",
       "- PDK resistors `rsil`/`rppd` (`r3_cmc` OSDI): not simulated; every resistor in design/rx is an ideal `res` for that reason, so resistor corners (`res_*`) are not exercised.",
       "- Pad/ESD capacitance at 5 GHz, SDD11 (R9) and the core-to-pad seam: not simulated beyond the placeholder |Zdiff| above; owned by #24/#28.",
       "- Sampler offset and noise (Monte Carlo, DR-002), CDR, link behaviour, clock duty/quadrature error (R20 +-1 %, +-2 deg) and mismatch: not simulated.",
