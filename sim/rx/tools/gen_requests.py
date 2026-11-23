@@ -7,8 +7,9 @@
         # local check; never the grid, never a recorded result
 
 Node-stress measurements are derived from the exported netlists in
-design/rx/netlists/, so they follow the schematics. Everything measured here is
-sizing evidence, not a spec result.
+design/rx/netlists/, so they follow the schematics: max collector voltage,
+max Vce (against BVCEO 1.4 V, issue #242) and max reverse Vbe of every HBT.
+Everything measured here is sizing evidence, not a spec result.
 """
 import json
 import os
@@ -23,7 +24,7 @@ sys.path.insert(0, os.path.join(SIM, "..", "tools"))
 from hbt_corners import HBT_LIB, corner_axes  # noqa: E402
 
 VC_MAX = 1.32   # DR-003: no HBT collector node above this
-VCE_MAX = 1.4   # DR-003: npn13G2 BVCEO (target-spec HBT breakdown table)
+VCE_MAX = 1.4   # DR-003: npn13G2 open-base BVCEO (target-spec HBT breakdown table), hard limit (issues #242, #256)
 VBE_REV = 1.0   # DR-003: no reverse Vbe above this
 
 # Differential input amplitudes of the ctle_tran bench (issue #256), as the
@@ -59,15 +60,15 @@ def parse_subckt(cell):
     return ports, qs
 
 
-def stress_meas(inst, cell, portmap, prefix, kind, vce=False):
-    """`.meas` cards for max collector V and max reverse Vbe of every HBT.
+def stress_meas(inst, cell, portmap, prefix, kind, vce=True, vce_first=False):
+    """`.meas` cards for max collector V, max Vce and max reverse Vbe of every HBT.
 
     kind "dc": operating-point value via a two-point dummy sweep (`at=0`);
     kind "tran": maximum over the run. Plain `spice` cards, because the fleet
-    runner's `expr` support is not usable (see sim/rx/README.md). With
-    `vce=True` a third card per HBT, max Vce (DR-003/BVCEO), through another
-    B source; only the ctle_tran bench asks for it, so every other deck is
-    byte-identical to before.
+    runner's `expr` support is not usable (see sim/rx/README.md). Unless
+    `vce=False`, a third card per HBT, max Vce (DR-003/BVCEO), through another
+    B source (issues #242, #256). `vce_first` only orders that card before
+    `_vbe_rev_max`, as the ctle_tran request has it.
     """
     ports, qs = parse_subckt(cell)
 
@@ -89,8 +90,14 @@ def stress_meas(inst, cell, portmap, prefix, kind, vce=False):
         if vce:
             vce_node = base + "_vce_node"
             lines.append("B%s %s 0 V=v(%s)-v(%s)" % (vce_node, vce_node, node(c), node(e)))
-            cards.append(("_vce_max", "v(%s)" % vce_node, VCE_MAX))
-        cards.append(("_vbe_rev_max", "v(%s)" % vbe, VBE_REV))
+            vce_card = ("_vce_max", "v(%s)" % vce_node, VCE_MAX)
+            vbe_card = ("_vbe_rev_max", "v(%s)" % vbe, VBE_REV)
+            # Card order is kept per bench so every already-committed request
+            # (and the record generated from it) stays byte-identical:
+            # ctle_tran (issue #256) lists vce before vbe_rev, the others after.
+            cards += [vce_card, vbe_card] if vce_first else [vbe_card, vce_card]
+        else:
+            cards.append(("_vbe_rev_max", "v(%s)" % vbe, VBE_REV))
         for suffix, sig, lim in cards:
             name = base + suffix
             if kind == "dc":
@@ -261,7 +268,7 @@ def ctle_tran_meas():
             for k in range(3):
                 pm["c%d" % k] = "%s%dk%d" % (tag, c, k)
                 pm["c%db" % k] = "%s%dk%db" % (tag, c, k)
-            l_, m_ = stress_meas("Xd%s%d" % (tag, c), "ctle", pm, "ctle_%s_c%d" % (lvl, c), "tran", vce=True)
+            l_, m_ = stress_meas("Xd%s%d" % (tag, c), "ctle", pm, "ctle_%s_c%d" % (lvl, c), "tran", vce_first=True)
             lines += l_
             m += m_
             for ext, fn in (("_dif_max_v", "max"), ("_dif_min_v", "min")):
