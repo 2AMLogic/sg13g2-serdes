@@ -53,3 +53,7 @@ is recorded as the alternative the operator may choose, and nothing here relaxes
   must be re-run and a new record appended.
 - The finding applies to any later stage with a rail-referenced resistive load and
   an off-side collector at the rail (RX buffers, the clock path).
+
+## Note 2026-11-23: operator ruling and chosen load structure (issue #265)
+
+Operator ruling on #249 (2026-11-23): option 1 (keep R3 as written and redesign the over-limit nodes); options 2 to 4 not taken. Implemented in #265 as a series resistor from `vdd` to a common load return in each affected cell: predriver `RS` 10 ohm (both main and post instances), mux `RSm` 8 ohm. Evidence: `sim/tx/records/20261123-211956-ee22e3c-vce/record.md` (every HBT collector <= 1.32 V in every corner; the mux margin is 1.5 mV). Headroom cost, same record: driver tail Vce minimum at 1.08 V 0.1089 V to 0.0959 V, steady pad swing minimum 0.1320 V to 0.1238 V. The Decision text above is unchanged; the status change is the operator's act on merge.

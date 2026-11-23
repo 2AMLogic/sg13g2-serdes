@@ -28,8 +28,9 @@ XQ1 outn inp e vss npn13G2 Nx=4
 XQ2 outp inn e vss npn13G2 Nx=4
 XQt e vbn et vss npn13G2 Nx=4
 XRe et vss vss rsil w=8u l=18.29u m=1 b=0
-XRL1 vdd outp vss rsil w=8u l=68.57u m=1 b=0
-XRL2 vdd outn vss rsil w=8u l=68.57u m=1 b=0
+XRS vdd vl vss rsil w=8u l=11.43u m=1 b=0
+XRL1 vl outp vss rsil w=8u l=68.57u m=1 b=0
+XRL2 vl outn vss rsil w=8u l=68.57u m=1 b=0
 .ends
 
 .subckt mux2to1_cml vdd vss ckp ckn dap dan dbp dbn outp outn
@@ -63,8 +64,9 @@ XQb1 outn dbp eb vss npn13G2 Nx=2
 XQb2 outp dbn eb vss npn13G2 Nx=2
 XMTb eb sqb sb vss sg13_lv_nmos w=20u l=0.13u ng=4 m=1
 XRsb sb vss vss rsil w=8u l=68.57u m=1 b=0
-XRLp vdd outp vss rsil w=8u l=114.3u m=1 b=0
-XRLn vdd outn vss rsil w=8u l=114.3u m=1 b=0
+XRSm vdd vlm vss rsil w=8u l=9.143u m=1 b=0
+XRLp vlm outp vss rsil w=8u l=114.3u m=1 b=0
+XRLn vlm outn vss rsil w=8u l=114.3u m=1 b=0
 .ends
 
 Vckp ckp 0 pulse(0.4 0.8 0 20p 20p 80p 2e-10)
