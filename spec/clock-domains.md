@@ -200,16 +200,16 @@ What keeps G3 open, as work items rather than findings:
 1. The RX converter does not work at 43 of 45 corners against bounds that are
    not even requirements. It needs a sized or re-topologised cell and a
    requirement (output levels, valid window at 5 Gb/s per wire), then a new
-   record from `sim/rx/run_sizing.sh mos`.
+   record from `sim/rx/run_sizing.sh mos` (#251).
 2. Where the RX converter sits is undecided: DR-001 decision 3 says the first
    divided clock, DR-008 B1 says the 625 MHz word, the netlist says the latch
    output. Until a decision record settles it, the stages behind it cannot be
    assigned, and if it stays at the latch output the first deserializer stage
-   is CMOS at 2.5 GHz, which R2 does not allow today.
+   is CMOS at 2.5 GHz, which R2 does not allow today (#253).
 3. The TX clock converter's input rate is stated two ways (2.5 GHz in the
    bench and in decision 3's wording, 625 MHz-domain in `design/README.md`),
    its only record is at 2.5 GHz from an ideal source, and nothing consumes
-   `ckd_cmos`.
+   `ckd_cmos` (#252).
 4. Neither converter has post-layout evidence; neither has a load that is
    known rather than assumed (20 fF).
 5. The divider chain and the TX word-data converter are not implemented; the
