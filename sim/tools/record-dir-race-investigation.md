@@ -179,3 +179,20 @@ again in the final PR. Anomaly dumps (record dir with hidden entries,
 `.reserved` pid, both launchers' outputs, per-launcher `klt` logs, `mkdir`
 resolution) print into the job log; artifacts stay under the printed
 per-invocation directory for the runner's lifetime.
+
+## Erratum (2026-11-23)
+
+The consequence above -- "the two-claim contract in `record-dir.sh` stands" --
+described the revision this record was written against. Issue #244
+consolidated the reservation onto the single `os.mkdir` primitive in
+`scripts/klt-lib.sh`: `sim/tools/record-dir.sh` now builds the `<ts>-<sha>`
+record id and delegates the exclusive creation to `reserve_record_dir`, and
+the second `.reserved` claim was retired with the `mkdir(1)` call it guarded.
+This record's own control measurements are the justification -- bare
+`os.mkdir` measured 0 double-successes in 4000 pairs on the affected image
+(the marker existed to catch exactly the uutils `mkdir` false success that
+reading the `mkdir(2)` result directly cannot produce), so the second claim
+added no exclusivity on top of the primitive. The pinned-revision probe
+(`.github/workflows/record-dir-race-probe.yml`) still measures the two-claim
+revisions exactly as they were; nothing in this record's measurements or
+verdict changes.
