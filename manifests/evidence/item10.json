@@ -101,7 +101,7 @@
         "role": "hygiene",
         "path": "sim/bench/gen_inventory.py",
         "passed": true,
-        "content_hash": "sha256:7347844923ea99baad399fa7ef82579a6ca6249b16b9dd03fa3b8459e6096cc7"
+        "content_hash": "sha256:5900ba8bdb80421131b6b9b024e347e98f2bb05743d1caa6be53493bad3856cf"
       },
       {
         "check": "present",
