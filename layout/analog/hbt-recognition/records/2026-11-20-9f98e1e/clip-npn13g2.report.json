@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "file": "/home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-196/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+  "output": "npn13g2.gds",
+  "mode": "cell",
+  "cell": "npn13G2",
+  "region_um": null,
+  "top": null,
+  "dbu_um": 0.001,
+  "cell_count": 2,
+  "shape_count": 32
+}

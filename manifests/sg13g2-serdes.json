@@ -12,7 +12,7 @@
     },
     "10": {
       "file": "manifests/evidence/item10.json",
-      "content_hash": "sha256:e5a8c246822a4629db6f708b7f09420cafe8c10e9922db8616716a1bda4842c4"
+      "content_hash": "sha256:4666abb284feb004f0d40f8e8ec5955bfa98ebd85d1fcf4e477284bc0b036755"
     },
     "2.digital": {
       "file": "manifests/evidence/item2.json",
@@ -33,7 +33,21 @@
     "4.digital": {
       "file": "manifests/evidence/item4.json",
       "content_hash": "sha256:2995f15b44717ebc7e625f0b1978fe5e17a28a26d34f0bd84dfe75ff8e2d6e30"
-    }
+    },
+    "11.digital": [
+      {
+        "file": "layout/digital/erc-records/2026-11-23-51dde9f/erc.report.json",
+        "content_hash": "sha256:2d781d749448a8b2607b2ca3fb576767b0fddd6a8f231715cd6306fc077c2182"
+      },
+      {
+        "file": "layout/digital/records/2026-11-21-eec180f/report.json",
+        "content_hash": "sha256:08b90805a96b63df1e768a0055cf664b94796e26108ff1ada66ba285d709c7d8"
+      },
+      {
+        "file": "manifests/evidence/item4.json",
+        "content_hash": "sha256:2995f15b44717ebc7e625f0b1978fe5e17a28a26d34f0bd84dfe75ff8e2d6e30"
+      }
+    ]
   },
   "partition_boundary": {
     "analog": "design/tx and design/rx CML cells (HBT CML from the serial pad down to the 625 MHz word boundary, including the CML-to-CMOS level converter design/rx/lvl_cml2cmos and its TX counterpart); the pads and ESD",

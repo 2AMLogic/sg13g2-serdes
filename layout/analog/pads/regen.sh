@@ -3,8 +3,10 @@
 #   source scripts/env.sh; layout/analog/pads/regen.sh [<sha>]
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
+repo="$(cd "$here/../../.." && pwd)"
+# shellcheck source=scripts/klt-lib.sh
+. "$repo/scripts/klt-lib.sh"
 sha="${1:-$(git -C "$here" rev-parse --short HEAD)}"
 out="$here/records/$(date -u +%F)-$sha"
-[ -e "$out" ] && { echo "regen.sh: $out exists (records are append-only)" >&2; exit 2; }
-mkdir -p "$out"
+reserve_record_dir "$out" "regen.sh" 2
 exec python3 -I "$here/gen_pad_cells.py" "$out"

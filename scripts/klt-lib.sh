@@ -2,8 +2,10 @@
 # One copy of what pnr-lib.sh and synth-lib.sh used to duplicate: the jq/uvx
 # preflight, the pinned klt runner (layout/toolchain.json via a throwaway uvx
 # env), the $PDK_ROOT fallback (sim/pdk.json -> .cache/pdk), and the
-# PDK_ROOT/PDK exports. The per-flow checks -- which tool the flow runs and
-# which PDK sentinel it needs -- stay with the caller through require_tool /
+# PDK_ROOT/PDK exports, plus reserve_record_dir, the exclusive record-directory
+# reservation every regen writer makes before its first record write (#208,
+# #219). The per-flow checks -- which tool the flow runs and which PDK
+# sentinel it needs -- stay with the caller through require_tool /
 # require_pdk_file; every refusal exits 3, this repo's tool-gap exit.
 # shellcheck shell=bash
 
@@ -41,4 +43,31 @@ pdk_default_root() { # pdk_default_root <repo-root> -- the $PDK_ROOT fallback
   v="$(jq -r .extracted_dir "$1/sim/pdk.json")" || return 3
   [ -n "$v" ] && [ "$v" != null ] || return 3
   echo "$1/.cache/pdk/$v"
+}
+
+reserve_record_dir() { # reserve_record_dir <dest> <diag-prefix> [occupied-exit]
+  # uutils mkdir can report success to both racing callers. Read the mkdir
+  # syscall result directly so only the writer that created the record proceeds.
+  # An occupied destination exits 1, or the caller's third argument when it
+  # must keep another status (the analog writers' historical 2, #228); every
+  # other filesystem error keeps the distinct mkdir diagnostic and exits 1.
+  # A trailing-slash destination (the TX wrapper takes caller-supplied output
+  # directories) reserves the final directory component; diagnostics print the
+  # argument exactly as the caller passed it.
+  python3 -I - "$1" "$2" "${3:-1}" <<'PY'
+import os
+import sys
+
+dest, prefix, occupied = sys.argv[1], sys.argv[2], int(sys.argv[3])
+target = dest.rstrip("/") or "/"
+try:
+    os.makedirs(os.path.dirname(target) or ".", exist_ok=True)
+    try:
+        os.mkdir(target)
+    except FileExistsError:
+        print(f"{prefix}: {dest} exists (records are append-only)", file=sys.stderr)
+        sys.exit(occupied)
+except OSError as error:
+    sys.exit(f"{prefix}: mkdir: {error}")
+PY
 }

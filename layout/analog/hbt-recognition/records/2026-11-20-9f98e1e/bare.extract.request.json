@@ -1,0 +1,7 @@
+{
+  "schema": "klt.extract.request/1",
+  "file": "npn13g2.gds",
+  "deck": "sg13g2",
+  "top": "npn13G2",
+  "output": "bare.extract.spice"
+}
