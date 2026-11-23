@@ -199,7 +199,10 @@ def build_tx_lvl_routed(subs, out, klt):
     b_drop = round(rb[2] + 0.3, 1)       # east of the vdd trunk's east end
     a_drop = round(col_x0["XMN2"] - 0.9, 1)
     g1_x = pin_x("XMNt", "U0_G")
-    out_5 = pin_x("XMP3", "U0_D")
+    # the out lane sits 0.45 um east of the D pad centre (still inside both D
+    # pads): at the centre it ran 0.02 um from XMN3.G's metal2 landing, which
+    # o1 owns, and the router rejected the planned leg
+    out_5 = round(pin_x("XMP3", "U0_D") + 0.45, 2)
     P = lambda b, p: [b, p]
     nets = [
         {"net": "vdd", "layer_role": "metal3",

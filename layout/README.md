@@ -9,6 +9,16 @@
   - `scripts/check-pnr-fresh.sh` checks the newest record against the netlist
     (exit 3 = stale). Needs the PDK (`scripts/setup-env.sh`) and `openroad`, so
     it is not part of `scripts/check-ci.sh`.
+  - Record convention for a standalone `klt sta` report (#239): a record that
+    cites one discloses, beside the clock / `geometry_source` /
+    SPEF-or-wire-load model, `constraint_completeness.status`,
+    `unconstrained_endpoints.count` and `unclocked_registers.count` per corner,
+    and states that a violating-endpoint count is taken over the constrained
+    endpoint set only. Read the fields as: `unclocked_registers.count == 0`
+    means no register escapes the setup check; a non-zero
+    `unconstrained_endpoints.count` means that many endpoints carry no setup
+    check in that model. Re-measure with
+    `jq -r '.corners[] | [.corner, .constraint_completeness.status, .constraint_completeness.unconstrained_endpoints.count, .constraint_completeness.unclocked_registers.count] | @tsv' <report>`.
   - `lvs.request.json` is the template for the gate-level LVS request (T1 item 4,
     Digital column, `4.digital`). `scripts/lvs-regen.sh` extracts the newest routed
     GDS with every standard cell abstracted (about 15 minutes, single process) and
@@ -16,6 +26,16 @@
     `lvs-records/<date>-<sha>/`. `scripts/check-lvs-fresh.sh` is the `klt lvs --check`
     freshness gate (exit 3 = a newer place-and-route record or drifted inputs). Analog
     LVS is #128.
+  - `erc/digital.erc.json` is the `klt erc` supply spec for the routed digital
+    GDS (T1 item 11, Digital column, `11.digital`). `scripts/erc-regen.sh`
+    runs `klt erc --findings-only --omit-antenna-tables --deck sg13g2` against
+    the newest place-and-route record into a new dated, append-only
+    `erc-records/<date>-<sha>/`, with the spec copy it graded committed beside
+    the report (the document `klt signoff` re-reads). `scripts/check-erc-fresh.sh`
+    is the `klt erc --check` freshness gate (exit 3 = a newer place-and-route
+    record or drifted inputs). Neither needs the PDK or `openroad`; the
+    PDK-free hash axes are mirrored in `scripts/check-ci.sh`'s `fresh` mode.
+    Analog supply ERC stays on #29.
 - `analog/rx/` — RX core analog cells (`ctle`, `latch_cml`, `clk_buf_quad`,
   `lvl_cml2cmos`), T1 item 2, Analog column (#112, part of #24).
   `gen_rx_cells.py` reads `design/rx/netlists/rx_top.spice`, builds each device
@@ -46,6 +66,13 @@
   boundary pins — **placement and pins only, no routing** (#26, #27).
   `records/<date>-<sha>/` is append-only; `scripts/tx-core-regen.sh` re-runs
   into a new record. Attestation: `manifests/evidence/item2.analog-tx-core.json`.
+- `analog/hbt-recognition/` — routing-independent `npn13G2` recognition
+  probe (#196): `klt lvs` (curated deck and the pinned `klayout-runset`)
+  and `klt extract` (curated) on the bare PDK cell and the smallest placed
+  HBT cell. Outcome (2026-11-20): curated engines extract no HBT (documented
+  deck gap); the runset recognises it with C/B/E/S terminals and
+  `we/le/Nx/m` parameters — the runset is item 4 analog's engine path
+  (#128). `records/<date>-<sha>/` is append-only.
 - `toolchain.json` pins klt; `tools.json` pins the RTL-flow tool versions.
 
 ## Per-cell analog route plans and per-cell LVS (issue #199, first split of #127)

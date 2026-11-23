@@ -231,8 +231,34 @@ def run_klt(args, **kw):
 # plan deliberately does not cover.
 # ---------------------------------------------------------------------------
 
+def assert_plan_followed(cell, nets, res):
+    """Raise unless every leg the plan names was drawn as planned.
+
+    gen-compose reports a net `routed` when its pins end up connected, even if
+    it rejected a planned leg and substituted a connection of its own. This
+    checks the legs, not the net: (1) no leg in the response may be unrouted
+    (`routed` false), and (2) for a net that supplies legs, every response leg
+    must be one of those planned pin pairs -- an extra leg is the router's
+    substitute. Both are an explicit-plan defect, never a pass.
+    """
+    planned = {n["net"]: {frozenset((tuple(lg["a"]), tuple(lg["b"]))) for lg in n["legs"]}
+               for n in nets if n.get("legs")}
+    bad = []
+    for n in res.get("nets", []):
+        for lg in n.get("legs", []):
+            ps = [(p["block"], p["port"]) for p in lg.get("pins", [])]
+            name = f"{n.get('net')}: {ps[0][0]}.{ps[0][1]}-{ps[1][0]}.{ps[1][1]}" if len(ps) == 2 else str(n.get("net"))
+            if not lg.get("routed"):
+                bad.append(f"{name} rejected ({str(lg.get('reason'))[:90]})")
+            elif n.get("net") in planned and len(ps) == 2 and frozenset(ps) not in planned[n["net"]]:
+                bad.append(f"{name} not in the plan (router substitute)")
+    if bad:
+        raise AssertionError(f"{cell}: explicit route plan not followed: " + "; ".join(bad))
+
+
 def compose_routed_cell(out, cell, pdk, blocks, order, origins, nets, pins,
-                        nwell_merge_boxes, default_route=None):
+                        nwell_merge_boxes, default_route=None,
+                        expect_ties=(1, 1), expect_wells=1):
     """Compose one cell from an explicit plan; return (request, response).
 
     blocks: [{id, generator_report | cell}] -- device blocks are `klt gen`
@@ -244,8 +270,12 @@ def compose_routed_cell(out, cell, pdk, blocks, order, origins, nets, pins,
     nwell_merge_boxes: [[x0, y0, x1, y1], ...] um boxes drawn into NWell after
         composition to merge the pfet wells and the well-tie strap into one
         region (a disjoint well would float its pfet bodies).
-    After gen-compose the NWell merge is applied and the tie invariants are
-    asserted (assert_ties); the composed GDS is rewritten in place.
+    expect_ties: (substrate ties, well ties) the cell must contain;
+    expect_wells: merged NWell polygon count the cell must contain (one well).
+    After gen-compose the NWell merge is applied and the tie / merged-well
+    invariants are enforced -- a count other than the expected one raises
+    BEFORE the composed GDS is rewritten, so a layout with a dropped tie or a
+    split well is never published; the GDS is then rewritten in place.
     """
     import klayout.db as kdb
     import os
@@ -274,6 +304,7 @@ def compose_routed_cell(out, cell, pdk, blocks, order, origins, nets, pins,
     json.dump(req, open(rp, "w"), indent=1)
     res = run_klt(["klt", "gen-compose", rp, "--format", "json"])
     json.dump(res, open(os.path.join(work, "compose.response.json"), "w"), indent=1)
+    assert_plan_followed(cell, nets, res)
     gds = os.path.join(out, f"{cell}.gds")
     ly = kdb.Layout()
     ly.dbu = 0.001
@@ -281,6 +312,12 @@ def compose_routed_cell(out, cell, pdk, blocks, order, origins, nets, pins,
     top = ly.cell(cell)
     nwell_polys = overlay_nwell_merge(ly, top, nwell_merge_boxes)
     n_sub, n_well = assert_ties(ly, top)
+    if (n_sub, n_well) != tuple(expect_ties):
+        raise AssertionError(f"{cell}: body ties (substrate, well) = {(n_sub, n_well)}, "
+                             f"expected {tuple(expect_ties)}")
+    if nwell_polys != expect_wells:
+        raise AssertionError(f"{cell}: merged NWell has {nwell_polys} polygon(s), "
+                             f"expected {expect_wells} (a split well floats a pfet body)")
     ly.write(gds)
     res["body_ties"] = {"substrate_ties": n_sub, "well_ties": n_well,
                         "merged_nwell_polygons": nwell_polys}

@@ -145,6 +145,7 @@ def build_lvl_routed(spec, out):
     ch_t = round(row_a_top + 2.6, 1)      # metal3: tl trunk
     jog = round(row_b_top + 1.0, 1)       # metal2: gate jogs above row B
     vdd_y = round(row_b_top + 2.0, 1)     # metal3: vdd trunk
+    tl_low = -1.2                         # metal3: tl trunk below row A
     vss_y = -2.5                          # metal2: vss trunk below row A
     g = lambda i, dx: round((col_x0[LVL_COLS[i][0]] + col_w[LVL_COLS[i][0]]) + dx, 1)
     tl_w, vdd_w = round(LVL_WEST - 1.5, 1), round(LVL_WEST - 2.5, 1)
@@ -188,7 +189,7 @@ def build_lvl_routed(spec, out):
          "pins": [P("XMn1", "U0_S"), P("XMn2", "U0_S"), P("XMnt", "U0_D")],
          "legs": [
              {"a": P("XMn1", "U0_S"), "b": P("XMnt", "U0_D"),
-              "waypoints_um": [[tl_w, ch_t], [tl_3, ch_t]]},
+              "waypoints_um": [[tl_w, tl_low], [tl_3, tl_low]]},
              {"a": P("XMn2", "U0_S"), "b": P("XMn1", "U0_S"),
               "waypoints_um": [[tl_1, ch_t]]}]},
         {"net": "op", "layer_role": "metal2",

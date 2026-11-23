@@ -12,6 +12,8 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "${HERE}/../.." && pwd)"
+# shellcheck source=../tools/record-dir.sh
+. "${REPO_DIR}/sim/tools/record-dir.sh"
 command -v klt >/dev/null 2>&1 || { echo "run_sizing.sh: klt not on PATH -- source scripts/env.sh" >&2; exit 3; }
 [[ -n "${PDK_ROOT:-}" ]] || { echo "run_sizing.sh: PDK_ROOT unset -- source scripts/env.sh" >&2; exit 3; }
 SET="${1:-hbt}"
@@ -20,9 +22,9 @@ case "${SET}" in
   mos) PREFIX=tx_mos; SUFFIX="-mos"; RECORD=make_record_mos.py ;;
   *) echo "run_sizing.sh: unknown set '${SET}' (hbt|mos)" >&2; exit 2 ;;
 esac
-ID="$(date -u +%Y%m%d-%H%M%S)-$(git -C "${REPO_DIR}" rev-parse --short HEAD)${SUFFIX}"
-OUT="${HERE}/records/${ID}"
-mkdir -p "${OUT}"
+# Exclusive reservation: a same-second relaunch refuses instead of overwriting
+# the saved record (issue #202).
+OUT="$(reserve_sim_record_dir "${HERE}/records" "${SUFFIX}")" || exit 3
 r=0
 : > "${OUT}/exit-codes.txt"
 for req in "${HERE}"/${PREFIX}_*.request.json; do

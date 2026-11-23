@@ -24,7 +24,9 @@ die() { echo "run-bench.sh: $1" >&2; exit "${2:-2}"; }
 command -v jq >/dev/null 2>&1 || die "jq not on PATH" 3
 [[ $# -ge 1 ]] || die "usage: run-bench.sh --list | <id> [--run]"
 if [[ "$1" == "--list" ]]; then
-  jq -r '.benches[] | "\(.id)\t\(.partition)\t\(.rows|join(","))\t\(.corner_set)"' "${MAN}"; exit 0
+  # exec: propagate jq's exit status (a malformed registry must fail the caller's
+  # cold-start check, not be masked by a forced success; issue #224).
+  exec jq -r '.benches[] | "\(.id)\t\(.partition)\t\(.rows|join(","))\t\(.corner_set)"' "${MAN}"
 fi
 ID="$1"; shift; MODE=check; ONLY=""; QUICK=()
 while [[ $# -gt 0 ]]; do

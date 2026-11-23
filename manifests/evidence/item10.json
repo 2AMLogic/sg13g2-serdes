@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 10,
-  "summary": "T1 item 10 (Repo hygiene): 8/8 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 10 (Repo hygiene): 19/19 attestation checks passed (klt signoff --attest)",
   "source": "manifests/evidence/item10.inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 8,
-    "passed_count": 8,
+    "check_count": 19,
+    "passed_count": 19,
     "checks": [
       {
         "check": "present",
@@ -45,7 +45,84 @@
         "role": "hygiene",
         "path": "scripts/check-ci.sh",
         "passed": true,
-        "content_hash": "sha256:d488d9a12b0d8c42d2adbbae9c17055e4de4eefa2151fc5bee68030effb940a4"
+        "content_hash": "sha256:61ff321f3815954dbae08cc623ab4fac443d2069bce89c94791a60a2da7e8cb4"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/erc-fresh-lib.sh",
+        "passed": true,
+        "content_hash": "sha256:6cf6b671c5631d097262a0b9e851edf2f8b94f36f4bdf663c334fed587c400b0"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/erc-regen.sh",
+        "passed": true,
+        "content_hash": "sha256:82a19dbd25ff2bff5a4af7ac88227c501a60dbb96d30d1491cce6aa5a1ba3985"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/klt-lib.sh",
+        "passed": true,
+        "content_hash": "sha256:3764557998f01c6c29a2551a8a868a5d5254b9d722099d7428eacf513ff14ec4"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/lvs-regen.sh",
+        "passed": true,
+        "content_hash": "sha256:b3ec594476a3ed2edeb69dbe8ed2e37da2c7ba2d8d4b5893d622f4c99c90eee0"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/pnr-lib.sh",
+        "passed": true,
+        "content_hash": "sha256:68979cc4a2922f3ef261c74aade4f382adf1041db403170966aae289ade01485"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/pnr-regen.sh",
+        "passed": true,
+        "content_hash": "sha256:7ae56782312cbcce226b326be60dd7a42cce2a9a7749aacf9f8aa52788989675"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/test-reserve-record-dir.sh",
+        "passed": true,
+        "content_hash": "sha256:fb977b63a1285948a679e14a344e4730bfb8169d7f66b14ede1a70a34ce04a2b"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "sim/bench/gen_inventory.py",
+        "passed": true,
+        "content_hash": "sha256:7347844923ea99baad399fa7ef82579a6ca6249b16b9dd03fa3b8459e6096cc7"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "sim/bench/test_link_bench.py",
+        "passed": true,
+        "content_hash": "sha256:ed12e91b43914f6a479137fb4cc1471b25580a534f3cf440e705b5af1825e812"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "sim/tools/record-dir.sh",
+        "passed": true,
+        "content_hash": "sha256:c76406d7f0d6ef1d48908e73d1e3556207038059efc2bbce3fcf94bf633003ef"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "sim/tools/test-record-dir.sh",
+        "passed": true,
+        "content_hash": "sha256:38b068192c96a02de809975c47ec26d317624915126b21e49789466c33c61b18"
       },
       {
         "check": "command",
@@ -95,7 +172,7 @@
         "path": "manifests/evidence/item10.inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:e5a8c246822a4629db6f708b7f09420cafe8c10e9922db8616716a1bda4842c4"
+      "content_hash": "sha256:4666abb284feb004f0d40f8e8ec5955bfa98ebd85d1fcf4e477284bc0b036755"
     }
   }
 }
