@@ -52,7 +52,7 @@
         "role": "hygiene",
         "path": "scripts/check-ci.sh",
         "passed": true,
-        "content_hash": "sha256:ce1410e0b64ca91dc00e72d2dbfd6ab40fdf013c6a4d5048d4fe675eaf54fa54"
+        "content_hash": "sha256:3a33efaa1fdc0771087700f5144f96122e68a118a2d4ccccea0448fc976ab610"
       },
       {
         "check": "present",
