@@ -4,8 +4,10 @@
 # (sim/pdk.json -> .cache/pdk), the PDK_ROOT/PDK exports, latest_record_dir
 # (the newest dated record directory), and reserve_record_dir, the exclusive
 # record-directory reservation every regen writer makes before its first record
-# write (#208, #219). The per-flow checks -- which tool the flow runs and which
-# PDK sentinel it needs -- stay with the caller through require_tool /
+# write (#208, #219) and -- through the sim-side id builder
+# sim/tools/record-dir.sh (#244) -- the sim runners too: the one such
+# reservation primitive. The per-flow checks -- which tool the flow runs and
+# which PDK sentinel it needs -- stay with the caller through require_tool /
 # require_pdk_file; every refusal exits 3, this repo's tool-gap exit.
 # shellcheck shell=bash
 

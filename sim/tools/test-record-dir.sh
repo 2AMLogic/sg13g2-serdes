@@ -27,7 +27,9 @@ fail() {
 
 # --- disposable repo: the runners, their inputs, and nothing else ----------
 mkdir -p "$TMP/repo/sim/tools" "$TMP/repo/sim/rx/tools" "$TMP/repo/sim/tx" \
-         "$TMP/repo/sim/smoke" "$TMP/repo/design" "$TMP/repo/layout" "$TMP/bin"
+         "$TMP/repo/sim/smoke" "$TMP/repo/design" "$TMP/repo/layout" \
+         "$TMP/repo/scripts" "$TMP/bin"
+cp "$REPO/scripts/klt-lib.sh" "$TMP/repo/scripts/"
 cp "$REPO/sim/tools/record-dir.sh" "$REPO/sim/tools/record_common.py" \
    "$REPO/sim/tools/build-osdi.sh" "$TMP/repo/sim/tools/"
 cp "$REPO/sim/pdk.json" "$TMP/repo/sim/"
@@ -133,11 +135,6 @@ check_runner() { # check_runner <name> <script> [set-arg] [id-suffix] [sim-calls
       echo "--- ls -la $dir:"; ls -la "$dir"
       echo "--- ls -la $rec (record dir, hidden entries included):"
       ls -la "$rec"
-      if [ -e "$rec/.reserved" ]; then
-        echo "--- .reserved marker pid: $(cat "$rec/.reserved") (equals launch a or b pid above on the guarded revision)"
-      else
-        echo "--- .reserved marker: absent (pre-guard revision, or neither claim reached the marker)"
-      fi
       echo "--- mkdir resolution in this PATH: $(type -a mkdir 2>&1 | tr '\n' ' ')"
       echo "--- fixture fs: $(stat -f -c %T "$TMP" 2>&1)"
       echo "--- exit-codes files:"; find "$dir" -name exit-codes.txt -print -exec cat {} \;
