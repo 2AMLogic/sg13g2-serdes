@@ -27,7 +27,9 @@ fail() {
 
 # --- disposable repo: the runners, their inputs, and nothing else ----------
 mkdir -p "$TMP/repo/sim/tools" "$TMP/repo/sim/rx/tools" "$TMP/repo/sim/tx" \
-         "$TMP/repo/sim/smoke" "$TMP/repo/design" "$TMP/repo/layout" "$TMP/bin"
+         "$TMP/repo/sim/smoke" "$TMP/repo/design" "$TMP/repo/layout" \
+         "$TMP/repo/scripts" "$TMP/bin"
+cp "$REPO/scripts/klt-lib.sh" "$TMP/repo/scripts/"
 cp "$REPO/sim/tools/record-dir.sh" "$REPO/sim/tools/record_common.py" \
    "$REPO/sim/tools/build-osdi.sh" "$TMP/repo/sim/tools/"
 cp "$REPO/sim/pdk.json" "$TMP/repo/sim/"
@@ -38,9 +40,10 @@ cp "$REPO/sim/rx/run_sizing.sh" "$TMP/repo/sim/rx/"
 cp "$REPO/sim/rx/tools/make_record.py" "$TMP/repo/sim/rx/tools/"
 cp "$REPO"/sim/rx/*.request.json "$TMP/repo/sim/rx/"
 cp "$REPO/sim/tx/run_sizing.sh" "$TMP/repo/sim/tx/"
-cp "$REPO/sim/tx/make_record.py" "$REPO/sim/tx/make_record_mos.py" "$TMP/repo/sim/tx/"
-cp "$REPO/sim/tx/tx_sizing_ffe0_typ.request.json" \
-   "$REPO/sim/tx/tx_mos_ffe_en.request.json" "$TMP/repo/sim/tx/"
+cp "$REPO/sim/tx/make_record.py" "$REPO/sim/tx/make_record_mos.py" "$REPO/sim/tx/make_record_vce.py" "$TMP/repo/sim/tx/"
+# every request the TX runner names (hbt: 6 sizing, mos: 3 MOS cells, vce: 6 + 2)
+cp "$REPO"/sim/tx/tx_sizing_*.request.json "$REPO"/sim/tx/tx_mos_*.request.json \
+   "$TMP/repo/sim/tx/"
 cp "$REPO/sim/smoke/run_smoke.sh" "$REPO/sim/smoke/make_record.py" "$TMP/repo/sim/smoke/"
 cp "$REPO"/sim/smoke/*.request.json "$TMP/repo/sim/smoke/"
 
@@ -88,7 +91,7 @@ check_runner() { # check_runner <name> <script> [set-arg] [id-suffix] [sim-calls
   shopt -s nullglob
   for e in "$dir"/* "$dir"/.[!.]* "$dir"/..?*; do
     case "${e##*/}" in
-      "${FIXED_TS}-${SHA}"|"${FIXED_TS}-${SHA}-mos") ;;
+      "${FIXED_TS}-${SHA}"|"${FIXED_TS}-${SHA}-mos"|"${FIXED_TS}-${SHA}-vce") ;;
       *) bad="${bad:+$bad }${e##*/}" ;;
     esac
   done
@@ -133,11 +136,6 @@ check_runner() { # check_runner <name> <script> [set-arg] [id-suffix] [sim-calls
       echo "--- ls -la $dir:"; ls -la "$dir"
       echo "--- ls -la $rec (record dir, hidden entries included):"
       ls -la "$rec"
-      if [ -e "$rec/.reserved" ]; then
-        echo "--- .reserved marker pid: $(cat "$rec/.reserved") (equals launch a or b pid above on the guarded revision)"
-      else
-        echo "--- .reserved marker: absent (pre-guard revision, or neither claim reached the marker)"
-      fi
       echo "--- mkdir resolution in this PATH: $(type -a mkdir 2>&1 | tr '\n' ' ')"
       echo "--- fixture fs: $(stat -f -c %T "$TMP" 2>&1)"
       echo "--- exit-codes files:"; find "$dir" -name exit-codes.txt -print -exec cat {} \;
@@ -154,6 +152,7 @@ check_runner() { # check_runner <name> <script> [set-arg] [id-suffix] [sim-calls
 
 check_runner rx      sim/rx/run_sizing.sh   ""   ""     4
 check_runner smoke   sim/smoke/run_smoke.sh ""   ""     3
-check_runner tx-hbt  sim/tx/run_sizing.sh   ""   ""     1
-check_runner tx-mos  sim/tx/run_sizing.sh   mos  "-mos" 1
+check_runner tx-hbt  sim/tx/run_sizing.sh   ""   ""     6
+check_runner tx-mos  sim/tx/run_sizing.sh   mos  "-mos" 3
+check_runner tx-vce  sim/tx/run_sizing.sh   vce  "-vce" 8
 echo "test-record-dir: all runners hold the reservation contract"

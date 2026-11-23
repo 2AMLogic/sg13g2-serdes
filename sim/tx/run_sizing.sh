@@ -30,7 +30,7 @@ case "${SET}" in
 esac
 # Exclusive reservation: a same-second relaunch refuses instead of overwriting
 # the saved record (issue #202).
-OUT="$(reserve_record_dir "${HERE}/records" "${SUFFIX}")" || exit 3
+OUT="$(reserve_sim_record_dir "${HERE}/records" "${SUFFIX}")" || exit 3
 r=0
 : > "${OUT}/exit-codes.txt"
 for tag in "${REQS[@]}"; do

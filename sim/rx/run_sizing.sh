@@ -26,7 +26,7 @@ SUFFIX=""
 
 # Exclusive reservation: a same-second relaunch refuses instead of overwriting
 # the saved record (issue #202).
-OUT="$(reserve_record_dir "${HERE}/records" "${SUFFIX}")" || exit 3
+OUT="$(reserve_sim_record_dir "${HERE}/records" "${SUFFIX}")" || exit 3
 rc=0
 for req in ctle_ac ctle_op pad_ac latch_regen; do
   echo "run_sizing.sh: klt sim ${req}.request.json"
