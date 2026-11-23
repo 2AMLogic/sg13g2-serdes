@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 9,
-  "summary": "T1 item 9 (Testbenches shipped): 66/66 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 9 (Testbenches shipped): 62/62 attestation checks passed (klt signoff --attest)",
   "source": "verification/testbench-inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 66,
-    "passed_count": 66,
+    "check_count": 62,
+    "passed_count": 62,
     "checks": [
       {
         "check": "present",
@@ -73,42 +73,28 @@
         "role": "testbench",
         "path": "sim/bench/benches.json",
         "passed": true,
-        "content_hash": "sha256:f7f5d7e35ac03e3b1d3a7817115244645c41b6c54ca819a86e6ac5715b1a9c41"
+        "content_hash": "sha256:f9d661062d0cbf9cc4079f449aae04c5a3c914b05b25d5c59ba735fe927f5fcc"
       },
       {
         "check": "present",
         "role": "testbench",
-        "path": "sim/bench/link_r11.py",
+        "path": "sim/bench/cdrmodel.py",
         "passed": true,
-        "content_hash": "sha256:06b11f213c59ee2f7c0ac166b9ebf8639a24b1e9b2f3a16a0e4bdda5ad035c67"
+        "content_hash": "sha256:8ca49bb454decfc556a910598e405fef010a94bf5d37b5dcc8923ae9bfd8e65a"
       },
       {
         "check": "present",
         "role": "testbench",
-        "path": "sim/bench/link_r12.py",
+        "path": "sim/bench/link_bench.py",
         "passed": true,
-        "content_hash": "sha256:cac7950084493b4413fe04010f9722b5fe4988a7571a3316eb8daa799a5bd89a"
+        "content_hash": "sha256:b2b4e5af1d817b8905dfc8f20e60089b9da0e28b185d54956123e5d4a7e4692f"
       },
       {
         "check": "present",
         "role": "testbench",
-        "path": "sim/bench/link_r13.py",
+        "path": "sim/bench/linkcore.py",
         "passed": true,
-        "content_hash": "sha256:7e10cf5ddb73a4c4a93ee73249abbe9f082cb251c150f042bd071431acaf80b7"
-      },
-      {
-        "check": "present",
-        "role": "testbench",
-        "path": "sim/bench/link_r15.py",
-        "passed": true,
-        "content_hash": "sha256:0623d9feb40bfdee2b554abd9e5f78e213cb00c404d2e98e2220f86914803c24"
-      },
-      {
-        "check": "present",
-        "role": "testbench",
-        "path": "sim/bench/link_r8.py",
-        "passed": true,
-        "content_hash": "sha256:3f7b4f80f21dadca7153384112051fc6599712a09c9b866963a27633570397b4"
+        "content_hash": "sha256:0f77cd22fe50ab58a308a6ce4987571a94c949c522e49131e9379f6718aab157"
       },
       {
         "check": "present",
@@ -356,7 +342,7 @@
       {
         "check": "command",
         "role": "cold_start",
-        "testbench": "sim/bench/link_r11.py",
+        "testbench": "sim/bench/cdrmodel.py",
         "argv": [
           "scripts/run-bench.sh",
           "link-r11-cdr-lock"
@@ -369,33 +355,7 @@
       {
         "check": "command",
         "role": "cold_start",
-        "testbench": "sim/bench/link_r12.py",
-        "argv": [
-          "scripts/run-bench.sh",
-          "link-r12-jtol"
-        ],
-        "cwd": ".",
-        "exit_status": 0,
-        "passed": true,
-        "local_only": true
-      },
-      {
-        "check": "command",
-        "role": "cold_start",
-        "testbench": "sim/bench/link_r13.py",
-        "argv": [
-          "scripts/run-bench.sh",
-          "link-r13-offset"
-        ],
-        "cwd": ".",
-        "exit_status": 0,
-        "passed": true,
-        "local_only": true
-      },
-      {
-        "check": "command",
-        "role": "cold_start",
-        "testbench": "sim/bench/link_r15.py",
+        "testbench": "sim/bench/link_bench.py",
         "argv": [
           "scripts/run-bench.sh",
           "link-r15-method"
@@ -408,7 +368,7 @@
       {
         "check": "command",
         "role": "cold_start",
-        "testbench": "sim/bench/link_r8.py",
+        "testbench": "sim/bench/linkcore.py",
         "argv": [
           "scripts/run-bench.sh",
           "link-r8-sensitivity"
@@ -721,7 +681,7 @@
         "path": "verification/testbench-inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:d7ddf90f5e3924311529a39e50bd198cd8bc19b1347f00e2dbfba476955c4870"
+      "content_hash": "sha256:96df56d06c0a07d3753763c97144b85b31d33ca382b7802bacd945493d1b8ca6"
     }
   }
 }

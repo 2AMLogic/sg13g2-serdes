@@ -1407,7 +1407,7 @@
         "command": null,
         "kind": "generic",
         "check_status": "pass",
-        "content_hash": "sha256:d7ddf90f5e3924311529a39e50bd198cd8bc19b1347f00e2dbfba476955c4870",
+        "content_hash": "sha256:96df56d06c0a07d3753763c97144b85b31d33ca382b7802bacd945493d1b8ca6",
         "input_verified": true,
         "exit_status": 0,
         "artifact_binding": {
@@ -1416,15 +1416,15 @@
             "path": "verification/testbench-inventory.json",
             "scope": "repo"
           },
-          "content_hash": "sha256:d7ddf90f5e3924311529a39e50bd198cd8bc19b1347f00e2dbfba476955c4870",
+          "content_hash": "sha256:96df56d06c0a07d3753763c97144b85b31d33ca382b7802bacd945493d1b8ca6",
           "input_verified": true,
-          "summary": "T1 item 9 (Testbenches shipped): 66/66 attestation checks passed (klt signoff --attest)",
+          "summary": "T1 item 9 (Testbenches shipped): 62/62 attestation checks passed (klt signoff --attest)",
           "source": "verification/testbench-inventory.json",
           "attestation": {
             "producer": "klt signoff --attest",
             "inventory_schema_version": 1,
-            "check_count": 66,
-            "passed_count": 66
+            "check_count": 62,
+            "passed_count": 62
           }
         }
       }
@@ -1445,7 +1445,7 @@
         "command": null,
         "kind": "generic",
         "check_status": "pass",
-        "content_hash": "sha256:d7ddf90f5e3924311529a39e50bd198cd8bc19b1347f00e2dbfba476955c4870",
+        "content_hash": "sha256:96df56d06c0a07d3753763c97144b85b31d33ca382b7802bacd945493d1b8ca6",
         "input_verified": true,
         "exit_status": 0,
         "artifact_binding": {
@@ -1454,15 +1454,15 @@
             "path": "verification/testbench-inventory.json",
             "scope": "repo"
           },
-          "content_hash": "sha256:d7ddf90f5e3924311529a39e50bd198cd8bc19b1347f00e2dbfba476955c4870",
+          "content_hash": "sha256:96df56d06c0a07d3753763c97144b85b31d33ca382b7802bacd945493d1b8ca6",
           "input_verified": true,
-          "summary": "T1 item 9 (Testbenches shipped): 66/66 attestation checks passed (klt signoff --attest)",
+          "summary": "T1 item 9 (Testbenches shipped): 62/62 attestation checks passed (klt signoff --attest)",
           "source": "verification/testbench-inventory.json",
           "attestation": {
             "producer": "klt signoff --attest",
             "inventory_schema_version": 1,
-            "check_count": 66,
-            "passed_count": 66
+            "check_count": 62,
+            "passed_count": 62
           }
         }
       }
