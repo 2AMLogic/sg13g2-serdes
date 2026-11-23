@@ -5,12 +5,12 @@
     python3 -I sim/bench/gen_inventory.py --check    # exit 1 if the committed file differs
 
 The inventory is derived, never hand-edited, so it cannot drift from the bench files.
-Each bench contributes one testbench entry per request file (analog), per behavioural entry point, or per cocotb
+Each bench contributes one testbench entry per request file (analog), per behavioural source file (benches.json
+behavioural_sources: the model, not the entry point), or per cocotb
 test module (digital), each with its own cold-start command. Cold starts are
 local_only: they need klt, jq, iverilog and a cocotb uvx environment, which the CI
 runner does not provision, so `--attest 9 --check` in CI re-hashes the files and
 carries the committed outcome (re-run with --attest 9 -o on a provisioned host).
-test module (digital), each with its own cold-start command.
 """
 import json
 import pathlib
@@ -35,11 +35,15 @@ def build():
         if b["partition"] == "digital":
             paths = [(f"rtl/tests/test_{b['rtl_bench']}.py", ["scripts/run-bench.sh", b["id"]])]
         elif b["partition"] == "behavioural":
-            paths = [(b["entry"], ["scripts/run-bench.sh", b["id"]])]
+            paths = []  # inventoried once per model source file, below
         else:
             paths = [(r, ["scripts/run-bench.sh", b["id"], "--request", r]) for r in b["requests"]]
         for path, argv in paths:
             benches.append({"path": path, "cold_start": {"argv": argv, "timeout_s": 300, "local_only": True}})
+    # klt refuses a path listed twice, so each behavioural source file carries one bench's cold start.
+    for src in man["behavioural_sources"]:
+        benches.append({"path": src["path"],
+                        "cold_start": {"argv": ["scripts/run-bench.sh", src["bench"]], "timeout_s": 300, "local_only": True}})
     benches.append({"path": "sim/bench/benches.json",
                     "cold_start": {"argv": ["scripts/run-bench.sh", "--list"], "local_only": True}})
     return {
