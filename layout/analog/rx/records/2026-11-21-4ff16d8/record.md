@@ -48,3 +48,11 @@ On scratch copies of this record's GDS, same LVS request, reference unchanged:
 `ctle`, `latch_cml`, `clk_buf_quad` (HBT cells), the top-level interconnect
 and the core-to-pad seam stay with #127; partition-level LVS stays with #128.
 No claim that T1 item 4 (analog) is met.
+
+## Erratum (2026-11-23, PR #212)
+
+"Nets drawn: 7/7" above counts nets reported `routed`, not planned legs drawn:
+the rejected `tl` leg means the `tl` net was connected by a router-substituted
+route, not the plan as written. The DRC and LVS results above are unaffected.
+`2026-11-23-9f3e17c` draws every planned leg and supersedes this record for
+`lvl_cml2cmos`.

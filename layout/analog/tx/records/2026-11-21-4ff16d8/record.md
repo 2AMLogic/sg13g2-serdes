@@ -51,3 +51,11 @@ On scratch copies of this record's GDS, same LVS request, reference unchanged:
 `bias`, `ffe_en`, `mux2to1_cml`, `predriver`, `driver_ffe`, the top-level
 interconnect and the core-to-pad seam stay with #127; partition-level LVS
 stays with #128. No claim that T1 item 4 (analog) is met.
+
+## Erratum (2026-11-23, PR #212)
+
+"Nets drawn: 7/7" above counts nets reported `routed`, not planned legs drawn:
+the rejected `out` leg means the whole `out` route was a router-substituted
+one, not the plan as written. The DRC and LVS results above are unaffected.
+`2026-11-23-4e3c174` draws every planned leg and supersedes this record for
+`tx_lvl_cml2cmos`.

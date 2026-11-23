@@ -78,16 +78,25 @@
 ## Per-cell analog route plans and per-cell LVS (issue #199, first split of #127)
 
 Two cells are routed end-to-end from a **hand-specified multi-layer plan**:
-RX `lvl_cml2cmos` and TX `tx_lvl_cml2cmos` (records `2026-11-21-4ff16d8`,
-source commit `4ff16d8`). Per cell: every multi-terminal net drawn connected,
+RX `lvl_cml2cmos` and TX `tx_lvl_cml2cmos` (records `2026-11-23-9f3e17c` and
+`2026-11-23-4e3c174`; they supersede `2026-11-21-4ff16d8`, whose `tl` and `out`
+legs the router had rejected and substituted). Per cell: every multi-terminal
+net drawn connected **by the planned legs** (`layout_common.assert_plan_followed`
+fails generation on a rejected or router-substituted leg even when the net
+reports `routed`; body-tie and merged-well counts are enforced the same way),
 `klt drc --deck sg13g2` `clean`, `klt lvs` against the cell's standalone
 subckt (`reference.form: subckt-call`, `options.anchor_top_level_pins: true`)
 `match` with the subckt's port set — both supplies included — anchored, and a
 scratch negative control (one removed device; one routing plane erased)
 yielding `mismatch`. `scripts/analog-lvs-regen.sh` writes the DRC+LVS evidence
-into the newest records; `scripts/check-analog-lvs-fresh.sh` is the
-`klt lvs --check` freshness gate (exit 3 = a newer generator record without
-LVS evidence). This is per-cell evidence under
+into the newest record of each partition (`scripts/analog-lvs-regen.sh tx`
+or `rx` regenerates one partition; a partition already carrying valid evidence
+is validated and skipped, never rewritten); `scripts/check-analog-lvs-fresh.sh`
+is the `klt lvs --check` freshness gate (exit 3 = the newest generator record
+has no DRC/LVS evidence; exit 1 = evidence bound to a different GDS or
+reference; `--rerun` re-compares). `scripts/check-ci.sh fresh` axes 7-8 apply
+the same newest-record selection and hash binding without klt
+(`scripts/analog-cell-evidence-lib.sh`). This is per-cell evidence under
 `manifests/design-evidence-tiers.md` item 4, **not** a partition-level LVS
 claim: T1 item 4 (analog) stays with #128 and the unrouted cells stay with
 #127.
@@ -117,8 +126,10 @@ The recipe for the next cell (what worked, in order):
    then run at rail level. (c) A seeded leg whose staircase crosses or
    approaches an already-drawn net (< spacing) is rejected and the router
    silently re-plans that net — the net still reports `routed`, the rejected
-   leg carries `reason` in `compose.response.json`; check `legs[]` for
-   `reason` to know the plan as written was not what got drawn. All three
+   leg carries `reason` in `compose.response.json`; `assert_plan_followed`
+   now fails the build on it. Fixes that worked: RX `tl` runs below row A
+   because the channel route would cross the vdd feed on one layer; TX `out`
+   leaves its D pad sideways to a lane clear of `o1`'s G landing. All three
    posted as generic data points on `2AMLogic/klayout-tools#1962`
    ([comment](https://github.com/2AMLogic/klayout-tools/issues/1962#issuecomment-7054026274),
    2026-11-21).
