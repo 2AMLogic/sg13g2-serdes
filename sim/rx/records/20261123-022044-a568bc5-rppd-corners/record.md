@@ -11,7 +11,7 @@ by the two window members below. R9's own numbers are unchanged by this record.
 | source | rsh_rppd (ohm/sq) | vs 260 |
 |---|---|---|
 | PDK process spec Rev. 1.2 p.11 s.2.8 (RSRPPD min/target/max) | 235 / 260 / 285 | -9.62 % / +9.62 % |
-| cornerRES.lib sections res_bcs/res_typ/res_wcs | 234.0 / 260.0 / 286.0 | -10.00 % / +10.08 % |
+| cornerRES.lib sections res_bcs/res_typ/res_wcs | 234.0 / 260.0 / 286.0 | -10.00 % / +10.00 % |
 | DR-014 (PR #47 head `8f213e3`, not on main) | -- | about -10.5 % / +11.8 %, **not reproducible from p.11** |
 
 The library corners envelope the p.11 sheet window; neither matches DR-014's figure.

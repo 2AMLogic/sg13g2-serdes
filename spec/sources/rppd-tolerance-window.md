@@ -29,14 +29,14 @@ Quoted verbatim (table linearized; `§2.8` intro sentence first):
 > |---|---|---|---|---|---|---|---|
 > | Sheet Resistance | RSRPPD | Ω [extracts as `W`] | 235 | 260 | 285 | A.i | |
 > | Line Width Delta | DWRPPD | nm | -24 | 6 | 36 | A.i | |
-> | Temperature Coefficients | TC1NRPPD TC2NRPPD | ppm/K ppm/K² | | 170 | | A.af | two parameters, one value each |
+> | Temperature Coefficients | TC1NRPPD TC2NRPPD | ppm/K ppm/K² | | 170 0.4 | | A.af | two parameters, one value each |
 > | Matching Coefficient | MATRPPD | nm | | 15 | | A.ac | |
 > | Metal-to-Body-Resistance | RCRPPD | Ω·µm [extracts as `W*µm`] | | 35 | | A.ae | |
 > | Temperature Coefficient Metal-toBody-Resistance | TC3NRPPD | ppm/K | | -950 | | | |
 > | Max. Current Density | IMRPPD | mA/µm | | 1.2 | | | 11 years @105°C |
 
-(The two-parameter rows carry one value per parameter in the Min/Target/Max
-band; the original layout is preserved above, empty cells and all.)
+(The two-parameter row carries one value per parameter in its Target cell,
+`170 0.4` = TC1NRPPD, TC2NRPPD; the original layout is preserved above, empty cells and all.)
 
 ## The window, three ways
 
@@ -47,7 +47,7 @@ marked **PDK**.
    **+9.62 %**. This is the window on `rsh` alone.
 2. **Simulation library corners (PDK, `cornerRES.lib`, quoted 2026-11-23
    from the pinned tarball):** `.param rsh_rppd` = 234.0 (`res_bcs`),
-   260.0 (`res_typ`), 286.0 (`res_wcs`) Ω/sq, i.e. **−10.00 %/+10.08 %**.
+   260.0 (`res_typ`), 286.0 (`res_wcs`) Ω/sq, i.e. **−10.00 %/+10.00 %**.
    The library corners sit ~1 Ω outside the p.11 window at each edge and
    envelope it. The two PDK sources therefore do not agree exactly; both are
    recorded, neither is rounded into the other.

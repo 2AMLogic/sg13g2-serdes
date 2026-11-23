@@ -67,7 +67,7 @@ L = [f"# RX termination rppd corner record {out.name}", "",
      "| source | rsh_rppd (ohm/sq) | vs 260 |",
      "|---|---|---|",
      "| PDK process spec Rev. 1.2 p.11 s.2.8 (RSRPPD min/target/max) | 235 / 260 / 285 | -9.62 % / +9.62 % |",
-     "| cornerRES.lib sections res_bcs/res_typ/res_wcs | 234.0 / 260.0 / 286.0 | -10.00 % / +10.08 % |",
+     f"| cornerRES.lib sections res_bcs/res_typ/res_wcs | 234.0 / 260.0 / 286.0 | {100 * (234.0 / 260.0 - 1):+.2f} % / {100 * (286.0 / 260.0 - 1):+.2f} % |",
      "| DR-014 (PR #47 head `8f213e3`, not on main) | -- | about -10.5 % / +11.8 %, **not reproducible from p.11** |", "",
      "The library corners envelope the p.11 sheet window; neither matches DR-014's figure.",
      "The mismatch is reported here and in the source note, not edited into any spec row.", "",
@@ -127,7 +127,7 @@ if main_r:
         z5s = [v for v in z5s if v is not None]
         L += ["",
               f"- Corners inside the R9 draft window at 0.1 GHz: {len([1 for v, _ in zd if 90.0 <= v <= 110.0])} of {len(zd)}.",
-              f"- Span at 0.1 GHz: {lo[0]:.1f} ohm ({lo[0] - 100.0:+.1f} %) at {lo[1]} to {hi[0]:.1f} ohm ({hi[0] - 100.0:+.1f} %) at {hi[1]}.",
+              f"- Span at 0.1 GHz: {lo[0]:.1f} ohm ({100 * (lo[0] / (2 * R_SIDE_TYP) - 1):+.1f} %) at {lo[1]} to {hi[0]:.1f} ohm ({100 * (hi[0] / (2 * R_SIDE_TYP) - 1):+.1f} %) at {hi[1]}.",
               f"- Span at 5 GHz: {f(min(z5s), '{:.1f}')} to {f(max(z5s), '{:.1f}')} ohm." if z5s else "- Span at 5 GHz: no data."]
 L += ["", "### p.11 window members (2 points)", "",
       f"Same circuit, typical ganged sections, nominal supply and 27 C, with `rsh_rppd`",
