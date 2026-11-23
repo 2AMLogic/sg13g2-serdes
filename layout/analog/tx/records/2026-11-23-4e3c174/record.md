@@ -35,3 +35,39 @@ true`); verdicts unaffected.
 `bias`, `ffe_en`, `mux2to1_cml`, `predriver`, `driver_ffe`, the top-level
 interconnect and the core-to-pad seam stay with #127; partition-level LVS stays
 with #128. No claim that T1 item 4 (analog) is met.
+
+## Addendum (2026-11-23, issue #258)
+
+Self-containment pass: the negative control and the parameter probes below
+were run against **this record's** GDS — scratch copies under /tmp, this
+record's `lvs.request.json` with absolute paths, reference unchanged, pinned
+klt 0.9.0 / KLayout 0.30.14 (the same engine note as above; the un-perturbed
+base copy re-verified `match` 9/9 devices, 9/9 nets, before each control).
+Scratch files are not committed.
+
+- Negative control: remove one device instance (`tx_lvl_cml2cmos_XMP3`, cell
+  `XMP3__tx_lvl_cml2cmos_XMP3`): `mismatch`. Erase every Metal3 (30/0) shape —
+  21 shapes, `vdd` + `vbm` unrouted: `mismatch`.
+- LVS parameter coverage of the committed `lvs.report.json`
+  (`options.compare_parameters: null`): the drawn `rppd` had **zero**
+  parameters compared — `R` is the literal-0 placeholder
+  (`device.placeholder_value`: the reference `rppd` comes from a subckt call,
+  `reference.form: "subckt-call"`) and `A/L/P/W` are geometry secondaries
+  (`device.geometry_not_compared`: the resistor is paired on topology alone;
+  its geometry could differ by any amount and the run would still report
+  `match`). Reporting-gap context:
+  https://github.com/2AMLogic/klayout-tools/issues/5653
+- Probes (scratch): (1) `options.compare_parameters: {"rppd": ["W", "L"]}` on
+  an otherwise-unchanged copy keeps `status: match`, with the coverage block
+  now `compared: ["L", "W"]` and no `parameter_tolerance` needed — the drawn
+  geometry agrees with the reference `w=0.5u l=19.23u`; worth requesting at
+  the next regeneration so the resistor's coverage is positive rather than
+  empty. (2) Shrinking one MOS's drawn W (XMP3 active height 4.0 → 3.4 um,
+  topology intact) flips the verdict to `mismatch` (`device.property: matched
+  device parameter 'w_um' differs`) — MOS W/L are compared by default at
+  klt 0.9.0 with `compare_parameters: null`.
+- Seeded-leg rejection data point behind this record's plan (link carried from
+  the superseded `2026-11-21-4ff16d8`): all 2026-11-21 rejections and the two
+  pad-geometry constraints are posted as generic data points on
+  2AMLogic/klayout-tools#1962 (comment 2026-11-21):
+  https://github.com/2AMLogic/klayout-tools/issues/1962#issuecomment-7054026274

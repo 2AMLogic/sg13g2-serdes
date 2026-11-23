@@ -37,3 +37,31 @@ unaffected, counts and deck hashes may differ from a 0.30.12 run.
 `ctle`, `latch_cml`, `clk_buf_quad` (HBT cells), the top-level interconnect and
 the core-to-pad seam stay with #127; partition-level LVS stays with #128. No
 claim that T1 item 4 (analog) is met.
+
+## Addendum (2026-11-23, issue #258)
+
+Self-containment pass: the negative control below was re-run against **this
+record's** GDS — scratch copies under /tmp, this record's `lvs.request.json`
+with absolute paths, reference unchanged, pinned klt 0.9.0 / KLayout 0.30.14
+(the same engine note as above; the un-perturbed base copy re-verified `match`
+9/9 devices, 9/9 nets, before each control). Scratch files are not committed.
+
+- Negative control: remove one device instance (`lvl_cml2cmos_XMpi2`, cell
+  `XMpi2__lvl_cml2cmos_XMpi2`): `mismatch`. Erase every Metal3 (30/0) shape —
+  27 shapes, `vdd` + `tl` unrouted: `mismatch`.
+- LVS parameter coverage of the committed `lvs.report.json`
+  (`options.compare_parameters: null`): `device_parameter_coverage` is `[]`,
+  and at klt 0.9.0 the coverage block only emits resistor/capacitor classes,
+  so a MOS-only cell reports `[]` whether or not MOS parameters were compared
+  (the reporting gap filed upstream as
+  https://github.com/2AMLogic/klayout-tools/issues/5653). Empirical probe
+  (scratch): shrinking one MOS's drawn W (XMpi2 active height 4.0 → 3.4 um,
+  topology intact) flips the verdict to `mismatch` (`device.property: matched
+  device parameter 'w_um' differs`) — MOS W/L **do** take part in the compare
+  at klt 0.9.0 with `compare_parameters: null`; the empty coverage block is a
+  reporting gap, not a hole in this record's compare. Nothing to request for
+  MOS coverage at the next regeneration.
+- Seeded-leg rejection data point behind this record's plan (link carried from
+  the superseded `2026-11-21-4ff16d8`): both 2026-11-21 rejections are posted
+  as generic data points on 2AMLogic/klayout-tools#1962 (comment 2026-11-21):
+  https://github.com/2AMLogic/klayout-tools/issues/1962#issuecomment-7054026274
