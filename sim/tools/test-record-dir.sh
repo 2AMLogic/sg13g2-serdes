@@ -149,7 +149,7 @@ check_runner() { # check_runner <name> <script> [set-arg] [id-suffix] [sim-calls
   echo "test-record-dir: PASS: $name (naming, retry refused untouched, race: one launcher)"
 }
 
-check_runner rx      sim/rx/run_sizing.sh   ""   ""     4
+check_runner rx      sim/rx/run_sizing.sh   ""   ""     5
 check_runner smoke   sim/smoke/run_smoke.sh ""   ""     3
 check_runner tx-hbt  sim/tx/run_sizing.sh   ""   ""     1
 check_runner tx-mos  sim/tx/run_sizing.sh   mos  "-mos" 1
