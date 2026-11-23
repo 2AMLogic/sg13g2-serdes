@@ -107,7 +107,7 @@ if "mux2to1_cml" in corners:
 
 if "tx_lvl_cml2cmos" in corners:
     ks = sorted(corners["tx_lvl_cml2cmos"], key=lambda k: k["corner_id"])
-    L += ["## tx_lvl_cml2cmos (2.5 GHz input, 20 fF load)", "",
+    L += ["## tx_lvl_cml2cmos (625 MHz input, 20 fF load; DR-014)", "",
           "| corner | out hi (V) | out lo (V) | duty (%) | tpd LH (ps) | tpd HL (ps) | Idd (mA) |",
           "|---|---|---|---|---|---|---|"]
     for k in ks:
