@@ -1,13 +1,15 @@
-# DR-008: Scope of the target-spec ratification
+# DR-014: Scope of the target-spec ratification
 
 - **Status**: proposed (ratification is the operator's act on merge)
-- **Date**: 2026-11-01 (revised from the 2026-10-27 draft after the two-key review)
+- **Date**: 2026-11-23 (revised twice: 2026-11-01 after the first two-key review, 2026-11-23 after the second and the operator's send-back)
 - **Decided by**: Builder agent, issue #44; the decision is the operator's
 - **Fixes rows**: R2, R3, R9 (corrections of unratified rows, see Revision; no other row changes)
 
-Renumbered from DR-005: `main` now holds two other DR-005 files (digital timing
-budget, TX collector ceiling), DR-006 and DR-007; DR-008 is the next unused
-number (`TEMPLATE.md`). References in other records to "DR-005" mean those, not this.
+Renumbered twice. First from DR-005 to DR-008, then, because `main` has since
+taken DR-008 for `DR-008-stage-boundaries` (and DR-009 to DR-013 for the CDR and
+pad records), from DR-008 to DR-014, the next unused number (`TEMPLATE.md`).
+References in other records to "DR-005" or "DR-008" mean those records, not this
+one; a citation of this record is always spelled "DR-014".
 
 ## Context
 
@@ -64,12 +66,75 @@ measured FAIL against a ratified number):
 
 Both key reviews re-run on the revised head before the operator ratifies.
 
+## Revision after the second two-key review (2026-11-23)
+
+The operator ruled (2026-11-22, round 20261121-r19, q23) **not ratified; changes
+requested**, not a release of the hold and not a rejection of the record. The EE
+key returned `request-changes` and the market key `uncompetitive` at `6a1a646`.
+No row number is changed in this revision; no row is relaxed. Corrections to the
+record and the evidence statements:
+
+- **Number collision.** This record was DR-008 while `DR-008-stage-boundaries`
+  also existed, so "DR-008" in R2 and elsewhere was ambiguous. This record is now
+  DR-014; R2 cites `DR-008-stage-boundaries` and DR-014 by full name. The
+  stage-boundaries record proposes B1 (all-CML tree to 625 MHz); R2 as revised
+  marks the 1.25 GHz and 2.5 GHz stages and level conversion **OPEN**, so R2
+  governs and the B1 proposal is not ratified here.
+- **What is ratified** is now identified by content, not by `b347d55` (see
+  Decision). The first draft said "every other line is unchanged" since
+  `b347d55`; that was false.
+- **R3 basis.** Only the product 0.9 × 1.4 V = 1.26 V is arithmetic. The 90 %
+  derating is a proposal, and the reverse-Vbe limit is taken at 100 % of BVEBO
+  with no derating (also a proposal). Both are flagged for the operator in the
+  row; the numbers are unchanged. Basis column now reads proposal accordingly.
+- **R9 citation.** The "-10.5 %/+11.8 %, PDK process spec p.11" figure cannot be
+  reproduced from anything committed in this repo (no PDK copy, no record), and
+  the RX design uses an ideal resistor. The row now says so; the ±15 % target is
+  unchanged and is a proposal until gate G1 closes. The −10 dB SDD11 target has no
+  supporting record: the pad record covers capacitance only, and a ±15 %
+  termination alone gives |Γ| ≈ 0.07 (≈ −23 dB), so SDD11 is set by pad
+  capacitance (gate G4).
+
+### Gates that keep rows at "target only"
+
+Each is an evidence gap, not a defect in a number. None is closed by this PR.
+
+| Gate | Row | What closes it |
+|---|---|---|
+| G1 | R9 | A committed source for the `rppd` window (quoted PDK table or a derivation), plus an `rppd` model run on the RX side over resistor corners |
+| G2 | R3 | Per-device Vce (including transients) over PVT-full for every device on RX and TX; mux, FFE enable and level converter are unsimulated; RX records report collector-to-ground, not Vce |
+| G3 | R2 | A per-stage clock-domain list and a PVT, post-layout STA or SPICE record for each CMOS stage at ≥ 1.25 GHz and for the level converter; the 625 MHz word domain currently rests on one pre-layout, ideal-clock, single-corner STA (`typ_1p20V_25C`, +0.014 ns) |
+| G4 | R9 | An S-parameter or AC record of termination plus extracted pad for SDD11 to 5 GHz (pad capacitance now exists in DR-012 for R18) |
+
+### Market key: R12 (open item for the operator)
+
+The market key graded R12 (≥ 0.15 UIpp above 10 MHz) **uncompetitive**: the one
+comparable it found, a TI retimer datasheet, states 0.6 UI SJ over 10 kHz to
+250 MHz at BER 1e-15. R12 is unchanged here; an agent does not raise or relax
+a row to clear a verdict, and the spec already says the mask is common practice
+and **not from a named standard**. Context for the operator, all simulated and
+none measured: the comp is a retimer, not a serdes; the key itself says the
+datasheet figure was the only one it could fetch; and DR-011 records that the
+candidate CDR meets the 0.15 mask at 30 MHz with the weakest margin on slew
+(1.36× at 0.3 MHz) while other candidates fall below the mask, so a 4× tighter
+target is not supported by any current record. Whether to accept R12 as a
+target with that rationale, or to raise it, is the operator's call. The key also
+notes that 10.0 Gb/s does not interoperate with 10.3125 Gb/s (10GBASE-R) gear;
+R1 is unchanged and the 10 Gb/s figure is the repo's declared target.
+
 ## Decision
 
 The PR carrying this record asks for ratification of the following, as
-**targets**, at the content of `spec/target-spec.md` in commit `b347d55` as
-revised above (R2, R3, R9 and the status line change; every other line is
-unchanged):
+**targets**, at the content of the files named below as they stand on the head
+of this PR after the merge of `main` that carries it. Relative to commit
+`b347d55`, which the first draft named, the changes in the ratified set are:
+R2, R3, R9 and the status lines of `spec/target-spec.md`; the 2026-11-02 refresh
+of the sibling comparison in `spec/clock-requirement.md` (commit `dd31205`); the
+`spec/README.md` index; and `spec/validation-plan.md`, added after `b347d55`
+(it states the basis of each budget and the validation gates, and is ratified as
+the plan of record, not as a result). Records DR-005 to DR-013 were added after
+`b347d55` and are **not** ratified by this PR; DR-001 to DR-004 are unchanged
+since `b347d55`:
 
 - `spec/target-spec.md` rows R1–R22 (R2, R3, R9 as revised), their targets, fallbacks (5 Gb/s) and
   stretch values (12.5 Gb/s), and the binding conditions and corner sets
@@ -104,7 +169,7 @@ not relax a row to obtain approval.
   key holders, who are neither the PR author nor each other (protocol §3). The
   Builder cannot post them and has not.
 - Only the operator's approval of this PR ratifies the spec. Whether the
-  status line and the Status field of DR-001 to DR-004 and DR-008 then change from
+  status line and the Status field of DR-001 to DR-004 and DR-014 then change from
   proposed is the operator's call; no agent marks them ratified.
 - After ratification, #5 is updated so its items 5–8 can be filed or released.
 - A ratified target is not a design result: R1–R22 remain unverified until the
