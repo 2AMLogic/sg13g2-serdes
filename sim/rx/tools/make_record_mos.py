@@ -99,7 +99,7 @@ env = rep["environment"]
 rem = env.get("remote") or {}
 L += [f"- status **{rep['status']}** ({rep['passed']}/{rep['corner_count']} corners pass, {rep['failed']} "
       f"fail, {rep['errored']} error, {rep.get('not_reached', 0)} measurements `not_reached`); engine "
-      f"{env.get('engine_host')} worker, ngspice {env.get('engine_version')}"
+      f"{env.get('engine_host')}, ngspice {env.get('engine_version')}"
       + (f", backend job `{rem['job_id']}`" if rem.get("job_id") else ""), ""]
 
 corners = sorted(rep["corners"], key=lambda k: k["corner_id"])
