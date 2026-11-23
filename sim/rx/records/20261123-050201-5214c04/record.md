@@ -297,3 +297,15 @@ with the +10 % supply, not with the input level alone (`lo` worst Vc is
 1.067 V): the rail, not the signal, sets the ceiling. A future re-sizing that
 raises the CTLE load resistance or the supply beyond +10 % would cross it.
 Reverse Vbe never leaves forward bias anywhere in the grid (worst -0.333 V).
+
+## Erratum (2026-11-23, issue #256, PR #257)
+
+The CTLE transient section of this record drove a **single polarity** of the
+settled long run on each input source, so half of the 22 `ctle.*` HBTs were
+under-stressed (symmetric pairs differed by 76-158 mV at hbt_wcs/1.320V/-40C,
+code 7, `hi`) and 96 per-device values sat below their `ctle_op` DC value.
+Its worst-case Vc/Vce/reverse-Vbe figures, including the 1.316 V Vc and the
+4 mV margin quoted above, are therefore **not** the true transient peaks.
+The corrected bench drives both polarities; its record is
+`records/20261123-102613-14d2158`. The original text above is unchanged.
+

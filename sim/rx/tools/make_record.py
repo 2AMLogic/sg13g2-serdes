@@ -48,12 +48,13 @@ DEC_V, FLOOR_V = regen_levels(rx / "latch_regen.request.json")
 
 def tran_levels(sp_path):
     """(lo, hi) differential pk-pk input amplitudes in volts of the ctle_tran
-    bench, read from its pulse sources (4x the single-ended half-swing), so
-    the record can never disagree with the deck that produced the numbers."""
+    bench, read from its pwl sources (4x the single-ended half-swing: the
+    first point after t=0 is the opposite-polarity value, so |v| is the
+    half-swing), so the record can never disagree with the deck."""
     amps = {}
     for line in pathlib.Path(sp_path).read_text().splitlines():
         t = line.split()
-        if len(t) > 4 and t[0] in ("Vip", "Vjp") and t[2] == "vcm" and t[3].startswith("pulse("):
+        if len(t) > 4 and t[0] in ("Vip", "Vjp") and t[2] == "vcm" and t[3].startswith("pwl("):
             amps["lo" if t[0] == "Vip" else "hi"] = 4.0 * abs(float(t[4]))
     return amps.get("lo"), amps.get("hi")
 
@@ -144,8 +145,9 @@ if tr:
     TRAN_METS = (("vc", "Vc", 1.32), ("vce", "Vce", 1.4), ("vbe_rev", "rev Vbe", 1.0))
     L += ["", "## CTLE transient node stress (R3 per-device, issue #256)", "",
           f"The `ctle_op` cards above are quiescent (inputs at dc 0); every number in this section is a",
-          f"`.meas tran` maximum over a driven run: 2 ns at one polarity (settled worst-case long run),",
-          "then 5 GHz alternation (200 ps period, 20 ps edges), all 8 peaking codes, 27-corner grid.",
+          f"`.meas tran` maximum over a driven run that exercises both polarities of the settled long run:",
+          "2 ns settled, 1 ns of 5 GHz alternation (200 ps period, 20 ps edges), 3 ns held at the opposite",
+          "polarity, then 1 ns of 5 GHz alternation again; all 8 peaking codes, 27-corner grid.",
           "Limits: Vc <= 1.32 V, Vce <= 1.40 V (BVCEO), reverse Vbe <= 1.0 V (BVEBO) -- DR-003 and the",
           "HBT breakdown table in `spec/target-spec.md`; not relaxed anywhere here.", "",
           "The spec declares **no maximum RX input swing** (R8 gives only the minimum sensitivity), so",
@@ -191,7 +193,7 @@ if tr:
             if top:
                 L.append(f"- `{lvl}` worst {lab}: {top[0]:.3f} V (limit {lim} V) -- device `{[d for d, mm in dev.items() if mm.get(met) == top][0]}`, code {top[2]}, {top[1]}.")
     bad = [c["corner_id"] for c in tr["corners"]
-           if c.get("status") != "pass" or any(m.get("value") is None for m in c.get("measurements", []))]
+           if c.get("status") not in ("pass", "fail") or any(m.get("value") is None for m in c.get("measurements", []))]
     L.append(f"- Corners with an error or a measurement that returned no value (listed, not dropped): "
              f"{len(bad)}" + (" -- " + ", ".join(bad) if bad else ""))
     for c in tr["corners"]:

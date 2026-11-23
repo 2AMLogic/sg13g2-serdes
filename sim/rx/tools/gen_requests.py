@@ -176,26 +176,57 @@ def ctle_op_meas():
     return lines, m
 
 
+def _tran_pwl(amp, sign):
+    """PWL text for one source of the ctle_tran bench: +-`amp` about vcm,
+    `sign` = +1 for the p side, -1 for the n side (the pair is complementary).
+    Both polarities of the long run are exercised, so every device of the
+    symmetric pair sees its settled worst-case collector level:
+      0-2 ns      settled at -amp (the .op state)
+      2-3 ns      5 cycles of 5 GHz alternation (200 ps, 20 ps edges), first
+                  edge -amp -> +amp
+      3-6 ns      held at +amp (3 ns > 8*tau of the 300 ps Rca*Cca feed-forward,
+                  so hpp/hpn settle back to vcm)
+      6-7 ns      5 cycles of 5 GHz alternation, first edge +amp -> -amp
+      7-7.1 ns    held at +amp
+    """
+    E, P = 20e-12, 200e-12   # edge time, period
+    pts = [(0.0, -amp)]
+
+    def alt(t0, lvl):
+        for i in range(5):
+            t = t0 + i * P
+            pts.extend([(t, lvl), (t + E, -lvl), (t + P / 2, -lvl), (t + P / 2 + E, lvl)])
+        return t0 + 5 * P
+
+    t = alt(2e-9, -amp)            # ends at -amp
+    pts.extend([(t, -amp), (t + E, amp)])   # then held at +amp until alt() at 6 ns
+    alt(6e-9, amp)                 # ends at +amp
+    pts.append((7.1e-9, amp))
+    return "pwl(" + " ".join("%.4gn %g" % (a * 1e9, sign * b) for a, b in pts) + ")"
+
+
 def ctle_tran_body(extra=()):
     """16 copies of ctle (codes 0-7 at each of two differential input levels)
-    driven by ideal differential pulse sources: 2 ns at one polarity so the
-    off-side collector settles at its worst long-run value, then 5 GHz
-    alternation (200 ps period, 20 ps edges) for the toggling peaks."""
+    driven by ideal differential PWL sources that exercise BOTH polarities of
+    the settled long run (see _tran_pwl): the ctle input network is a
+    symmetric pair with AC-coupled feed-forward paths, so a single-polarity
+    long run under-stresses one half of it."""
     L = ["* CTLE transient node-stress bench (issue #256): ctle_op's stress cards",
          "* are quiescent (Vip/Vin at dc 0); this bench drives a real differential",
          "* swing so the R3 per-device table gets transient peaks. 16 copies of",
          "* ctle: codes 0-7 at each of two input levels (lo/hi below), same ideal",
          "* source, same placeholder 80 fF load as ctle_ac/ctle_op. Stimulus per",
-         "* side: 2 ns at one polarity (settled worst-case long run), then 5 GHz",
-         "* alternation (200 ps period, 20 ps edges). Sizing evidence, not a spec",
+         "* side (pwl, both polarities): 2 ns settled, 1 ns of 5 GHz alternation",
+         "* (200 ps period, 20 ps edges), a 3 ns long run at the opposite polarity,",
+         "* then 1 ns of 5 GHz alternation again. Sizing evidence, not a spec",
          "* result.",
          ".include ../../design/rx/netlists/ctle.spice",
          "Vdd vdd 0 1.2",
          "Bvcm vcm 0 V=0.7917*v(vdd)",
-         "Vip inp vcm pulse(%g %g 2n 20p 20p 60p 200p)" % (-CTLE_TRAN_SENS_V, CTLE_TRAN_SENS_V),
-         "Vin inn vcm pulse(%g %g 2n 20p 20p 60p 200p)" % (CTLE_TRAN_SENS_V, -CTLE_TRAN_SENS_V),
-         "Vjp jnp vcm pulse(%g %g 2n 20p 20p 60p 200p)" % (-CTLE_TRAN_MAX_V, CTLE_TRAN_MAX_V),
-         "Vjn jnn vcm pulse(%g %g 2n 20p 20p 60p 200p)" % (CTLE_TRAN_MAX_V, -CTLE_TRAN_MAX_V)]
+         "Vip inp vcm " + _tran_pwl(CTLE_TRAN_SENS_V, +1),
+         "Vin inn vcm " + _tran_pwl(CTLE_TRAN_SENS_V, -1),
+         "Vjp jnp vcm " + _tran_pwl(CTLE_TRAN_MAX_V, +1),
+         "Vjn jnn vcm " + _tran_pwl(CTLE_TRAN_MAX_V, -1)]
     _ctle_copies(L, "l", "inp", "inn")
     _ctle_copies(L, "h", "jnp", "jnn")
     L += list(extra)
@@ -370,13 +401,13 @@ def main(argv):
     files = {
         "ctle_ac": (ctle_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, ctle_ac_meas()),
         "ctle_op": (ctle_op_body(op_lines), {"kind": "dc", "args": "Vdmy 0 1m 1m"}, op_meas),
-        "ctle_tran": (ctle_tran_body(tran_lines), {"kind": "tran", "args": "2p 3n"}, tran_meas),
+        "ctle_tran": (ctle_tran_body(tran_lines), {"kind": "tran", "args": "2p 7.1n"}, tran_meas),
         "pad_ac": (pad_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, pad_meas()),
         "latch_regen": (latch_body(lat_lines), {"kind": "tran", "args": "2p 3n"}, lat_meas),
     }
-    # 16 CTLE copies at 3 ns is a much larger transient deck than latch_regen;
-    # give it a longer per-unit timeout than the default 120 s.
-    timeouts = {"ctle_tran": {"timeout_s": 900}}
+    # 16 CTLE copies at 7.1 ns is a much larger transient deck than
+    # latch_regen; give it a longer per-unit timeout than the default 120 s.
+    timeouts = {"ctle_tran": {"timeout_s": 1800}}
     for name, (body, ana, meas) in files.items():
         rel = os.path.relpath(NET, out)
         with open(os.path.join(out, name + ".sp"), "w") as f:

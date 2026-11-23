@@ -3,16 +3,17 @@
 * swing so the R3 per-device table gets transient peaks. 16 copies of
 * ctle: codes 0-7 at each of two input levels (lo/hi below), same ideal
 * source, same placeholder 80 fF load as ctle_ac/ctle_op. Stimulus per
-* side: 2 ns at one polarity (settled worst-case long run), then 5 GHz
-* alternation (200 ps period, 20 ps edges). Sizing evidence, not a spec
+* side (pwl, both polarities): 2 ns settled, 1 ns of 5 GHz alternation
+* (200 ps period, 20 ps edges), a 3 ns long run at the opposite polarity,
+* then 1 ns of 5 GHz alternation again. Sizing evidence, not a spec
 * result.
 .include ../../design/rx/netlists/ctle.spice
 Vdd vdd 0 1.2
 Bvcm vcm 0 V=0.7917*v(vdd)
-Vip inp vcm pulse(-0.0125 0.0125 2n 20p 20p 60p 200p)
-Vin inn vcm pulse(0.0125 -0.0125 2n 20p 20p 60p 200p)
-Vjp jnp vcm pulse(-0.2 0.2 2n 20p 20p 60p 200p)
-Vjn jnn vcm pulse(0.2 -0.2 2n 20p 20p 60p 200p)
+Vip inp vcm pwl(0n -0.0125 2n -0.0125 2.02n 0.0125 2.1n 0.0125 2.12n -0.0125 2.2n -0.0125 2.22n 0.0125 2.3n 0.0125 2.32n -0.0125 2.4n -0.0125 2.42n 0.0125 2.5n 0.0125 2.52n -0.0125 2.6n -0.0125 2.62n 0.0125 2.7n 0.0125 2.72n -0.0125 2.8n -0.0125 2.82n 0.0125 2.9n 0.0125 2.92n -0.0125 3n -0.0125 3.02n 0.0125 6n 0.0125 6.02n -0.0125 6.1n -0.0125 6.12n 0.0125 6.2n 0.0125 6.22n -0.0125 6.3n -0.0125 6.32n 0.0125 6.4n 0.0125 6.42n -0.0125 6.5n -0.0125 6.52n 0.0125 6.6n 0.0125 6.62n -0.0125 6.7n -0.0125 6.72n 0.0125 6.8n 0.0125 6.82n -0.0125 6.9n -0.0125 6.92n 0.0125 7.1n 0.0125)
+Vin inn vcm pwl(0n 0.0125 2n 0.0125 2.02n -0.0125 2.1n -0.0125 2.12n 0.0125 2.2n 0.0125 2.22n -0.0125 2.3n -0.0125 2.32n 0.0125 2.4n 0.0125 2.42n -0.0125 2.5n -0.0125 2.52n 0.0125 2.6n 0.0125 2.62n -0.0125 2.7n -0.0125 2.72n 0.0125 2.8n 0.0125 2.82n -0.0125 2.9n -0.0125 2.92n 0.0125 3n 0.0125 3.02n -0.0125 6n -0.0125 6.02n 0.0125 6.1n 0.0125 6.12n -0.0125 6.2n -0.0125 6.22n 0.0125 6.3n 0.0125 6.32n -0.0125 6.4n -0.0125 6.42n 0.0125 6.5n 0.0125 6.52n -0.0125 6.6n -0.0125 6.62n 0.0125 6.7n 0.0125 6.72n -0.0125 6.8n -0.0125 6.82n 0.0125 6.9n 0.0125 6.92n -0.0125 7.1n -0.0125)
+Vjp jnp vcm pwl(0n -0.2 2n -0.2 2.02n 0.2 2.1n 0.2 2.12n -0.2 2.2n -0.2 2.22n 0.2 2.3n 0.2 2.32n -0.2 2.4n -0.2 2.42n 0.2 2.5n 0.2 2.52n -0.2 2.6n -0.2 2.62n 0.2 2.7n 0.2 2.72n -0.2 2.8n -0.2 2.82n 0.2 2.9n 0.2 2.92n -0.2 3n -0.2 3.02n 0.2 6n 0.2 6.02n -0.2 6.1n -0.2 6.12n 0.2 6.2n 0.2 6.22n -0.2 6.3n -0.2 6.32n 0.2 6.4n 0.2 6.42n -0.2 6.5n -0.2 6.52n 0.2 6.6n 0.2 6.62n -0.2 6.7n -0.2 6.72n 0.2 6.8n 0.2 6.82n -0.2 6.9n -0.2 6.92n 0.2 7.1n 0.2)
+Vjn jnn vcm pwl(0n 0.2 2n 0.2 2.02n -0.2 2.1n -0.2 2.12n 0.2 2.2n 0.2 2.22n -0.2 2.3n -0.2 2.32n 0.2 2.4n 0.2 2.42n -0.2 2.5n -0.2 2.52n 0.2 2.6n 0.2 2.62n -0.2 2.7n -0.2 2.72n 0.2 2.8n 0.2 2.82n -0.2 2.9n -0.2 2.92n 0.2 3n 0.2 3.02n -0.2 6n -0.2 6.02n 0.2 6.1n 0.2 6.12n -0.2 6.2n -0.2 6.22n 0.2 6.3n 0.2 6.32n -0.2 6.4n -0.2 6.42n 0.2 6.5n 0.2 6.52n -0.2 6.6n -0.2 6.62n 0.2 6.7n 0.2 6.72n -0.2 6.8n -0.2 6.82n 0.2 6.9n 0.2 6.92n -0.2 7.1n -0.2)
 Bkl0_0 l0k0 0 V=v(vdd)-0.25
 Bkl0_0b l0k0b 0 V=v(vdd)
 Bkl0_1 l0k1 0 V=v(vdd)-0.25
