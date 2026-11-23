@@ -1,0 +1,195 @@
+{
+  "schema_version": 2,
+  "engine": "klayout",
+  "layout": {
+    "path": "layout/analog/rx/records/2026-11-23-9f3e17c/lvl_cml2cmos.gds",
+    "scope": "repo"
+  },
+  "reference": "../../../../../../design/rx/netlists/lvl_cml2cmos.spice",
+  "top": "lvl_cml2cmos",
+  "reference_top": "LVL_CML2CMOS",
+  "reference_conversion": {
+    "form": "subckt-call",
+    "deck": "sg13g2",
+    "device_map": null
+  },
+  "parameter_tolerance": null,
+  "options": {
+    "combine_devices": false,
+    "combine_devices_per_circuit": null,
+    "combine_devices_max_attempts": 5,
+    "flatten_layout": false,
+    "flatten_reference": false,
+    "netgen_setup": null,
+    "parameter_tolerance": null,
+    "compare_parameters": null,
+    "power_connectivity": null,
+    "anchor_top_level_pins": true,
+    "strict_top_level_pin_count": false,
+    "compare_mos_flavour": false,
+    "supply_nets": [
+      "GND",
+      "VCC",
+      "VDD",
+      "VGND",
+      "VPWR",
+      "VSS"
+    ],
+    "finfet_bulk": null
+  },
+  "hints_applied": null,
+  "constant_nets_applied": null,
+  "status": "match",
+  "power_connectivity": {
+    "status": "unchecked",
+    "reason": "reference.form is 'subckt-call', whose reference netlist carries its own power/ground pins and nets -- they take part in the ordinary compare, so this check (which exists to cover the signal-only 'gate-level-verilog' form) does not apply",
+    "power_pins": [],
+    "power_pins_derivation": null,
+    "instance_count": 0,
+    "expected_nets": null,
+    "unchecked_expected_pins": [],
+    "excluded_pins": [],
+    "findings": [],
+    "finding_count": 0
+  },
+  "body_verification": {
+    "status": "verified",
+    "reason": null,
+    "device_classes": [],
+    "device_count": 0,
+    "findings": [],
+    "finding_count": 0
+  },
+  "device_parameter_coverage": [],
+  "mismatch_count": 1,
+  "error_count": 0,
+  "category_counts": {
+    "topology.top_level_pins_anchored": 1
+  },
+  "category_error_counts": {},
+  "counts": {
+    "nets": {
+      "layout": 9,
+      "reference": 9,
+      "matched": 9
+    },
+    "devices": {
+      "layout": 9,
+      "reference": 9,
+      "matched": 9
+    },
+    "pins": {
+      "layout": 9,
+      "reference": 5,
+      "matched": 9
+    }
+  },
+  "device_classes": [
+    "nfet",
+    "pfet",
+    "cap_cmim",
+    "rfcmim",
+    "cap_cmomi",
+    "cap_cmomf",
+    "resistor",
+    "dantenna",
+    "dpantenna"
+  ],
+  "environment": {
+    "engine": "klayout",
+    "engine_version": "0.30.14",
+    "netgen_binary": null,
+    "layout_sha256": "116ff825c351d088d0bd5ed6392b33a260515d6e9775e0ad296d38510bae0e99",
+    "reference_sha256": "802fe8bcc7f3bb904d6b716b04c920826d3ad6d0f53f5d9a2e7f9d8612226175",
+    "extracted_netlist": null
+  },
+  "provenance": {
+    "klt_version": "0.9.0",
+    "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+    "klt_reinstall_spec": "klayout-tools==0.9.0",
+    "klayout_version": "0.30.14",
+    "pdk": null,
+    "deck": {
+      "name": "sg13g2",
+      "content_hash": "sha256:1c95db40596afc5412e216009bcf0b775d1d74895b32738447eccbc76336dd15",
+      "released": true
+    },
+    "input": {
+      "content_hash": "sha256:116ff825c351d088d0bd5ed6392b33a260515d6e9775e0ad296d38510bae0e99",
+      "role": "layout"
+    },
+    "klayout_version_mismatch": true
+  },
+  "mismatches": [
+    {
+      "category": "topology.top_level_pins_anchored",
+      "severity": "warning",
+      "description": "5 top-level pin name(s) declared on both sides were anchored by name before comparing (options.anchor_top_level_pins): each one's layout net is asserted to match the reference net of the same-named pin, which the comparer's own topology-only net pairing does not otherwise require. Without it, two boundary nets with identical topology (e.g. two bits of a black-box macro's bus) are interchangeable and a swap between them compares clean -- see docs/cli/lvs.md, \"Top-level pin anchoring\"",
+      "side": "both",
+      "net": null,
+      "device": null,
+      "property": null,
+      "details": {
+        "pins": [
+          "IN",
+          "IP",
+          "OP",
+          "VDD",
+          "VSS"
+        ],
+        "pin_count": 5,
+        "pins_truncated": false
+      },
+      "circuit": null,
+      "instance": null,
+      "subcircuit": null
+    }
+  ],
+  "net_correspondence": [
+    {
+      "layout": "in",
+      "reference": "IN",
+      "pin": true
+    },
+    {
+      "layout": "ip",
+      "reference": "IP",
+      "pin": true
+    },
+    {
+      "layout": "op",
+      "reference": "OP",
+      "pin": true
+    },
+    {
+      "layout": "tl",
+      "reference": "TL",
+      "pin": true
+    },
+    {
+      "layout": "vdd",
+      "reference": "VDD",
+      "pin": true
+    },
+    {
+      "layout": "vss",
+      "reference": "VSS",
+      "pin": true
+    },
+    {
+      "layout": "x",
+      "reference": "X",
+      "pin": true
+    },
+    {
+      "layout": "y",
+      "reference": "Y",
+      "pin": true
+    },
+    {
+      "layout": "z",
+      "reference": "Z",
+      "pin": true
+    }
+  ]
+}

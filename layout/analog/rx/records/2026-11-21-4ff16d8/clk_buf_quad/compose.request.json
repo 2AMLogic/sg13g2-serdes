@@ -1,0 +1,2223 @@
+{
+ "schema": "klt.gen_compose.request/1",
+ "pdk": {
+  "variant": "ihp-sg13g2"
+ },
+ "blocks": [
+  {
+   "id": "XQi1a",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "bjt_array",
+    "cell_name": "clk_buf_quad_XQi1a",
+    "gds_path": "./clk_buf_quad/XQi1a.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 15.4,
+     "y1": 7.11
+    },
+    "device_count": 2,
+    "ports": [
+     {
+      "name": "Q1_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.35,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.049999999999999,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 2.0,
+     "matched_group_id": "bjt_array:1x2:npn13G2",
+     "snapped_to_grid": false,
+     "notes": [
+      "sg13g2 HBT: 2 instance(s) of the PDK cell 'npn13G2' read from <repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds; params emitter_um, topology, dummy, add_collector_ring do not apply to the PDK-authored HBT and are ignored (no ring, dummies or common-centroid pairing is drawn)",
+      "extraction/LVS recognition of npn13G2 is not claimed by this generator (tracked by #4397)"
+     ]
+    },
+    "warnings": [],
+    "hbt": {
+     "flavor": "npn13G2",
+     "cell": "npn13G2",
+     "source_gds": "<repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+     "count": 2
+    },
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "XQi1b",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "bjt_array",
+    "cell_name": "clk_buf_quad_XQi1b",
+    "gds_path": "./clk_buf_quad/XQi1b.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 15.4,
+     "y1": 7.11
+    },
+    "device_count": 2,
+    "ports": [
+     {
+      "name": "Q1_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.35,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.049999999999999,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 2.0,
+     "matched_group_id": "bjt_array:1x2:npn13G2",
+     "snapped_to_grid": false,
+     "notes": [
+      "sg13g2 HBT: 2 instance(s) of the PDK cell 'npn13G2' read from <repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds; params emitter_um, topology, dummy, add_collector_ring do not apply to the PDK-authored HBT and are ignored (no ring, dummies or common-centroid pairing is drawn)",
+      "extraction/LVS recognition of npn13G2 is not claimed by this generator (tracked by #4397)"
+     ]
+    },
+    "warnings": [],
+    "hbt": {
+     "flavor": "npn13G2",
+     "cell": "npn13G2",
+     "source_gds": "<repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+     "count": 2
+    },
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   },
+   "orientation": "mirror_x"
+  },
+  {
+   "id": "Rti1",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "clk_buf_quad_Rti1",
+    "gds_path": "./clk_buf_quad/Rti1.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 2.84,
+     "y1": 0.42
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 2.63,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "RLi1a",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "clk_buf_quad_RLi1a",
+    "gds_path": "./clk_buf_quad/RLi1a.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 2.84,
+     "y1": 0.42
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 2.63,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "RLi1b",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "clk_buf_quad_RLi1b",
+    "gds_path": "./clk_buf_quad/RLi1b.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 2.84,
+     "y1": 0.42
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 2.63,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   },
+   "orientation": "mirror_x"
+  },
+  {
+   "id": "XQi2a",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "bjt_array",
+    "cell_name": "clk_buf_quad_XQi2a",
+    "gds_path": "./clk_buf_quad/XQi2a.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 15.4,
+     "y1": 7.11
+    },
+    "device_count": 2,
+    "ports": [
+     {
+      "name": "Q1_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.35,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.049999999999999,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 2.0,
+     "matched_group_id": "bjt_array:1x2:npn13G2",
+     "snapped_to_grid": false,
+     "notes": [
+      "sg13g2 HBT: 2 instance(s) of the PDK cell 'npn13G2' read from <repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds; params emitter_um, topology, dummy, add_collector_ring do not apply to the PDK-authored HBT and are ignored (no ring, dummies or common-centroid pairing is drawn)",
+      "extraction/LVS recognition of npn13G2 is not claimed by this generator (tracked by #4397)"
+     ]
+    },
+    "warnings": [],
+    "hbt": {
+     "flavor": "npn13G2",
+     "cell": "npn13G2",
+     "source_gds": "<repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+     "count": 2
+    },
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "XQi2b",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "bjt_array",
+    "cell_name": "clk_buf_quad_XQi2b",
+    "gds_path": "./clk_buf_quad/XQi2b.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 15.4,
+     "y1": 7.11
+    },
+    "device_count": 2,
+    "ports": [
+     {
+      "name": "Q1_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.35,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.049999999999999,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 2.0,
+     "matched_group_id": "bjt_array:1x2:npn13G2",
+     "snapped_to_grid": false,
+     "notes": [
+      "sg13g2 HBT: 2 instance(s) of the PDK cell 'npn13G2' read from <repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds; params emitter_um, topology, dummy, add_collector_ring do not apply to the PDK-authored HBT and are ignored (no ring, dummies or common-centroid pairing is drawn)",
+      "extraction/LVS recognition of npn13G2 is not claimed by this generator (tracked by #4397)"
+     ]
+    },
+    "warnings": [],
+    "hbt": {
+     "flavor": "npn13G2",
+     "cell": "npn13G2",
+     "source_gds": "<repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+     "count": 2
+    },
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   },
+   "orientation": "mirror_x"
+  },
+  {
+   "id": "Rti2",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "clk_buf_quad_Rti2",
+    "gds_path": "./clk_buf_quad/Rti2.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 2.84,
+     "y1": 0.42
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 2.63,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "RLi2a",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "clk_buf_quad_RLi2a",
+    "gds_path": "./clk_buf_quad/RLi2a.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 2.84,
+     "y1": 0.42
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 2.63,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "RLi2b",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "clk_buf_quad_RLi2b",
+    "gds_path": "./clk_buf_quad/RLi2b.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 2.84,
+     "y1": 0.42
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 2.63,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   },
+   "orientation": "mirror_x"
+  },
+  {
+   "id": "XQq1a",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "bjt_array",
+    "cell_name": "clk_buf_quad_XQq1a",
+    "gds_path": "./clk_buf_quad/XQq1a.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 15.4,
+     "y1": 7.11
+    },
+    "device_count": 2,
+    "ports": [
+     {
+      "name": "Q1_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.35,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.049999999999999,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 2.0,
+     "matched_group_id": "bjt_array:1x2:npn13G2",
+     "snapped_to_grid": false,
+     "notes": [
+      "sg13g2 HBT: 2 instance(s) of the PDK cell 'npn13G2' read from <repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds; params emitter_um, topology, dummy, add_collector_ring do not apply to the PDK-authored HBT and are ignored (no ring, dummies or common-centroid pairing is drawn)",
+      "extraction/LVS recognition of npn13G2 is not claimed by this generator (tracked by #4397)"
+     ]
+    },
+    "warnings": [],
+    "hbt": {
+     "flavor": "npn13G2",
+     "cell": "npn13G2",
+     "source_gds": "<repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+     "count": 2
+    },
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "XQq1b",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "bjt_array",
+    "cell_name": "clk_buf_quad_XQq1b",
+    "gds_path": "./clk_buf_quad/XQq1b.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 15.4,
+     "y1": 7.11
+    },
+    "device_count": 2,
+    "ports": [
+     {
+      "name": "Q1_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.35,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.049999999999999,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 2.0,
+     "matched_group_id": "bjt_array:1x2:npn13G2",
+     "snapped_to_grid": false,
+     "notes": [
+      "sg13g2 HBT: 2 instance(s) of the PDK cell 'npn13G2' read from <repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds; params emitter_um, topology, dummy, add_collector_ring do not apply to the PDK-authored HBT and are ignored (no ring, dummies or common-centroid pairing is drawn)",
+      "extraction/LVS recognition of npn13G2 is not claimed by this generator (tracked by #4397)"
+     ]
+    },
+    "warnings": [],
+    "hbt": {
+     "flavor": "npn13G2",
+     "cell": "npn13G2",
+     "source_gds": "<repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+     "count": 2
+    },
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   },
+   "orientation": "mirror_x"
+  },
+  {
+   "id": "Rtq1",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "clk_buf_quad_Rtq1",
+    "gds_path": "./clk_buf_quad/Rtq1.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 2.84,
+     "y1": 0.42
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 2.63,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "RLq1a",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "clk_buf_quad_RLq1a",
+    "gds_path": "./clk_buf_quad/RLq1a.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 2.84,
+     "y1": 0.42
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 2.63,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "RLq1b",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "clk_buf_quad_RLq1b",
+    "gds_path": "./clk_buf_quad/RLq1b.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 2.84,
+     "y1": 0.42
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 2.63,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   },
+   "orientation": "mirror_x"
+  },
+  {
+   "id": "XQq2a",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "bjt_array",
+    "cell_name": "clk_buf_quad_XQq2a",
+    "gds_path": "./clk_buf_quad/XQq2a.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 15.4,
+     "y1": 7.11
+    },
+    "device_count": 2,
+    "ports": [
+     {
+      "name": "Q1_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.35,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.049999999999999,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 2.0,
+     "matched_group_id": "bjt_array:1x2:npn13G2",
+     "snapped_to_grid": false,
+     "notes": [
+      "sg13g2 HBT: 2 instance(s) of the PDK cell 'npn13G2' read from <repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds; params emitter_um, topology, dummy, add_collector_ring do not apply to the PDK-authored HBT and are ignored (no ring, dummies or common-centroid pairing is drawn)",
+      "extraction/LVS recognition of npn13G2 is not claimed by this generator (tracked by #4397)"
+     ]
+    },
+    "warnings": [],
+    "hbt": {
+     "flavor": "npn13G2",
+     "cell": "npn13G2",
+     "source_gds": "<repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+     "count": 2
+    },
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "XQq2b",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "bjt_array",
+    "cell_name": "clk_buf_quad_XQq2b",
+    "gds_path": "./clk_buf_quad/XQq2b.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 15.4,
+     "y1": 7.11
+    },
+    "device_count": 2,
+    "ports": [
+     {
+      "name": "Q1_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.35,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q1_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 3.355,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_E",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.049999999999999,
+      "y_um": 3.325,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 2.19,
+      "width_um": 0.16,
+      "direction_deg": 90
+     },
+     {
+      "name": "Q2_C",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 12.055,
+      "y_um": 4.46,
+      "width_um": 0.16,
+      "direction_deg": 90
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 2.0,
+     "matched_group_id": "bjt_array:1x2:npn13G2",
+     "snapped_to_grid": false,
+     "notes": [
+      "sg13g2 HBT: 2 instance(s) of the PDK cell 'npn13G2' read from <repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds; params emitter_um, topology, dummy, add_collector_ring do not apply to the PDK-authored HBT and are ignored (no ring, dummies or common-centroid pairing is drawn)",
+      "extraction/LVS recognition of npn13G2 is not claimed by this generator (tracked by #4397)"
+     ]
+    },
+    "warnings": [],
+    "hbt": {
+     "flavor": "npn13G2",
+     "cell": "npn13G2",
+     "source_gds": "<repo>/.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+     "count": 2
+    },
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   },
+   "orientation": "mirror_x"
+  },
+  {
+   "id": "Rtq2",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "clk_buf_quad_Rtq2",
+    "gds_path": "./clk_buf_quad/Rtq2.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 2.84,
+     "y1": 0.42
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 2.63,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "RLq2a",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "clk_buf_quad_RLq2a",
+    "gds_path": "./clk_buf_quad/RLq2a.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 2.84,
+     "y1": 0.42
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 2.63,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "RLq2b",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "clk_buf_quad_RLq2b",
+    "gds_path": "./clk_buf_quad/RLq2b.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 2.84,
+     "y1": 0.42
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 2.63,
+      "y_um": 0.21,
+      "width_um": 0.42,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   },
+   "orientation": "mirror_x"
+  }
+ ],
+ "placement": {
+  "strategy": "explicit",
+  "order": [
+   "XQi1a",
+   "XQi1b",
+   "Rti1",
+   "RLi1a",
+   "RLi1b",
+   "XQi2a",
+   "XQi2b",
+   "Rti2",
+   "RLi2a",
+   "RLi2b",
+   "XQq1a",
+   "XQq1b",
+   "Rtq1",
+   "RLq1a",
+   "RLq1b",
+   "XQq2a",
+   "XQq2b",
+   "Rtq2",
+   "RLq2a",
+   "RLq2b"
+  ],
+  "origins_um": {
+   "XQi1a": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "XQi1b": {
+    "x": 33.8,
+    "y": 0.0
+   },
+   "Rti1": {
+    "x": 36.8,
+    "y": 0.0
+   },
+   "RLi1a": {
+    "x": 42.64,
+    "y": 0.0
+   },
+   "RLi1b": {
+    "x": 51.32,
+    "y": 0.0
+   },
+   "XQi2a": {
+    "x": 54.32,
+    "y": 0.0
+   },
+   "XQi2b": {
+    "x": 88.12,
+    "y": 0.0
+   },
+   "Rti2": {
+    "x": 91.12,
+    "y": 0.0
+   },
+   "RLi2a": {
+    "x": 96.96,
+    "y": 0.0
+   },
+   "RLi2b": {
+    "x": 105.64,
+    "y": 0.0
+   },
+   "XQq1a": {
+    "x": 0.0,
+    "y": 10.11
+   },
+   "XQq1b": {
+    "x": 33.8,
+    "y": 10.11
+   },
+   "Rtq1": {
+    "x": 36.8,
+    "y": 10.11
+   },
+   "RLq1a": {
+    "x": 42.64,
+    "y": 10.11
+   },
+   "RLq1b": {
+    "x": 51.32,
+    "y": 10.11
+   },
+   "XQq2a": {
+    "x": 54.32,
+    "y": 10.11
+   },
+   "XQq2b": {
+    "x": 88.12,
+    "y": 10.11
+   },
+   "Rtq2": {
+    "x": 91.12,
+    "y": 10.11
+   },
+   "RLq2a": {
+    "x": 96.96,
+    "y": 10.11
+   },
+   "RLq2b": {
+    "x": 105.64,
+    "y": 10.11
+   }
+  }
+ },
+ "connectivity": [
+  {
+   "net": "vdd",
+   "pins": [
+    {
+     "block": "RLi1a",
+     "port": "R0_A"
+    },
+    {
+     "block": "RLi1b",
+     "port": "R0_A"
+    },
+    {
+     "block": "RLi2a",
+     "port": "R0_A"
+    },
+    {
+     "block": "RLi2b",
+     "port": "R0_A"
+    },
+    {
+     "block": "RLq1a",
+     "port": "R0_A"
+    },
+    {
+     "block": "RLq1b",
+     "port": "R0_A"
+    },
+    {
+     "block": "RLq2a",
+     "port": "R0_A"
+    },
+    {
+     "block": "RLq2b",
+     "port": "R0_A"
+    }
+   ]
+  },
+  {
+   "net": "vss",
+   "pins": [
+    {
+     "block": "Rti1",
+     "port": "R0_B"
+    },
+    {
+     "block": "Rti2",
+     "port": "R0_B"
+    },
+    {
+     "block": "Rtq1",
+     "port": "R0_B"
+    },
+    {
+     "block": "Rtq2",
+     "port": "R0_B"
+    }
+   ]
+  }
+ ],
+ "pins": [
+  {
+   "net": "ck0",
+   "block": "XQi1a",
+   "port": "Q1_B"
+  },
+  {
+   "net": "ck180",
+   "block": "XQi1b",
+   "port": "Q1_B"
+  },
+  {
+   "net": "ck90",
+   "block": "XQq1a",
+   "port": "Q1_B"
+  },
+  {
+   "net": "ck270",
+   "block": "XQq1b",
+   "port": "Q1_B"
+  },
+  {
+   "net": "vdd",
+   "block": "RLi1a",
+   "port": "R0_A"
+  },
+  {
+   "net": "vss",
+   "block": "Rti1",
+   "port": "R0_B"
+  },
+  {
+   "net": "b0",
+   "block": "XQi2b",
+   "port": "Q1_C"
+  },
+  {
+   "net": "b180",
+   "block": "XQi2a",
+   "port": "Q1_C"
+  },
+  {
+   "net": "b90",
+   "block": "XQq2b",
+   "port": "Q1_C"
+  },
+  {
+   "net": "b270",
+   "block": "XQq2a",
+   "port": "Q1_C"
+  }
+ ],
+ "routing": {
+  "layer_role": "metal3",
+  "width_um": 0.2
+ },
+ "options": {
+  "cell_name": "clk_buf_quad",
+  "output": "./clk_buf_quad.gds"
+ }
+}
