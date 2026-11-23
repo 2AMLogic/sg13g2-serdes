@@ -56,7 +56,6 @@ All proposed, conditional on DR-008 B1:
    made today**: `ckd_cmos` is unloaded past the `tx_top` port and nothing wires it to
    `clk`. Making it belongs to top-level integration, out of scope here.
 3. **`Xlvl` stays in `tx_top`**: it is the TX's own clock-domain crossing (CML divider to
-3. **`Xlvl` stays in `tx_top`**: it is the TX's own clock-domain crossing (CML divider to
    CMOS word clock) that DR-008 B1 places at the word boundary. With no connection to `clk`
    yet it is the interface pin the digital partition's word clock will come from; removing it
    would leave that partition with no word-clock source.
