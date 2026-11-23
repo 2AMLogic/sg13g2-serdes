@@ -193,12 +193,12 @@ This record's own control measurements are the justification -- bare
 (the marker existed to catch exactly the uutils `mkdir` false success that
 reading the `mkdir(2)` result directly cannot produce), so the second claim
 added no exclusivity on top of the primitive. The pinned-revision probe
-(`.github/workflows/record-dir-race-probe.yml`) still measures the two-claim
-revisions exactly as they were; nothing in this record's measurements or
+(`.github/workflows/record-dir-race-probe.yml`) still measures the pre-guard and
+two-claim revisions exactly as they were; nothing in this record's measurements or
 verdict changes.
 The probe script itself (`sim/tools/record-dir-race-probe.sh race`) was also
-updated in this PR to measure both shapes: it stages `scripts/klt-lib.sh` when
-the pinned revision has it, reports `guarded=no` for a delegated revision, and
+updated in this PR to measure all three shapes: it stages `scripts/klt-lib.sh` when
+the pinned revision has it, reports `guarded=yes` only for the `.reserved` two-claim revision (`guarded=no` for the pre-guard and delegated ones), and
 counts the `record-dir: ... exists (records are append-only)` refusal under
 `mkdir-refusals`; it refuses a delegated pin whose `klt-lib.sh` is missing
 rather than printing a summary.

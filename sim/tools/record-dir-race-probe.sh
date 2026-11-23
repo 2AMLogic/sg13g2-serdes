@@ -15,10 +15,11 @@
 #       having made zero klt sim calls).
 # The fixture recipe is test-record-dir.sh's, but every copied file comes from
 # the pinned revision under test, so a run measures that revision as-is. Both
-# record-dir.sh shapes are handled: the pre-#244 two-claim revision
-# (guarded=yes, `.reserved` second claim) and the post-#244 revision that
-# delegates to scripts/klt-lib.sh (guarded=no; reserved-refusals stays 0 by
-# construction, refusals count under mkdir-refusals).
+# record-dir.sh shapes are handled: the pre-guard single-`mkdir` revision
+# (guarded=no), the pre-#244 two-claim revision (guarded=yes, `.reserved`
+# second claim) and the post-#244 revision that delegates to
+# scripts/klt-lib.sh (guarded=no; reserved-refusals stays 0 by construction,
+# refusals count under mkdir-refusals).
 #   record-dir-race-probe.sh env    <pinned-repo>
 #   record-dir-race-probe.sh micro  <parent-dir> <rounds> [pin]   # pin = taskset -c 0
 #   record-dir-race-probe.sh race   <pinned-repo> <rx|smoke|tx-hbt|tx-mos> <attempts>
@@ -38,7 +39,8 @@ make_fixture() { # make_fixture <pinned-repo-root> <tmp-root>
   cp "$pin/sim/tools/record-dir.sh" "$pin/sim/tools/record_common.py" \
      "$pin/sim/tools/build-osdi.sh" "$tmp/repo/sim/tools/"
   # post-#244 revisions source scripts/klt-lib.sh at record-dir.sh source time;
-  # pre-#244 (two-claim) pins have none, so stage it only where the pin has it
+  # older pins may not ship the file (or ship it unused), so stage it only
+  # where the pin has it
   [ -f "$pin/scripts/klt-lib.sh" ] && cp "$pin/scripts/klt-lib.sh" "$tmp/repo/scripts/"
   cp "$pin/sim/pdk.json" "$tmp/repo/sim/"
   cp "$pin/layout/toolchain.json" "$tmp/repo/layout/"
@@ -144,10 +146,22 @@ race)
     *) die "unknown case $case (rx|smoke|tx-hbt|tx-mos)" ;;
   esac
   [ -f "$pin/sim/tools/record-dir.sh" ] || die "$pin has no sim/tools/record-dir.sh"
-  # two-claim shape (pre-#244) = no delegation to klt-lib.sh; guarded=yes only
-  # for it (the `.reserved` second claim). A delegated pin reports guarded=no.
-  if grep -q 'klt-lib\.sh' "$pin/sim/tools/record-dir.sh"; then guarded=no; else guarded=yes; fi
-  if [ "$guarded" = no ] && [ ! -f "$pin/scripts/klt-lib.sh" ]; then
+  # Three historical shapes of record-dir.sh; classify on non-comment lines only
+  # (a header comment may mention `.reserved` or klt-lib.sh without using them):
+  #   pre-guard   (d436b53): single shell mkdir      -> guarded=no  delegated=no
+  #   two-claim   (4367f60): mkdir + `.reserved`     -> guarded=yes delegated=no
+  #   delegated   (post-#244): sources klt-lib.sh    -> guarded=no  delegated=yes
+  if grep -v '^[[:space:]]*#' "$pin/sim/tools/record-dir.sh" | grep -q '\.reserved'; then
+    guarded=yes
+  else
+    guarded=no
+  fi
+  if grep -v '^[[:space:]]*#' "$pin/sim/tools/record-dir.sh" | grep -q 'klt-lib\.sh'; then
+    delegated=yes
+  else
+    delegated=no
+  fi
+  if [ "$delegated" = yes ] && [ ! -f "$pin/scripts/klt-lib.sh" ]; then
     die "$pin: record-dir.sh delegates to scripts/klt-lib.sh, which is missing -- refusing to measure"
   fi
   sha8="$(git -C "$pin" rev-parse --short HEAD)"
