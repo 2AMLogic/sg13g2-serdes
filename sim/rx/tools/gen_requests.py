@@ -20,10 +20,18 @@ SIM = os.path.join(HERE, "..")
 NET = os.path.join(SIM, "..", "..", "design", "rx", "netlists")
 
 sys.path.insert(0, os.path.join(SIM, "..", "tools"))
-from hbt_corners import HBT_LIB, corner_axes  # noqa: E402
+from hbt_corners import CAP_LIB, HBT_LIB, corner_axes  # noqa: E402
 
 VC_MAX = 1.32   # DR-003: no HBT collector node above this
 VBE_REV = 1.0   # DR-003: no reverse Vbe above this
+
+MOS_LIB = "libs.tech/ngspice/models/cornerMOSlv.lib"
+RES_LIB = "libs.tech/ngspice/models/cornerRES.lib"
+OSDI = ["$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/" + f
+        for f in ("psp103.osdi", "psp103_nqs.osdi", "r3_cmc.osdi", "mosvar.osdi")]
+# (corner name, MOS section, HBT / CAP / RES section), the sim/tx/make_tb.py pairing
+MOS_PAIRING = (("tt_typ", "tt", "typ"), ("ff_bcs", "ff", "bcs"), ("ss_wcs", "ss", "wcs"),
+               ("fs_typ", "fs", "typ"), ("sf_typ", "sf", "typ"))
 
 
 def parse_subckt(cell):
@@ -76,13 +84,13 @@ def stress_meas(inst, cell, portmap, prefix, kind):
     return lines, out
 
 
-def request(netlist, analysis, measurements, corners, extra_options=None):
+def request(netlist, analysis, measurements, corners, extra_options=None, lib=HBT_LIB):
     opts = {"stage_model_inputs": True, "timeout_s": 120, "keep_artifacts": False}
     opts.update(extra_options or {})
     return {
         "engine": "ngspice",
         "netlist": netlist,
-        "models": {"pdk": "ihp-sg13g2", "lib": HBT_LIB},
+        "models": {"pdk": "ihp-sg13g2", "lib": lib},
         "corners": corners,
         "analysis": analysis,
         "measurements": measurements,
@@ -270,24 +278,126 @@ def latch_meas():
     return l1 + l2, m + m1 + m2
 
 
+# ----------------------------------------------------- level-converter bench
+# lvl_cml2cmos is thin-oxide MOS (PSP103 via OSDI), so it runs on the MOS set
+# of sim/tx/make_tb.py (issue #241, evidence gate G3): each MOS corner ganged
+# with an HBT / CAP / RES section, x 3 supplies x 3 temperatures, 45 corners.
+def mos_corner_axes(debug=False):
+    procs = []
+    for name, mos, other in MOS_PAIRING[:1] if debug else MOS_PAIRING:
+        procs.append({"name": name, "sections": [
+            {"lib": MOS_LIB, "section": "mos_" + mos},
+            {"lib": HBT_LIB, "section": "hbt_" + other},
+            {"lib": CAP_LIB, "section": "cap_" + other},
+            {"lib": RES_LIB, "section": "res_" + other}]})
+    return {
+        "process": procs,
+        "temperature_c": [27] if debug else [-40, 27, 125],
+        "supply_v": {"vdd": [1.2] if debug else [1.08, 1.2, 1.32]},
+    }
+
+
+# Half the 5 GHz clock period: from the hold edge that regenerates the bit to
+# the next sample phase opening, the latch_regen limit. NOT a spec value --
+# DR-008 item 3 leaves the converter unspecified -- it grades this record only.
+FIRST_LOOK_S = 100e-12
+LVL_LOAD_F = 20e-15   # d0 load; the CMOS deserializer behind it does not exist
+
+
+def lvl_body():
+    head = [
+        "* lvl_cml2cmos sizing bench, driven by the latch it loads in rx_top (issue #241,",
+        "* evidence gate G3). SIZING EVIDENCE, not a spec result.",
+        "* Stimulus and rate: the latch_regen bench below (ideal 5 GHz four-phase clock,",
+        "* +-10 mV data), so qp/qn carries the 1010 stream of a 5 Gb/s per-wire sampler",
+        "* output (200 ps per bit) at the latch's own swing and common mode. One",
+        "* lvl_cml2cmos sits on qp/qn as Xlvl_d0 does in design/rx/rx_top.spice;",
+        "* Xlvl_d180, Xlvl_e90 and Xlvl_e270 are the same cell on equivalent latch outputs.",
+        "* Load on d0: %gf to ground (assumption: the CMOS deserializer behind it does not"
+        % (LVL_LOAD_F * 1e15),
+        "* exist yet). The converter supply goes through the 0 V source Vddc so its current",
+        "* is read alone. Threshold nodes: vdd/2 (on), 90 % (n90) and 10 % (n10) of vdd.",
+    ]
+    return "\n".join(head) + "\n" + latch_body([
+        ".include ../../design/rx/netlists/lvl_cml2cmos.spice",
+        "Vddc vdd cdd dc 0",
+        "Xlvl qp qn cdd 0 d0 lvl_cml2cmos",
+        "Cd0 d0 0 %gf" % (LVL_LOAD_F * 1e15),
+        "Bon on 0 V=v(d0)-0.5*v(vdd)",
+        "Bn90 n90 0 V=v(d0)-0.9*v(vdd)",
+        "Bn10 n10 0 V=v(d0)-0.1*v(vdd)"])
+
+
+def lvl_meas():
+    # Event times are absolute `when` crossings, combined in
+    # tools/make_record_mos.py: ngspice pairs a TRIG with the first TARG after
+    # TD, not after the trigger, so a late output edge pairs with the wrong
+    # edge in a TRIG/TARG card. Latch output: q rises at ~2.33 ns (sample
+    # phase), the hold edge (ck falling) is at 2.4146 ns, q falls at ~2.53 ns,
+    # the next hold edge at 2.6146 ns. Every crossing that a dead converter
+    # never makes is `not_reached`, never an error.
+    def when(name, node, edge, td):
+        return {"name": name, "unit": "s", "on_unreached": "null",
+                "spice": ".meas tran %s when v(%s)=0 %s=1 td=%s" % (name, node, edge, td)}
+
+    w = "from=2.1n to=2.95n"
+    return [
+        when("lvl_t_q_rise_s", "q", "rise", "2.25n"),
+        when("lvl_t_q_fall_s", "q", "fall", "2.45n"),
+        when("lvl_t_q_rise2_s", "q", "rise", "2.65n"),
+        when("lvl_t_out_rise_s", "on", "rise", "2.36n"),
+        when("lvl_t_out_fall_s", "on", "fall", "2.54n"),
+        when("lvl_t_out_rise2_s", "on", "rise", "2.74n"),
+        when("lvl_t_out_rise10_s", "n10", "rise", "2.36n"),
+        when("lvl_t_out_hi90_s", "n90", "rise", "2.36n"),
+        when("lvl_t_out_fall90_s", "n90", "fall", "2.54n"),
+        when("lvl_t_out_lo10_s", "n10", "fall", "2.54n"),
+        {"name": "lvl_tck_lh90_s", "unit": "s", "limits": {"max": FIRST_LOOK_S},
+         "on_unreached": "null",
+         "spice": ".meas tran lvl_tck_lh90_s trig v(ck) val=0 fall=1 td=2.35n "
+                   "targ v(n90) val=0 rise=1 td=2.35n"},
+        {"name": "lvl_tck_hl10_s", "unit": "s", "limits": {"max": FIRST_LOOK_S},
+         "on_unreached": "null",
+         "spice": ".meas tran lvl_tck_hl10_s trig v(ck) val=0 fall=1 td=2.55n "
+                   "targ v(n10) val=0 fall=1 td=2.55n"},
+        {"name": "lvl_out_hi_v", "unit": "V", "spice": ".meas tran lvl_out_hi_v max v(d0) " + w},
+        {"name": "lvl_out_lo_v", "unit": "V", "spice": ".meas tran lvl_out_lo_v min v(d0) " + w},
+        {"name": "lvl_hi_margin_v", "unit": "V", "limits": {"min": 0.0},
+         "spice": ".meas tran lvl_hi_margin_v max v(n90) " + w},
+        {"name": "lvl_lo_margin_v", "unit": "V", "limits": {"max": 0.0},
+         "spice": ".meas tran lvl_lo_margin_v min v(n10) " + w},
+        {"name": "lvl_q_max_v", "unit": "V", "spice": ".meas tran lvl_q_max_v max v(q) from=2n to=3n"},
+        {"name": "lvl_q_min_v", "unit": "V", "spice": ".meas tran lvl_q_min_v min v(q) from=2n to=3n"},
+        {"name": "lvl_qp_hi_v", "unit": "V", "spice": ".meas tran lvl_qp_hi_v max v(qp) from=2n to=3n"},
+        {"name": "lvl_qp_lo_v", "unit": "V", "spice": ".meas tran lvl_qp_lo_v min v(qp) from=2n to=3n"},
+        {"name": "lvl_idd_avg", "unit": "A", "spice": ".meas tran lvl_idd_avg avg i(vddc) from=2n to=3n"},
+    ]
+
+
 def main(argv):
     debug = len(argv) > 1 and argv[1] == "--debug"
     out = argv[2] if debug else SIM
     os.makedirs(out, exist_ok=True)
     units = corner_axes(debug)
+    mos_units = mos_corner_axes(debug)
     op_lines, op_meas = ctle_op_meas()
-    lat_lines, lat_meas = latch_meas()
+    lat_lines, lat_meas_ = latch_meas()
     files = {
-        "ctle_ac": (ctle_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, ctle_ac_meas()),
-        "ctle_op": (ctle_op_body(op_lines), {"kind": "dc", "args": "Vdmy 0 1m 1m"}, op_meas),
-        "pad_ac": (pad_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, pad_meas()),
-        "latch_regen": (latch_body(lat_lines), {"kind": "tran", "args": "2p 3n"}, lat_meas),
+        "ctle_ac": (ctle_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, ctle_ac_meas(), None),
+        "ctle_op": (ctle_op_body(op_lines), {"kind": "dc", "args": "Vdmy 0 1m 1m"}, op_meas, None),
+        "pad_ac": (pad_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, pad_meas(), None),
+        "latch_regen": (latch_body(lat_lines), {"kind": "tran", "args": "2p 3n"}, lat_meas_, None),
+        "lvl_cml2cmos": (lvl_body(), {"kind": "tran", "args": "2p 3n"}, lvl_meas(),
+                         {"timeout_s": 75, "osdi_preload": OSDI}),
     }
-    for name, (body, ana, meas) in files.items():
+    for name, (body, ana, meas, mos) in files.items():
         rel = os.path.relpath(NET, out)
         with open(os.path.join(out, name + ".sp"), "w") as f:
             f.write(body.replace("../../design/rx/netlists", rel))
-        req = request(name + ".sp", ana, meas, units)
+        if mos is None:
+            req = request(name + ".sp", ana, meas, units)
+        else:
+            req = request(name + ".sp", ana, meas, mos_units, mos, lib=MOS_LIB)
         with open(os.path.join(out, name + ".request.json"), "w") as f:
             json.dump(req, f, indent=2)
             f.write("\n")

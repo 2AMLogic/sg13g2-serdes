@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # run_sizing.sh -- run the RX sizing grids through `klt sim` and write a record.
 #
-#   source scripts/env.sh && sim/rx/run_sizing.sh
+#   source scripts/env.sh && sim/rx/run_sizing.sh          # the four HBT grids
+#   source scripts/env.sh && sim/rx/run_sizing.sh mos      # lvl_cml2cmos (MOS set)
 #
-# Each request is a 27-point HBT PVT grid, so `klt sim` routes it to the batch
+# Each request is a multi-corner grid, so `klt sim` routes it to the batch
 # fleet (KLT_SIM_BACKEND=batch). This script never falls back to a local grid:
 # a failed submit is recorded as-is. Records under sim/rx/records/<id>/ are
 # append-only evidence -- never edit or delete an earlier record directory.
@@ -17,11 +18,20 @@ command -v klt >/dev/null 2>&1 || { echo "run_sizing.sh: klt not on PATH" >&2; e
 [[ -n "${PDK_ROOT:-}" ]] || { echo "run_sizing.sh: PDK_ROOT unset -- 'source scripts/env.sh'" >&2; exit 3; }
 "${REPO_DIR}/design/check-netlists.sh" >/dev/null || { echo "run_sizing.sh: netlists are stale or missing; run design/check-netlists.sh" >&2; exit 3; }
 
+# `mos`: the lvl_cml2cmos bench (PSP103 via osdi_preload, 45-corner MOS set,
+# record id suffixed -mos), issue #241. No argument: the four HBT grids.
+SET="${1:-hbt}"
+case "${SET}" in
+  hbt) REQS=(ctle_ac ctle_op pad_ac latch_regen); SUFFIX=""; RECORD=make_record.py ;;
+  mos) REQS=(lvl_cml2cmos); SUFFIX="-mos"; RECORD=make_record_mos.py ;;
+  *) echo "run_sizing.sh: unknown set '${SET}' (hbt|mos)" >&2; exit 2 ;;
+esac
+
 # Exclusive reservation: a same-second relaunch refuses instead of overwriting
 # the saved record (issue #202).
-OUT="$(reserve_record_dir "${HERE}/records")" || exit 3
+OUT="$(reserve_record_dir "${HERE}/records" "${SUFFIX}")" || exit 3
 rc=0
-for req in ctle_ac ctle_op pad_ac latch_regen; do
+for req in "${REQS[@]}"; do
   echo "run_sizing.sh: klt sim ${req}.request.json"
   ( cd "${HERE}" && klt sim --format json --wait-for-capacity 900 \
       --report-out "${OUT}/${req}.report.json" "${req}.request.json" \
@@ -30,5 +40,5 @@ for req in ctle_ac ctle_op pad_ac latch_regen; do
   echo "${req} exit=${r}" | tee -a "${OUT}/exit-codes.txt"
   [[ ${r} -eq 0 ]] || rc=1
 done
-python3 -I "${HERE}/tools/make_record.py" "${OUT}" || rc=1
+python3 -I "${HERE}/tools/${RECORD}" "${OUT}" || rc=1
 exit ${rc}

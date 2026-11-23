@@ -1,0 +1,275 @@
+{
+  "engine": "ngspice",
+  "netlist": "lvl_cml2cmos.sp",
+  "models": {
+    "pdk": "ihp-sg13g2",
+    "lib": "libs.tech/ngspice/models/cornerMOSlv.lib"
+  },
+  "corners": {
+    "process": [
+      {
+        "name": "tt_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_tt"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_typ"
+          }
+        ]
+      },
+      {
+        "name": "ff_bcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_ff"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_bcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_bcs"
+          }
+        ]
+      },
+      {
+        "name": "ss_wcs",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_ss"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_wcs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_wcs"
+          }
+        ]
+      },
+      {
+        "name": "fs_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_fs"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_typ"
+          }
+        ]
+      },
+      {
+        "name": "sf_typ",
+        "sections": [
+          {
+            "lib": "libs.tech/ngspice/models/cornerMOSlv.lib",
+            "section": "mos_sf"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerHBT.lib",
+            "section": "hbt_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerCAP.lib",
+            "section": "cap_typ"
+          },
+          {
+            "lib": "libs.tech/ngspice/models/cornerRES.lib",
+            "section": "res_typ"
+          }
+        ]
+      }
+    ],
+    "temperature_c": [
+      -40,
+      27,
+      125
+    ],
+    "supply_v": {
+      "vdd": [
+        1.08,
+        1.2,
+        1.32
+      ]
+    }
+  },
+  "analysis": {
+    "kind": "tran",
+    "args": "2p 3n"
+  },
+  "measurements": [
+    {
+      "name": "lvl_t_q_rise_s",
+      "unit": "s",
+      "on_unreached": "null",
+      "spice": ".meas tran lvl_t_q_rise_s when v(q)=0 rise=1 td=2.25n"
+    },
+    {
+      "name": "lvl_t_q_fall_s",
+      "unit": "s",
+      "on_unreached": "null",
+      "spice": ".meas tran lvl_t_q_fall_s when v(q)=0 fall=1 td=2.45n"
+    },
+    {
+      "name": "lvl_t_q_rise2_s",
+      "unit": "s",
+      "on_unreached": "null",
+      "spice": ".meas tran lvl_t_q_rise2_s when v(q)=0 rise=1 td=2.65n"
+    },
+    {
+      "name": "lvl_t_out_rise_s",
+      "unit": "s",
+      "on_unreached": "null",
+      "spice": ".meas tran lvl_t_out_rise_s when v(on)=0 rise=1 td=2.36n"
+    },
+    {
+      "name": "lvl_t_out_fall_s",
+      "unit": "s",
+      "on_unreached": "null",
+      "spice": ".meas tran lvl_t_out_fall_s when v(on)=0 fall=1 td=2.54n"
+    },
+    {
+      "name": "lvl_t_out_rise2_s",
+      "unit": "s",
+      "on_unreached": "null",
+      "spice": ".meas tran lvl_t_out_rise2_s when v(on)=0 rise=1 td=2.74n"
+    },
+    {
+      "name": "lvl_t_out_rise10_s",
+      "unit": "s",
+      "on_unreached": "null",
+      "spice": ".meas tran lvl_t_out_rise10_s when v(n10)=0 rise=1 td=2.36n"
+    },
+    {
+      "name": "lvl_t_out_hi90_s",
+      "unit": "s",
+      "on_unreached": "null",
+      "spice": ".meas tran lvl_t_out_hi90_s when v(n90)=0 rise=1 td=2.36n"
+    },
+    {
+      "name": "lvl_t_out_fall90_s",
+      "unit": "s",
+      "on_unreached": "null",
+      "spice": ".meas tran lvl_t_out_fall90_s when v(n90)=0 fall=1 td=2.54n"
+    },
+    {
+      "name": "lvl_t_out_lo10_s",
+      "unit": "s",
+      "on_unreached": "null",
+      "spice": ".meas tran lvl_t_out_lo10_s when v(n10)=0 fall=1 td=2.54n"
+    },
+    {
+      "name": "lvl_tck_lh90_s",
+      "unit": "s",
+      "limits": {
+        "max": 1e-10
+      },
+      "on_unreached": "null",
+      "spice": ".meas tran lvl_tck_lh90_s trig v(ck) val=0 fall=1 td=2.35n targ v(n90) val=0 rise=1 td=2.35n"
+    },
+    {
+      "name": "lvl_tck_hl10_s",
+      "unit": "s",
+      "limits": {
+        "max": 1e-10
+      },
+      "on_unreached": "null",
+      "spice": ".meas tran lvl_tck_hl10_s trig v(ck) val=0 fall=1 td=2.55n targ v(n10) val=0 fall=1 td=2.55n"
+    },
+    {
+      "name": "lvl_out_hi_v",
+      "unit": "V",
+      "spice": ".meas tran lvl_out_hi_v max v(d0) from=2.1n to=2.95n"
+    },
+    {
+      "name": "lvl_out_lo_v",
+      "unit": "V",
+      "spice": ".meas tran lvl_out_lo_v min v(d0) from=2.1n to=2.95n"
+    },
+    {
+      "name": "lvl_hi_margin_v",
+      "unit": "V",
+      "limits": {
+        "min": 0.0
+      },
+      "spice": ".meas tran lvl_hi_margin_v max v(n90) from=2.1n to=2.95n"
+    },
+    {
+      "name": "lvl_lo_margin_v",
+      "unit": "V",
+      "limits": {
+        "max": 0.0
+      },
+      "spice": ".meas tran lvl_lo_margin_v min v(n10) from=2.1n to=2.95n"
+    },
+    {
+      "name": "lvl_q_max_v",
+      "unit": "V",
+      "spice": ".meas tran lvl_q_max_v max v(q) from=2n to=3n"
+    },
+    {
+      "name": "lvl_q_min_v",
+      "unit": "V",
+      "spice": ".meas tran lvl_q_min_v min v(q) from=2n to=3n"
+    },
+    {
+      "name": "lvl_qp_hi_v",
+      "unit": "V",
+      "spice": ".meas tran lvl_qp_hi_v max v(qp) from=2n to=3n"
+    },
+    {
+      "name": "lvl_qp_lo_v",
+      "unit": "V",
+      "spice": ".meas tran lvl_qp_lo_v min v(qp) from=2n to=3n"
+    },
+    {
+      "name": "lvl_idd_avg",
+      "unit": "A",
+      "spice": ".meas tran lvl_idd_avg avg i(vddc) from=2n to=3n"
+    }
+  ],
+  "options": {
+    "stage_model_inputs": true,
+    "timeout_s": 75,
+    "keep_artifacts": false,
+    "osdi_preload": [
+      "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/psp103.osdi",
+      "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/psp103_nqs.osdi",
+      "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/r3_cmc.osdi",
+      "$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/mosvar.osdi"
+    ]
+  }
+}
