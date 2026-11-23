@@ -1,0 +1,303 @@
+{
+ "schema": "klt.gen_compose.request/1",
+ "pdk": {
+  "variant": "ihp-sg13g2"
+ },
+ "blocks": [
+  {
+   "id": "Rsp",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "pad_esd_Rsp",
+    "gds_path": "./pad_esd/Rsp.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 5.4110000000000005,
+     "y1": 8.0
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 4.0,
+      "width_um": 8.0,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 5.201,
+      "y_um": 4.0,
+      "width_um": 8.0,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "Dhp",
+   "cell": {
+    "gds_path": "$PDK_ROOT/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+    "cell_name": "diodevdd_2kv",
+    "ports": [
+     {
+      "name": "PAD",
+      "x_um": -0.32,
+      "y_um": 18.535
+     }
+    ]
+   }
+  },
+  {
+   "id": "Dlp",
+   "cell": {
+    "gds_path": "$PDK_ROOT/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+    "cell_name": "diodevss_2kv",
+    "ports": [
+     {
+      "name": "PAD",
+      "x_um": -0.28,
+      "y_um": 18.525
+     }
+    ]
+   }
+  },
+  {
+   "id": "PADp",
+   "cell": {
+    "gds_path": "$PDK_ROOT/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+    "cell_name": "bondpad",
+    "ports": []
+   }
+  },
+  {
+   "id": "Rsn",
+   "generator_report": {
+    "schema_version": 1,
+    "generator": "res_array",
+    "cell_name": "pad_esd_Rsn",
+    "gds_path": "./pad_esd/Rsn.gds",
+    "pdk": {
+     "name": "ihp-sg13g2",
+     "variant": "ihp-sg13g2",
+     "version": null
+    },
+    "dbu_um": 0.001,
+    "bbox_um": {
+     "x0": 0.0,
+     "y0": 0.0,
+     "x1": 5.4110000000000005,
+     "y1": 8.0
+    },
+    "device_count": 1,
+    "ports": [
+     {
+      "name": "R0_A",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 0.21000000000000002,
+      "y_um": 4.0,
+      "width_um": 8.0,
+      "direction_deg": 180
+     },
+     {
+      "name": "R0_B",
+      "net": null,
+      "layer": {
+       "layer": 8,
+       "datatype": 0,
+       "name": null
+      },
+      "x_um": 5.201,
+      "y_um": 4.0,
+      "width_um": 8.0,
+      "direction_deg": 0
+     }
+    ],
+    "navigable_regions": [],
+    "drc_hints": {
+     "min_spacing_um": 0.5,
+     "foreign_clearance_um": 0.4,
+     "matched_group_id": "res_array:1",
+     "snapped_to_grid": false,
+     "notes": []
+    },
+    "warnings": [],
+    "provenance": {
+     "klt_version": "0.9.0",
+     "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+     "klt_reinstall_spec": "klayout-tools==0.9.0",
+     "klayout_version": "0.30.13",
+     "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+       "search root: ~/share/pdk"
+      ]
+     },
+     "deck": null,
+     "input": null
+    }
+   }
+  },
+  {
+   "id": "Dhn",
+   "cell": {
+    "gds_path": "$PDK_ROOT/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+    "cell_name": "diodevdd_2kv",
+    "ports": [
+     {
+      "name": "PAD",
+      "x_um": -0.32,
+      "y_um": 18.535
+     }
+    ]
+   }
+  },
+  {
+   "id": "Dln",
+   "cell": {
+    "gds_path": "$PDK_ROOT/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+    "cell_name": "diodevss_2kv",
+    "ports": [
+     {
+      "name": "PAD",
+      "x_um": -0.28,
+      "y_um": 18.525
+     }
+    ]
+   }
+  },
+  {
+   "id": "PADn",
+   "cell": {
+    "gds_path": "$PDK_ROOT/ihp-sg13g2/libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+    "cell_name": "bondpad",
+    "ports": []
+   }
+  }
+ ],
+ "placement": {
+  "strategy": "explicit",
+  "order": [
+   "Rsp",
+   "Dhp",
+   "Dlp",
+   "PADp",
+   "Rsn",
+   "Dhn",
+   "Dln",
+   "PADn"
+  ],
+  "origins_um": {
+   "Rsp": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "Dhp": {
+    "x": -2.12,
+    "y": 15.0
+   },
+   "Dlp": {
+    "x": 14.0,
+    "y": 15.0
+   },
+   "PADp": {
+    "x": 20.0,
+    "y": 97.05
+   },
+   "Rsn": {
+    "x": 100.0,
+    "y": 0.0
+   },
+   "Dhn": {
+    "x": 97.88,
+    "y": 15.0
+   },
+   "Dln": {
+    "x": 114.0,
+    "y": 15.0
+   },
+   "PADn": {
+    "x": 120.0,
+    "y": 97.05
+   }
+  }
+ },
+ "pins": [
+  {
+   "net": "cp",
+   "block": "Rsp",
+   "port": "R0_A"
+  },
+  {
+   "net": "padp",
+   "block": "Rsp",
+   "port": "R0_B"
+  },
+  {
+   "net": "cn",
+   "block": "Rsn",
+   "port": "R0_A"
+  },
+  {
+   "net": "padn",
+   "block": "Rsn",
+   "port": "R0_B"
+  }
+ ],
+ "options": {
+  "cell_name": "pad_esd",
+  "output": "./pad_esd.gds"
+ }
+}

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "kind": "generic",
+  "status": "pass",
+  "t1_item": 2,
+  "summary": "T1 item 2 (Layout): 3/3 attestation checks passed (klt signoff --attest)",
+  "source": "layout/analog/rx/records/2026-11-12-0193777/rx_core.gds",
+  "attestation": {
+    "producer": "klt signoff --attest",
+    "hash_algorithm": "sha256-raw-bytes",
+    "check_count": 3,
+    "passed_count": 3,
+    "checks": [
+      {
+        "check": "stream_readable",
+        "role": "layout",
+        "passed": true,
+        "content_hash": "sha256:df4b333b910c2c0ef3bbd84213490e667680da84eb913ab57fce289547011645"
+      },
+      {
+        "check": "top_cell_non_empty",
+        "role": "layout",
+        "passed": true,
+        "top_cells": [
+          "clk_buf_quad",
+          "ctle",
+          "latch_cml",
+          "lvl_cml2cmos"
+        ]
+      },
+      {
+        "check": "dbu_on_grid",
+        "role": "layout",
+        "passed": true,
+        "dbu": 0.001
+      }
+    ]
+  },
+  "provenance": {
+    "klt_version": "0.9.0",
+    "klayout_version": "0.30.13",
+    "pdk": null,
+    "deck": null,
+    "input": {
+      "path": {
+        "path": "layout/analog/rx/records/2026-11-12-0193777/rx_core.gds",
+        "scope": "repo"
+      },
+      "content_hash": "sha256:df4b333b910c2c0ef3bbd84213490e667680da84eb913ab57fce289547011645"
+    }
+  }
+}

@@ -35,8 +35,10 @@ behind it — so both flows apply.
   is scoped to the tool, so keep design-specific detail out of it and describe
   the gap, not the design.
 - **Verification is the product**: no claim without a testbench. PVT corners
-  on every recorded analog result; recorded results are append-only evidence.
-  A simulated or extrapolated BER is never called measured.
+  on every recorded analog result; recorded results are append-only evidence:
+  a correction is a dated `Erratum` paragraph appended at the end of the
+  record — never an edit of the original text — citing the correcting commit
+  or PR. A simulated or extrapolated BER is never called measured.
 - Spec changes go through `spec/` with a decision record; agents do not relax
   the ratified spec to make results pass.
 - **10 Gb/s is the target.** 5 Gb/s is the fallback and 12.5 Gb/s a stretch.
@@ -49,7 +51,7 @@ Work is coordinated through `loom:` labels on issues and pull requests, and the 
 <!-- END LOOM ORCHESTRATION -->
 
 <!-- BEGIN REPO-SKILLS -->
-This repository has [Repo Skills](https://github.com/rjwalters/repo) v0.25.10 installed —
+This repository has [Repo Skills](https://github.com/rjwalters/repo) v0.26.1 installed —
 general repository hygiene and environment commands invoked as `/repo:<command>`. Run
 `/repo:help` for the command list, or see `.claude/skills/repo/SKILL.md` for the full
 guide. Hygiene commands apply safe, reversible fixes by default and report each

@@ -28,7 +28,7 @@ case "${1:-}" in
   *) echo "setup-env.sh: unknown argument '$1'" >&2; exit 2 ;;
 esac
 
-die() { echo "setup-env.sh: $*" >&2; exit "${2:-1}"; }
+die() { echo "setup-env.sh: $1" >&2; exit "${2:-1}"; }
 
 sha256_of() {
   if command -v sha256sum >/dev/null 2>&1; then sha256sum "$1" | awk '{print $1}'
@@ -53,7 +53,7 @@ verify_or_remove() {
 # json_get <file> <python-expression-on-d>
 json_get() { python3 -I -c 'import json,sys; d=json.load(open(sys.argv[1])); print(eval(sys.argv[2]))' "$1" "$2"; }
 
-for tool in python3 curl tar ngspice; do
+for tool in python3 curl tar ngspice jq; do
   command -v "${tool}" >/dev/null 2>&1 \
     || die "'${tool}' not found on PATH. This script does not install host tools; report the gap (worker spec) instead." 3
 done
@@ -129,12 +129,44 @@ for row in "${HARNESS_ROWS[@]}"; do
   verify_or_remove "${dest}" "${sha}" "${from}@${commit:0:7}:${upstream}"
 done
 
-# ---- klt (layout/toolchain.json): repo-local venv, never a host tool -------
+# ---- klt + bench deps (layout/toolchain.json): repo-local venv, never a host tool ----
 KLT_INSTALL="$(json_get "${REPO_DIR}/layout/toolchain.json" "d['klt_install']")"
-if [[ ${CHECK_ONLY} -eq 0 && ! -x "${REPO_DIR}/.venv/bin/klt" ]]; then
+BENCH_INSTALL="$(json_get "${REPO_DIR}/layout/toolchain.json" "d['bench_install']")"
+# bench_install is a comma-separated set of '<name>==<version>' pins, installed
+# into .venv and validated per pin below -- no check names a package, so adding
+# a bench dependency is a toolchain.json edit, not a script edit (issue #170).
+IFS=',' read -ra BENCH_PINS <<<"${BENCH_INSTALL}"
+[[ ${#BENCH_PINS[@]} -gt 0 ]] \
+  || die "layout/toolchain.json bench_install is empty; it must carry at least one '<name>==<version>' pin." 4
+for pin in "${BENCH_PINS[@]}"; do
+  [[ "${pin}" == *==* && -n "${pin%%==*}" && -n "${pin##*==}" ]] \
+    || die "layout/toolchain.json bench_install '${BENCH_INSTALL}' carries a pin that is not '<name>==<version>': '${pin}'." 4
+done
+if [[ ${CHECK_ONLY} -eq 0 ]]; then
   command -v uv >/dev/null 2>&1 || die "'uv' not found on PATH; needed to build the repo-local .venv (not installing it)." 3
-  uv venv "${REPO_DIR}/.venv"
-  uv pip install --python "${REPO_DIR}/.venv/bin/python" "${KLT_INSTALL}"
+  # Build on the host python3 (already floor-checked above), self-contained:
+  # the pinned numpy lives IN the venv, so nothing depends on what the host
+  # happens to carry. `klt signoff --attest 9` runs the behavioural benches as
+  # cold_start checks in a sanitized environment (no .venv/bin on PATH, no
+  # VIRTUAL_ENV), where scripts/run-bench.sh resolves this interpreter by path.
+  # The venv pins the tools; it does not replace the host python.
+  if [[ ! -x "${REPO_DIR}/.venv/bin/klt" ]]; then
+    uv venv --python "$(command -v python3)" "${REPO_DIR}/.venv"
+    uv pip install --python "${REPO_DIR}/.venv/bin/python" "${KLT_INSTALL}"
+  fi
+  # NOT inside the klt guard: a tree provisioned before bench_install existed
+  # already has .venv/bin/klt, and an install placed in there would silently
+  # skip every already-provisioned checkout (issue #158; scipy hit exactly that
+  # trap in issue #170). The guard tests what it is about to install, at the
+  # version it is about to install it at, per pin:
+  BENCH_INSTALL_NEEDED=0
+  for pin in "${BENCH_PINS[@]}"; do
+    got="$("${REPO_DIR}/.venv/bin/python" -c "import ${pin%%==*}; print(${pin%%==*}.__version__)" 2>/dev/null || true)"
+    [[ "${got}" == "${pin##*==}" ]] || BENCH_INSTALL_NEEDED=1
+  done
+  if [[ ${BENCH_INSTALL_NEEDED} -eq 1 ]]; then
+    uv pip install --python "${REPO_DIR}/.venv/bin/python" "${BENCH_PINS[@]}"
+  fi
 fi
 [[ -x "${REPO_DIR}/.venv/bin/klt" ]] || die ".venv/bin/klt missing -- run scripts/setup-env.sh (without --check)." 3
 # A PyPI install has no direct_url.json vcs_info, so verify the pinned version.
@@ -145,6 +177,24 @@ KLT_ACTUAL="$("${REPO_DIR}/.venv/bin/klt" --version 2>/dev/null || true)"
 [[ "${KLT_ACTUAL}" == "klt ${KLT_WANT}" ]] \
   || die "klt in .venv reports '${KLT_ACTUAL:-unknown}', pin is 'klt ${KLT_WANT}'; remove .venv and re-run." 4
 echo "setup-env.sh: ${KLT_ACTUAL} in .venv"
+# Import gate, the way the benches run it (issue #158): the venv interpreter
+# when present, else PATH python3 -- always isolated, because `-I` drops the
+# user site dir, so a ~/.local package cannot mask a missing install here.
+if [[ -x "${REPO_DIR}/.venv/bin/python3" ]]; then
+  BENCH_PY="${REPO_DIR}/.venv/bin/python3"
+else
+  BENCH_PY="python3"
+fi
+for pin in "${BENCH_PINS[@]}"; do
+  "${BENCH_PY}" -I -c "import ${pin%%==*}" >/dev/null 2>&1 \
+    || die "${pin%%==*} not importable the way the behavioural benches run it ('${BENCH_PY} -I') -- run scripts/setup-env.sh (without --check)." 3
+  # Same discipline for every bench dependency (issue #158 numpy, issue #170
+  # scipy): the attested benches run on them, so each version must be its pin
+  # -- "whatever uv resolved last" is not a version the evidence can cite.
+  actual="$("${REPO_DIR}/.venv/bin/python" -c "import ${pin%%==*}; print(${pin%%==*}.__version__)" 2>/dev/null || true)"
+  [[ "${actual}" == "${pin##*==}" ]] \
+    || die "${pin%%==*} in .venv reports '${actual:-nothing}', pin is '${pin}'; remove .venv and re-run." 4
+done
 
 echo
 echo "setup-env.sh: OK. Next:  source scripts/env.sh   then   sim/smoke/run_smoke.sh"

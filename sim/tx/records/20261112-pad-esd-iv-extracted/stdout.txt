@@ -1,0 +1,151 @@
+netlist: sim/tx/pad_esd_iv_extracted.sp
+status: pass
+corners: 27  passed: 27  failed: 0  errored: 0  inconclusive: 0
+engine: ngspice 46
+models_lib: <unresolved>
+pdk: ihp-sg13g2 fetched:0.3.0 (via search root: ~/share/pdk)
+pdk_stamp: match [basis: staged_model_inputs]
+models_lib: not_comparable (runner_hash_unavailable)
+models_staged: true
+
+measurements:
+  clamp_ext_i_m0p6_a [pass]  worst=9.32143e-11 @ hbt_typ/1.080V/-40C (margin=None)
+    hbt_typ/1.080V/-40C: 9.32143e-11
+    hbt_typ/1.080V/27C: 7.04181e-08
+    hbt_typ/1.080V/125C: 5.76134e-06
+    hbt_typ/1.200V/-40C: 9.35743e-11
+    hbt_typ/1.200V/27C: 7.04185e-08
+    hbt_typ/1.200V/125C: 5.76134e-06
+    hbt_typ/1.320V/-40C: 9.39343e-11
+    hbt_typ/1.320V/27C: 7.04188e-08
+    hbt_typ/1.320V/125C: 5.76134e-06
+    hbt_bcs/1.080V/-40C: 9.32143e-11
+    hbt_bcs/1.080V/27C: 7.04181e-08
+    hbt_bcs/1.080V/125C: 5.76134e-06
+    hbt_bcs/1.200V/-40C: 9.35743e-11
+    hbt_bcs/1.200V/27C: 7.04185e-08
+    hbt_bcs/1.200V/125C: 5.76134e-06
+    hbt_bcs/1.320V/-40C: 9.39343e-11
+    hbt_bcs/1.320V/27C: 7.04188e-08
+    hbt_bcs/1.320V/125C: 5.76134e-06
+    hbt_wcs/1.080V/-40C: 9.32143e-11
+    hbt_wcs/1.080V/27C: 7.04181e-08
+    hbt_wcs/1.080V/125C: 5.76134e-06
+    hbt_wcs/1.200V/-40C: 9.35743e-11
+    hbt_wcs/1.200V/27C: 7.04185e-08
+    hbt_wcs/1.200V/125C: 5.76134e-06
+    hbt_wcs/1.320V/-40C: 9.39343e-11
+    hbt_wcs/1.320V/27C: 7.04188e-08
+    hbt_wcs/1.320V/125C: 5.76134e-06
+  clamp_ext_i_p0p6_a [pass]  worst=-4.6162e-12 @ hbt_typ/1.080V/-40C (margin=None)
+    hbt_typ/1.080V/-40C: -4.6162e-12
+    hbt_typ/1.080V/27C: -5.63362e-11
+    hbt_typ/1.080V/125C: -5.09068e-10
+    hbt_typ/1.200V/-40C: -4.25619e-12
+    hbt_typ/1.200V/27C: -5.59762e-11
+    hbt_typ/1.200V/125C: -5.08708e-10
+    hbt_typ/1.320V/-40C: -3.89619e-12
+    hbt_typ/1.320V/27C: -5.56162e-11
+    hbt_typ/1.320V/125C: -5.08348e-10
+    hbt_bcs/1.080V/-40C: -4.6162e-12
+    hbt_bcs/1.080V/27C: -5.63362e-11
+    hbt_bcs/1.080V/125C: -5.09068e-10
+    hbt_bcs/1.200V/-40C: -4.25619e-12
+    hbt_bcs/1.200V/27C: -5.59762e-11
+    hbt_bcs/1.200V/125C: -5.08708e-10
+    hbt_bcs/1.320V/-40C: -3.89619e-12
+    hbt_bcs/1.320V/27C: -5.56162e-11
+    hbt_bcs/1.320V/125C: -5.08348e-10
+    hbt_wcs/1.080V/-40C: -4.6162e-12
+    hbt_wcs/1.080V/27C: -5.63362e-11
+    hbt_wcs/1.080V/125C: -5.09068e-10
+    hbt_wcs/1.200V/-40C: -4.25619e-12
+    hbt_wcs/1.200V/27C: -5.59762e-11
+    hbt_wcs/1.200V/125C: -5.08708e-10
+    hbt_wcs/1.320V/-40C: -3.89619e-12
+    hbt_wcs/1.320V/27C: -5.56162e-11
+    hbt_wcs/1.320V/125C: -5.08348e-10
+  clamp_ext_i_p1p2_a [pass]  worst=-1.17988e-11 @ hbt_typ/1.080V/-40C (margin=None)
+    hbt_typ/1.080V/-40C: -1.17988e-11
+    hbt_typ/1.080V/27C: -9.39197e-11
+    hbt_typ/1.080V/125C: -7.48256e-10
+    hbt_typ/1.200V/-40C: -1.14388e-11
+    hbt_typ/1.200V/27C: -9.35555e-11
+    hbt_typ/1.200V/125C: -7.31815e-10
+    hbt_typ/1.320V/-40C: -1.10788e-11
+    hbt_typ/1.320V/27C: -9.31952e-11
+    hbt_typ/1.320V/125C: -7.30859e-10
+    hbt_bcs/1.080V/-40C: -1.17988e-11
+    hbt_bcs/1.080V/27C: -9.39197e-11
+    hbt_bcs/1.080V/125C: -7.48256e-10
+    hbt_bcs/1.200V/-40C: -1.14388e-11
+    hbt_bcs/1.200V/27C: -9.35555e-11
+    hbt_bcs/1.200V/125C: -7.31815e-10
+    hbt_bcs/1.320V/-40C: -1.10788e-11
+    hbt_bcs/1.320V/27C: -9.31952e-11
+    hbt_bcs/1.320V/125C: -7.30859e-10
+    hbt_wcs/1.080V/-40C: -1.17988e-11
+    hbt_wcs/1.080V/27C: -9.39197e-11
+    hbt_wcs/1.080V/125C: -7.48256e-10
+    hbt_wcs/1.200V/-40C: -1.14388e-11
+    hbt_wcs/1.200V/27C: -9.35555e-11
+    hbt_wcs/1.200V/125C: -7.31815e-10
+    hbt_wcs/1.320V/-40C: -1.10788e-11
+    hbt_wcs/1.320V/27C: -9.31952e-11
+    hbt_wcs/1.320V/125C: -7.30859e-10
+  clamp_ext_i_p1p8_a [pass]  worst=-1.72314e-08 @ hbt_typ/1.080V/-40C (margin=None)
+    hbt_typ/1.080V/-40C: -1.72314e-08
+    hbt_typ/1.080V/27C: -1.99219e-06
+    hbt_typ/1.080V/125C: -1.87735e-05
+    hbt_typ/1.200V/-40C: -6.94334e-11
+    hbt_typ/1.200V/27C: -3.83242e-08
+    hbt_typ/1.200V/125C: -5.09863e-06
+    hbt_typ/1.320V/-40C: -2.14671e-11
+    hbt_typ/1.320V/27C: -5.51673e-10
+    hbt_typ/1.320V/125C: -4.33885e-07
+    hbt_bcs/1.080V/-40C: -1.72314e-08
+    hbt_bcs/1.080V/27C: -1.99219e-06
+    hbt_bcs/1.080V/125C: -1.87735e-05
+    hbt_bcs/1.200V/-40C: -6.94334e-11
+    hbt_bcs/1.200V/27C: -3.83242e-08
+    hbt_bcs/1.200V/125C: -5.09863e-06
+    hbt_bcs/1.320V/-40C: -2.14671e-11
+    hbt_bcs/1.320V/27C: -5.51673e-10
+    hbt_bcs/1.320V/125C: -4.33885e-07
+    hbt_wcs/1.080V/-40C: -1.72314e-08
+    hbt_wcs/1.080V/27C: -1.99219e-06
+    hbt_wcs/1.080V/125C: -1.87735e-05
+    hbt_wcs/1.200V/-40C: -6.94334e-11
+    hbt_wcs/1.200V/27C: -3.83242e-08
+    hbt_wcs/1.200V/125C: -5.09863e-06
+    hbt_wcs/1.320V/-40C: -2.14671e-11
+    hbt_wcs/1.320V/27C: -5.51673e-10
+    hbt_wcs/1.320V/125C: -4.33885e-07
+
+hbt_typ/1.080V/-40C  [pass]  runtime=0.122s
+hbt_typ/1.080V/27C  [pass]  runtime=0.124s
+hbt_typ/1.080V/125C  [pass]  runtime=0.124s
+hbt_typ/1.200V/-40C  [pass]  runtime=0.128s
+hbt_typ/1.200V/27C  [pass]  runtime=0.126s
+hbt_typ/1.200V/125C  [pass]  runtime=0.126s
+hbt_typ/1.320V/-40C  [pass]  runtime=0.123s
+hbt_typ/1.320V/27C  [pass]  runtime=0.117s
+hbt_typ/1.320V/125C  [pass]  runtime=0.018s
+hbt_bcs/1.080V/-40C  [pass]  runtime=0.018s
+hbt_bcs/1.080V/27C  [pass]  runtime=0.018s
+hbt_bcs/1.080V/125C  [pass]  runtime=0.018s
+hbt_bcs/1.200V/-40C  [pass]  runtime=0.018s
+hbt_bcs/1.200V/27C  [pass]  runtime=0.018s
+hbt_bcs/1.200V/125C  [pass]  runtime=0.019s
+hbt_bcs/1.320V/-40C  [pass]  runtime=0.018s
+hbt_bcs/1.320V/27C  [pass]  runtime=0.018s
+hbt_bcs/1.320V/125C  [pass]  runtime=0.019s
+hbt_wcs/1.080V/-40C  [pass]  runtime=0.018s
+hbt_wcs/1.080V/27C  [pass]  runtime=0.019s
+hbt_wcs/1.080V/125C  [pass]  runtime=0.018s
+hbt_wcs/1.200V/-40C  [pass]  runtime=0.018s
+hbt_wcs/1.200V/27C  [pass]  runtime=0.018s
+hbt_wcs/1.200V/125C  [pass]  runtime=0.018s
+hbt_wcs/1.320V/-40C  [pass]  runtime=0.018s
+hbt_wcs/1.320V/27C  [pass]  runtime=0.018s
+hbt_wcs/1.320V/125C  [pass]  runtime=0.017s

@@ -1,0 +1,727 @@
+{
+  "schema_version": 1,
+  "kind": "generic",
+  "status": "pass",
+  "t1_item": 9,
+  "summary": "T1 item 9 (Testbenches shipped): 66/66 attestation checks passed (klt signoff --attest)",
+  "source": "verification/testbench-inventory.json",
+  "attestation": {
+    "producer": "klt signoff --attest",
+    "inventory_schema_version": 1,
+    "hash_algorithm": "sha256-raw-bytes",
+    "check_count": 66,
+    "passed_count": 66,
+    "checks": [
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "rtl/tests/test_cdr.py",
+        "passed": true,
+        "content_hash": "sha256:a9636e821d5bd41a3bee8b18942b8597ac4f2dabd1f85290a213947c93e040df"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "rtl/tests/test_cdr_pd.py",
+        "passed": true,
+        "content_hash": "sha256:121cd00ed481dff5118ec99530056b4a2449d352d5ac65d770601e6ecd983593"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "rtl/tests/test_ctrl.py",
+        "passed": true,
+        "content_hash": "sha256:8ea2d46ef739b1e9ab03847330f8125c0863bbdcbdd4d7b8f3d626ed8c8b8c8e"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "rtl/tests/test_eye.py",
+        "passed": true,
+        "content_hash": "sha256:eceeee29e8761709c39672782e8c5cc3c853af40e27d6781662b8127556087a3"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "rtl/tests/test_loopback.py",
+        "passed": true,
+        "content_hash": "sha256:337c6d0a7783ce33d11232b8da83f5c6c7d444bcdc1d5d32f8a0c5f28a2af67a"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "rtl/tests/test_prbs_chk.py",
+        "passed": true,
+        "content_hash": "sha256:a21e56e0149e149d7ce43a4347b8fbecf2e896880060c78fda5810ade3de26c6"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "rtl/tests/test_prbs_gen.py",
+        "passed": true,
+        "content_hash": "sha256:e5f4270f8c67db9bf33f635c0e8b0ff9d430cd168ba38f47461dca194416267a"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "rtl/tests/test_top.py",
+        "passed": true,
+        "content_hash": "sha256:d2903af79e3dd17ab040012787b85db2e8177ca6647507e075dc16472620f231"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/benches.json",
+        "passed": true,
+        "content_hash": "sha256:f7f5d7e35ac03e3b1d3a7817115244645c41b6c54ca819a86e6ac5715b1a9c41"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/link_r11.py",
+        "passed": true,
+        "content_hash": "sha256:06b11f213c59ee2f7c0ac166b9ebf8639a24b1e9b2f3a16a0e4bdda5ad035c67"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/link_r12.py",
+        "passed": true,
+        "content_hash": "sha256:cac7950084493b4413fe04010f9722b5fe4988a7571a3316eb8daa799a5bd89a"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/link_r13.py",
+        "passed": true,
+        "content_hash": "sha256:7e10cf5ddb73a4c4a93ee73249abbe9f082cb251c150f042bd071431acaf80b7"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/link_r15.py",
+        "passed": true,
+        "content_hash": "sha256:0623d9feb40bfdee2b554abd9e5f78e213cb00c404d2e98e2220f86914803c24"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/link_r8.py",
+        "passed": true,
+        "content_hash": "sha256:3f7b4f80f21dadca7153384112051fc6599712a09c9b866963a27633570397b4"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/r20_clk_quality.request.json",
+        "passed": true,
+        "content_hash": "sha256:a5c36478affaff530d55f541f977fc8420d987178fcdede22b227408e6aae7c8"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/r6_tx_return_loss_off.request.json",
+        "passed": true,
+        "content_hash": "sha256:1c00156f56e2619e5a1dc4f469c204de7447ab04ae8c67f668bccc9beeed2f90"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/bench/r6_tx_return_loss_on.request.json",
+        "passed": true,
+        "content_hash": "sha256:dd04e984a441622fcb5a7bc9c19abb0bfa56763147305fda82aa6f125018c854"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/rx/ctle_ac.request.json",
+        "passed": true,
+        "content_hash": "sha256:8de37f06afd26ee3c2c83eff749d4082521d0ccf657a8ff6837f611a7714b269"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/rx/ctle_op.request.json",
+        "passed": true,
+        "content_hash": "sha256:f1846b27c9171225b2d9e40e49f2059f1fde1bee6cfb69d796b34ae2b906b595"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/rx/latch_regen.request.json",
+        "passed": true,
+        "content_hash": "sha256:0dba1770a1e98ca2e2b897a8d89bc02ae4e06fcbcf251349defdbe055d610943"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/rx/pad_ac.request.json",
+        "passed": true,
+        "content_hash": "sha256:2a93baeea3c2e62d7825f92c4e0d6c4adeac29555568f64d288240d0f9d2b369"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/tx/pad_cap_extracted_5ghz.request.json",
+        "passed": true,
+        "content_hash": "sha256:ada027ad7f509ae20dded0f06cfa56cd05fddddf6751a8b3829d031d3693e772"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/tx/pad_esd_iv_extracted.request.json",
+        "passed": true,
+        "content_hash": "sha256:aded25cf132a8bb036f57717bd84f70c9a9c82ed20282c4e2f681f4e298fb0a1"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/tx/tx_mos_ffe_en.request.json",
+        "passed": true,
+        "content_hash": "sha256:f51dc102d5f4dc7f1e6f51750cce2c9117a14ad84ba77d92a66730a621c15b3d"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/tx/tx_mos_mux2to1_cml.request.json",
+        "passed": true,
+        "content_hash": "sha256:db5f3400639d5d17a914887a4ab5b23504e6680b17f1a185efe63f07e39adcf8"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/tx/tx_mos_tx_lvl_cml2cmos.request.json",
+        "passed": true,
+        "content_hash": "sha256:2aea31d41456ce90c393d5fd7eb6c2beb13b4065f35872e626601901d6d1e740"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/tx/tx_sizing_ffe0_bcs.request.json",
+        "passed": true,
+        "content_hash": "sha256:b297897e45457b146f44bddbefa6b2fcdbcfe6c2e23d098f8a44a3309eea3004"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/tx/tx_sizing_ffe0_typ.request.json",
+        "passed": true,
+        "content_hash": "sha256:c8cf3984b3befd270d0b3a0f81a33f9e72492614cffb77987bb865a91c785996"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/tx/tx_sizing_ffe0_wcs.request.json",
+        "passed": true,
+        "content_hash": "sha256:5a321dade89a26787563d15edc6c15aa962a61f619cc6f704f6059b14eae8d12"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/tx/tx_sizing_ffe1_bcs.request.json",
+        "passed": true,
+        "content_hash": "sha256:e8044fa56d2a9d39f303965805c12fbede74b706f5b257b7afeff7e8d403802f"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/tx/tx_sizing_ffe1_typ.request.json",
+        "passed": true,
+        "content_hash": "sha256:10cde4577135351da08a70738caf40413862da4364beb90bb147bbfb58dc5c0a"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/tx/tx_sizing_ffe1_wcs.request.json",
+        "passed": true,
+        "content_hash": "sha256:941403b88cb2f0ec1ccd9817f18e588a0c39386fcf8e7cccf212bbe8f01bff6a"
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "rtl/tests/test_cdr.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-cdr"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "rtl/tests/test_cdr_pd.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-cdr-pd"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "rtl/tests/test_ctrl.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-ctrl"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "rtl/tests/test_eye.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-eye"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "rtl/tests/test_loopback.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-loopback"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "rtl/tests/test_prbs_chk.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-prbs-chk"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "rtl/tests/test_prbs_gen.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-prbs-gen"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "rtl/tests/test_top.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rtl-top"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/benches.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "--list"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/link_r11.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r11-cdr-lock"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/link_r12.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r12-jtol"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/link_r13.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r13-offset"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/link_r15.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r15-method"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/link_r8.py",
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r8-sensitivity"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/r20_clk_quality.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rx-clk-quality",
+          "--request",
+          "sim/bench/r20_clk_quality.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/r6_tx_return_loss_off.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-return-loss",
+          "--request",
+          "sim/bench/r6_tx_return_loss_off.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/bench/r6_tx_return_loss_on.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-return-loss",
+          "--request",
+          "sim/bench/r6_tx_return_loss_on.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/rx/ctle_ac.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rx-ctle-ac",
+          "--request",
+          "sim/rx/ctle_ac.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/rx/ctle_op.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rx-ctle-op",
+          "--request",
+          "sim/rx/ctle_op.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/rx/latch_regen.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rx-latch-regen",
+          "--request",
+          "sim/rx/latch_regen.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/rx/pad_ac.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rx-term-pad",
+          "--request",
+          "sim/rx/pad_ac.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/tx/pad_cap_extracted_5ghz.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "pad-cap-extracted",
+          "--request",
+          "sim/tx/pad_cap_extracted_5ghz.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/tx/pad_esd_iv_extracted.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "pad-esd-iv-extracted",
+          "--request",
+          "sim/tx/pad_esd_iv_extracted.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/tx/tx_mos_ffe_en.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-mos-ffe-en",
+          "--request",
+          "sim/tx/tx_mos_ffe_en.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/tx/tx_mos_mux2to1_cml.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-mos-mux2to1-cml",
+          "--request",
+          "sim/tx/tx_mos_mux2to1_cml.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/tx/tx_mos_tx_lvl_cml2cmos.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-mos-lvl-cml2cmos",
+          "--request",
+          "sim/tx/tx_mos_tx_lvl_cml2cmos.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/tx/tx_sizing_ffe0_bcs.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-link",
+          "--request",
+          "sim/tx/tx_sizing_ffe0_bcs.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/tx/tx_sizing_ffe0_typ.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-link",
+          "--request",
+          "sim/tx/tx_sizing_ffe0_typ.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/tx/tx_sizing_ffe0_wcs.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-link",
+          "--request",
+          "sim/tx/tx_sizing_ffe0_wcs.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/tx/tx_sizing_ffe1_bcs.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-link",
+          "--request",
+          "sim/tx/tx_sizing_ffe1_bcs.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/tx/tx_sizing_ffe1_typ.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-link",
+          "--request",
+          "sim/tx/tx_sizing_ffe1_typ.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
+        "testbench": "sim/tx/tx_sizing_ffe1_wcs.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "tx-link",
+          "--request",
+          "sim/tx/tx_sizing_ffe1_wcs.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "pin",
+        "role": "pdk",
+        "passed": true,
+        "value": {
+          "name": "ihp-sg13g2",
+          "revision": "IHP-GmbH/IHP-Open-PDK v0.3.0 sha256:f6afb7a8d2adf3e40acd3fd2c7892fc93510e6f760565409a8df2b5b242254fc"
+        }
+      },
+      {
+        "check": "pin",
+        "role": "tools",
+        "passed": true,
+        "value": {
+          "cocotb": "2.0.1",
+          "harness": "2AMLogic/sg13g2-stdcells@f450813c6a5eecf3cf67aaf899db90d11f4ee68c",
+          "icarus": "Icarus Verilog version 13.0 (stable) (v13_0)",
+          "klt": "0.9.0",
+          "ngspice_min": "42"
+        }
+      }
+    ]
+  },
+  "provenance": {
+    "klt_version": "0.9.0",
+    "klayout_version": null,
+    "pdk": null,
+    "deck": null,
+    "input": {
+      "path": {
+        "path": "verification/testbench-inventory.json",
+        "scope": "repo"
+      },
+      "content_hash": "sha256:d7ddf90f5e3924311529a39e50bd198cd8bc19b1347f00e2dbfba476955c4870"
+    }
+  }
+}

@@ -7565,7 +7565,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .Y(spi_miso_oe)
   );
   sg13g2_and2_1 _0969_ (
-    .A(ctrl[3]),
+    .A(chk_en),
     .B(chk_locked),
     .X(status_o)
   );
@@ -7693,7 +7693,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .Y(_0350_)
   );
   sg13g2_o21ai_1 _0994_ (
-    .A1(mosi_s[1]),
+    .A1(mosi_v),
     .A2(_0337_),
     .B1(_0340_),
     .Y(_0351_)
@@ -7705,7 +7705,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .Y(_0005_)
   );
   sg13g2_inv_1 _0996_ (
-    .A(ctrl[6]),
+    .A(cdr_en),
     .Y(_0352_)
   );
   sg13g2_inv_1 _0997_ (
@@ -7772,7 +7772,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .Y(_0006_)
   );
   sg13g2_inv_1 _1009_ (
-    .A(ctrl[5]),
+    .A(ser_lb),
     .Y(_0364_)
   );
   sg13g2_buf_1 _1010_ (
@@ -7792,7 +7792,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .Y(_0007_)
   );
   sg13g2_inv_1 _1013_ (
-    .A(ctrl[4]),
+    .A(par_lb),
     .Y(_0367_)
   );
   sg13g2_o21ai_1 _1014_ (
@@ -7808,7 +7808,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .Y(_0008_)
   );
   sg13g2_inv_1 _1016_ (
-    .A(ctrl[3]),
+    .A(chk_en),
     .Y(_0369_)
   );
   sg13g2_o21ai_1 _1017_ (
@@ -7824,7 +7824,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .Y(_0009_)
   );
   sg13g2_inv_1 _1019_ (
-    .A(ctrl[2]),
+    .A(sel31),
     .Y(_0371_)
   );
   sg13g2_o21ai_1 _1020_ (
@@ -7852,7 +7852,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .X(_0375_)
   );
   sg13g2_a21oi_1 _1025_ (
-    .A1(ctrl[1]),
+    .A1(src_ext),
     .A2(_0362_),
     .B1(_0375_),
     .Y(_0376_)
@@ -7864,11 +7864,11 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .Y(_0011_)
   );
   sg13g2_inv_1 _1027_ (
-    .A(ctrl[0]),
+    .A(prbs_en),
     .Y(_0377_)
   );
   sg13g2_o21ai_1 _1028_ (
-    .A1(mosi_s[1]),
+    .A1(mosi_v),
     .A2(_0362_),
     .B1(_0365_),
     .Y(_0378_)
@@ -7992,7 +7992,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .X(_0395_)
   );
   sg13g2_o21ai_1 _1052_ (
-    .A1(mosi_s[1]),
+    .A1(mosi_v),
     .A2(_0383_),
     .B1(_0395_),
     .Y(_0396_)
@@ -8079,7 +8079,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .Y(_0022_)
   );
   sg13g2_nor2_1 _1068_ (
-    .A(mosi_s[1]),
+    .A(mosi_v),
     .B(_0399_),
     .Y(_0407_)
   );
@@ -8351,7 +8351,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .Y(_0443_)
   );
   sg13g2_o21ai_1 _1120_ (
-    .A1(mosi_s[1]),
+    .A1(mosi_v),
     .A2(_0411_),
     .B1(_0425_),
     .Y(_0444_)
@@ -10131,7 +10131,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .A1(eye_err[7]),
     .A2(_0610_),
     .B1(_0701_),
-    .B2(ctrl[7]),
+    .B2(cdr_hold),
     .Y(_0702_)
   );
   sg13g2_nand2_1 _1448_ (
@@ -10261,7 +10261,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .A1(snap_err[22]),
     .A2(_0616_),
     .B1(_0701_),
-    .B2(ctrl[6]),
+    .B2(cdr_en),
     .C1(_0721_),
     .Y(_0722_)
   );
@@ -10306,7 +10306,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .A1(eye_err[21]),
     .A2(_0605_),
     .B1(_0701_),
-    .B2(ctrl[5]),
+    .B2(ser_lb),
     .Y(_0728_)
   );
   sg13g2_nand2_1 _1476_ (
@@ -10447,7 +10447,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .A1(snap_err[4]),
     .A2(_0618_),
     .B1(_0701_),
-    .B2(ctrl[4]),
+    .B2(par_lb),
     .Y(_0174_)
   );
   sg13g2_a21oi_1 _1498_ (
@@ -10514,7 +10514,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .A1(freq[3]),
     .A2(_0624_),
     .B1(_0701_),
-    .B2(ctrl[3]),
+    .B2(chk_en),
     .Y(_0184_)
   );
   sg13g2_a22oi_1 _1509_ (
@@ -10627,7 +10627,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .Y(_0201_)
   );
   sg13g2_a22oi_1 _1527_ (
-    .A1(ctrl[2]),
+    .A1(sel31),
     .A2(_0701_),
     .B1(_0730_),
     .B2(eofs[2]),
@@ -10760,7 +10760,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .A1(snap_err[17]),
     .A2(_0616_),
     .B1(_0701_),
-    .B2(ctrl[1]),
+    .B2(src_ext),
     .Y(_0222_)
   );
   sg13g2_a21oi_1 _1549_ (
@@ -10873,7 +10873,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .A1(eye_err[0]),
     .A2(_0610_),
     .B1(_0701_),
-    .B2(ctrl[0]),
+    .B2(prbs_en),
     .Y(_0239_)
   );
   sg13g2_a22oi_1 _1567_ (
@@ -11030,7 +11030,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .Y(_0119_)
   );
   sg13g2_inv_1 _1593_ (
-    .A(ctrl[7]),
+    .A(cdr_hold),
     .Y(_0260_)
   );
   sg13g2_o21ai_1 _1594_ (
@@ -11634,7 +11634,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .Y(_0160_)
   );
   sg13g2_inv_1 _1703_ (
-    .A(mosi_s[1]),
+    .A(mosi_v),
     .Y(_0329_)
   );
   sg13g2_nand2_1 _1704_ (
@@ -12324,49 +12324,49 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
   sg13g2_dfrbpq_1 _1818_ (
     .CLK(clk),
     .D(_0012_),
-    .Q(ctrl[0]),
+    .Q(prbs_en),
     .RESET_B(_0760_)
   );
   sg13g2_dfrbpq_1 _1819_ (
     .CLK(clk),
     .D(_0011_),
-    .Q(ctrl[1]),
+    .Q(src_ext),
     .RESET_B(_0941_)
   );
   sg13g2_dfrbpq_1 _1820_ (
     .CLK(clk),
     .D(_0010_),
-    .Q(ctrl[2]),
+    .Q(sel31),
     .RESET_B(_0944_)
   );
   sg13g2_dfrbpq_1 _1821_ (
     .CLK(clk),
     .D(_0009_),
-    .Q(ctrl[3]),
+    .Q(chk_en),
     .RESET_B(_0946_)
   );
   sg13g2_dfrbpq_1 _1822_ (
     .CLK(clk),
     .D(_0008_),
-    .Q(ctrl[4]),
+    .Q(par_lb),
     .RESET_B(_0948_)
   );
   sg13g2_dfrbpq_1 _1823_ (
     .CLK(clk),
     .D(_0007_),
-    .Q(ctrl[5]),
+    .Q(ser_lb),
     .RESET_B(_0950_)
   );
   sg13g2_dfrbpq_1 _1824_ (
     .CLK(clk),
     .D(_0006_),
-    .Q(ctrl[6]),
+    .Q(cdr_en),
     .RESET_B(_0952_)
   );
   sg13g2_dfrbpq_1 _1825_ (
     .CLK(clk),
     .D(_0120_),
-    .Q(ctrl[7]),
+    .Q(cdr_hold),
     .RESET_B(_0909_)
   );
   sg13g2_dfrbpq_1 _1826_ (
@@ -12618,7 +12618,7 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
   sg13g2_dfrbpq_1 _1867_ (
     .CLK(clk),
     .D(_0156_),
-    .Q(mosi_s[1]),
+    .Q(mosi_v),
     .RESET_B(_0761_)
   );
   sg13g2_dfrbpq_1 _1868_ (
@@ -13723,21 +13723,14 @@ module serdes_ctrl(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_
     .L_LO(_0967_)
   );
   assign ad_full = sh[21:15];
-  assign wd_full = { sh[14:0], mosi_s[1] };
+  assign wd_full = { sh[14:0], mosi_v };
   assign shifter[0] = _0967_;
-  assign mosi_v = mosi_s[1];
+  assign ctrl = { cdr_hold, cdr_en, ser_lb, par_lb, chk_en, sel31, src_ext, prbs_en };
   assign cs_act = spi_miso_oe;
+  assign mosi_s[1] = mosi_v;
   assign eye_dwell = edwell;
   assign eye_smp_off = eofs;
   assign eye_ph_off = eph;
-  assign cdr_hold = ctrl[7];
-  assign cdr_en = ctrl[6];
-  assign ser_lb = ctrl[5];
-  assign par_lb = ctrl[4];
-  assign chk_en = ctrl[3];
-  assign sel31 = ctrl[2];
-  assign src_ext = ctrl[1];
-  assign prbs_en = ctrl[0];
 endmodule
 
 module serdes_digital_top(clk, rst_n, spi_cs_n, spi_sclk, spi_mosi, spi_miso, spi_miso_oe, status_o, ext_tx_word, tx_word, rx_data_word, rx_edge_word, pi_code, eye_ph_off, eye_smp_off, ser_lb);
@@ -21121,7 +21114,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .X(_0554_)
   );
   sg13g2_nand2_1 _1197_ (
-    .A(rr[13]),
+    .A(\mode[1].bit_[14].tb ),
     .B(_0554_),
     .Y(_0555_)
   );
@@ -21144,7 +21137,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_o21ai_1 _1202_ (
     .A1(_0556_),
-    .A2(rr[29]),
+    .A2(\mode[1].bit_[1].ta ),
     .B1(_0559_),
     .Y(_0560_)
   );
@@ -21155,13 +21148,13 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0000_)
   );
   sg13g2_nand2_1 _1204_ (
-    .A(rr[12]),
+    .A(\mode[1].bit_[15].tb ),
     .B(_0554_),
     .Y(_0561_)
   );
   sg13g2_o21ai_1 _1205_ (
     .A1(_0556_),
-    .A2(rr[28]),
+    .A2(\mode[1].bit_[2].ta ),
     .B1(_0559_),
     .Y(_0562_)
   );
@@ -21178,7 +21171,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_o21ai_1 _1208_ (
     .A1(_0556_),
-    .A2(rr[27]),
+    .A2(\mode[1].bit_[0].tb ),
     .B1(_0559_),
     .Y(_0564_)
   );
@@ -21229,7 +21222,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_o21ai_1 _1219_ (
     .A1(_0556_),
-    .A2(rr[26]),
+    .A2(\mode[1].bit_[1].tb ),
     .B1(_0559_),
     .Y(_0573_)
   );
@@ -21246,7 +21239,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_o21ai_1 _1222_ (
     .A1(_0556_),
-    .A2(rr[25]),
+    .A2(\mode[1].bit_[2].tb ),
     .B1(_0559_),
     .Y(_0575_)
   );
@@ -21263,7 +21256,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_o21ai_1 _1225_ (
     .A1(_0556_),
-    .A2(rr[24]),
+    .A2(\mode[1].bit_[3].tb ),
     .B1(_0559_),
     .Y(_0577_)
   );
@@ -21304,7 +21297,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_o21ai_1 _1233_ (
     .A1(_0556_),
-    .A2(rr[23]),
+    .A2(\mode[1].bit_[4].tb ),
     .B1(_0559_),
     .Y(_0583_)
   );
@@ -21315,7 +21308,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0008_)
   );
   sg13g2_nand2_1 _1235_ (
-    .A(rxA[9]),
+    .A(\mode[0].bit_[0].ta ),
     .B(_0554_),
     .Y(_0584_)
   );
@@ -21329,7 +21322,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_o21ai_1 _1238_ (
     .A1(_0585_),
-    .A2(rr[22]),
+    .A2(\mode[1].bit_[5].tb ),
     .B1(_0586_),
     .Y(_0587_)
   );
@@ -21340,13 +21333,13 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0009_)
   );
   sg13g2_nand2_1 _1240_ (
-    .A(rxA[10]),
+    .A(\mode[0].bit_[0].tb ),
     .B(_0554_),
     .Y(_0588_)
   );
   sg13g2_o21ai_1 _1241_ (
     .A1(_0585_),
-    .A2(rr[21]),
+    .A2(\mode[1].bit_[6].tb ),
     .B1(_0586_),
     .Y(_0589_)
   );
@@ -21415,7 +21408,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0601_)
   );
   sg13g2_xnor2_1 _1255_ (
-    .A(rr[0]),
+    .A(\mode[0].bit_[5].tb ),
     .B(_0601_),
     .Y(_0602_)
   );
@@ -21436,13 +21429,13 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0011_)
   );
   sg13g2_nand2_1 _1259_ (
-    .A(rxA[11]),
+    .A(\mode[0].bit_[1].tb ),
     .B(sel31),
     .Y(_0605_)
   );
   sg13g2_o21ai_1 _1260_ (
     .A1(_0585_),
-    .A2(rr[20]),
+    .A2(\mode[1].bit_[10].ta ),
     .B1(_0586_),
     .Y(_0606_)
   );
@@ -21457,13 +21450,13 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .X(_0607_)
   );
   sg13g2_nand2_1 _1263_ (
-    .A(rxA[12]),
+    .A(\mode[0].bit_[2].tb ),
     .B(sel31),
     .Y(_0608_)
   );
   sg13g2_o21ai_1 _1264_ (
     .A1(_0585_),
-    .A2(rr[19]),
+    .A2(\mode[1].bit_[11].ta ),
     .B1(_0586_),
     .Y(_0609_)
   );
@@ -21474,13 +21467,13 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0013_)
   );
   sg13g2_nand2_1 _1266_ (
-    .A(rxA[13]),
+    .A(\mode[0].bit_[3].tb ),
     .B(sel31),
     .Y(_0610_)
   );
   sg13g2_o21ai_1 _1267_ (
     .A1(_0585_),
-    .A2(rr[18]),
+    .A2(\mode[1].bit_[12].ta ),
     .B1(_0586_),
     .Y(_0611_)
   );
@@ -21500,13 +21493,13 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .X(_0015_)
   );
   sg13g2_nand2_1 _1271_ (
-    .A(rxA[14]),
+    .A(\mode[0].bit_[4].tb ),
     .B(sel31),
     .Y(_0613_)
   );
   sg13g2_o21ai_1 _1272_ (
     .A1(_0585_),
-    .A2(rr[17]),
+    .A2(\mode[1].bit_[10].tb ),
     .B1(_0586_),
     .Y(_0614_)
   );
@@ -21517,13 +21510,13 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0016_)
   );
   sg13g2_nand2_1 _1274_ (
-    .A(rr[0]),
+    .A(\mode[0].bit_[5].tb ),
     .B(_0596_),
     .Y(_0615_)
   );
   sg13g2_o21ai_1 _1275_ (
     .A1(_0585_),
-    .A2(rr[16]),
+    .A2(\mode[1].bit_[11].tb ),
     .B1(_0586_),
     .Y(_0616_)
   );
@@ -21540,7 +21533,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_o21ai_1 _1278_ (
     .A1(_0585_),
-    .A2(rr[15]),
+    .A2(\mode[1].bit_[12].tb ),
     .B1(_0586_),
     .Y(_0618_)
   );
@@ -21573,7 +21566,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_o21ai_1 _1284_ (
     .A1(_0585_),
-    .A2(rr[14]),
+    .A2(\mode[1].bit_[13].tb ),
     .B1(_0586_),
     .Y(_0622_)
   );
@@ -21594,7 +21587,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_o21ai_1 _1288_ (
     .A1(_0585_),
-    .A2(rr[13]),
+    .A2(\mode[1].bit_[14].tb ),
     .B1(_0624_),
     .Y(_0625_)
   );
@@ -21615,7 +21608,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_o21ai_1 _1292_ (
     .A1(_0627_),
-    .A2(rr[12]),
+    .A2(\mode[1].bit_[15].tb ),
     .B1(_0624_),
     .Y(_0628_)
   );
@@ -21889,7 +21882,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_nand2b_1 _1342_ (
     .A_N(_0627_),
-    .B(rr[0]),
+    .B(\mode[0].bit_[5].tb ),
     .Y(_0662_)
   );
   sg13g2_nand2_1 _1343_ (
@@ -23442,7 +23435,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .X(_0871_)
   );
   sg13g2_xor2_1 _1626_ (
-    .A(rxA[14]),
+    .A(\mode[0].bit_[4].tb ),
     .B(_0871_),
     .X(_0872_)
   );
@@ -23484,7 +23477,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0878_)
   );
   sg13g2_xnor2_1 _1634_ (
-    .A(rxA[13]),
+    .A(\mode[0].bit_[3].tb ),
     .B(_0878_),
     .Y(_0879_)
   );
@@ -23522,7 +23515,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0884_)
   );
   sg13g2_xnor2_1 _1641_ (
-    .A(rxA[12]),
+    .A(\mode[0].bit_[2].tb ),
     .B(_0884_),
     .Y(_0885_)
   );
@@ -23560,7 +23553,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0890_)
   );
   sg13g2_xnor2_1 _1648_ (
-    .A(rxA[11]),
+    .A(\mode[0].bit_[1].tb ),
     .B(_0890_),
     .Y(_0891_)
   );
@@ -23598,7 +23591,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0896_)
   );
   sg13g2_xnor2_1 _1655_ (
-    .A(rxA[10]),
+    .A(\mode[0].bit_[0].tb ),
     .B(_0896_),
     .Y(_0897_)
   );
@@ -23636,7 +23629,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0902_)
   );
   sg13g2_xnor2_1 _1662_ (
-    .A(rxA[9]),
+    .A(\mode[0].bit_[0].ta ),
     .B(_0902_),
     .Y(_0903_)
   );
@@ -24034,7 +24027,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_nand2b_1 _1733_ (
     .A_N(_0627_),
-    .B(rxA[14]),
+    .B(\mode[0].bit_[4].tb ),
     .Y(_0230_)
   );
   sg13g2_nand2_1 _1734_ (
@@ -24050,7 +24043,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_nand2b_1 _1736_ (
     .A_N(_0627_),
-    .B(rxA[13]),
+    .B(\mode[0].bit_[3].tb ),
     .Y(_0232_)
   );
   sg13g2_nand2_1 _1737_ (
@@ -24070,7 +24063,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_nand2b_1 _1740_ (
     .A_N(_0234_),
-    .B(rxA[12]),
+    .B(\mode[0].bit_[2].tb ),
     .Y(_0235_)
   );
   sg13g2_nand2_1 _1741_ (
@@ -24086,7 +24079,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_nand2b_1 _1743_ (
     .A_N(_0234_),
-    .B(rxA[11]),
+    .B(\mode[0].bit_[1].tb ),
     .Y(_0237_)
   );
   sg13g2_nand2_1 _1744_ (
@@ -24120,7 +24113,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_nand2b_1 _1749_ (
     .A_N(_0234_),
-    .B(rxA[10]),
+    .B(\mode[0].bit_[0].tb ),
     .Y(_0241_)
   );
   sg13g2_buf_1 _1750_ (
@@ -24140,7 +24133,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_nand2b_1 _1753_ (
     .A_N(_0234_),
-    .B(rxA[9]),
+    .B(\mode[0].bit_[0].ta ),
     .Y(_0244_)
   );
   sg13g2_nand2_1 _1754_ (
@@ -24451,7 +24444,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .X(_0286_)
   );
   sg13g2_a21oi_1 _1811_ (
-    .A1(rr[29]),
+    .A1(\mode[1].bit_[1].ta ),
     .A2(_0286_),
     .B1(_0567_),
     .Y(_0287_)
@@ -24475,7 +24468,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0289_)
   );
   sg13g2_a21oi_1 _1815_ (
-    .A1(rr[28]),
+    .A1(\mode[1].bit_[2].ta ),
     .A2(_0286_),
     .B1(_0567_),
     .Y(_0290_)
@@ -24499,7 +24492,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0292_)
   );
   sg13g2_a21oi_1 _1819_ (
-    .A1(rr[27]),
+    .A1(\mode[1].bit_[0].tb ),
     .A2(_0286_),
     .B1(_0567_),
     .Y(_0293_)
@@ -24523,7 +24516,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0295_)
   );
   sg13g2_a21oi_1 _1823_ (
-    .A1(rr[26]),
+    .A1(\mode[1].bit_[1].tb ),
     .A2(_0286_),
     .B1(_0567_),
     .Y(_0296_)
@@ -24547,7 +24540,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0298_)
   );
   sg13g2_a21oi_1 _1827_ (
-    .A1(rr[25]),
+    .A1(\mode[1].bit_[2].tb ),
     .A2(_0286_),
     .B1(_0567_),
     .Y(_0299_)
@@ -24579,7 +24572,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0303_)
   );
   sg13g2_a21oi_1 _1833_ (
-    .A1(rr[24]),
+    .A1(\mode[1].bit_[3].tb ),
     .A2(_0286_),
     .B1(_0567_),
     .Y(_0304_)
@@ -24607,7 +24600,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0307_)
   );
   sg13g2_a21oi_1 _1838_ (
-    .A1(rr[23]),
+    .A1(\mode[1].bit_[4].tb ),
     .A2(_0286_),
     .B1(_0567_),
     .Y(_0308_)
@@ -24631,7 +24624,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0310_)
   );
   sg13g2_a21oi_1 _1842_ (
-    .A1(rr[22]),
+    .A1(\mode[1].bit_[5].tb ),
     .A2(_0286_),
     .B1(_0567_),
     .Y(_0311_)
@@ -24663,7 +24656,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .X(_0315_)
   );
   sg13g2_a21oi_1 _1848_ (
-    .A1(rr[21]),
+    .A1(\mode[1].bit_[6].tb ),
     .A2(_0314_),
     .B1(_0315_),
     .Y(_0316_)
@@ -24687,7 +24680,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0318_)
   );
   sg13g2_a21oi_1 _1852_ (
-    .A1(rr[20]),
+    .A1(\mode[1].bit_[10].ta ),
     .A2(_0314_),
     .B1(_0315_),
     .Y(_0319_)
@@ -24711,7 +24704,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0321_)
   );
   sg13g2_a21oi_1 _1856_ (
-    .A1(rr[19]),
+    .A1(\mode[1].bit_[11].ta ),
     .A2(_0314_),
     .B1(_0315_),
     .Y(_0322_)
@@ -24735,7 +24728,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0324_)
   );
   sg13g2_a21oi_1 _1860_ (
-    .A1(rr[18]),
+    .A1(\mode[1].bit_[12].ta ),
     .A2(_0314_),
     .B1(_0315_),
     .Y(_0325_)
@@ -24759,7 +24752,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0327_)
   );
   sg13g2_a21oi_1 _1864_ (
-    .A1(rr[17]),
+    .A1(\mode[1].bit_[10].tb ),
     .A2(_0314_),
     .B1(_0315_),
     .Y(_0328_)
@@ -24783,7 +24776,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0330_)
   );
   sg13g2_a21oi_1 _1868_ (
-    .A1(rr[16]),
+    .A1(\mode[1].bit_[11].tb ),
     .A2(_0314_),
     .B1(_0315_),
     .Y(_0331_)
@@ -24815,7 +24808,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0335_)
   );
   sg13g2_a21oi_1 _1874_ (
-    .A1(rr[15]),
+    .A1(\mode[1].bit_[12].tb ),
     .A2(_0333_),
     .B1(_0335_),
     .Y(_0336_)
@@ -24838,7 +24831,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0338_)
   );
   sg13g2_a21oi_1 _1878_ (
-    .A1(rr[14]),
+    .A1(\mode[1].bit_[13].tb ),
     .A2(_0333_),
     .B1(_0338_),
     .Y(_0339_)
@@ -24861,7 +24854,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0341_)
   );
   sg13g2_a21oi_1 _1882_ (
-    .A1(rr[13]),
+    .A1(\mode[1].bit_[14].tb ),
     .A2(_0333_),
     .B1(_0341_),
     .Y(_0342_)
@@ -24884,7 +24877,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0344_)
   );
   sg13g2_a21oi_1 _1886_ (
-    .A1(rr[12]),
+    .A1(\mode[1].bit_[15].tb ),
     .A2(_0333_),
     .B1(_0344_),
     .Y(_0345_)
@@ -24956,13 +24949,13 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .X(_0167_)
   );
   sg13g2_nand2_1 _1899_ (
-    .A(rr[14]),
+    .A(\mode[1].bit_[13].tb ),
     .B(_0571_),
     .Y(_0354_)
   );
   sg13g2_o21ai_1 _1900_ (
     .A1(_0627_),
-    .A2(rr[30]),
+    .A2(\mode[1].bit_[0].ta ),
     .B1(_0205_),
     .Y(_0355_)
   );
@@ -24979,7 +24972,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0356_)
   );
   sg13g2_a21oi_1 _1903_ (
-    .A1(rr[30]),
+    .A1(\mode[1].bit_[0].ta ),
     .A2(_0314_),
     .B1(_0315_),
     .Y(_0357_)
@@ -25118,7 +25111,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .X(_0177_)
   );
   sg13g2_nand2_1 _1927_ (
-    .A(rxA[9]),
+    .A(\mode[0].bit_[0].ta ),
     .B(_0333_),
     .Y(_0373_)
   );
@@ -25141,7 +25134,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0178_)
   );
   sg13g2_nand2_1 _1931_ (
-    .A(rxA[10]),
+    .A(\mode[0].bit_[0].tb ),
     .B(_0333_),
     .Y(_0376_)
   );
@@ -25164,7 +25157,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0179_)
   );
   sg13g2_nand2_1 _1935_ (
-    .A(rxA[11]),
+    .A(\mode[0].bit_[1].tb ),
     .B(_0333_),
     .Y(_0379_)
   );
@@ -25291,8 +25284,8 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0399_)
   );
   sg13g2_xor2_1 _1957_ (
-    .A(rr[21]),
-    .B(rr[24]),
+    .A(\mode[1].bit_[6].tb ),
+    .B(\mode[1].bit_[3].tb ),
     .X(_0400_)
   );
   sg13g2_xnor2_1 _1958_ (
@@ -25302,50 +25295,50 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_xnor2_1 _1959_ (
     .A(rx_word[4]),
-    .B(rr[26]),
+    .B(\mode[1].bit_[1].tb ),
     .Y(_0402_)
   );
   sg13g2_xnor2_1 _1960_ (
     .A(rx_word[5]),
-    .B(rr[25]),
+    .B(\mode[1].bit_[2].tb ),
     .Y(_0403_)
   );
   sg13g2_a22oi_1 _1961_ (
-    .A1(rr[23]),
+    .A1(\mode[1].bit_[4].tb ),
     .A2(_0402_),
     .B1(_0403_),
-    .B2(rr[22]),
+    .B2(\mode[1].bit_[5].tb ),
     .Y(_0404_)
   );
   sg13g2_or2_1 _1962_ (
-    .A(rr[22]),
+    .A(\mode[1].bit_[5].tb ),
     .B(_0403_),
     .X(_0405_)
   );
   sg13g2_xor2_1 _1963_ (
     .A(rx_word[7]),
-    .B(rr[23]),
+    .B(\mode[1].bit_[4].tb ),
     .X(_0406_)
   );
   sg13g2_xnor2_1 _1964_ (
-    .A(rr[20]),
+    .A(\mode[1].bit_[10].ta ),
     .B(_0406_),
     .Y(_0407_)
   );
   sg13g2_xnor2_1 _1965_ (
     .A(rx_word[15]),
-    .B(rr[12]),
+    .B(\mode[1].bit_[15].tb ),
     .Y(_0408_)
   );
   sg13g2_xnor2_1 _1966_ (
     .A(rx_word[12]),
-    .B(rr[18]),
+    .B(\mode[1].bit_[12].ta ),
     .Y(_0409_)
   );
   sg13g2_o21ai_1 _1967_ (
     .A1(_0408_),
     .A2(_0409_),
-    .B1(rr[15]),
+    .B1(\mode[1].bit_[12].tb ),
     .Y(_0410_)
   );
   sg13g2_nand4_1 _1968_ (
@@ -25358,31 +25351,31 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   sg13g2_a21oi_1 _1969_ (
     .A1(_0408_),
     .A2(_0409_),
-    .B1(rr[15]),
+    .B1(\mode[1].bit_[12].tb ),
     .Y(_0412_)
   );
   sg13g2_xnor2_1 _1970_ (
     .A(rx_word[1]),
-    .B(rr[29]),
+    .B(\mode[1].bit_[1].ta ),
     .Y(_0413_)
   );
   sg13g2_nand2_1 _1971_ (
-    .A(rr[26]),
+    .A(\mode[1].bit_[1].tb ),
     .B(_0413_),
     .Y(_0414_)
   );
   sg13g2_xnor2_1 _1972_ (
     .A(rx_word[11]),
-    .B(rr[19]),
+    .B(\mode[1].bit_[11].ta ),
     .Y(_0415_)
   );
   sg13g2_nand2_1 _1973_ (
-    .A(rr[16]),
+    .A(\mode[1].bit_[11].tb ),
     .B(_0415_),
     .Y(_0416_)
   );
   sg13g2_or2_1 _1974_ (
-    .A(rr[16]),
+    .A(\mode[1].bit_[11].tb ),
     .B(_0415_),
     .X(_0417_)
   );
@@ -25402,54 +25395,54 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_xnor2_1 _1977_ (
     .A(rx_word[8]),
-    .B(rr[19]),
+    .B(\mode[1].bit_[11].ta ),
     .Y(_0420_)
   );
   sg13g2_xnor2_1 _1978_ (
-    .A(rr[22]),
+    .A(\mode[1].bit_[5].tb ),
     .B(_0420_),
     .Y(_0421_)
   );
   sg13g2_xnor2_1 _1979_ (
     .A(rx_word[13]),
-    .B(rr[17]),
+    .B(\mode[1].bit_[10].tb ),
     .Y(_0422_)
   );
   sg13g2_xor2_1 _1980_ (
     .A(rx_word[9]),
-    .B(rr[18]),
+    .B(\mode[1].bit_[12].ta ),
     .X(_0423_)
   );
   sg13g2_xnor2_1 _1981_ (
-    .A(rr[21]),
+    .A(\mode[1].bit_[6].tb ),
     .B(_0423_),
     .Y(_0424_)
   );
   sg13g2_o21ai_1 _1982_ (
-    .A1(rr[14]),
+    .A1(\mode[1].bit_[13].tb ),
     .A2(_0422_),
     .B1(_0424_),
     .Y(_0425_)
   );
   sg13g2_xor2_1 _1983_ (
     .A(rx_word[3]),
-    .B(rr[24]),
+    .B(\mode[1].bit_[3].tb ),
     .X(_0426_)
   );
   sg13g2_xnor2_1 _1984_ (
-    .A(rr[27]),
+    .A(\mode[1].bit_[0].tb ),
     .B(_0426_),
     .Y(_0427_)
   );
   sg13g2_o21ai_1 _1985_ (
-    .A1(rr[23]),
+    .A1(\mode[1].bit_[4].tb ),
     .A2(_0402_),
     .B1(_0427_),
     .Y(_0428_)
   );
   sg13g2_xnor2_1 _1986_ (
-    .A(rr[25]),
-    .B(rr[28]),
+    .A(\mode[1].bit_[2].tb ),
+    .B(\mode[1].bit_[2].ta ),
     .Y(_0429_)
   );
   sg13g2_xnor2_1 _1987_ (
@@ -25459,44 +25452,44 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_xnor2_1 _1988_ (
     .A(rx_word[10]),
-    .B(rr[17]),
+    .B(\mode[1].bit_[10].tb ),
     .Y(_0431_)
   );
   sg13g2_xnor2_1 _1989_ (
-    .A(rr[20]),
+    .A(\mode[1].bit_[10].ta ),
     .B(_0431_),
     .Y(_0432_)
   );
   sg13g2_xnor2_1 _1990_ (
     .A(rx_word[0]),
-    .B(rr[27]),
+    .B(\mode[1].bit_[0].tb ),
     .Y(_0433_)
   );
   sg13g2_a22oi_1 _1991_ (
-    .A1(rr[14]),
+    .A1(\mode[1].bit_[13].tb ),
     .A2(_0422_),
     .B1(_0433_),
-    .B2(rr[30]),
+    .B2(\mode[1].bit_[0].ta ),
     .Y(_0434_)
   );
   sg13g2_o21ai_1 _1992_ (
-    .A1(rr[26]),
+    .A1(\mode[1].bit_[1].tb ),
     .A2(_0413_),
     .B1(_0434_),
     .Y(_0435_)
   );
   sg13g2_xor2_1 _1993_ (
     .A(rx_word[14]),
-    .B(rr[13]),
+    .B(\mode[1].bit_[14].tb ),
     .X(_0436_)
   );
   sg13g2_xnor2_1 _1994_ (
-    .A(rr[16]),
+    .A(\mode[1].bit_[11].tb ),
     .B(_0436_),
     .Y(_0437_)
   );
   sg13g2_o21ai_1 _1995_ (
-    .A1(rr[30]),
+    .A1(\mode[1].bit_[0].ta ),
     .A2(_0433_),
     .B1(_0437_),
     .Y(_0438_)
@@ -25536,8 +25529,8 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0444_)
   );
   sg13g2_xnor2_1 _2002_ (
-    .A(rxA[12]),
-    .B(rxA[13]),
+    .A(\mode[0].bit_[2].tb ),
+    .B(\mode[0].bit_[3].tb ),
     .Y(_0445_)
   );
   sg13g2_xnor2_1 _2003_ (
@@ -25573,8 +25566,8 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0451_)
   );
   sg13g2_xnor2_1 _2009_ (
-    .A(rxA[9]),
-    .B(rxA[10]),
+    .A(\mode[0].bit_[0].ta ),
+    .B(\mode[0].bit_[0].tb ),
     .Y(_0452_)
   );
   sg13g2_xnor2_1 _2010_ (
@@ -25584,14 +25577,14 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_xnor2_1 _2011_ (
     .A(rx_word[5]),
-    .B(rxA[14]),
+    .B(\mode[0].bit_[4].tb ),
     .Y(_0454_)
   );
   sg13g2_a22oi_1 _2012_ (
     .A1(rx_word[6]),
     .A2(_0453_),
     .B1(_0454_),
-    .B2(rr[0]),
+    .B2(\mode[0].bit_[5].tb ),
     .Y(_0455_)
   );
   sg13g2_o21ai_1 _2013_ (
@@ -25611,8 +25604,8 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .X(_0458_)
   );
   sg13g2_xor2_1 _2016_ (
-    .A(rxA[11]),
-    .B(rxA[12]),
+    .A(\mode[0].bit_[1].tb ),
+    .B(\mode[0].bit_[2].tb ),
     .X(_0459_)
   );
   sg13g2_and2_1 _2017_ (
@@ -25633,17 +25626,17 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0462_)
   );
   sg13g2_or2_1 _2020_ (
-    .A(rr[0]),
+    .A(\mode[0].bit_[5].tb ),
     .B(_0454_),
     .X(_0463_)
   );
   sg13g2_xor2_1 _2021_ (
     .A(rx_word[4]),
-    .B(rxA[13]),
+    .B(\mode[0].bit_[3].tb ),
     .X(_0464_)
   );
   sg13g2_xnor2_1 _2022_ (
-    .A(rxA[14]),
+    .A(\mode[0].bit_[4].tb ),
     .B(_0464_),
     .Y(_0465_)
   );
@@ -25682,7 +25675,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   sg13g2_xor2_1 _2029_ (
     .A(rx_word[6]),
-    .B(rr[0]),
+    .B(\mode[0].bit_[5].tb ),
     .X(_0472_)
   );
   sg13g2_mux2_1 _2030_ (
@@ -25697,8 +25690,8 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .X(_0474_)
   );
   sg13g2_xnor2_1 _2032_ (
-    .A(rxA[10]),
-    .B(rxA[11]),
+    .A(\mode[0].bit_[0].tb ),
+    .B(\mode[0].bit_[1].tb ),
     .Y(_0475_)
   );
   sg13g2_xnor2_1 _2033_ (
@@ -25762,7 +25755,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0484_)
   );
   sg13g2_a21oi_1 _2043_ (
-    .A1(rxA[12]),
+    .A1(\mode[0].bit_[2].tb ),
     .A2(_0314_),
     .B1(_0566_),
     .Y(_0485_)
@@ -25785,7 +25778,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0487_)
   );
   sg13g2_a21oi_1 _2047_ (
-    .A1(rxA[13]),
+    .A1(\mode[0].bit_[3].tb ),
     .A2(_0314_),
     .B1(_0566_),
     .Y(_0488_)
@@ -25809,7 +25802,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0490_)
   );
   sg13g2_a21oi_1 _2051_ (
-    .A1(rxA[14]),
+    .A1(\mode[0].bit_[4].tb ),
     .A2(_0285_),
     .B1(_0566_),
     .Y(_0491_)
@@ -25831,7 +25824,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
     .Y(_0493_)
   );
   sg13g2_a21oi_1 _2055_ (
-    .A1(rr[0]),
+    .A1(\mode[0].bit_[5].tb ),
     .A2(_0314_),
     .B1(_0566_),
     .Y(_0494_)
@@ -26067,7 +26060,7 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   sg13g2_dfrbpq_1 _2094_ (
     .CLK(clk),
     .D(_0038_),
-    .Q(rr[0]),
+    .Q(\mode[0].bit_[5].tb ),
     .RESET_B(_1103_)
   );
   sg13g2_dfrbpq_1 _2095_ (
@@ -26103,115 +26096,115 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   sg13g2_dfrbpq_1 _2100_ (
     .CLK(clk),
     .D(_0022_),
-    .Q(rr[12]),
+    .Q(\mode[1].bit_[15].tb ),
     .RESET_B(_0941_)
   );
   sg13g2_dfrbpq_1 _2101_ (
     .CLK(clk),
     .D(_0021_),
-    .Q(rr[13]),
+    .Q(\mode[1].bit_[14].tb ),
     .RESET_B(_0943_)
   );
   sg13g2_dfrbpq_1 _2102_ (
     .CLK(clk),
     .D(_0020_),
-    .Q(rr[14]),
+    .Q(\mode[1].bit_[13].tb ),
     .RESET_B(_0945_)
   );
   sg13g2_dfrbpq_1 _2103_ (
     .CLK(clk),
     .D(_0018_),
-    .Q(rr[15]),
+    .Q(\mode[1].bit_[12].tb ),
     .RESET_B(_0949_)
   );
   sg13g2_dfrbpq_1 _2104_ (
     .CLK(clk),
     .D(_0017_),
-    .Q(rr[16]),
+    .Q(\mode[1].bit_[11].tb ),
     .RESET_B(_0951_)
   );
   sg13g2_dfrbpq_1 _2105_ (
     .CLK(clk),
     .D(_0016_),
-    .Q(rr[17]),
+    .Q(\mode[1].bit_[10].tb ),
     .RESET_B(_0953_)
   );
   sg13g2_dfrbpq_1 _2106_ (
     .CLK(clk),
     .D(_0014_),
-    .Q(rr[18]),
+    .Q(\mode[1].bit_[12].ta ),
     .RESET_B(_0956_)
   );
   sg13g2_dfrbpq_1 _2107_ (
     .CLK(clk),
     .D(_0013_),
-    .Q(rr[19]),
+    .Q(\mode[1].bit_[11].ta ),
     .RESET_B(_0958_)
   );
   sg13g2_dfrbpq_1 _2108_ (
     .CLK(clk),
     .D(_0012_),
-    .Q(rr[20]),
+    .Q(\mode[1].bit_[10].ta ),
     .RESET_B(_0960_)
   );
   sg13g2_dfrbpq_1 _2109_ (
     .CLK(clk),
     .D(_0010_),
-    .Q(rr[21]),
+    .Q(\mode[1].bit_[6].tb ),
     .RESET_B(_0964_)
   );
   sg13g2_dfrbpq_1 _2110_ (
     .CLK(clk),
     .D(_0009_),
-    .Q(rr[22]),
+    .Q(\mode[1].bit_[5].tb ),
     .RESET_B(_0966_)
   );
   sg13g2_dfrbpq_1 _2111_ (
     .CLK(clk),
     .D(_0008_),
-    .Q(rr[23]),
+    .Q(\mode[1].bit_[4].tb ),
     .RESET_B(_0968_)
   );
   sg13g2_dfrbpq_1 _2112_ (
     .CLK(clk),
     .D(_0006_),
-    .Q(rr[24]),
+    .Q(\mode[1].bit_[3].tb ),
     .RESET_B(_0972_)
   );
   sg13g2_dfrbpq_1 _2113_ (
     .CLK(clk),
     .D(_0005_),
-    .Q(rr[25]),
+    .Q(\mode[1].bit_[2].tb ),
     .RESET_B(_0974_)
   );
   sg13g2_dfrbpq_1 _2114_ (
     .CLK(clk),
     .D(_0004_),
-    .Q(rr[26]),
+    .Q(\mode[1].bit_[1].tb ),
     .RESET_B(_0976_)
   );
   sg13g2_dfrbpq_1 _2115_ (
     .CLK(clk),
     .D(_0002_),
-    .Q(rr[27]),
+    .Q(\mode[1].bit_[0].tb ),
     .RESET_B(_0979_)
   );
   sg13g2_dfrbpq_1 _2116_ (
     .CLK(clk),
     .D(_0001_),
-    .Q(rr[28]),
+    .Q(\mode[1].bit_[2].ta ),
     .RESET_B(_0981_)
   );
   sg13g2_dfrbpq_1 _2117_ (
     .CLK(clk),
     .D(_0000_),
-    .Q(rr[29]),
+    .Q(\mode[1].bit_[1].ta ),
     .RESET_B(_0955_)
   );
   sg13g2_dfrbpq_1 _2118_ (
     .CLK(clk),
     .D(_0169_),
-    .Q(rr[30]),
+    .Q(\mode[1].bit_[0].ta ),
     .RESET_B(_0963_)
   );
   sg13g2_dfrbpq_1 _2119_ (
@@ -26499,37 +26492,37 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   sg13g2_dfrbpq_1 _2166_ (
     .CLK(clk),
     .D(_0132_),
-    .Q(rxA[9]),
+    .Q(\mode[0].bit_[0].ta ),
     .RESET_B(_1061_)
   );
   sg13g2_dfrbpq_1 _2167_ (
     .CLK(clk),
     .D(_0131_),
-    .Q(rxA[10]),
+    .Q(\mode[0].bit_[0].tb ),
     .RESET_B(_1065_)
   );
   sg13g2_dfrbpq_1 _2168_ (
     .CLK(clk),
     .D(_0129_),
-    .Q(rxA[11]),
+    .Q(\mode[0].bit_[1].tb ),
     .RESET_B(_1073_)
   );
   sg13g2_dfrbpq_1 _2169_ (
     .CLK(clk),
     .D(_0128_),
-    .Q(rxA[12]),
+    .Q(\mode[0].bit_[2].tb ),
     .RESET_B(_1077_)
   );
   sg13g2_dfrbpq_1 _2170_ (
     .CLK(clk),
     .D(_0127_),
-    .Q(rxA[13]),
+    .Q(\mode[0].bit_[3].tb ),
     .RESET_B(_1081_)
   );
   sg13g2_dfrbpq_1 _2171_ (
     .CLK(clk),
     .D(_0126_),
-    .Q(rxA[14]),
+    .Q(\mode[0].bit_[4].tb ),
     .RESET_B(_1086_)
   );
   sg13g2_dfrbpq_1 _2172_ (
@@ -27524,40 +27517,21 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   );
   assign \m_rrn[0]  = { rx_word[9], rx_word[10], rx_word[11], rx_word[12], rx_word[13], rx_word[14], rx_word[15] };
   assign \m_fadv[1] [30:16] = f[14:0];
-  assign \m_rrn[1]  = { rr[14:7], rxA[9], rxA[10], rxA[11], rxA[12], rxA[13], rxA[14], rr[0], rx_word[0], rx_word[1], rx_word[2], rx_word[3], rx_word[4], rx_word[5], rx_word[6], rx_word[7], rx_word[8], rx_word[9], rx_word[10], rx_word[11], rx_word[12], rx_word[13], rx_word[14], rx_word[15] };
+  assign \m_rrn[1]  = { \mode[1].bit_[13].tb , \mode[1].bit_[14].tb , \mode[1].bit_[15].tb , rr[11:7], \mode[0].bit_[0].ta , \mode[0].bit_[0].tb , \mode[0].bit_[1].tb , \mode[0].bit_[2].tb , \mode[0].bit_[3].tb , \mode[0].bit_[4].tb , \mode[0].bit_[5].tb , rx_word[0], rx_word[1], rx_word[2], rx_word[3], rx_word[4], rx_word[5], rx_word[6], rx_word[7], rx_word[8], rx_word[9], rx_word[10], rx_word[11], rx_word[12], rx_word[13], rx_word[14], rx_word[15] };
   assign \m_ref[1]  = { \m_fadv[1] [0], \m_fadv[1] [1], \m_fadv[1] [2], \m_fadv[1] [3], \m_fadv[1] [4], \m_fadv[1] [5], \m_fadv[1] [6], \m_fadv[1] [7], \m_fadv[1] [8], \m_fadv[1] [9], \m_fadv[1] [10], \m_fadv[1] [11], \m_fadv[1] [12], \m_fadv[1] [13], \m_fadv[1] [14], \m_fadv[1] [15] };
-  assign \mode[1].bit_[15].tb  = rr[12];
-  assign \mode[1].bit_[15].ta  = rr[15];
-  assign \mode[1].bit_[14].tb  = rr[13];
-  assign \mode[1].bit_[14].ta  = rr[16];
-  assign \mode[1].bit_[13].tb  = rr[14];
-  assign \mode[1].bit_[13].ta  = rr[17];
-  assign \mode[1].bit_[12].tb  = rr[15];
-  assign \mode[1].bit_[12].ta  = rr[18];
-  assign \mode[1].bit_[11].tb  = rr[16];
-  assign \mode[1].bit_[11].ta  = rr[19];
-  assign \mode[1].bit_[10].tb  = rr[17];
-  assign \mode[1].bit_[10].ta  = rr[20];
-  assign \mode[1].bit_[9].tb  = rr[18];
-  assign \mode[1].bit_[9].ta  = rr[21];
-  assign \mode[1].bit_[8].tb  = rr[19];
-  assign \mode[1].bit_[8].ta  = rr[22];
-  assign \mode[1].bit_[7].tb  = rr[20];
-  assign \mode[1].bit_[7].ta  = rr[23];
-  assign \mode[1].bit_[6].tb  = rr[21];
-  assign \mode[1].bit_[6].ta  = rr[24];
-  assign \mode[1].bit_[5].tb  = rr[22];
-  assign \mode[1].bit_[5].ta  = rr[25];
-  assign \mode[1].bit_[4].tb  = rr[23];
-  assign \mode[1].bit_[4].ta  = rr[26];
-  assign \mode[1].bit_[3].tb  = rr[24];
-  assign \mode[1].bit_[3].ta  = rr[27];
-  assign \mode[1].bit_[2].tb  = rr[25];
-  assign \mode[1].bit_[2].ta  = rr[28];
-  assign \mode[1].bit_[1].tb  = rr[26];
-  assign \mode[1].bit_[1].ta  = rr[29];
-  assign \mode[1].bit_[0].tb  = rr[27];
-  assign \mode[1].bit_[0].ta  = rr[30];
+  assign \mode[1].bit_[15].ta  = \mode[1].bit_[12].tb ;
+  assign \mode[1].bit_[14].ta  = \mode[1].bit_[11].tb ;
+  assign \mode[1].bit_[13].ta  = \mode[1].bit_[10].tb ;
+  assign \mode[1].bit_[9].tb  = \mode[1].bit_[12].ta ;
+  assign \mode[1].bit_[9].ta  = \mode[1].bit_[6].tb ;
+  assign \mode[1].bit_[8].tb  = \mode[1].bit_[11].ta ;
+  assign \mode[1].bit_[8].ta  = \mode[1].bit_[5].tb ;
+  assign \mode[1].bit_[7].tb  = \mode[1].bit_[10].ta ;
+  assign \mode[1].bit_[7].ta  = \mode[1].bit_[4].tb ;
+  assign \mode[1].bit_[6].ta  = \mode[1].bit_[3].tb ;
+  assign \mode[1].bit_[5].ta  = \mode[1].bit_[2].tb ;
+  assign \mode[1].bit_[4].ta  = \mode[1].bit_[1].tb ;
+  assign \mode[1].bit_[3].ta  = \mode[1].bit_[0].tb ;
   assign \mode[0].bit_[15].tb  = rx_word[9];
   assign \mode[0].bit_[15].ta  = rx_word[8];
   assign \mode[0].bit_[14].tb  = rx_word[8];
@@ -27577,24 +27551,17 @@ module serdes_prbs_chk(clk, rst_n, en, sel31, clear, rx_word, locked, err_cnt, b
   assign \mode[0].bit_[7].tb  = rx_word[1];
   assign \mode[0].bit_[7].ta  = rx_word[0];
   assign \mode[0].bit_[6].tb  = rx_word[0];
-  assign \mode[0].bit_[6].ta  = rr[0];
-  assign \mode[0].bit_[5].tb  = rr[0];
-  assign \mode[0].bit_[5].ta  = rxA[14];
-  assign \mode[0].bit_[4].tb  = rxA[14];
-  assign \mode[0].bit_[4].ta  = rxA[13];
-  assign \mode[0].bit_[3].tb  = rxA[13];
-  assign \mode[0].bit_[3].ta  = rxA[12];
-  assign \mode[0].bit_[2].tb  = rxA[12];
-  assign \mode[0].bit_[2].ta  = rxA[11];
-  assign \mode[0].bit_[1].tb  = rxA[11];
-  assign \mode[0].bit_[1].ta  = rxA[10];
-  assign \mode[0].bit_[0].tb  = rxA[10];
-  assign \mode[0].bit_[0].ta  = rxA[9];
+  assign \mode[0].bit_[6].ta  = \mode[0].bit_[5].tb ;
+  assign \mode[0].bit_[5].ta  = \mode[0].bit_[4].tb ;
+  assign \mode[0].bit_[4].ta  = \mode[0].bit_[3].tb ;
+  assign \mode[0].bit_[3].ta  = \mode[0].bit_[2].tb ;
+  assign \mode[0].bit_[2].ta  = \mode[0].bit_[1].tb ;
+  assign \mode[0].bit_[1].ta  = \mode[0].bit_[0].tb ;
   assign cb[0] = inc_b;
   assign ce[0] = pend;
-  assign rxA[15] = rr[0];
+  assign rxA[15:9] = { \mode[0].bit_[5].tb , \mode[0].bit_[4].tb , \mode[0].bit_[3].tb , \mode[0].bit_[2].tb , \mode[0].bit_[1].tb , \mode[0].bit_[0].tb , \mode[0].bit_[0].ta  };
   assign rr_new[6:0] = { rx_word[9], rx_word[10], rx_word[11], rx_word[12], rx_word[13], rx_word[14], rx_word[15] };
-  assign rr[6:1] = { rxA[9], rxA[10], rxA[11], rxA[12], rxA[13], rxA[14] };
+  assign { rr[30:12], rr[6:0] } = { \mode[1].bit_[0].ta , \mode[1].bit_[1].ta , \mode[1].bit_[2].ta , \mode[1].bit_[0].tb , \mode[1].bit_[1].tb , \mode[1].bit_[2].tb , \mode[1].bit_[3].tb , \mode[1].bit_[4].tb , \mode[1].bit_[5].tb , \mode[1].bit_[6].tb , \mode[1].bit_[10].ta , \mode[1].bit_[11].ta , \mode[1].bit_[12].ta , \mode[1].bit_[10].tb , \mode[1].bit_[11].tb , \mode[1].bit_[12].tb , \mode[1].bit_[13].tb , \mode[1].bit_[14].tb , \mode[1].bit_[15].tb , \mode[0].bit_[0].ta , \mode[0].bit_[0].tb , \mode[0].bit_[1].tb , \mode[0].bit_[2].tb , \mode[0].bit_[3].tb , \mode[0].bit_[4].tb , \mode[0].bit_[5].tb  };
   assign { bit_cnt[3], bit_cnt[1:0] } = { bit_cnt[2], bit_cnt[2], bit_cnt[2] };
 endmodule
 

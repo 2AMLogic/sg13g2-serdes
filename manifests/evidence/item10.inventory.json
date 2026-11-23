@@ -8,10 +8,22 @@
     "LICENSE",
     ".github/workflows/ci.yml",
     "scripts/check-ci.sh",
+    "scripts/erc-fresh-lib.sh",
+    "scripts/klt-lib.sh",
+    "scripts/pnr-lib.sh",
+    "scripts/pnr-regen.sh",
+    "scripts/lvs-regen.sh",
+    "scripts/erc-regen.sh",
+    "scripts/test-reserve-record-dir.sh",
+    "sim/bench/gen_inventory.py",
+    "sim/bench/test_link_bench.py",
+    "sim/tools/test-record-dir.sh",
+    "sim/tools/record-dir.sh",
     "package.json"
   ],
   "checks": [
     {"name": "ci-json", "argv": ["scripts/check-ci.sh", "json"]},
-    {"name": "ci-links", "argv": ["scripts/check-ci.sh", "links"]}
+    {"name": "ci-links", "argv": ["scripts/check-ci.sh", "links"]},
+    {"name": "ci-fresh", "argv": ["scripts/check-ci.sh", "fresh"]}
   ]
 }

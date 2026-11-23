@@ -1,0 +1,11 @@
+{
+  "layout": {
+    "file": "npn13g2.gds",
+    "top": "npn13G2",
+    "deck": "sg13g2"
+  },
+  "reference": {
+    "netlist": "bare.ref.cir",
+    "top": "npn13G2"
+  }
+}

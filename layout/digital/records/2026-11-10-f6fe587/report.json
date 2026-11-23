@@ -1,0 +1,1635 @@
+{
+  "schema_version": 1,
+  "engine": "openroad",
+  "engine_version": "26Q3-1510-g6cb3f2b704",
+  "engine_logs": [
+    {
+      "invocation_id": "fe355222d1b9486aaea8c0c158812b65",
+      "script_name": "pnr_serdes_digital_top_floorplan.tcl",
+      "script_path": {
+        "path": "layout/digital/.klt/place-and-route/pnr_serdes_digital_top_floorplan.tcl",
+        "scope": "repo"
+      },
+      "script_sha256": "257ae8dd2b592b4c4f37814e1f46a8f6e0fd9efc3d07ad983f51fa6b3b8407a8",
+      "metrics_path": {
+        "path": "layout/digital/.klt/place-and-route/serdes_digital_top_floorplan_metrics.json",
+        "scope": "repo"
+      },
+      "outcome": "exited",
+      "returncode": 0,
+      "directory": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/fe355222d1b9486aaea8c0c158812b65",
+        "scope": "repo"
+      },
+      "stdout_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/fe355222d1b9486aaea8c0c158812b65/stdout.log",
+        "scope": "repo"
+      },
+      "stderr_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/fe355222d1b9486aaea8c0c158812b65/stderr.log",
+        "scope": "repo"
+      },
+      "metadata_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/fe355222d1b9486aaea8c0c158812b65/invocation.json",
+        "scope": "repo"
+      },
+      "retention_errors": []
+    },
+    {
+      "invocation_id": "2b303b5cb1834687b6d2fbf09be4ca38",
+      "script_name": "pnr_serdes_digital_top_place.tcl",
+      "script_path": {
+        "path": "layout/digital/.klt/place-and-route/pnr_serdes_digital_top_place.tcl",
+        "scope": "repo"
+      },
+      "script_sha256": "2c7ff0dcd1749e5803458654dc5729264752c6338cf920254cbb68cc8056a47a",
+      "metrics_path": {
+        "path": "layout/digital/.klt/place-and-route/serdes_digital_top_place_metrics.json",
+        "scope": "repo"
+      },
+      "outcome": "exited",
+      "returncode": 0,
+      "directory": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/2b303b5cb1834687b6d2fbf09be4ca38",
+        "scope": "repo"
+      },
+      "stdout_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/2b303b5cb1834687b6d2fbf09be4ca38/stdout.log",
+        "scope": "repo"
+      },
+      "stderr_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/2b303b5cb1834687b6d2fbf09be4ca38/stderr.log",
+        "scope": "repo"
+      },
+      "metadata_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/2b303b5cb1834687b6d2fbf09be4ca38/invocation.json",
+        "scope": "repo"
+      },
+      "retention_errors": []
+    },
+    {
+      "invocation_id": "e6ebda40a37144bb98ebb1b70ac4249d",
+      "script_name": "pnr_serdes_digital_top_cts.tcl",
+      "script_path": {
+        "path": "layout/digital/.klt/place-and-route/pnr_serdes_digital_top_cts.tcl",
+        "scope": "repo"
+      },
+      "script_sha256": "d42dbf731d930b4a3665344c328bf7ac309831fa383f7db1a3de5b937d6918fc",
+      "metrics_path": {
+        "path": "layout/digital/.klt/place-and-route/serdes_digital_top_cts_metrics.json",
+        "scope": "repo"
+      },
+      "outcome": "exited",
+      "returncode": 0,
+      "directory": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/e6ebda40a37144bb98ebb1b70ac4249d",
+        "scope": "repo"
+      },
+      "stdout_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/e6ebda40a37144bb98ebb1b70ac4249d/stdout.log",
+        "scope": "repo"
+      },
+      "stderr_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/e6ebda40a37144bb98ebb1b70ac4249d/stderr.log",
+        "scope": "repo"
+      },
+      "metadata_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/e6ebda40a37144bb98ebb1b70ac4249d/invocation.json",
+        "scope": "repo"
+      },
+      "retention_errors": []
+    },
+    {
+      "invocation_id": "3415f593267749768915581545e6cd9e",
+      "script_name": "pnr_serdes_digital_top_route.tcl",
+      "script_path": {
+        "path": "layout/digital/.klt/place-and-route/pnr_serdes_digital_top_route.tcl",
+        "scope": "repo"
+      },
+      "script_sha256": "6f75639ea358fa1ca86902b393ea9b1f748fbe9f33af62311b3b1c2277a2777a",
+      "metrics_path": {
+        "path": "layout/digital/.klt/place-and-route/serdes_digital_top_route_metrics.json",
+        "scope": "repo"
+      },
+      "outcome": "exited",
+      "returncode": 0,
+      "directory": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/3415f593267749768915581545e6cd9e",
+        "scope": "repo"
+      },
+      "stdout_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/3415f593267749768915581545e6cd9e/stdout.log",
+        "scope": "repo"
+      },
+      "stderr_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/3415f593267749768915581545e6cd9e/stderr.log",
+        "scope": "repo"
+      },
+      "metadata_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/3415f593267749768915581545e6cd9e/invocation.json",
+        "scope": "repo"
+      },
+      "retention_errors": []
+    },
+    {
+      "invocation_id": "89e2e9e413a64b41835bd8f9f0d25fcb",
+      "script_name": "pnr_serdes_digital_top_route_corners.tcl",
+      "script_path": {
+        "path": "layout/digital/.klt/place-and-route/pnr_serdes_digital_top_route_corners.tcl",
+        "scope": "repo"
+      },
+      "script_sha256": "8ca89262b4da611fda093e366ba9a3eb2eb2aa1c5f43deeefee512cf840afb83",
+      "metrics_path": {
+        "path": "layout/digital/.klt/place-and-route/serdes_digital_top_route_corners_metrics.json",
+        "scope": "repo"
+      },
+      "outcome": "exited",
+      "returncode": 0,
+      "directory": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/89e2e9e413a64b41835bd8f9f0d25fcb",
+        "scope": "repo"
+      },
+      "stdout_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/89e2e9e413a64b41835bd8f9f0d25fcb/stdout.log",
+        "scope": "repo"
+      },
+      "stderr_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/89e2e9e413a64b41835bd8f9f0d25fcb/stderr.log",
+        "scope": "repo"
+      },
+      "metadata_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/89e2e9e413a64b41835bd8f9f0d25fcb/invocation.json",
+        "scope": "repo"
+      },
+      "retention_errors": []
+    },
+    {
+      "invocation_id": "20a3676c545147a4845e2664ba555396",
+      "script_name": "pnr_serdes_digital_top_route_corner_fast_1p32V_m40C.tcl",
+      "script_path": {
+        "path": "layout/digital/.klt/place-and-route/pnr_serdes_digital_top_route_corner_fast_1p32V_m40C.tcl",
+        "scope": "repo"
+      },
+      "script_sha256": "80883edaf1a555350ef1ba41a192fcae0ef6c6a11482c4c1294aabe64a4d3122",
+      "metrics_path": {
+        "path": "layout/digital/.klt/place-and-route/serdes_digital_top_route_corner_fast_1p32V_m40C_metrics.json",
+        "scope": "repo"
+      },
+      "outcome": "exited",
+      "returncode": 0,
+      "directory": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/20a3676c545147a4845e2664ba555396",
+        "scope": "repo"
+      },
+      "stdout_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/20a3676c545147a4845e2664ba555396/stdout.log",
+        "scope": "repo"
+      },
+      "stderr_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/20a3676c545147a4845e2664ba555396/stderr.log",
+        "scope": "repo"
+      },
+      "metadata_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/20a3676c545147a4845e2664ba555396/invocation.json",
+        "scope": "repo"
+      },
+      "retention_errors": []
+    },
+    {
+      "invocation_id": "be5a178e7a6248fb8fc0a6db2b39a4f9",
+      "script_name": "pnr_serdes_digital_top_route_corner_fast_1p65V_m40C.tcl",
+      "script_path": {
+        "path": "layout/digital/.klt/place-and-route/pnr_serdes_digital_top_route_corner_fast_1p65V_m40C.tcl",
+        "scope": "repo"
+      },
+      "script_sha256": "862104dde47836c4cbb7a0e0ab79a76b3585b97b48671866e490bf9158e189d0",
+      "metrics_path": {
+        "path": "layout/digital/.klt/place-and-route/serdes_digital_top_route_corner_fast_1p65V_m40C_metrics.json",
+        "scope": "repo"
+      },
+      "outcome": "exited",
+      "returncode": 0,
+      "directory": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/be5a178e7a6248fb8fc0a6db2b39a4f9",
+        "scope": "repo"
+      },
+      "stdout_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/be5a178e7a6248fb8fc0a6db2b39a4f9/stdout.log",
+        "scope": "repo"
+      },
+      "stderr_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/be5a178e7a6248fb8fc0a6db2b39a4f9/stderr.log",
+        "scope": "repo"
+      },
+      "metadata_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/be5a178e7a6248fb8fc0a6db2b39a4f9/invocation.json",
+        "scope": "repo"
+      },
+      "retention_errors": []
+    },
+    {
+      "invocation_id": "29db273533e64d858fcd44f2ca9f75ec",
+      "script_name": "pnr_serdes_digital_top_route_corner_slow_1p08V_125C.tcl",
+      "script_path": {
+        "path": "layout/digital/.klt/place-and-route/pnr_serdes_digital_top_route_corner_slow_1p08V_125C.tcl",
+        "scope": "repo"
+      },
+      "script_sha256": "8136f35474ae39b0dc284bab849cf7fa6e7f67b0029dd8f12241db4ad5404db8",
+      "metrics_path": {
+        "path": "layout/digital/.klt/place-and-route/serdes_digital_top_route_corner_slow_1p08V_125C_metrics.json",
+        "scope": "repo"
+      },
+      "outcome": "exited",
+      "returncode": 0,
+      "directory": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/29db273533e64d858fcd44f2ca9f75ec",
+        "scope": "repo"
+      },
+      "stdout_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/29db273533e64d858fcd44f2ca9f75ec/stdout.log",
+        "scope": "repo"
+      },
+      "stderr_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/29db273533e64d858fcd44f2ca9f75ec/stderr.log",
+        "scope": "repo"
+      },
+      "metadata_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/29db273533e64d858fcd44f2ca9f75ec/invocation.json",
+        "scope": "repo"
+      },
+      "retention_errors": []
+    },
+    {
+      "invocation_id": "4656dc494fba4f3b81bc74515d4f5666",
+      "script_name": "pnr_serdes_digital_top_route_corner_slow_1p35V_125C.tcl",
+      "script_path": {
+        "path": "layout/digital/.klt/place-and-route/pnr_serdes_digital_top_route_corner_slow_1p35V_125C.tcl",
+        "scope": "repo"
+      },
+      "script_sha256": "82a8226d719bb7cdb77c739fd7424e205233c29b3f4621324e822eb00f011662",
+      "metrics_path": {
+        "path": "layout/digital/.klt/place-and-route/serdes_digital_top_route_corner_slow_1p35V_125C_metrics.json",
+        "scope": "repo"
+      },
+      "outcome": "exited",
+      "returncode": 0,
+      "directory": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/4656dc494fba4f3b81bc74515d4f5666",
+        "scope": "repo"
+      },
+      "stdout_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/4656dc494fba4f3b81bc74515d4f5666/stdout.log",
+        "scope": "repo"
+      },
+      "stderr_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/4656dc494fba4f3b81bc74515d4f5666/stderr.log",
+        "scope": "repo"
+      },
+      "metadata_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/4656dc494fba4f3b81bc74515d4f5666/invocation.json",
+        "scope": "repo"
+      },
+      "retention_errors": []
+    },
+    {
+      "invocation_id": "a56225c991ee482c93b95b788dcf35ba",
+      "script_name": "pnr_serdes_digital_top_route_corner_typ_1p20V_25C.tcl",
+      "script_path": {
+        "path": "layout/digital/.klt/place-and-route/pnr_serdes_digital_top_route_corner_typ_1p20V_25C.tcl",
+        "scope": "repo"
+      },
+      "script_sha256": "a97ada41d61b9c1c4443c07d5f8b41ed42e479d4e70dd8f864bb8651f34859fe",
+      "metrics_path": {
+        "path": "layout/digital/.klt/place-and-route/serdes_digital_top_route_corner_typ_1p20V_25C_metrics.json",
+        "scope": "repo"
+      },
+      "outcome": "exited",
+      "returncode": 0,
+      "directory": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/a56225c991ee482c93b95b788dcf35ba",
+        "scope": "repo"
+      },
+      "stdout_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/a56225c991ee482c93b95b788dcf35ba/stdout.log",
+        "scope": "repo"
+      },
+      "stderr_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/a56225c991ee482c93b95b788dcf35ba/stderr.log",
+        "scope": "repo"
+      },
+      "metadata_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/a56225c991ee482c93b95b788dcf35ba/invocation.json",
+        "scope": "repo"
+      },
+      "retention_errors": []
+    },
+    {
+      "invocation_id": "2ac14609118f46b8b5eb68c96fcb6aab",
+      "script_name": "pnr_serdes_digital_top_route_corner_typ_1p50V_25C.tcl",
+      "script_path": {
+        "path": "layout/digital/.klt/place-and-route/pnr_serdes_digital_top_route_corner_typ_1p50V_25C.tcl",
+        "scope": "repo"
+      },
+      "script_sha256": "3d30f9cc27aca6ce54f16502b6923d6b9fa40177d40f6e64e9f3e895c5021948",
+      "metrics_path": {
+        "path": "layout/digital/.klt/place-and-route/serdes_digital_top_route_corner_typ_1p50V_25C_metrics.json",
+        "scope": "repo"
+      },
+      "outcome": "exited",
+      "returncode": 0,
+      "directory": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/2ac14609118f46b8b5eb68c96fcb6aab",
+        "scope": "repo"
+      },
+      "stdout_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/2ac14609118f46b8b5eb68c96fcb6aab/stdout.log",
+        "scope": "repo"
+      },
+      "stderr_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/2ac14609118f46b8b5eb68c96fcb6aab/stderr.log",
+        "scope": "repo"
+      },
+      "metadata_path": {
+        "path": "layout/digital/.klt/place-and-route/openroad-logs/2ac14609118f46b8b5eb68c96fcb6aab/invocation.json",
+        "scope": "repo"
+      },
+      "retention_errors": []
+    }
+  ],
+  "hdl_toplevel": "serdes_digital_top",
+  "netlist": {
+    "path": "rtl/synth/serdes_digital_top_synth.v",
+    "scope": "repo"
+  },
+  "status": "ok",
+  "stage_reached": "route",
+  "seed": 1,
+  "coverage": {
+    "metal_density_fill": {
+      "status": "unsupported",
+      "inserted": false,
+      "reason": "no metal density fill is inserted at any stage; standard-cell gap fillers are not metal fill"
+    },
+    "density_compliance": {
+      "status": "unsupported",
+      "evaluated": false,
+      "reason": "metal density rules are not evaluated by place-and-route; a zero route_drc_violation_count does not imply density compliance"
+    }
+  },
+  "interconnect_corner": "nom",
+  "die_area_um2": 195404,
+  "core_area_um2": 177029,
+  "utilization_pct": 44.0908,
+  "wirelength_um": 147196,
+  "worst_slack_ns": -0.00386,
+  "total_negative_slack_ns": -0.00386,
+  "fmax_mhz": 623.496,
+  "setup_violation_count": 1,
+  "hold_violation_count": 0,
+  "nominal_hold_slack_ns": 0.19587,
+  "antenna_violation_count": 0,
+  "route_drc_violation_count": 0,
+  "estimated_power_mw": 40.1789,
+  "clock_skew_ns": 0.04647,
+  "worst_setup_slack_ns": -0.99182,
+  "worst_hold_slack_ns": 0.10018,
+  "corners": [
+    {
+      "name": "fast_1p32V_m40C",
+      "setup_slack_ns": 0.53027,
+      "hold_slack_ns": 0.13565,
+      "total_negative_setup_slack_ns": 0,
+      "total_negative_hold_slack_ns": 0,
+      "timing_status": "constrained",
+      "max_transition_violation_count": 0,
+      "max_capacitance_violation_count": 0,
+      "max_transition_violation_count_vs_library": 0,
+      "max_capacitance_violation_count_vs_library": 0
+    },
+    {
+      "name": "fast_1p65V_m40C",
+      "setup_slack_ns": 0.84459,
+      "hold_slack_ns": 0.10018,
+      "total_negative_setup_slack_ns": 0,
+      "total_negative_hold_slack_ns": 0,
+      "timing_status": "constrained",
+      "max_transition_violation_count": 0,
+      "max_capacitance_violation_count": 0,
+      "max_transition_violation_count_vs_library": 0,
+      "max_capacitance_violation_count_vs_library": 0
+    },
+    {
+      "name": "slow_1p08V_125C",
+      "setup_slack_ns": -0.99182,
+      "hold_slack_ns": 0.32102,
+      "total_negative_setup_slack_ns": -225.186,
+      "total_negative_hold_slack_ns": 0,
+      "timing_status": "constrained",
+      "max_transition_violation_count": 0,
+      "max_capacitance_violation_count": 0,
+      "max_transition_violation_count_vs_library": 0,
+      "max_capacitance_violation_count_vs_library": 0
+    },
+    {
+      "name": "slow_1p35V_125C",
+      "setup_slack_ns": -0.04821,
+      "hold_slack_ns": 0.20933,
+      "total_negative_setup_slack_ns": -0.04821,
+      "total_negative_hold_slack_ns": 0,
+      "timing_status": "constrained",
+      "max_transition_violation_count": 0,
+      "max_capacitance_violation_count": 0,
+      "max_transition_violation_count_vs_library": 0,
+      "max_capacitance_violation_count_vs_library": 0
+    },
+    {
+      "name": "typ_1p20V_25C",
+      "setup_slack_ns": -0.03275,
+      "hold_slack_ns": 0.20256,
+      "total_negative_setup_slack_ns": -0.03275,
+      "total_negative_hold_slack_ns": 0,
+      "timing_status": "constrained",
+      "max_transition_violation_count": 0,
+      "max_capacitance_violation_count": 0,
+      "max_transition_violation_count_vs_library": 0,
+      "max_capacitance_violation_count_vs_library": 0
+    },
+    {
+      "name": "typ_1p50V_25C",
+      "setup_slack_ns": 0.50948,
+      "hold_slack_ns": 0.13997,
+      "total_negative_setup_slack_ns": 0,
+      "total_negative_hold_slack_ns": 0,
+      "timing_status": "constrained",
+      "max_transition_violation_count": 0,
+      "max_capacitance_violation_count": 0,
+      "max_transition_violation_count_vs_library": 0,
+      "max_capacitance_violation_count_vs_library": 0
+    }
+  ],
+  "congestion": {
+    "global_route": {
+      "total_overflow": 0,
+      "max_horizontal_overflow": 0,
+      "max_vertical_overflow": 0,
+      "usage_pct": 8.3,
+      "max_layer_usage_pct": 21.43,
+      "overflow_per_layer": {
+        "Metal1": {
+          "resource": 0,
+          "demand": 0,
+          "usage_pct": 0.0,
+          "max_horizontal_overflow": 0,
+          "max_vertical_overflow": 0,
+          "total_overflow": 0
+        },
+        "Metal2": {
+          "resource": 52512,
+          "demand": 11252,
+          "usage_pct": 21.43,
+          "max_horizontal_overflow": 0,
+          "max_vertical_overflow": 0,
+          "total_overflow": 0
+        },
+        "Metal3": {
+          "resource": 62436,
+          "demand": 8799,
+          "usage_pct": 14.09,
+          "max_horizontal_overflow": 0,
+          "max_vertical_overflow": 0,
+          "total_overflow": 0
+        },
+        "Metal4": {
+          "resource": 52512,
+          "demand": 81,
+          "usage_pct": 0.15,
+          "max_horizontal_overflow": 0,
+          "max_vertical_overflow": 0,
+          "total_overflow": 0
+        },
+        "Metal5": {
+          "resource": 61758,
+          "demand": 0,
+          "usage_pct": 0.0,
+          "max_horizontal_overflow": 0,
+          "max_vertical_overflow": 0,
+          "total_overflow": 0
+        },
+        "TopMetal1": {
+          "resource": 7398,
+          "demand": 0,
+          "usage_pct": 0.0,
+          "max_horizontal_overflow": 0,
+          "max_vertical_overflow": 0,
+          "total_overflow": 0
+        },
+        "TopMetal2": {
+          "resource": 5892,
+          "demand": 0,
+          "usage_pct": 0.0,
+          "max_horizontal_overflow": 0,
+          "max_vertical_overflow": 0,
+          "total_overflow": 0
+        }
+      },
+      "routed_net_count": 4901,
+      "max_gcell_usage_pct": null
+    },
+    "detailed_route": {
+      "first_iteration_drc_violation_count": 1998,
+      "iteration_count": 5,
+      "drc_violations_per_iteration": [
+        1998,
+        958,
+        930,
+        27,
+        0
+      ],
+      "converged": true
+    },
+    "completeness": {
+      "signal_net_count": 4794,
+      "unrouted_net_count": 0,
+      "partially_routed_net_count": null
+    },
+    "placement": {
+      "total_routing_overflow": 0.0,
+      "overflowed_tile_count": 0,
+      "final_weighted_congestion": 0.4237
+    },
+    "null_reasons": {
+      "global_route.max_gcell_usage_pct": "OpenROAD's global router reports usage per routing layer, not per GCell",
+      "completeness.partially_routed_net_count": "OpenROAD exposes no per-net connectivity check; only nets with no routed wire at all are counted"
+    }
+  },
+  "max_transition_violation_count": 0,
+  "max_capacitance_violation_count": 0,
+  "max_transition_violation_count_vs_library": 0,
+  "max_capacitance_violation_count_vs_library": 0,
+  "timing_status": "constrained",
+  "stages": [
+    {
+      "name": "floorplan",
+      "die_area_um2": 195404,
+      "core_area_um2": 177029,
+      "utilization_pct": 40.2474,
+      "worst_slack_ns": 0.01392,
+      "total_negative_slack_ns": 0,
+      "timing_status": "constrained"
+    },
+    {
+      "name": "place",
+      "die_area_um2": 195404,
+      "core_area_um2": 177029,
+      "utilization_pct": 41.1637,
+      "worst_slack_ns": 0.08842,
+      "total_negative_slack_ns": 0,
+      "wirelength_um": 119901,
+      "fmax_mhz": 661.559,
+      "estimated_power_mw": 24.9569,
+      "setup_violation_count": 0,
+      "hold_violation_count": 0,
+      "nominal_hold_slack_ns": 0.19458,
+      "timing_status": "constrained"
+    },
+    {
+      "name": "cts",
+      "die_area_um2": 195404,
+      "core_area_um2": 177029,
+      "utilization_pct": 44.0878,
+      "worst_slack_ns": 0.06708,
+      "total_negative_slack_ns": 0,
+      "wirelength_um": 129761,
+      "fmax_mhz": 652.348,
+      "estimated_power_mw": 40.041,
+      "clock_skew_ns": 0.01942,
+      "setup_violation_count": 0,
+      "hold_violation_count": 0,
+      "nominal_hold_slack_ns": 0.20085,
+      "timing_status": "constrained"
+    },
+    {
+      "name": "route",
+      "die_area_um2": 195404,
+      "core_area_um2": 177029,
+      "utilization_pct": 44.0908,
+      "worst_slack_ns": -0.00386,
+      "total_negative_slack_ns": -0.00386,
+      "wirelength_um": 147196,
+      "fmax_mhz": 623.496,
+      "estimated_power_mw": 40.1789,
+      "clock_skew_ns": 0.04647,
+      "setup_violation_count": 1,
+      "hold_violation_count": 0,
+      "nominal_hold_slack_ns": 0.19587,
+      "antenna_violation_count": 0,
+      "route_drc_violation_count": 0,
+      "worst_setup_slack_ns": -0.99182,
+      "worst_hold_slack_ns": 0.10018,
+      "corners": [
+        {
+          "name": "fast_1p32V_m40C",
+          "setup_slack_ns": 0.53027,
+          "hold_slack_ns": 0.13565,
+          "total_negative_setup_slack_ns": 0,
+          "total_negative_hold_slack_ns": 0,
+          "timing_status": "constrained",
+          "max_transition_violation_count": 0,
+          "max_capacitance_violation_count": 0,
+          "max_transition_violation_count_vs_library": 0,
+          "max_capacitance_violation_count_vs_library": 0
+        },
+        {
+          "name": "fast_1p65V_m40C",
+          "setup_slack_ns": 0.84459,
+          "hold_slack_ns": 0.10018,
+          "total_negative_setup_slack_ns": 0,
+          "total_negative_hold_slack_ns": 0,
+          "timing_status": "constrained",
+          "max_transition_violation_count": 0,
+          "max_capacitance_violation_count": 0,
+          "max_transition_violation_count_vs_library": 0,
+          "max_capacitance_violation_count_vs_library": 0
+        },
+        {
+          "name": "slow_1p08V_125C",
+          "setup_slack_ns": -0.99182,
+          "hold_slack_ns": 0.32102,
+          "total_negative_setup_slack_ns": -225.186,
+          "total_negative_hold_slack_ns": 0,
+          "timing_status": "constrained",
+          "max_transition_violation_count": 0,
+          "max_capacitance_violation_count": 0,
+          "max_transition_violation_count_vs_library": 0,
+          "max_capacitance_violation_count_vs_library": 0
+        },
+        {
+          "name": "slow_1p35V_125C",
+          "setup_slack_ns": -0.04821,
+          "hold_slack_ns": 0.20933,
+          "total_negative_setup_slack_ns": -0.04821,
+          "total_negative_hold_slack_ns": 0,
+          "timing_status": "constrained",
+          "max_transition_violation_count": 0,
+          "max_capacitance_violation_count": 0,
+          "max_transition_violation_count_vs_library": 0,
+          "max_capacitance_violation_count_vs_library": 0
+        },
+        {
+          "name": "typ_1p20V_25C",
+          "setup_slack_ns": -0.03275,
+          "hold_slack_ns": 0.20256,
+          "total_negative_setup_slack_ns": -0.03275,
+          "total_negative_hold_slack_ns": 0,
+          "timing_status": "constrained",
+          "max_transition_violation_count": 0,
+          "max_capacitance_violation_count": 0,
+          "max_transition_violation_count_vs_library": 0,
+          "max_capacitance_violation_count_vs_library": 0
+        },
+        {
+          "name": "typ_1p50V_25C",
+          "setup_slack_ns": 0.50948,
+          "hold_slack_ns": 0.13997,
+          "total_negative_setup_slack_ns": 0,
+          "total_negative_hold_slack_ns": 0,
+          "timing_status": "constrained",
+          "max_transition_violation_count": 0,
+          "max_capacitance_violation_count": 0,
+          "max_transition_violation_count_vs_library": 0,
+          "max_capacitance_violation_count_vs_library": 0
+        }
+      ],
+      "max_transition_violation_count": 0,
+      "max_capacitance_violation_count": 0,
+      "max_transition_violation_count_vs_library": 0,
+      "max_capacitance_violation_count_vs_library": 0,
+      "congestion": {
+        "global_route": {
+          "total_overflow": 0,
+          "max_horizontal_overflow": 0,
+          "max_vertical_overflow": 0,
+          "usage_pct": 8.3,
+          "max_layer_usage_pct": 21.43,
+          "overflow_per_layer": {
+            "Metal1": {
+              "resource": 0,
+              "demand": 0,
+              "usage_pct": 0.0,
+              "max_horizontal_overflow": 0,
+              "max_vertical_overflow": 0,
+              "total_overflow": 0
+            },
+            "Metal2": {
+              "resource": 52512,
+              "demand": 11252,
+              "usage_pct": 21.43,
+              "max_horizontal_overflow": 0,
+              "max_vertical_overflow": 0,
+              "total_overflow": 0
+            },
+            "Metal3": {
+              "resource": 62436,
+              "demand": 8799,
+              "usage_pct": 14.09,
+              "max_horizontal_overflow": 0,
+              "max_vertical_overflow": 0,
+              "total_overflow": 0
+            },
+            "Metal4": {
+              "resource": 52512,
+              "demand": 81,
+              "usage_pct": 0.15,
+              "max_horizontal_overflow": 0,
+              "max_vertical_overflow": 0,
+              "total_overflow": 0
+            },
+            "Metal5": {
+              "resource": 61758,
+              "demand": 0,
+              "usage_pct": 0.0,
+              "max_horizontal_overflow": 0,
+              "max_vertical_overflow": 0,
+              "total_overflow": 0
+            },
+            "TopMetal1": {
+              "resource": 7398,
+              "demand": 0,
+              "usage_pct": 0.0,
+              "max_horizontal_overflow": 0,
+              "max_vertical_overflow": 0,
+              "total_overflow": 0
+            },
+            "TopMetal2": {
+              "resource": 5892,
+              "demand": 0,
+              "usage_pct": 0.0,
+              "max_horizontal_overflow": 0,
+              "max_vertical_overflow": 0,
+              "total_overflow": 0
+            }
+          },
+          "routed_net_count": 4901,
+          "max_gcell_usage_pct": null
+        },
+        "detailed_route": {
+          "first_iteration_drc_violation_count": 1998,
+          "iteration_count": 5,
+          "drc_violations_per_iteration": [
+            1998,
+            958,
+            930,
+            27,
+            0
+          ],
+          "converged": true
+        },
+        "completeness": {
+          "signal_net_count": 4794,
+          "unrouted_net_count": 0,
+          "partially_routed_net_count": null
+        },
+        "placement": {
+          "total_routing_overflow": 0.0,
+          "overflowed_tile_count": 0,
+          "final_weighted_congestion": 0.4237
+        },
+        "null_reasons": {
+          "global_route.max_gcell_usage_pct": "OpenROAD's global router reports usage per routing layer, not per GCell",
+          "completeness.partially_routed_net_count": "OpenROAD exposes no per-net connectivity check; only nets with no routed wire at all are counted"
+        }
+      },
+      "timing_status": "constrained"
+    }
+  ],
+  "macros": [],
+  "def_path": {
+    "path": "layout/digital/.klt/place-and-route/serdes_digital_top.def",
+    "scope": "repo"
+  },
+  "pins": [
+    {
+      "name": "VDD",
+      "edge": "north",
+      "x_um": 221.04,
+      "y_um": 409.14,
+      "layer": "TopMetal2"
+    },
+    {
+      "name": "VSS",
+      "edge": "north",
+      "x_um": 221.04,
+      "y_um": 402.94,
+      "layer": "TopMetal2"
+    },
+    {
+      "name": "clk",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 259.98,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[0]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 240.66,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[10]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 220.5,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[11]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 219.66,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[12]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 218.82,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[13]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 222.18,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[14]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 241.5,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[15]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 251.58,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[1]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 216.3,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[2]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 223.02,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[3]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 215.46,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[4]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 242.34,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[5]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 252.42,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[6]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 258.3,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[7]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 212.94,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[8]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 212.1,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ext_tx_word[9]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 243.18,
+      "layer": "Metal3"
+    },
+    {
+      "name": "eye_ph_off[0]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 256.62,
+      "layer": "Metal3"
+    },
+    {
+      "name": "eye_ph_off[1]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 210.42,
+      "layer": "Metal3"
+    },
+    {
+      "name": "eye_ph_off[2]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 209.58,
+      "layer": "Metal3"
+    },
+    {
+      "name": "eye_ph_off[3]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 208.74,
+      "layer": "Metal3"
+    },
+    {
+      "name": "eye_ph_off[4]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 244.02,
+      "layer": "Metal3"
+    },
+    {
+      "name": "eye_ph_off[5]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 245.7,
+      "layer": "Metal3"
+    },
+    {
+      "name": "eye_ph_off[6]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 207.06,
+      "layer": "Metal3"
+    },
+    {
+      "name": "eye_smp_off[0]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 206.22,
+      "layer": "Metal3"
+    },
+    {
+      "name": "eye_smp_off[1]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 226.38,
+      "layer": "Metal3"
+    },
+    {
+      "name": "eye_smp_off[2]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 244.86,
+      "layer": "Metal3"
+    },
+    {
+      "name": "eye_smp_off[3]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 204.54,
+      "layer": "Metal3"
+    },
+    {
+      "name": "eye_smp_off[4]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 203.7,
+      "layer": "Metal3"
+    },
+    {
+      "name": "eye_smp_off[5]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 227.22,
+      "layer": "Metal3"
+    },
+    {
+      "name": "pi_code[0]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 202.86,
+      "layer": "Metal3"
+    },
+    {
+      "name": "pi_code[1]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 253.26,
+      "layer": "Metal3"
+    },
+    {
+      "name": "pi_code[2]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 232.26,
+      "layer": "Metal3"
+    },
+    {
+      "name": "pi_code[3]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 228.06,
+      "layer": "Metal3"
+    },
+    {
+      "name": "pi_code[4]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 200.34,
+      "layer": "Metal3"
+    },
+    {
+      "name": "pi_code[5]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 199.5,
+      "layer": "Metal3"
+    },
+    {
+      "name": "pi_code[6]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 246.54,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rst_n",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 228.9,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[0]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 224.7,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[10]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 196.98,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[11]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 196.14,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[12]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 229.74,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[13]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 195.3,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[14]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 247.38,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[15]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 254.1,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[1]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 230.58,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[2]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 207.9,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[3]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 193.62,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[4]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 202.02,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[5]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 231.42,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[6]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 223.86,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[7]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 205.38,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[8]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 191.94,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_data_word[9]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 248.22,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[0]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 191.1,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[10]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 257.46,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[11]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 190.26,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[12]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 233.1,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[13]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 214.62,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[14]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 189.42,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[15]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 217.98,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[1]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 233.94,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[2]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 254.94,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[3]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 221.34,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[4]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 239.82,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[5]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 234.78,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[6]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 201.18,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[7]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 249.06,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[8]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 211.26,
+      "layer": "Metal3"
+    },
+    {
+      "name": "rx_edge_word[9]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 235.62,
+      "layer": "Metal3"
+    },
+    {
+      "name": "ser_lb",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 238.98,
+      "layer": "Metal3"
+    },
+    {
+      "name": "spi_cs_n",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 187.74,
+      "layer": "Metal3"
+    },
+    {
+      "name": "spi_miso",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 197.82,
+      "layer": "Metal3"
+    },
+    {
+      "name": "spi_miso_oe",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 236.46,
+      "layer": "Metal3"
+    },
+    {
+      "name": "spi_mosi",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 188.58,
+      "layer": "Metal3"
+    },
+    {
+      "name": "spi_sclk",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 186.06,
+      "layer": "Metal3"
+    },
+    {
+      "name": "status_o",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 249.9,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[0]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 237.3,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[10]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 217.14,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[11]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 185.22,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[12]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 194.46,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[13]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 238.14,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[14]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 184.38,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[15]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 183.54,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[1]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 186.9,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[2]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 250.74,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[3]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 225.54,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[4]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 198.66,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[5]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 255.78,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[6]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 259.14,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[7]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 182.7,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[8]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 192.78,
+      "layer": "Metal3"
+    },
+    {
+      "name": "tx_word[9]",
+      "edge": "east",
+      "x_um": 441.685,
+      "y_um": 213.78,
+      "layer": "Metal3"
+    }
+  ],
+  "unrouted_def_path": null,
+  "gds_path": {
+    "path": "layout/digital/.klt/place-and-route/serdes_digital_top.gds",
+    "scope": "repo"
+  },
+  "layer_map": {
+    "path": "$PDK_ROOT/ihp-sg13g2/libs.tech/klayout/tech/sg13g2.map",
+    "resolution": "family"
+  },
+  "def_net_names": {
+    "single_pin_markers": 311,
+    "unresolved_single_pin_nets": []
+  },
+  "min_area_repair": {
+    "status": "skipped",
+    "reason": "the curated deck for PDK variant 'ihp-sg13g2' carries no plain minimum-area rule on any routed-net layer",
+    "patches": 0,
+    "repaired": 0,
+    "remaining": 0,
+    "rules": [],
+    "unrepaired": []
+  },
+  "verilog_path": {
+    "path": "layout/digital/.klt/place-and-route/serdes_digital_top.v",
+    "scope": "repo"
+  },
+  "spef_sta": null,
+  "power": {
+    "preset": null,
+    "pdn": true,
+    "global_connect": true,
+    "power_net": "VDD",
+    "ground_net": "VSS",
+    "tapcell_master": null,
+    "endcap_master": null,
+    "tapcell_distance_um": null,
+    "filler_masters": [
+      "sg13g2_fill_1",
+      "sg13g2_fill_2"
+    ],
+    "straps": [
+      {
+        "layer": "Metal1",
+        "spacing_um": null
+      },
+      {
+        "layer": "TopMetal1",
+        "spacing_um": 4.0
+      },
+      {
+        "layer": "TopMetal2",
+        "spacing_um": 4.0
+      }
+    ],
+    "connects": [
+      {
+        "layers": [
+          "Metal1",
+          "TopMetal1"
+        ],
+        "max_columns": null,
+        "ongrid": null,
+        "split_cuts": null
+      },
+      {
+        "layers": [
+          "TopMetal1",
+          "TopMetal2"
+        ],
+        "max_columns": null,
+        "ongrid": null,
+        "split_cuts": null
+      }
+    ],
+    "row_rail": {
+      "emitted": false,
+      "layer": null,
+      "power_net": null,
+      "ground_net": null,
+      "filler_masters": []
+    },
+    "placed": {
+      "evidence": "def",
+      "def_path": {
+        "path": "layout/digital/.klt/place-and-route/serdes_digital_top.def",
+        "scope": "repo"
+      },
+      "unavailable_reason": null,
+      "status": "complete",
+      "missing": [],
+      "components": 33482,
+      "tapcells": 0,
+      "endcaps": 0,
+      "fillers": 28313,
+      "special_nets": [
+        {
+          "name": "VDD",
+          "use": "POWER",
+          "followpin_segments": 56,
+          "stripe_segments": 1728,
+          "other_segments": 336,
+          "stripe_layers": [
+            "TopMetal2",
+            "TopMetal1",
+            "Metal5",
+            "Metal4",
+            "Metal3",
+            "Metal2",
+            "Metal1"
+          ],
+          "vias": 1716
+        },
+        {
+          "name": "VSS",
+          "use": "GROUND",
+          "followpin_segments": 56,
+          "stripe_segments": 1728,
+          "other_segments": 336,
+          "stripe_layers": [
+            "TopMetal2",
+            "TopMetal1",
+            "Metal5",
+            "Metal4",
+            "Metal3",
+            "Metal2",
+            "Metal1"
+          ],
+          "vias": 1716
+        }
+      ]
+    }
+  },
+  "warnings": [],
+  "provenance": {
+    "klt_version": "0.8.0",
+    "klayout_version": "0.30.13",
+    "pdk": {
+      "name": "ihp-sg13g2",
+      "source": "PDK_ROOT environment variable",
+      "version": null,
+      "ambiguous_sources": [
+        "search root: ~/share/pdk"
+      ]
+    },
+    "deck": {
+      "name": "sg13g2_stdcell__typ_1p20V_25C",
+      "content_hash": "sha256:7677a8918689f452e80405ad16a83e744709342574f2aedcc507c2758986b396",
+      "released": false,
+      "path": {
+        "path": ".cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p20V_25C.lib",
+        "scope": "repo"
+      }
+    },
+    "input": {
+      "content_hash": "sha256:d659124458e555fdf5dabdd5bb80246b9c44585486021e466e67b8c9a6edb4aa",
+      "role": "netlist"
+    }
+  }
+}

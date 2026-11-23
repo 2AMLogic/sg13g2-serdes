@@ -4,7 +4,8 @@
   "engine_version": "0.67+post",
   "hdl_toplevel": "serdes_digital_top",
   "parameters": {},
-  "run_id": "run-9765142c6f494052aefbeb594ed2d9f8",
+  "defines": {},
+  "run_id": "run-1f552c91106f48e19c6f30de795c031a",
   "status": "ok",
   "instance_count": 4843,
   "area_um2": 71244.4572,
@@ -39,6 +40,10 @@
     "sg13g2_xnor2_1": 206,
     "sg13g2_xor2_1": 126
   },
+  "macros": [],
+  "macro_instance_counts_by_type": {},
+  "macro_instance_count": 0,
+  "cells_without_area": [],
   "leakage_power_nw": 789.5830751999999,
   "leakage_by_type_nw": {
     "sg13g2_a21o_1": 0.158296,
@@ -74,7 +79,41 @@
     "source": "abc_stime",
     "wire_load": null,
     "critical_path_ps": 1252.14,
-    "delay_target_ps": 1600
+    "delay_target_ps": 1600,
+    "regions": [
+      {
+        "module": "serdes_digital_top",
+        "critical_path_ps": 247.1
+      },
+      {
+        "module": "serdes_ctrl",
+        "critical_path_ps": 1252.14
+      },
+      {
+        "module": "serdes_eye_mon",
+        "critical_path_ps": 1116.1
+      },
+      {
+        "module": "serdes_loopback",
+        "critical_path_ps": 473.5
+      },
+      {
+        "module": "serdes_cdr_filter",
+        "critical_path_ps": 1145.68
+      },
+      {
+        "module": "serdes_cdr_pd",
+        "critical_path_ps": 1039.89
+      },
+      {
+        "module": "serdes_prbs_chk",
+        "critical_path_ps": 1115.64
+      },
+      {
+        "module": "serdes_prbs_gen",
+        "critical_path_ps": 986.39
+      }
+    ]
   },
   "clock_targets": {
     "clocks": [],
@@ -112,6 +151,11 @@
     "validated": null,
     "engine_supports_dont_use": true
   },
+  "abc_constr": {
+    "source": "builtin",
+    "driving_cell": "sg13g2_buf_4",
+    "load_ff": 6.0
+  },
   "warnings": {
     "total": 0,
     "by_category": {},
@@ -122,27 +166,29 @@
     "reason": null,
     "modules": [],
     "script_path": {
-      "path": "rtl/synth/.klt/synthesize/run-9765142c6f494052aefbeb594ed2d9f8/serdes_digital_top_memory_evidence.ys",
+      "path": "rtl/synth/.klt/synthesize/run-1f552c91106f48e19c6f30de795c031a/serdes_digital_top_memory_evidence.ys",
       "scope": "repo"
     }
   },
   "blackbox_modules": [],
   "netlist_path": {
-    "path": "rtl/synth/.klt/synthesize/run-9765142c6f494052aefbeb594ed2d9f8/serdes_digital_top_synth.v",
+    "path": "rtl/synth/.klt/synthesize/run-1f552c91106f48e19c6f30de795c031a/serdes_digital_top_synth.v",
     "scope": "repo"
   },
-  "netlist_sha256": "d659124458e555fdf5dabdd5bb80246b9c44585486021e466e67b8c9a6edb4aa",
+  "netlist_sha256": "08b90805a96b63df1e768a0055cf664b94796e26108ff1ada66ba285d709c7d8",
   "script_path": {
-    "path": "rtl/synth/.klt/synthesize/run-9765142c6f494052aefbeb594ed2d9f8/synth_serdes_digital_top.ys",
+    "path": "rtl/synth/.klt/synthesize/run-1f552c91106f48e19c6f30de795c031a/synth_serdes_digital_top.ys",
     "scope": "repo"
   },
   "run_script_path": {
-    "path": "rtl/synth/.klt/synthesize/run-9765142c6f494052aefbeb594ed2d9f8/synth_serdes_digital_top.run.ys",
+    "path": "rtl/synth/.klt/synthesize/run-1f552c91106f48e19c6f30de795c031a/synth_serdes_digital_top.run.ys",
     "scope": "repo"
   },
   "provenance": {
-    "klt_version": "0.8.0",
-    "klayout_version": "0.30.12",
+    "klt_version": "0.9.0",
+    "klt_git_commit": "5dbbad05ff42265c92a6f3d2f20d1bbcd2957d49",
+    "klt_reinstall_spec": "klayout-tools==0.9.0",
+    "klayout_version": "0.30.13",
     "pdk": {
       "name": "ihp-sg13g2",
       "source": "PDK_ROOT environment variable",
@@ -160,7 +206,8 @@
       "content_hash": "sha256:4b390fe301e0d02315a539c3dedffc83579ab4cba08752f1d2ade8742d9672da",
       "role": "source"
     },
-    "parameters": {}
+    "parameters": {},
+    "defines": {}
   },
   "equivalence": null,
   "restructuring": null,

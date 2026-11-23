@@ -2,6 +2,63 @@
 
 Chronological record of merged PRs and closed issues. Maintained by the Guide role.
 
+### 2026-11-12
+
+- **PR #145**: feat(sim): load TX R4/R6 benches with extracted pad C and PDK ESD diodes
+- **Issue #142** (closed): Re-point R4/R6/R9 benches to the extracted pad model; ratify DR-011/012/013 pad decisions
+- **PR #141**: feat(sim): R19 clamp DC IV bench on extracted pad_esd devices, DR-013
+- **Issue #94** (closed): T1 item 9 follow-up: pad and ESD benches for R18 and R19 need an extracted or EM pad model
+- **PR #139**: fix(layout): clear analog DRC by fixing HBT overlap and HBT-net routing, cite item 3
+- **PR #137**: feat(sim): R18 pad-capacitance bench on extracted pad metal plus ESD diodes
+- **Issue #26** (closed): T1 item 3 (DRC clean): klt drc on both partitions' GDS, with the coverage disclosure
+- **PR #136**: feat(layout): digital-partition gate-level LVS flow with a match record
+- **PR #133**: docs: DR-011 compares CDR loop architectures, proposes second-order fractional-integral loop
+- **Issue #125** (closed): CDR loop architecture: find a loop that closes R12/R15 with margin (DR-009 fix KP=8, KI=0 not accepted)
+- **Issue #27** (closed): T1 item 4 (LVS clean): klt lvs on both partitions, with HBT recognition and power_connectivity
+- **PR #132**: feat(layout): extract pad_esd diodes and bondpad via Recog.diode marker and pad-net strap
+- **Issue #131** (closed): Pad cell extractability: add diode markers and bondpad coverage so R18 can be extracted
+- **PR #130**: feat: add klt drc reports for both partitions (digital clean, analog unmet)
+- **PR #129**: feat(sim): add pad ESD cap and clamp IV benches, DR-011 pad model source
+- **Issue #24** (closed): T1 item 2 (layout, analog): GDS for the CML TX/RX cells, clock path and high-speed pads
+- **Issue #105** (closed): rtl: apply DR-009 CDR loop gain (KP=8, KI=0) and regenerate synth/P&R records
+
+### 2026-11-11
+
+- **PR #122**: refactor(layout): share netlist parser, klt runner and um() across analog generators
+- **Issue #119** (closed): Consolidate duplicated netlist parser, um() and klt runner across the three analog layout generators
+- **PR #120**: feat(layout): analog top assembly of TX/RX core and pad cells with item 2 attestation
+- **PR #118**: fix: run RX layout regen with the repo-local .venv python
+- **PR #116**: feat(layout): pad_esd and rx_term_pad pad cells from PDK bondpad/ESD cells
+- **PR #115**: feat(layout): generate RX core analog cells with a re-runnable klt generator
+- **PR #114**: feat(layout): generate TX core analog cells with port-named pins
+- **PR #109**: fix(bench): remove duplicated phrase in top-bench R11 limitations string
+- **PR #108**: fix(sim): count nt votes in noise-free CDR loop analysis; DR-010 supersedes DR-007 numbers
+- **PR #107**: feat(sim): attribute CDR dither closure and propose KP=8 KI=0 loop fix (DR-009)
+- **PR #104**: feat(sim): add R6 return-loss and R20 clock-quality analog benches
+- **Issue #117** (closed): layout/analog/rx: regen.sh needs klayout.db under plain python3 -I; not provided by setup-env
+- **Issue #113** (closed): T1 item 2 (layout, analog): pad/ESD cells and analog top assembly with item-2 attestation
+- **Issue #112** (closed): T1 item 2 (layout, analog): RX core cell layouts (CTLE, CML latch, clock buffer quad, level converter)
+- **Issue #111** (closed): x
+- **Issue #110** (closed): T1 item 2 (layout, analog): TX core cell layouts (bias, ffe_en, mux, predriver, driver_ffe, level converter)
+- **Issue #106** (closed): scripts/cdr-loop-analysis.py counts one vote per word when noise-free (DR-007 noise-free columns wrong)
+- **Issue #102** (closed): Follow-on from PR #100: 1e-12 eye closes once CDR dither is included (R12/R15)
+- **Issue #101** (closed): Fix garbled limitations text for the digital top bench in sim/bench/benches.json
+- **Issue #92** (closed): T1 item 9 follow-up: analog benches for R6 (TX return loss) and R20 (receiving-buffer clock quality)
+- **PR #100**: feat(sim): add behavioural link benches for R8, R11, R12, R13, R15
+- **Issue #93** (closed): T1 item 9 follow-up: behavioural/statistical benches for R8, R11, R12, R13 and R15
+
+### 2026-11-10
+
+- **PR #97**: feat(layout): digital-partition place-and-route flow and routed GDS record
+- **PR #96**: docs(sim/tx): state why the 0.4 V mux clock swing is unvalidated and what closes it
+- **PR #95**: sim: ship testbench registry, run-bench.sh cold start and item-9 attestation
+- **PR #91**: sim: cap TX MOS request timeout_s at 75 s and record 135-unit re-run
+- **Issue #80** (closed): sim/tx: add batch-fleet sizing benches for the MOS cells mux2to1_cml, ffe_en, tx_lvl_cml2cmos
+- **Issue #28** (closed): T1 item 9 (testbenches shipped): one bench per simulation-graded spec row, with cold-start docs and --attest 9
+- **Issue #25** (closed): T1 item 2 (layout, digital): routed GDS of the CMOS partition from a committed klt place-and-route flow
+- **PR #89**: build: bump klayout-tools pin to 0.9.0 and record TX MOS-cell fleet run
+- **Issue #23** (closed): T1 item 1 (design sources, digital): serializer/deserializer, PRBS, CDR loop filter RTL plus sg13g2 netlist
+
 ### 2026-11-07
 
 - **PR #85**: Merge pull request: chore: Bump Repo Skills 0.25.1 -> 0.25.10

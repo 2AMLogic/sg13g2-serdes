@@ -31,7 +31,7 @@ if [ "$want" != "$got" ]; then
   exit 1
 fi
 
-"${KLT[@]}" synthesize "$REQ" --check "$REPORT"
+"${KLT[@]}" synthesize "$REQ" --check "$REPORT" --netlist "$NETLIST"
 rc=$?
 case $rc in
   0) echo "check-synth-fresh: OK -- netlist and envelope match the RTL" ;;

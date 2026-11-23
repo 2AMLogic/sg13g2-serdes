@@ -1,0 +1,19 @@
+* Reference for the placed cell ctle_XQa0 (one npn13G2).
+* Mirrors the XQa0 device line of design/rx/netlists/rx_top.spice
+*   (XQa0 ca0 hpp ea0 vss npn13G2 Nx=1)
+* with the wrapper pins named after the generator ports
+*   (Q1_C, Q1_B, Q1_E; layout/analog/rx/records/2026-11-12-0193777
+*    ctle/compose.request.json, block XQa0), written as a Q card in
+* the IHP LVS runset's own schematic dialect (CustomReader maps
+* Q...npn13G2 to a BJT4 with terminals C B E S and parameters
+* we/le/Nx/m).
+* we/le are the standard npn13G2 cell geometry (emitter 0.07 um x
+* 0.90 um): the PDK's own regression testcase
+* ihp-sg13g2/libs.tech/klayout/tech/lvs/testing/testcases/unit/
+* bjt_devices/netlist/npn13G2.cdl uses le=900.0n we=70.00n, and the
+* placed instance carries the GDS property Ae=1*1*0.07*0.90.
+* Note: without we/le on the Q card the runset leaves the device
+* unpaired (see record.md, dialect finding).
+.subckt ctle_XQa0 Q1_C Q1_B Q1_E vss
+QQa0 Q1_C Q1_B Q1_E vss npn13G2 Nx=1 we=0.07u le=0.90u m=1
+.ends
