@@ -122,7 +122,7 @@
         "role": "hygiene",
         "path": "sim/tools/test-record-dir.sh",
         "passed": true,
-        "content_hash": "sha256:38b068192c96a02de809975c47ec26d317624915126b21e49789466c33c61b18"
+        "content_hash": "sha256:b176885f7a0b777ba0f695904ff3394953516a6f2488c08177df85ce4c7ae82c"
       },
       {
         "check": "command",
