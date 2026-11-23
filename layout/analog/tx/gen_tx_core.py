@@ -181,6 +181,7 @@ def build_tx_lvl_routed(subs, out, klt):
     g = lambda k, dx: round((col_x0[k] + col_w[k]) + dx, 1)
     vdd_w = 6.0
     pin_x = lambda b, p: round(composed_pin_x(reports, origins, b, p), 2)
+    pin_y = lambda b, p: round(composed_pin_y(reports, origins, b, p), 2)
     tie_w_cx = round(origins["TIE_VDD"]["x"] + 0.75, 1)
     tie_s_cx = round(origins["TIE_VSS"]["x"] + 0.75, 1)
     vdd_3, vdd_5 = pin_x("XMP2", "U0_S"), pin_x("XMP3", "U0_S")
@@ -199,10 +200,12 @@ def build_tx_lvl_routed(subs, out, klt):
     b_drop = round(rb[2] + 0.3, 1)       # east of the vdd trunk's east end
     a_drop = round(col_x0["XMN2"] - 0.9, 1)
     g1_x = pin_x("XMNt", "U0_G")
-    # the out lane sits 0.45 um east of the D pad centre (still inside both D
-    # pads): at the centre it ran 0.02 um from XMN3.G's metal2 landing, which
-    # o1 owns, and the router rejected the planned leg
-    out_5 = round(pin_x("XMP3", "U0_D") + 0.45, 2)
+    # the out lane cannot ride the D pad centre: there it runs 0.02 um from
+    # XMN3.G's metal2 landing (net o1), and the router rejected the planned
+    # leg. It leaves the XMN3.D pad horizontally to a lane 0.75 um east of the
+    # pad centre, rises clear of both landings, and re-enters XMP3.D's pad.
+    out_5 = round(pin_x("XMP3", "U0_D") + 0.75, 2)
+    out_lo, out_hi = (pin_y("XMN3", "U0_D"), pin_y("XMP3", "U0_D"))
     P = lambda b, p: [b, p]
     nets = [
         {"net": "vdd", "layer_role": "metal3",
@@ -267,7 +270,7 @@ def build_tx_lvl_routed(subs, out, klt):
         {"net": "out", "layer_role": "metal2",
          "pins": [P("XMP3", "U0_D"), P("XMN3", "U0_D")],
          "legs": [{"a": P("XMN3", "U0_D"), "b": P("XMP3", "U0_D"),
-                   "waypoints_um": [[out_5, out_mid]]}]},
+                   "waypoints_um": [[out_5, out_lo], [out_5, out_hi]]}]},
     ]
     pins = [{"net": n, "block": b, "port": p} for n, b, p in (
         ("vdd", "TIE_VDD", "TAP"), ("vss", "TIE_VSS", "TAP"),
@@ -294,6 +297,13 @@ def composed_pin_x(reports, origins, block, port):
     for p in reports[block]["ports"]:
         if p["name"] == port:
             return origins[block]["x"] + p["x_um"]
+    raise KeyError(f"{block}.{port}")
+
+
+def composed_pin_y(reports, origins, block, port):
+    for p in reports[block]["ports"]:
+        if p["name"] == port:
+            return origins[block]["y"] + p["y_um"]
     raise KeyError(f"{block}.{port}")
 
 
