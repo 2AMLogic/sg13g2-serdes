@@ -22,8 +22,9 @@ RLi1b vdd mip 100 m=1
 XQi2a b180 min ti2 vss npn13G2 Nx=2
 XQi2b b0 mip ti2 vss npn13G2 Nx=2
 Rti2 ti2 vss 85 m=1
-RLi2a vdd b180 225 m=1
-RLi2b vdd b0 225 m=1
+Rsi2 vdd vi2 5 m=1
+RLi2a vi2 b180 225 m=1
+RLi2b vi2 b0 225 m=1
 XQq1a mqn ck90 tq1 vss npn13G2 Nx=2
 XQq1b mqp ck270 tq1 vss npn13G2 Nx=2
 Rtq1 tq1 vss 85 m=1
@@ -32,8 +33,9 @@ RLq1b vdd mqp 100 m=1
 XQq2a b270 mqn tq2 vss npn13G2 Nx=2
 XQq2b b90 mqp tq2 vss npn13G2 Nx=2
 Rtq2 tq2 vss 85 m=1
-RLq2a vdd b270 225 m=1
-RLq2b vdd b90 225 m=1
+Rsq2 vdd vq2 5 m=1
+RLq2a vq2 b270 225 m=1
+RLq2b vq2 b90 225 m=1
 .ends
 
 Vdd vdd 0 1.2
