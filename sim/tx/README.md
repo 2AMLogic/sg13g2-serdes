@@ -8,8 +8,8 @@ a spec result and not a measurement.**
 | `make_tb.py` | generates the decks and requests below from `design/tx/netlists/` |
 | `tx_sizing_ffe{0,1}_{typ,bcs,wcs}.sp` / `.request.json` | six `klt sim` requests, each 3 supplies (1.08/1.2/1.32 V) x 3 temperatures (-40/27/125 C) = 54 corners; FFE off or all three post-cursor slices on; HBT, capacitor and resistor corners move together |
 | `tx_mos_{mux2to1_cml,tx_lvl_cml2cmos,ffe_en}.sp` / `.request.json` | three MOS-cell `klt sim` requests (issue #80), each 5 process pairings x 3 supplies x 3 temperatures = 45 corners; PSP103 and the real `r3_cmc` resistors via `osdi_preload` |
-| `run_sizing.sh [mos]` | runs the six HBT requests, or with `mos` the three MOS requests (batch fleet via `KLT_SIM_BACKEND=batch`; no local fallback) and writes `records/<id>/` (`<id>-mos/` for the MOS set) |
-| `make_record.py` / `make_record_mos.py` | render `records/<id>/record.md` for the HBT / MOS set |
+| `run_sizing.sh [mos\|vce]` | runs the six HBT requests, `mos` the three MOS requests, `vce` the R3 per-device Vce set -- six HBT + mux2to1_cml + ffe_en, every TX bench with an HBT (batch fleet via `KLT_SIM_BACKEND=batch`; no local fallback) and writes `records/<id>/` (`<id>-mos/` / `<id>-vce/` for the MOS / VCE sets) |
+| `make_record.py` / `make_record_mos.py` / `make_record_vce.py` | render `records/<id>/record.md` for the HBT / MOS / VCE set |
 | `records/<id>/` | append-only run records; never edited after the fact |
 
 Reproduce: `source scripts/env.sh && python3 -I sim/tx/make_tb.py && sim/tx/run_sizing.sh`.
@@ -71,6 +71,19 @@ MOS-set run status:
     75 s with the same 36 pass / 7 fail / 2 error on `mux2to1_cml` and no timeouts.
   - Rise/fall stays at the fixed +-30 mV thresholds (artifacts at low swing, see above);
     no 20-80 % derivation was added because the benches keep no waveforms.
+
+## R3 per-device Vce pass (issue #242)
+
+`run_sizing.sh vce` writes one record, `records/<id>-vce/`, that closes the R3 evidence
+gap of gate G2 (tracker #238): a per-device table (24 rows) of collector / Vce /
+reverse-Vbe worst cases over each bench family's full grid including the 1.32 V supply,
+for every HBT on TX. Since that pass, the `tx_sizing_*` decks carry a **limited**
+`vce_max_*` card (open-base BVCEO 1.4 V) for every HBT -- the post-cursor slice pairs and
+tails, the predriver tails and the bias device were the missing ones -- and the `ffe_en`
+bench measures the same three stress values for its one HBT (bias `XQref`). `tx_lvl_cml2cmos`
+is not run for Vce: it has no HBT (R3 Vce n/a; its CMOS evidence is the `-mos` record).
+Violations are kept and marked in the table, not dropped and not fixed there. First record:
+`records/20261123-022802-fedf656-vce/`.
 
 ## Pad ESD benches (issue #94)
 

@@ -225,9 +225,9 @@ L.append("- Per-node values for every HBT, corner and CTLE code are in the `*.re
 # latch_cml (6); rx_term_pad and lvl_cml2cmos have no HBT. Instances differ
 # from devices in rx_top (4 latches), the cells do not.
 DEV_ALIAS = (
-    (re.compile(r"^ctle_c\d+_xd\d+_(q[a-z0-9]+)_(vc_max|vce_max|vbe_rev_max)$"), "ctle.%s"),
-    (re.compile(r"^clk_xclk_(q[a-z0-9]+)_(vc_max|vce_max|vbe_rev_max)$"), "clk_buf_quad.%s"),
-    (re.compile(r"^latch_xl_(q[a-z0-9]+)_(vc_max|vce_max|vbe_rev_max)$"), "latch_cml.%s"),
+    (re.compile(r"^ctle_c\d+_xd\d+_([a-z][a-z0-9]*)_(vc_max|vce_max|vbe_rev_max)$"), "ctle.%s"),
+    (re.compile(r"^clk_xclk_([a-z][a-z0-9]*)_(vc_max|vce_max|vbe_rev_max)$"), "clk_buf_quad.%s"),
+    (re.compile(r"^latch_xl_([a-z][a-z0-9]*)_(vc_max|vce_max|vbe_rev_max)$"), "latch_cml.%s"),
 )
 dev_worst = {}
 for n, (v, cid) in worst.items():

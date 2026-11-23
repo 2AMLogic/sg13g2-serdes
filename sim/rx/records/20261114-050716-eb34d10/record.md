@@ -202,3 +202,15 @@ Time from the clock edge that closes the sample phase to |q| reaching a fixed le
 - Sampler offset and noise (Monte Carlo, DR-002), CDR, link behaviour, clock duty/quadrature error (R20 +-1 %, +-2 deg) and mismatch: not simulated.
 - Full PVT-full grid (135 points): not run; only the 27-point HBT-family grid (MOS corners absent), `hbt_*` sections ganged with `cap_*` and `dio_*`. The spec's 7-point PVT-edge set is a subset of it.
 - Unconfirmed: the +-10 % supply tolerance is a proposal (DR-003); temperature -40/27/125 C is a proposal.
+
+## Erratum (2026-11-23, issue #242)
+
+The "Not simulated" bullet on `lvl_cml2cmos` gives "batch jobs staging `.osdi`
+inputs fail (klayout-tools#3818, #3819; blocked on #3)" as the reason. The
+blocker claim was stale on this record's date: #3 was cleared by PR #76 and the
+TX MOS-cell benches ran on the fleet via `osdi_preload` on 2026-11-10 (records
+`sim/tx/records/20261110-224611-4092fc2-mos/`). The factual claim stands -- no
+RX MOS bench for `lvl_cml2cmos` exists -- but for the true reason (none was
+built; the cell has no HBT, so R3 Vce is not applicable to it). All numbers in
+this record are unaffected. Corrected wording and the per-device Vce table:
+`records/20261123-025159-fedf656-vce/` (issue #242). Nothing else changes.

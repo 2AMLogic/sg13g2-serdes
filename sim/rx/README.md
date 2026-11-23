@@ -11,12 +11,20 @@ pad capacitance and the CTLE load are placeholders, the clock source is ideal.
 | `latch_regen.sp` | clock buffer + latch at 5 GHz: regeneration time to two fixed \|q\| levels (0.25 V decision, 0.10 V floor), collector/Vbe stress |
 | `pad_ac.sp` | termination + pad + CTLE: differential drive current, so \|Zdiff\| at 0.1 and 5 GHz |
 | `*.request.json` | `klt sim` requests: HBT corners (ganged with CAP and DIO sections) x 1.08/1.2/1.32 V x -40/27/125 C |
-| `run_sizing.sh` | submits the four requests (batch fleet) and writes `records/<id>/` |
+| `run_sizing.sh [vce]` | submits the four requests (batch fleet) and writes `records/<id>/`; `vce` suffixes the record id `-vce` (R3 per-device Vce pass, issue #242) |
 | `tools/gen_requests.py` | generates the `.sp` bodies and requests; the node-stress `.meas` cards follow the exported netlists |
 | `tools/make_record.py` | renders `record.md` from the reports |
 
 Requests and bodies are generated: edit `tools/gen_requests.py`, rerun it,
 commit the output.
+
+Every HBT now carries three stress cards per bench: `*_vc_max` (collector to
+ground, <= 1.32 V), `*_vce_max` (collector to emitter through a B source,
+<= 1.4 V open-base BVCEO) and `*_vbe_rev_max` (<= 1.0 V). The renderer's
+per-device table aggregates the 8 CTLE code copies into 36 rows (ctle 22,
+clk_buf_quad 8, latch_cml 6), matching the `npn13G2` instances of the exported
+netlists; first `-vce` record: `records/20261123-025159-fedf656-vce/` (issue #242,
+gate G2 / row R3 of tracker #238).
 
 ## Records (append-only)
 

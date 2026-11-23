@@ -80,8 +80,7 @@ exit_codes = "; ".join(rc.exit_codes(out))
 L += ["## Run", f"- {exit_codes}"]
 reps, missing = {}, []
 for name in TAGS + [MUX, FFE]:
-    tag = "tx_sizing_" + name
-    rep, msg = rc.report_or_error(out, tag)
+    rep, msg = rc.report_or_error(out, "tx_sizing_" + name if name in TAGS else name)
     if rep is not None:
         reps[name] = rep
     else:
