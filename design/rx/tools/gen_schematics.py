@@ -145,6 +145,8 @@ RL_CTLE = 60
 RT1 = 220
 RU = 440
 RL_LATCH = 100
+RS_LATCH = 16   # shared load-return series R, issue #266
+RS_CLK = 5      # per-chain stage-2 load-return series R, issue #266
 RE_LATCH = 40
 NX_LATCH = 2
 
@@ -232,8 +234,12 @@ high. Sizing choice, not a result.
     s.npn("Qth", "eh", "clkn", "eth", nx, 2, 1)
     s.res("Rts", "ets", "vss", RE_LATCH, 1, 1)
     s.res("Rth", "eth", "vss", RE_LATCH, 3, 1)
-    s.res("RLp", "vdd", "qp", RL_LATCH, 4, 0)
-    s.res("RLn", "vdd", "qn", RL_LATCH, 5, 0)
+    # Load return `vl` sits RS_LATCH below vdd (issue #266, DR-005 option 1): the
+    # off-side collector rests at vl, not the rail, so the Cbc kick from the
+    # cross-coupled pair stays under R3's 1.32 V at +10 % supply.
+    s.res("Rsl", "vdd", "vl", RS_LATCH, 6, 0)
+    s.res("RLp", "vl", "qp", RL_LATCH, 4, 0)
+    s.res("RLn", "vl", "qn", RL_LATCH, 5, 0)
     return s
 
 
@@ -260,8 +266,10 @@ Sizing choice, not a result.
         s.npn("Q%s2a" % tag, on, "m%sn" % tag, "t%s2" % tag, 2, 0, r + 1)
         s.npn("Q%s2b" % tag, op, "m%sp" % tag, "t%s2" % tag, 2, 1, r + 1)
         s.res("Rt%s2" % tag, "t%s2" % tag, "vss", 85, 2, r + 1)
-        s.res("RL%s2a" % tag, "vdd", on, 225, 3, r + 1)
-        s.res("RL%s2b" % tag, "vdd", op, 225, 4, r + 1)
+        # stage-2 load return RS_CLK below vdd (issue #266, DR-005 option 1)
+        s.res("Rs%s2" % tag, "vdd", "v%s2" % tag, RS_CLK, 5, r + 1)
+        s.res("RL%s2a" % tag, "v%s2" % tag, on, 225, 3, r + 1)
+        s.res("RL%s2b" % tag, "v%s2" % tag, op, 225, 4, r + 1)
     return s
 
 
