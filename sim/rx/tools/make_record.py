@@ -242,6 +242,11 @@ if dev_worst:
     L += ["", "### R3 per-device table (worst over all corners; ctle over the 8 code copies)", "",
           "Limits: collector <= 1.32 V, Vce <= 1.4 V (open-base BVCEO), reverse Vbe <= 1.0 V. "
           "A value over its limit keeps its row -- violations are marked, not dropped.", "",
+          "**Coverage caveat.** The `ctle.*` rows are operating-point values from `ctle_op` "
+          "(`analysis.kind: \"dc\"`, `Vip`/`Vin` at `dc 0`, cards `.meas dc ... at=0`): no input "
+          "signal and no transient peak, so their R3 status is quiescent-only (a lower bound for a "
+          "differential pair). The `clk_buf_quad.*` and `latch_cml.*` rows are transient maxima. "
+          "A CTLE large-signal bench is tracked in #256.", "",
           "| device | vc max (V) @ corner | Vce max (V) @ corner | vbe rev max (V) @ corner |",
           "|---|---|---|---|"]
     devs = sorted({d for d, _ in dev_worst})
@@ -267,6 +272,8 @@ L += ["", "## Not simulated",
       "exists (the TX benches of issue #80 show the OSDI path works on the fleet since "
       "PR #76). It has no HBT, so R3 Vce is not applicable to it; its CMOS levels need a "
       "G3-class CMOS-evidence bench, not this record.",
+      "- CTLE large-signal/transient node stress: not simulated -- `ctle_op` is a zero-input DC "
+      "operating point, so the `ctle.*` R3 rows above are quiescent-only. Tracked in #256.",
       "- PDK resistors `rsil`/`rppd` (`r3_cmc` OSDI): not simulated; every resistor in design/rx is an ideal `res` for that reason, so resistor corners (`res_*`) are not exercised.",
       "- Pad/ESD capacitance at 5 GHz, SDD11 (R9) and the core-to-pad seam: not simulated beyond the placeholder |Zdiff| above; owned by #24/#28.",
       "- Sampler offset and noise (Monte Carlo, DR-002), CDR, link behaviour, clock duty/quadrature error (R20 +-1 %, +-2 deg) and mismatch: not simulated.",

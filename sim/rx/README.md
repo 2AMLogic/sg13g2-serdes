@@ -25,6 +25,10 @@ per-device table aggregates the 8 CTLE code copies into 36 rows (ctle 22,
 clk_buf_quad 8, latch_cml 6), matching the `npn13G2` instances of the exported
 netlists; first `-vce` record: `records/20261123-025159-fedf656-vce/` (issue #242,
 gate G2 / row R3 of tracker #238).
+Caveat: the 22 `ctle.*` rows come from `ctle_op`, a zero-input DC operating
+point (`.meas dc ... at=0`), so they are quiescent-only; only `clk_buf_quad`
+and `latch_cml` (and all TX) rows are transient maxima. CTLE large-signal
+stress is tracked in #256.
 
 ## Records (append-only)
 
