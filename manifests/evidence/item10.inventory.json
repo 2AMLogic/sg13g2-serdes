@@ -9,6 +9,7 @@
     ".github/workflows/ci.yml",
     "scripts/check-ci.sh",
     "scripts/erc-fresh-lib.sh",
+    "scripts/analog-cell-evidence-lib.sh",
     "scripts/klt-lib.sh",
     "scripts/pnr-lib.sh",
     "scripts/pnr-regen.sh",

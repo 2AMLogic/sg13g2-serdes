@@ -214,3 +214,14 @@ RX MOS bench for `lvl_cml2cmos` exists -- but for the true reason (none was
 built; the cell has no HBT, so R3 Vce is not applicable to it). All numbers in
 this record are unaffected. Corrected wording and the per-device Vce table:
 `records/20261123-025159-fedf656-vce/` (issue #242). Nothing else changes.
+
+## Erratum (2026-11-23, issue #256)
+
+The CTLE rows of the "HBT node stress versus DR-003" section above are
+**quiescent operating-point values** (`ctle_op` runs with `Vip`/`Vin` at
+`dc 0`), not transient maxima — a lower bound for a differential pair, whose
+off-side collector rises under signal. Transient maxima for all 22 `ctle.*`
+HBTs (Vc, Vce, reverse Vbe; both input levels, all codes, the same 27-corner
+grid) are in `records/20261123-102613-14d2158` (superseding `records/20261123-050201-5214c04`, whose single-polarity stimulus under-stressed half the pair; see its Erratum); nothing there exceeds a
+DR-003 limit. This paragraph is an appended pointer; the original text above
+is unchanged.

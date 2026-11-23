@@ -24,8 +24,23 @@ sys.path.insert(0, os.path.join(SIM, "..", "tools"))
 from hbt_corners import HBT_LIB, corner_axes  # noqa: E402
 
 VC_MAX = 1.32   # DR-003: no HBT collector node above this
+VCE_MAX = 1.4   # DR-003: npn13G2 open-base BVCEO (target-spec HBT breakdown table), hard limit (issues #242, #256)
 VBE_REV = 1.0   # DR-003: no reverse Vbe above this
-VCE_MAX = 1.4   # DR-003: npn13G2 open-base BVCEO, hard limit (issue #242)
+
+# Differential input amplitudes of the ctle_tran bench (issue #256), as the
+# single-ended half-swing A of each source about vcm: each side swings +-A, so
+# the differential peak-to-peak swing is 4*A (mVppd). The spec declares no
+# MAXIMUM RX input swing -- R8 gives only the minimum sensitivity -- so both
+# levels are bench bounds named here and restated in the record, not spec
+# limits:
+# - lo: 50 mVppd -- R8 nominal RX input sensitivity (spec/target-spec.md R8),
+#   the smallest swing the RX must resolve, so the stress floor.
+# - hi: 800 mVppd -- R4 stretch TX output swing (the R4 maximum), taken as the
+#   pad amplitude at zero channel loss: the committed channel model
+#   (spec/channel/) has S11 = S22 = 0 and IL(f) -> 0 dB as f -> 0, so the
+#   largest pad amplitude it admits is the TX swing itself.
+CTLE_TRAN_SENS_V = 0.0125
+CTLE_TRAN_MAX_V = 0.2
 
 
 def parse_subckt(cell):
@@ -45,12 +60,15 @@ def parse_subckt(cell):
     return ports, qs
 
 
-def stress_meas(inst, cell, portmap, prefix, kind):
+def stress_meas(inst, cell, portmap, prefix, kind, vce=True, vce_first=False):
     """`.meas` cards for max collector V, max Vce and max reverse Vbe of every HBT.
 
     kind "dc": operating-point value via a two-point dummy sweep (`at=0`);
     kind "tran": maximum over the run. Plain `spice` cards, because the fleet
-    runner's `expr` support is not usable (see sim/rx/README.md).
+    runner's `expr` support is not usable (see sim/rx/README.md). Unless
+    `vce=False`, a third card per HBT, max Vce (DR-003/BVCEO), through another
+    B source (issues #242, #256). `vce_first` only orders that card before
+    `_vbe_rev_max`, as the ctle_tran request has it.
     """
     ports, qs = parse_subckt(cell)
 
@@ -67,12 +85,20 @@ def stress_meas(inst, cell, portmap, prefix, kind):
     for q, c, b, e in qs:
         base = "%s_%s_%s" % (prefix, inst.lower(), q.lower())
         vbe = base + "_vbe_node"
-        vce = base + "_vce_node"
         lines.append("B%s %s 0 V=v(%s)-v(%s)" % (vbe, vbe, node(e), node(b)))
-        lines.append("B%s %s 0 V=v(%s)-v(%s)" % (vce, vce, node(c), node(e)))
-        for suffix, sig, lim in (("_vc_max", "v(%s)" % node(c), VC_MAX),
-                                 ("_vbe_rev_max", "v(%s)" % vbe, VBE_REV),
-                                 ("_vce_max", "v(%s)" % vce, VCE_MAX)):
+        cards = [("_vc_max", "v(%s)" % node(c), VC_MAX)]
+        if vce:
+            vce_node = base + "_vce_node"
+            lines.append("B%s %s 0 V=v(%s)-v(%s)" % (vce_node, vce_node, node(c), node(e)))
+            vce_card = ("_vce_max", "v(%s)" % vce_node, VCE_MAX)
+            vbe_card = ("_vbe_rev_max", "v(%s)" % vbe, VBE_REV)
+            # Card order is kept per bench so every already-committed request
+            # (and the record generated from it) stays byte-identical:
+            # ctle_tran (issue #256) lists vce before vbe_rev, the others after.
+            cards += [vce_card, vbe_card] if vce_first else [vbe_card, vce_card]
+        else:
+            cards.append(("_vbe_rev_max", "v(%s)" % vbe, VBE_REV))
+        for suffix, sig, lim in cards:
             name = base + suffix
             if kind == "dc":
                 card = ".meas dc %s find %s at=0" % (name, sig)
@@ -154,6 +180,101 @@ def ctle_op_meas():
         m.append({"name": "ctle_c%d_outcm" % c, "unit": "V",
                   "spice": ".meas dc ctle_c%d_outcm find v(ocm%d) at=0" % (c, c)})
         lines.append("Bocm%d ocm%d 0 V=(v(op%d)+v(on%d))/2" % (c, c, c, c))
+    return lines, m
+
+
+def _tran_pwl(amp, sign):
+    """PWL text for one source of the ctle_tran bench: +-`amp` about vcm,
+    `sign` = +1 for the p side, -1 for the n side (the pair is complementary).
+    Both polarities of the long run are exercised, so every device of the
+    symmetric pair sees its settled worst-case collector level:
+      0-2 ns      settled at -amp (the .op state)
+      2-3 ns      5 cycles of 5 GHz alternation (200 ps, 20 ps edges), first
+                  edge -amp -> +amp
+      3-6 ns      held at +amp (3 ns > 8*tau of the 300 ps Rca*Cca feed-forward,
+                  so hpp/hpn settle back to vcm)
+      6-7 ns      5 cycles of 5 GHz alternation, first edge +amp -> -amp
+      7-7.1 ns    held at +amp
+    """
+    E, P = 20e-12, 200e-12   # edge time, period
+    pts = [(0.0, -amp)]
+
+    def alt(t0, lvl):
+        for i in range(5):
+            t = t0 + i * P
+            pts.extend([(t, lvl), (t + E, -lvl), (t + P / 2, -lvl), (t + P / 2 + E, lvl)])
+        return t0 + 5 * P
+
+    t = alt(2e-9, -amp)            # ends at -amp
+    pts.extend([(t, -amp), (t + E, amp)])   # then held at +amp until alt() at 6 ns
+    alt(6e-9, amp)                 # ends at +amp
+    pts.append((7.1e-9, amp))
+    return "pwl(" + " ".join("%.4gn %g" % (a * 1e9, sign * b) for a, b in pts) + ")"
+
+
+def ctle_tran_body(extra=()):
+    """16 copies of ctle (codes 0-7 at each of two differential input levels)
+    driven by ideal differential PWL sources that exercise BOTH polarities of
+    the settled long run (see _tran_pwl): the ctle input network is a
+    symmetric pair with AC-coupled feed-forward paths, so a single-polarity
+    long run under-stresses one half of it."""
+    L = ["* CTLE transient node-stress bench (issue #256): ctle_op's stress cards",
+         "* are quiescent (Vip/Vin at dc 0); this bench drives a real differential",
+         "* swing so the R3 per-device table gets transient peaks. 16 copies of",
+         "* ctle: codes 0-7 at each of two input levels (lo/hi below), same ideal",
+         "* source, same placeholder 80 fF load as ctle_ac/ctle_op. Stimulus per",
+         "* side (pwl, both polarities): 2 ns settled, 1 ns of 5 GHz alternation",
+         "* (200 ps period, 20 ps edges), a 3 ns long run at the opposite polarity,",
+         "* then 1 ns of 5 GHz alternation again. Sizing evidence, not a spec",
+         "* result.",
+         ".include ../../design/rx/netlists/ctle.spice",
+         "Vdd vdd 0 1.2",
+         "Bvcm vcm 0 V=0.7917*v(vdd)",
+         "Vip inp vcm " + _tran_pwl(CTLE_TRAN_SENS_V, +1),
+         "Vin inn vcm " + _tran_pwl(CTLE_TRAN_SENS_V, -1),
+         "Vjp jnp vcm " + _tran_pwl(CTLE_TRAN_MAX_V, +1),
+         "Vjn jnn vcm " + _tran_pwl(CTLE_TRAN_MAX_V, -1)]
+    _ctle_copies(L, "l", "inp", "inn")
+    _ctle_copies(L, "h", "jnp", "jnn")
+    L += list(extra)
+    return "\n".join(L) + "\n"
+
+
+def _ctle_copies(L, tag, inp, inn):
+    """Append the 8 peaking-code copies of ctle for one input source pair,
+    with node names prefixed `tag` so the two amplitude levels of ctle_tran
+    (and the ac/op benches) never collide."""
+    for c in range(8):
+        for k in range(3):
+            bit = (c >> k) & 1
+            hi, lo = "v(vdd)", "v(vdd)-0.25"
+            L.append("Bk%s%d_%d %s%dk%d 0 V=%s" % (tag, c, k, tag, c, k, hi if bit else lo))
+            L.append("Bk%s%d_%db %s%dk%db 0 V=%s" % (tag, c, k, tag, c, k, lo if bit else hi))
+        L.append("Xd%s%d %s %s vcm vdd 0 %s%dk0 %s%dk0b %s%dk1 %s%dk1b %s%dk2 %s%dk2b op%s%d on%s%d ctle"
+                 % (tag, c, inp, inn, tag, c, tag, c, tag, c, tag, c, tag, c, tag, c, tag, c, tag, c))
+        L.append("Clp%s%d op%s%d 0 80f" % (tag, c, tag, c))
+        L.append("Cln%s%d on%s%d 0 80f" % (tag, c, tag, c))
+        L.append("Bd%s%d dif%s%d 0 V=v(op%s%d)-v(on%s%d)" % (tag, c, tag, c, tag, c, tag, c))
+
+
+def ctle_tran_meas():
+    """Stress cards (with Vce) per HBT per code per level, plus the
+    differential output max/min per copy as nonzero-swing evidence."""
+    lines, m = [], []
+    for lvl, tag, inp, inn in (("lo", "l", "inp", "inn"), ("hi", "h", "jnp", "jnn")):
+        for c in range(8):
+            pm = {"inp": inp, "inn": inn, "vcm": "vcm", "vdd": "vdd",
+                  "outp": "op%s%d" % (tag, c), "outn": "on%s%d" % (tag, c)}
+            for k in range(3):
+                pm["c%d" % k] = "%s%dk%d" % (tag, c, k)
+                pm["c%db" % k] = "%s%dk%db" % (tag, c, k)
+            l_, m_ = stress_meas("Xd%s%d" % (tag, c), "ctle", pm, "ctle_%s_c%d" % (lvl, c), "tran", vce_first=True)
+            lines += l_
+            m += m_
+            for ext, fn in (("_dif_max_v", "max"), ("_dif_min_v", "min")):
+                n = "ctle_%s_c%d%s" % (lvl, c, ext)
+                m.append({"name": n, "unit": "V",
+                          "spice": ".meas tran %s %s v(dif%s%d)" % (n, fn, tag, c)})
     return lines, m
 
 
@@ -282,18 +403,23 @@ def main(argv):
     os.makedirs(out, exist_ok=True)
     units = corner_axes(debug)
     op_lines, op_meas = ctle_op_meas()
+    tran_lines, tran_meas = ctle_tran_meas()
     lat_lines, lat_meas = latch_meas()
     files = {
         "ctle_ac": (ctle_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, ctle_ac_meas()),
         "ctle_op": (ctle_op_body(op_lines), {"kind": "dc", "args": "Vdmy 0 1m 1m"}, op_meas),
+        "ctle_tran": (ctle_tran_body(tran_lines), {"kind": "tran", "args": "2p 7.1n"}, tran_meas),
         "pad_ac": (pad_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, pad_meas()),
         "latch_regen": (latch_body(lat_lines), {"kind": "tran", "args": "2p 3n"}, lat_meas),
     }
+    # 16 CTLE copies at 7.1 ns is a much larger transient deck than
+    # latch_regen; give it a longer per-unit timeout than the default 120 s.
+    timeouts = {"ctle_tran": {"timeout_s": 1800}}
     for name, (body, ana, meas) in files.items():
         rel = os.path.relpath(NET, out)
         with open(os.path.join(out, name + ".sp"), "w") as f:
             f.write(body.replace("../../design/rx/netlists", rel))
-        req = request(name + ".sp", ana, meas, units)
+        req = request(name + ".sp", ana, meas, units, timeouts.get(name))
         with open(os.path.join(out, name + ".request.json"), "w") as f:
             json.dump(req, f, indent=2)
             f.write("\n")

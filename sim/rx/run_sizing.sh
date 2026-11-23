@@ -28,7 +28,7 @@ SUFFIX=""
 # the saved record (issue #202).
 OUT="$(reserve_sim_record_dir "${HERE}/records" "${SUFFIX}")" || exit 3
 rc=0
-for req in ctle_ac ctle_op pad_ac latch_regen; do
+for req in ctle_ac ctle_op ctle_tran pad_ac latch_regen; do
   echo "run_sizing.sh: klt sim ${req}.request.json"
   ( cd "${HERE}" && klt sim --format json --wait-for-capacity 900 \
       --report-out "${OUT}/${req}.report.json" "${req}.request.json" \
