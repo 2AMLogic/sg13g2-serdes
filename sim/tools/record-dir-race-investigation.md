@@ -22,7 +22,8 @@ carried the temporary dispatch-gated probe job (reverted in the final PR; the
 standalone probe that followed it, `record-dir-race-probe.sh` and
 `.github/workflows/record-dir-race-probe.yml`, was removed on 2026-11-23 once
 this investigation concluded -- operator ruling on #234 -- and is retrievable
-at `42fd372`, its last revision; see "Reproducing" below):
+from history at `42fd372`, the revision that produced every measurement below;
+see "Reproducing"):
 
 - Run [44969040860](https://github.com/2AMLogic/sg13g2-serdes/actions/runs/44969040860)
   (branch @ `de832e9`) — first reproduction, instrument commit.
@@ -176,15 +177,20 @@ passes prove nothing, which is why the original reds looked irreproducible.
 ## Reproducing
 
 2026-11-23: the probe was removed once this investigation concluded (operator
-ruling on #234; the PR #216 `.reserved` guard makes its question immaterial to
-the contract). Nothing in the tree runs it and there is no workflow to
-dispatch; it is reproduced from history at `42fd372`, the last revision that
-contains it:
+ruling on #234). Nothing in the tree runs it and there is no workflow to
+dispatch; it is reproduced from history. `42fd372` is the revision that
+produced every measurement above:
 
     git show 42fd372:sim/tools/record-dir-race-probe.sh
     git show 42fd372:.github/workflows/record-dir-race-probe.yml
 
-The workflow at that revision is the recipe. It only runs on a host whose
+The script saw one further change before its removal: #245 (commit `597f1de`)
+taught it to classify the post-#244 delegated `record-dir.sh` shape and stage
+`scripts/klt-lib.sh` (see the Erratum below). That revision is retrieved the
+same way, `git show 597f1de:sim/tools/record-dir-race-probe.sh`; it produced no
+measurement recorded here, and the workflow did not change after `42fd372`.
+
+The workflow at `42fd372` is the recipe for the recorded runs. It only runs on a host whose
 `mkdir --version` reports uutils coreutils (see "Runner environment" above; a
 GNU host does not reproduce): add the two pinned revisions as worktrees,
 `d436b53` (pre-guard) and `4367f60` (guarded), then run the script's modes
@@ -197,3 +203,35 @@ again in the final PR. Anomaly dumps (record dir with hidden entries,
 `.reserved` pid, both launchers' outputs, per-launcher `klt` logs, `mkdir`
 resolution) print into the job log; artifacts stay under the printed
 per-invocation directory for the runner's lifetime.
+
+## Erratum (2026-11-23)
+
+The consequence above -- "the two-claim contract in `record-dir.sh` stands" --
+described the revision this record was written against. Issue #244
+consolidated the reservation onto the single `os.mkdir` primitive in
+`scripts/klt-lib.sh`: `sim/tools/record-dir.sh` now builds the `<ts>-<sha>`
+record id and delegates the exclusive creation to `reserve_record_dir`, and
+the second `.reserved` claim was retired with the `mkdir(1)` call it guarded.
+This record's own control measurements are the justification -- bare
+`os.mkdir` measured 0 double-successes in 4000 pairs on the affected image
+(the marker existed to catch exactly the uutils `mkdir` false success that
+reading the `mkdir(2)` result directly cannot produce), so the second claim
+added no exclusivity on top of the primitive. The pinned-revision probe
+(`.github/workflows/record-dir-race-probe.yml`) still measures the pre-guard and
+two-claim revisions exactly as they were; nothing in this record's measurements or
+verdict changes.
+The probe script itself (`sim/tools/record-dir-race-probe.sh race`) was also
+updated in this PR to measure all three shapes: it stages `scripts/klt-lib.sh` when
+the pinned revision has it, reports `guarded=yes` only for the `.reserved` two-claim revision (`guarded=no` for the pre-guard and delegated ones), and
+counts the `record-dir: ... exists (records are append-only)` refusal under
+`mkdir-refusals`; it refuses a delegated pin whose `klt-lib.sh` is missing
+rather than printing a summary.
+
+## Removal (2026-11-23)
+
+Per the operator ruling on #234 the probe the Erratum above describes -- the
+script and its `workflow_dispatch` workflow -- was removed once this
+investigation concluded; the Erratum's present-tense description of it refers
+to the pre-removal tree. Nothing in the tree runs it. Reproduction from
+history, and the revisions to retrieve, are given under "Reproducing" above.
+No finding, table or measurement in this record is changed by the removal.

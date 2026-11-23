@@ -66,7 +66,7 @@
         "role": "hygiene",
         "path": "scripts/klt-lib.sh",
         "passed": true,
-        "content_hash": "sha256:2f6538fc85ed4915eace2a4204f911d6c588fcde6aeb6a2bd30a9b9ea5d7cbc9"
+        "content_hash": "sha256:3764557998f01c6c29a2551a8a868a5d5254b9d722099d7428eacf513ff14ec4"
       },
       {
         "check": "present",
@@ -115,14 +115,14 @@
         "role": "hygiene",
         "path": "sim/tools/record-dir.sh",
         "passed": true,
-        "content_hash": "sha256:43384f35162c649ce10754005e0f9a3d9daf612b2f18a85bee0f476aa779eb06"
+        "content_hash": "sha256:c76406d7f0d6ef1d48908e73d1e3556207038059efc2bbce3fcf94bf633003ef"
       },
       {
         "check": "present",
         "role": "hygiene",
         "path": "sim/tools/test-record-dir.sh",
         "passed": true,
-        "content_hash": "sha256:0e5bd4c0687967b115712eab0305acc7bde80c25eb2c478c4cdb23d946e4e0f8"
+        "content_hash": "sha256:38b068192c96a02de809975c47ec26d317624915126b21e49789466c33c61b18"
       },
       {
         "check": "command",
