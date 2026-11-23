@@ -221,7 +221,7 @@ L += [f"- {a}: `{b}` = {c}" for a, b, c in other] or ["- none recorded as `fail`
 L += ["", "## Not simulated",
       "",
       "- `lvl_cml2cmos` (thin-oxide MOS, PSP103 via OSDI): not simulated; the host ngspice cannot load OSDI v0.4 and batch jobs staging `.osdi` inputs fail (klayout-tools#3818, #3819; sim/README.md; blocked on #3).",
-      "- PDK resistors `rsil`/`rppd` (`r3_cmc` OSDI): not simulated; every resistor in design/rx is an ideal `res` for that reason, so resistor corners (`res_*`) are not exercised.",
+      "- PDK resistors `rsil`/`rppd` (`r3_cmc` OSDI): not simulated in these four benches; every resistor in design/rx is an ideal `res`, so resistor corners (`res_*`) are not exercised here. The RX termination has its own `rppd` resistor-corner bench and record family (`run_rppd_corners.sh`, issue #240); the CTLE-internal and latch resistors stay ideal in both.",
       "- Pad/ESD capacitance at 5 GHz, SDD11 (R9) and the core-to-pad seam: not simulated beyond the placeholder |Zdiff| above; owned by #24/#28.",
       "- Sampler offset and noise (Monte Carlo, DR-002), CDR, link behaviour, clock duty/quadrature error (R20 +-1 %, +-2 deg) and mismatch: not simulated.",
       "- Full PVT-full grid (135 points): not run; only the 27-point HBT-family grid (MOS corners absent), `hbt_*` sections ganged with `cap_*` and `dio_*`. The spec's 7-point PVT-edge set is a subset of it.",
