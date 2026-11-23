@@ -19,7 +19,7 @@ command -v klt >/dev/null 2>&1 || { echo "run_smoke.sh: klt not on PATH -- 'sour
 
 # Exclusive reservation: a same-second relaunch refuses instead of overwriting
 # the saved record (issue #202).
-OUT="$(reserve_record_dir "${HERE}/records")" || exit 3
+OUT="$(reserve_sim_record_dir "${HERE}/records")" || exit 3
 
 rc=0
 for req in hbt_gummel mos_inv_dc mixed_tran; do
