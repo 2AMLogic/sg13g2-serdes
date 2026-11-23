@@ -49,7 +49,13 @@ geo = re.search(r"XRtp \S+ \S+ 0 rppd w=(\S+) l=(\S+) m=(\d+)", deck)
 if not geo:
     raise SystemExit(f"make_record_rppd.py: no rppd termination instance found in {MAIN}.sp")
 W_U, L_U, M = geo.groups()
-R_SIDE_TYP = RSH_TYP * float(L_U.rstrip("u")) / (int(M) * (float(W_U.rstrip("u")) + 0.006))
+W_UM = float(W_U.rstrip("u"))
+# The r3_cmc terminal resistance (model rc = rz = rzspec/w, RCRPPD 35 ohm·um
+# on p.11): in series with the channel term and NOT divided by m. The bench
+# records of this family reproduce R_side = rz + rsh*k within ~0.7 %.
+RZ = 35.0 / W_UM
+K = float(L_U.rstrip("u")) / (int(M) * (W_UM + 0.006))   # ohm per (ohm/sq)
+R_SIDE_TYP = RZ + RSH_TYP * K
 
 L = [f"# RX termination rppd corner record {out.name}", "",
      "**Sizing evidence, not a spec result and not a measurement.** Every figure below is",
@@ -89,10 +95,14 @@ L += ["", "## Bench",
       "",
       f"The two ideal 50 ohm legs of `design/rx/netlists/rx_term_pad.spice` are replaced by PDK",
       f"`rppd` instances (r3_cmc OSDI via `osdi_preload`, as on the TX MOS benches): w={W_U},",
-      f"l={L_U}, m={M} parallel strips -> {R_SIDE_TYP:.3f} ohm per side, {2 * R_SIDE_TYP:.3f} ohm",
-      "differential at rsh = 260. w = 2 um is the p.11 precision recommendation; the layout",
-      "minimums (0.50 um width and SalBlock length) rule out a single 50 ohm strip at that",
-      "width, hence two 100 ohm strips in parallel. Everything else is the pad_ac bench as-is:",
+      f"l={L_U}, m={M} parallel strips. The model's resistance is R_side = rz + rsh*l/(m*(w+xw)),",
+      f"with the terminal resistance rz = 35 ohm·um / w = {RZ:.1f} ohm (RCRPPD p.11, model",
+      f"`rzspec`), in series with the channel and **not** divided by m -- sizing for the",
+      f"channel term 50 - {RZ:.1f} = {50 - RZ:.1f} ohm gives {R_SIDE_TYP:.3f} ohm per side,",
+      f"{2 * R_SIDE_TYP:.3f} ohm differential at rsh = 260. The terminal term also compresses",
+      f"the corner span: a +-10 % rsh move is about {100 * RSH_TYP * K / R_SIDE_TYP:.1f} % of the finished",
+      "resistor. w = 2 um is the p.11 precision recommendation; the layout minimums (0.50 um",
+      "width and SalBlock length) are met. Everything else is the pad_ac bench as-is:",
       "PLACEHOLDER 50 fF pad capacitance, ideal 4 ohm metal series stand-ins, ideal",
       "CTLE-internal resistors, code-0 CTLE hanging on the pad. |Zdiff| = 1/|I_diff| for a",
       "1 V differential AC drive; the 0.1 GHz point stands in for the DC resistance.", "",
@@ -138,8 +148,9 @@ if win_r:
         z0, z5 = z(c, "pad_idiff_0p1g_a"), z(c, "pad_idiff_5g_a")
         L.append(f"| {c['corner_id']} | {rsh:g} | {f(z0, '{:.1f}')} | {f(z5, '{:.1f}')} |")
     # Consistency guard: the override must have moved |Zdiff| by roughly the
-    # sheet-resistance ratio. If it did not, the numbers are typ-like, not
-    # window edges -- say so loudly instead of recording them as the window.
+    # model-resistance ratio (rz terminal term included). If it did not, the
+    # numbers are typ-like, not window edges -- say so loudly instead of
+    # recording them as the window.
     if typ:
         L.append("")
         for c in win_r["corners"]:
@@ -147,9 +158,10 @@ if win_r:
             z0 = z(c, "pad_idiff_0p1g_a")
             if z0 is None:
                 continue
-            got, want = z0 / typ, rsh / RSH_TYP
-            verdict = "ok" if abs(got / want - 1.0) <= 0.02 else ("**WARNING: override may not have applied**" if abs(got - 1.0) <= 0.02 else "unexpected")
-            L.append(f"- rsh={rsh:g}: |Zdiff| ratio vs res_typ/1.200V/27C measured {got:.4f}, expected {want:.4f} -- {verdict}.")
+            got = z0 / typ
+            want = (RZ + rsh * K) / (RZ + RSH_TYP * K)
+            verdict = "ok" if abs(got / want - 1.0) <= 0.02 else ("**WARNING: override may not have applied**" if abs(got - 1.0) <= 0.02 else "unexpected (see the ratio)")
+            L.append(f"- rsh={rsh:g}: |Zdiff| ratio vs res_typ/1.200V/27C measured {got:.4f}, expected {want:.4f} (rz included) -- {verdict}.")
 L += ["", "## Not simulated",
       "",
       "- SDD11 / return loss to 5 GHz (R9's AC half, gate G4): not simulated; the pad",

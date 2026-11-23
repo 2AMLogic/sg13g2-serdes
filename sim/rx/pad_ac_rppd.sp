@@ -1,6 +1,7 @@
 * RX termination rppd corner bench (issue #240, R9 gate G1): the two ideal
 * 50 ohm legs of design/rx/rx_term_pad are replaced by PDK rppd instances
-* (w=2u, l=0.7715u, m=2 -> 49.998 ohm per side at rsh = 260); everything else
+* (w=2u, l=0.5015u, m=2; R_side = rz + rsh*l/(m*(w+xw)) with rz = 35 R·um/w = 17.5,
+* -> 50.000 ohm per side, 100.000 ohm differential at rsh = 260); everything else
 * is pad_ac as-is: PLACEHOLDER pad capacitance, ideal 4 ohm metal series
 * stand-ins, ideal CTLE-internal resistors, code-0 CTLE hanging on the pad.
 * NOT a return-loss result: R9 SDD11 is graded on extracted layout (#24/#28).
@@ -8,8 +9,8 @@
 * process spec Rev. 1.2 p.11 vs cornerRES.lib; discrepancy reported, not
 * reconciled). Sizing evidence from a simulation, never a measurement.
 .include ../../design/rx/netlists/ctle.spice
-XRtp padp vcm 0 rppd w=2u l=0.7715u m=2 b=0
-XRtn padn vcm 0 rppd w=2u l=0.7715u m=2 b=0
+XRtp padp vcm 0 rppd w=2u l=0.5015u m=2 b=0
+XRtn padn vcm 0 rppd w=2u l=0.5015u m=2 b=0
 Cpad_p padp 0 50f m=1
 Cpad_n padn 0 50f m=1
 XDesd_pu vdd padp 0 diodevdd_2kv m=1

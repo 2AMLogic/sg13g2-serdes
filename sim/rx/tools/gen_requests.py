@@ -193,10 +193,14 @@ OSDI = ["$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/" + f
         for f in ("psp103.osdi", "psp103_nqs.osdi", "r3_cmc.osdi", "mosvar.osdi")]
 # Geometry: p.11 recommends w >= 2 um for precision resistors, and the layout
 # minimums (SG13G2_os_layout_rules.pdf 6.3: 0.50 um GatPoly width and SalBlock
-# length) forbid a single 50 ohm strip at w = 2 um (it would need
-# l = 50*2.006/260 = 0.386 um). Two 100 ohm strips in parallel instead:
-# l = 100*(2+0.006)/260 = 0.7715 um -> 49.998 ohm per side at rsh = 260.
-RPPD_W, RPPD_L, RPPD_M = "2u", "0.7715u", 2
+# length) rule out short single strips. The r3_cmc model puts the terminal
+# resistance rc = rz in series with the channel, rz = rzspec/w = 35 R·um / w
+# (RCRPPD p.11, model rzspec = 35e-6), unscaled by m -- the bench records of
+# this family reproduce R_side = rz + rsh*l/(m*(w+xw)) within ~0.7 % at every
+# corner. The strip is therefore sized for the channel term 50 - 17.5 =
+# 32.5 ohm: l = 32.5*2*2.006/260 = 0.5015 um (>= 0.50 um minimum), m = 2
+# strips in parallel.
+RPPD_W, RPPD_L, RPPD_M = "2u", "0.5015u", 2
 # Window edges from the source note: the p.11 min/max rsh and DWRPPD columns
 # folded into one effective sheet resistance at w = 2 um (the r3_cmc model has
 # no width-delta parameter; xw is fixed at the 6 nm target):
@@ -208,7 +212,8 @@ RSH_RPPD_P11_HI = 289.327
 def pad_rppd_body(win=False):
     L = ["* RX termination rppd corner bench (issue #240, R9 gate G1): the two ideal",
          "* 50 ohm legs of design/rx/rx_term_pad are replaced by PDK rppd instances",
-         "* (w=%s, l=%s, m=%d -> 49.998 ohm per side at rsh = 260); everything else" % (RPPD_W, RPPD_L, RPPD_M),
+         "* (w=%s, l=%s, m=%d; R_side = rz + rsh*l/(m*(w+xw)) with rz = 35 R·um/w = 17.5," % (RPPD_W, RPPD_L, RPPD_M),
+         "* -> 50.000 ohm per side, 100.000 ohm differential at rsh = 260); everything else",
          "* is pad_ac as-is: PLACEHOLDER pad capacitance, ideal 4 ohm metal series",
          "* stand-ins, ideal CTLE-internal resistors, code-0 CTLE hanging on the pad.",
          "* NOT a return-loss result: R9 SDD11 is graded on extracted layout (#24/#28).",

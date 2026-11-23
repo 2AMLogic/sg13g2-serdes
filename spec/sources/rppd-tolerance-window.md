@@ -68,6 +68,14 @@ marked **PDK**.
    window by overriding `rsh` with the folded values above — which is what
    the window members of the RX record do (`corners.params` on `rsh_rppd`).
 
+   One term the percentages above exclude: the metal-to-body resistance
+   RCRPPD (35 Ω·µm) enters the finished resistor as a series term
+   (`rc = rz = rzspec/w` in the model card), so a w = 2 µm strip carries
+   17.5 Ω in series per side that does not move with `rsh`. The as-built
+   percentage span of a finished resistor is therefore *narrower* than the
+   window quoted here; the RX bench records under `sim/rx/records/` measure
+   it on the real model.
+
 ## Cross-check: the model card encodes the p.11 target column
 
 `resistors_mod.lib`'s `.model res_rppd r3_cmc` (same pinned tarball) carries
