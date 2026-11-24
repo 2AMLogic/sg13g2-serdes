@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 10,
-  "summary": "T1 item 10 (Repo hygiene): 24/24 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 10 (Repo hygiene): 25/25 attestation checks passed (klt signoff --attest)",
   "source": "manifests/evidence/item10.inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 24,
-    "passed_count": 24,
+    "check_count": 25,
+    "passed_count": 25,
     "checks": [
       {
         "check": "present",
@@ -52,7 +52,7 @@
         "role": "hygiene",
         "path": "scripts/check-ci.sh",
         "passed": true,
-        "content_hash": "sha256:5fa70bbd271dcebec37a1b0ee73a8af201d0a033cb61ce65a3a3c0b68c0c94de"
+        "content_hash": "sha256:36a9fdf8a52d34ab1e1ed69ce954eb50f2c7a228bd3cc1ff692239eee3f5bca9"
       },
       {
         "check": "present",
@@ -109,6 +109,13 @@
         "path": "scripts/test-reserve-record-dir.sh",
         "passed": true,
         "content_hash": "sha256:7af95f3a55f26a9108f8bb47e45df401bbd5702ae5186718fa7558264924d1f1"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/test-sta-paths-liberty.sh",
+        "passed": true,
+        "content_hash": "sha256:be1a326227308e32ad43562173b9f86059bc36ffd414958ef7d67044f7cdc2a4"
       },
       {
         "check": "present",
@@ -207,7 +214,7 @@
         "path": "manifests/evidence/item10.inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:75724ef58efbcda2e2e1cfa33aa519a2d3a64b12fbca75c72bc2b0b8b928c2b7"
+      "content_hash": "sha256:bc3b07e39c53db105a160481b1175e0a6f1fb8b9bd0c6c38b792ac6b4b25dc53"
     }
   }
 }
