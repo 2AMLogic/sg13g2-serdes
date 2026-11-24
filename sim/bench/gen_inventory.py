@@ -41,6 +41,17 @@ def build():
         for path, argv in paths:
             benches.append({"path": path, "cold_start": {"argv": argv, "timeout_s": 300, "local_only": True}})
     # klt refuses a path listed twice, so each behavioural source file carries one bench's cold start.
+    # run-bench.sh only sees the id at cold start (local_only, never in CI), so a typo'd
+    # behavioural_sources entry must fail here -- in build(), so --check mode fails too.
+    partitions = {b["id"]: b["partition"] for b in man["benches"]}
+    for src in man["behavioural_sources"]:
+        if src["bench"] not in partitions:
+            sys.exit(f"sim/bench/benches.json: behavioural_sources bench '{src['bench']}' is not a benches[].id")
+        if partitions[src["bench"]] != "behavioural":
+            sys.exit(f"sim/bench/benches.json: behavioural_sources bench '{src['bench']}' has partition "
+                     f"'{partitions[src['bench']]}', not 'behavioural'")
+        if not (REPO / src["path"]).is_file():
+            sys.exit(f"sim/bench/benches.json: behavioural_sources path '{src['path']}' does not exist")
     for src in man["behavioural_sources"]:
         benches.append({"path": src["path"],
                         "cold_start": {"argv": ["scripts/run-bench.sh", src["bench"]], "timeout_s": 300, "local_only": True}})
