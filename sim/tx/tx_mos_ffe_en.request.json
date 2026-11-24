@@ -210,6 +210,30 @@
       "name": "vbp2_minus_vbn_code3",
       "unit": "V",
       "spice": ".meas tran vbp2_minus_vbn_code3 find par('v(vbp2)-v(vbn)') at=3.95e-08"
+    },
+    {
+      "name": "vc_max_ffe_bias",
+      "unit": "V",
+      "spice": ".meas tran vc_max_ffe_bias max par('v(vbn)')",
+      "limits": {
+        "max": 1.32
+      }
+    },
+    {
+      "name": "vce_max_ffe_bias",
+      "unit": "V",
+      "spice": ".meas tran vce_max_ffe_bias max par('v(vbn)-v(xbias.er)')",
+      "limits": {
+        "max": 1.4
+      }
+    },
+    {
+      "name": "vbe_rev_max_ffe_bias",
+      "unit": "V",
+      "spice": ".meas tran vbe_rev_max_ffe_bias max par('v(xbias.er)-v(vbn)')",
+      "limits": {
+        "max": 1.0
+      }
     }
   ],
   "options": {

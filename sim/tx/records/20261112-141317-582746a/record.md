@@ -154,3 +154,15 @@ Differential output `v(padp)-v(padn)` into 100 ohm differential, 4 ohm series + 
 - Corners: HBT, capacitor and resistor corners move together (typ/typ/typ, bcs/bcs/bcs, wcs/wcs/wcs), x supply 1.08/1.2/1.32 V x -40/27/125 C x FFE off / all three post slices on. Mismatch/Monte Carlo is not run.
 - Inputs are ideal sources at vdd-referenced CML levels (300 mV), not the mux output.
 - Supply and bias: Rref is a placeholder resistor reference, so tail current tracks the supply; the bias block is not a supply-independent reference.
+
+## Erratum (2026-11-23, issue #242)
+
+The "Not simulated" section above claims `mux2to1_cml`, `ffe_en` and
+`lvl_cml2cmos` cannot be simulated because "batch jobs staging `.osdi` inputs
+fail (klayout-tools#3818/#3819; owner #3)". That statement was already wrong on
+this record's date: blocker #3 was cleared by PR #76 and the MOS-cell benches
+ran the full 45-corner grids on the batch fleet on 2026-11-10 (records
+`20261110-221849-506b37e-mos/`, `20261110-224611-4092fc2-mos/`, 135 units, none
+errored on the version). The R3 node-stress numbers of this record (HBT set
+only) are unaffected. Corrected coverage: `records/20261123-022802-fedf656-vce/`
+(issue #242). Nothing else in this record changes.

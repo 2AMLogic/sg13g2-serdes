@@ -67,11 +67,11 @@ def worst(prefix, fn):
                 rows.append((n, v, cid))
     return rows
 
-L += ["## R3 check (DR-003): collector <= 1.32 V, reverse Vbe <= 1.0 V",
+L += ["## R3 check (DR-003): collector <= 1.32 V, Vce <= 1.4 V (BVCEO), reverse Vbe <= 1.0 V",
       "", "Worst case over all corners per HBT node.", "",
       "| check | worst value (V) | limit (V) | corner |", "|---|---|---|---|"]
 viol = 0
-for prefix, lim in (("vc_max_", 1.32), ("vbe_rev_max_", 1.0)):
+for prefix, lim in (("vc_max_", 1.32), ("vce_max_", 1.4), ("vbe_rev_max_", 1.0)):
     for n, v, cid in worst(prefix, max):
         flag = "" if v <= lim else " **VIOLATION**"
         viol += v > lim
@@ -79,7 +79,7 @@ for prefix, lim in (("vc_max_", 1.32), ("vbe_rev_max_", 1.0)):
 L += ["", f"- nodes beyond the R3 limits in this grid: **{viol}**", "",
       "## Informational headroom (not R3 limits)", "",
       "| measure | worst value | corner |", "|---|---|---|"]
-for prefix, fn in (("vce_min_", min), ("vcb_min_", min), ("vce_max_", max)):
+for prefix, fn in (("vce_min_", min), ("vcb_min_", min)):
     for n, v, cid in worst(prefix, fn):
         L.append(f"| {n} | {v:.4f} V | {cid} |")
 
@@ -99,10 +99,9 @@ L += ["", "Differential output `v(padp)-v(padn)` into 100 ohm differential, 4 oh
       "understates 20-80 % at large swing. The inputs are ideal 20 ps ramps. 'n/a' = no crossing.", ""]
 
 L += ["## Not simulated", "",
-      "- `mux2to1_cml`, `ffe_en`, `lvl_cml2cmos`: contain PSP103 MOS, which needs OSDI; "
-      "the host ngspice cannot load OSDI v0.4 and batch jobs staging `.osdi` fail "
-      "(sim/README.md known gaps, klayout-tools#3818/#3819; owner #3). Their R3 status is "
-      "unknown beyond the argument in design/README.md.",
+      "- `mux2to1_cml`, `ffe_en`, `lvl_cml2cmos`: not in this HBT-set record; they are the "
+      "MOS-cell benches of issue #80 (own `records/*-mos/` and, for the R3 per-device Vce "
+      "table over every TX HBT, the `records/*-vce/` pass of issue #242).",
       "- `pad_esd` cell: not inlined; each output sees a 4 ohm series stand-in, the extracted "
       "70.66 fF pad-metal C (layout/analog/pads/records/2026-11-12-fc8a7fa, quasi-static, no bondwire/package) "
       "and the PDK clamp diodes. PDK dantenna/dpantenna equivalence to the diodevdd_2kv clamp is not "
