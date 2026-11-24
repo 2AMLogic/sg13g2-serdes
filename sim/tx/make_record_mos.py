@@ -18,6 +18,15 @@ pdk, tool = rc.load_pins(repo)
 CELLS = ["mux2to1_cml", "tx_lvl_cml2cmos", "ffe_en"]
 sha = rc.sha
 
+reps, missing = {}, []
+for c in CELLS:
+    rep, msg = rc.report_or_error(out, f"tx_mos_{c}")
+    if rep is not None:
+        reps[c] = rep
+    else:
+        missing.append((c, msg))
+
+
 L = [f"# TX MOS-cell sizing record {out.name}", "",
      rc.SIZING_BANNER + " Simulated, first-cut "
      "sizes, ideal-source drive. No `spec/` row is graded here.", "",
@@ -25,7 +34,13 @@ L = [f"# TX MOS-cell sizing record {out.name}", "",
      f"- PDK: {pdk['source']} {pdk['release_tag']} (sim/pdk.json), tarball sha256 `{pdk['tarball_sha256']}`",
      f"- klt: `{tool['klt_last_verified_commit']}`"]
 for c in CELLS:
-    L.append(f"- `tx_mos_{c}.sp` sha256 `{sha(tx / f'tx_mos_{c}.sp')}`, "
+    # The deck the simulator used is the one the run recorded (environment.netlist_sha256);
+    # the working-tree deck may have changed since an archived run. Fall back to the
+    # working tree only when the run wrote no report, and say so.
+    staged = (reps[c]["environment"].get("netlist_sha256") if c in reps else None)
+    deck = (f"`{staged}`" if staged
+            else f"`{sha(tx / f'tx_mos_{c}.sp')}` (working tree; the run recorded no staged hash)")
+    L.append(f"- `tx_mos_{c}.sp` sha256 {deck}, "
              f"`tx_mos_{c}.request.json` sha256 `{sha(tx / f'tx_mos_{c}.request.json')}`")
     L.append(f"- netlist `design/tx/netlists/{c}.spice` sha256 "
              f"`{sha(repo / 'design' / 'tx' / 'netlists' / (c + '.spice'))}`")
@@ -34,13 +49,6 @@ L.append("")
 
 exit_codes = "; ".join(rc.exit_codes(out))
 L += ["## Run", f"- {exit_codes}"]
-reps, missing = {}, []
-for c in CELLS:
-    rep, msg = rc.report_or_error(out, f"tx_mos_{c}")
-    if rep is not None:
-        reps[c] = rep
-    else:
-        missing.append((c, msg))
 for c, msg in missing:
     L.append(f"- {c}: NO REPORT: {msg}")
 corners = {}
@@ -108,14 +116,20 @@ if "mux2to1_cml" in corners:
 if "tx_lvl_cml2cmos" in corners:
     ks = sorted(corners["tx_lvl_cml2cmos"], key=lambda k: k["corner_id"])
     periods = {round(val(k, "t_period_s"), 15) for k in ks if val(k, "t_period_s")}
-    if len(periods) != 1:
+    if len(periods) > 1:
         sys.exit(f"tx_lvl_cml2cmos: reported t_period_s is not one value across corners "
                  f"({sorted(periods)}); refusing to write a record with an unverifiable input rate")
-    period_s = periods.pop()
-    rate_hz = 1.0 / period_s
-    rate = f"{rate_hz / 1e9:g} GHz" if rate_hz >= 1e9 else f"{rate_hz / 1e6:g} MHz"
-    ref = "; DR-014" if abs(rate_hz - 625e6) < 1e3 else ""
-    L += [f"## tx_lvl_cml2cmos ({rate} input, period {period_s * 1e12:g} ps from the reports; 20 fF load{ref})", "",
+    # No measured period (e.g. every corner errored): keep the summary and diagnostics
+    # above, mark the period unavailable, and do not assert a rate.
+    period_s = periods.pop() if periods else None
+    rate_hz = 1.0 / period_s if period_s else None
+    if rate_hz is None:
+        rate, ref, ptxt = "input rate unavailable", "", "period unavailable: no corner measured t_period_s"
+    else:
+        rate = (f"{rate_hz / 1e9:g} GHz" if rate_hz >= 1e9 else f"{rate_hz / 1e6:g} MHz") + " input"
+        ref = "; DR-014" if abs(rate_hz - 625e6) < 1e3 else ""
+        ptxt = f"period {period_s * 1e12:g} ps from the reports"
+    L += [f"## tx_lvl_cml2cmos ({rate}, {ptxt}; 20 fF load{ref})", "",
           "| corner | out hi (V) | out lo (V) | duty (%) | tpd LH (ps) | tpd HL (ps) | Idd (mA) |",
           "|---|---|---|---|---|---|---|"]
     n_bad = 0
