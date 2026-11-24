@@ -20,8 +20,11 @@ want="$(jq -r .yosys.version_prefix "$ROOT/layout/tools.json")"
 require_tool yosys "synth-regen: yosys not found on PATH (pinned '$want'; worker-spec gap; do not install here)"
 got="$(yosys -V 2>&1 | head -1)"
 case "$got" in "$want"*) ;; *) echo "synth-regen: yosys mismatch: pinned '$want', found '$got' (worker-spec gap; do not install here)" >&2; exit 3;; esac
-require_pdk_file ihp-sg13g2/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p20V_25C.lib \
-  "synth-regen: SG13G2 stdcell liberty not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
+# The liberty is the one the request routes: <cell_library>_<corner>.lib, never a fixed corner.
+CELL_LIB="$(jq -r .pdk.cell_library "$ROOT/rtl/synth/request.json")"
+CORNER="$(jq -r .pdk.corner "$ROOT/rtl/synth/request.json")"
+require_pdk_file "ihp-sg13g2/libs.ref/$CELL_LIB/lib/${CELL_LIB}_${CORNER}.lib" \
+  "synth-regen: ${CELL_LIB}_${CORNER}.lib liberty not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
 
 OUT="$ROOT/rtl/synth"
 REQ="$OUT/request.json"
