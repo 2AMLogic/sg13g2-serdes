@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "t1-attestation-inventory",
   "t1_item": 10,
-  "description": "Repo hygiene: README (what the block is, spec table, Reproduce), license, CI workflow and the scripts it runs.",
+  "description": "Repo hygiene: README (what the block is, spec table, Reproduce), license, CI workflow and the scripts it runs. Membership rule: the hygiene list attests the harness self-tests that gate CI (every scripts/test-*.sh / sim/tools/test-*.sh run from check_harness()) plus the scripts, libs and regenerators the CI workflow depends on; the check-*-fresh.sh freshness gates are covered by the fresh axis and are not individually listed.",
   "hygiene": [
     "README.md",
     "LICENSE",
@@ -15,6 +15,7 @@
     "scripts/lvs-regen.sh",
     "scripts/erc-regen.sh",
     "scripts/test-reserve-record-dir.sh",
+    "scripts/test-pnr-fresh-liberty.sh",
     "sim/bench/gen_inventory.py",
     "sim/bench/test_link_bench.py",
     "sim/bench/test_gen_inventory.py",
