@@ -17,6 +17,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 . "$ROOT/scripts/klt-lib.sh"
 klt_env
 want="$(jq -r .yosys.version_prefix "$ROOT/layout/tools.json")"
+require_tool yosys "synth-regen: yosys not found on PATH (pinned '$want'; worker-spec gap; do not install here)"
 got="$(yosys -V 2>&1 | head -1)"
 case "$got" in "$want"*) ;; *) echo "synth-regen: yosys mismatch: pinned '$want', found '$got' (worker-spec gap; do not install here)" >&2; exit 3;; esac
 # The liberty is the one the request routes: <cell_library>_<corner>.lib, never a fixed corner.
