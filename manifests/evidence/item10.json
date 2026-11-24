@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 10,
-  "summary": "T1 item 10 (Repo hygiene): 21/21 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 10 (Repo hygiene): 24/24 attestation checks passed (klt signoff --attest)",
   "source": "manifests/evidence/item10.inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 21,
-    "passed_count": 21,
+    "check_count": 24,
+    "passed_count": 24,
     "checks": [
       {
         "check": "present",
@@ -92,6 +92,13 @@
       {
         "check": "present",
         "role": "hygiene",
+        "path": "scripts/synth-regen.sh",
+        "passed": true,
+        "content_hash": "sha256:2b32d17b491f9410f5f86f17af8435f57813915c23d0564d919f6a093fb060ad"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
         "path": "scripts/test-pnr-fresh-liberty.sh",
         "passed": true,
         "content_hash": "sha256:4e5360b929936a11ef7193ff51bd5bf93c181beec2ab7f5cb011bcbd08fb8045"
@@ -102,6 +109,20 @@
         "path": "scripts/test-reserve-record-dir.sh",
         "passed": true,
         "content_hash": "sha256:7af95f3a55f26a9108f8bb47e45df401bbd5702ae5186718fa7558264924d1f1"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/test-synth-fresh-liberty.sh",
+        "passed": true,
+        "content_hash": "sha256:086bf2f2696886a6ba93169e20cfbfe6713d25f85c9a4344f458e0c25217fa66"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/test-synth-missing-yosys.sh",
+        "passed": true,
+        "content_hash": "sha256:aeeac2abfa70ec484a9cf057f449cf73f81a3ddd2996c88f912d9c259c7c2e8e"
       },
       {
         "check": "present",
@@ -186,7 +207,7 @@
         "path": "manifests/evidence/item10.inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:66c93ad2d70d392b2d2e5e8ccb38c40f0f77ac25802dfd80e1a91e32372d96dc"
+      "content_hash": "sha256:75724ef58efbcda2e2e1cfa33aa519a2d3a64b12fbca75c72bc2b0b8b928c2b7"
     }
   }
 }
