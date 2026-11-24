@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 10,
-  "summary": "T1 item 10 (Repo hygiene): 19/19 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 10 (Repo hygiene): 20/20 attestation checks passed (klt signoff --attest)",
   "source": "manifests/evidence/item10.inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 19,
-    "passed_count": 19,
+    "check_count": 20,
+    "passed_count": 20,
     "checks": [
       {
         "check": "present",
@@ -88,6 +88,13 @@
         "path": "scripts/pnr-regen.sh",
         "passed": true,
         "content_hash": "sha256:82eed2efba2d9ec33544fa37942f8db6d45a5d698e5a219d342590fd7549d78e"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/test-pnr-fresh-liberty.sh",
+        "passed": true,
+        "content_hash": "sha256:4e5360b929936a11ef7193ff51bd5bf93c181beec2ab7f5cb011bcbd08fb8045"
       },
       {
         "check": "present",
@@ -172,7 +179,7 @@
         "path": "manifests/evidence/item10.inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:755033a4ef21a63addc421cce85ebe6312fdea31e1186013418ff0806e904408"
+      "content_hash": "sha256:55614584a2674fbea6c9735745f27c237657f582f52a98541b92193effc38188"
     }
   }
 }
