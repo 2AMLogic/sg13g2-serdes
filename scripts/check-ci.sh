@@ -106,6 +106,9 @@ check_harness() {
   echo "harness: scripts/test-synth-fresh-liberty.sh"
   bash scripts/test-synth-fresh-liberty.sh || {
     echo "::error file=scripts/test-synth-fresh-liberty.sh::synth freshness Liberty-corner self-test failed" >&2; return 1; }
+  echo "harness: scripts/test-sta-paths-liberty.sh"
+  bash scripts/test-sta-paths-liberty.sh || {
+    echo "::error file=scripts/test-sta-paths-liberty.sh::sta-paths Liberty-corner self-test failed" >&2; return 1; }
 }
 
 # check_fresh -- the committed evidence records still describe the committed
