@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 10,
-  "summary": "T1 item 10 (Repo hygiene): 20/20 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 10 (Repo hygiene): 21/21 attestation checks passed (klt signoff --attest)",
   "source": "manifests/evidence/item10.inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 20,
-    "passed_count": 20,
+    "check_count": 21,
+    "passed_count": 21,
     "checks": [
       {
         "check": "present",
@@ -52,7 +52,7 @@
         "role": "hygiene",
         "path": "scripts/check-ci.sh",
         "passed": true,
-        "content_hash": "sha256:17f57fe00dea093fccce38db2538b70ce03e37bee688eb96f85bec5dd29ddafd"
+        "content_hash": "sha256:5fa70bbd271dcebec37a1b0ee73a8af201d0a033cb61ce65a3a3c0b68c0c94de"
       },
       {
         "check": "present",
@@ -108,7 +108,14 @@
         "role": "hygiene",
         "path": "sim/bench/gen_inventory.py",
         "passed": true,
-        "content_hash": "sha256:5900ba8bdb80421131b6b9b024e347e98f2bb05743d1caa6be53493bad3856cf"
+        "content_hash": "sha256:63e07c6f0026b4218b6d0b8b113c3e3c4ded5e62ff0668c2edc36133b94720fa"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "sim/bench/test_gen_inventory.py",
+        "passed": true,
+        "content_hash": "sha256:b1d0446eaf9f3401b01bcd8f5472f6e74e3d92cb7b427ad5feb75521893e8f66"
       },
       {
         "check": "present",
@@ -179,7 +186,7 @@
         "path": "manifests/evidence/item10.inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:55614584a2674fbea6c9735745f27c237657f582f52a98541b92193effc38188"
+      "content_hash": "sha256:66c93ad2d70d392b2d2e5e8ccb38c40f0f77ac25802dfd80e1a91e32372d96dc"
     }
   }
 }
