@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 10,
-  "summary": "T1 item 10 (Repo hygiene): 19/19 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 10 (Repo hygiene): 25/25 attestation checks passed (klt signoff --attest)",
   "source": "manifests/evidence/item10.inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 19,
-    "passed_count": 19,
+    "check_count": 25,
+    "passed_count": 25,
     "checks": [
       {
         "check": "present",
@@ -43,9 +43,16 @@
       {
         "check": "present",
         "role": "hygiene",
+        "path": "scripts/analog-cell-evidence-lib.sh",
+        "passed": true,
+        "content_hash": "sha256:f330ea2c7e4a74916f4111269641437bc8b263210c239f784189ba16fc06183b"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
         "path": "scripts/check-ci.sh",
         "passed": true,
-        "content_hash": "sha256:61ff321f3815954dbae08cc623ab4fac443d2069bce89c94791a60a2da7e8cb4"
+        "content_hash": "sha256:36a9fdf8a52d34ab1e1ed69ce954eb50f2c7a228bd3cc1ff692239eee3f5bca9"
       },
       {
         "check": "present",
@@ -59,49 +66,84 @@
         "role": "hygiene",
         "path": "scripts/erc-regen.sh",
         "passed": true,
-        "content_hash": "sha256:82a19dbd25ff2bff5a4af7ac88227c501a60dbb96d30d1491cce6aa5a1ba3985"
+        "content_hash": "sha256:d1779e3c40b74aa4b694583043d55f708782554f32d789bfff913db53a914ccd"
       },
       {
         "check": "present",
         "role": "hygiene",
         "path": "scripts/klt-lib.sh",
         "passed": true,
-        "content_hash": "sha256:2f6538fc85ed4915eace2a4204f911d6c588fcde6aeb6a2bd30a9b9ea5d7cbc9"
+        "content_hash": "sha256:b5f79385daafd26da59afbad8f2de4d25d3fd4267cc3853cfdd74d5362c9b0cc"
       },
       {
         "check": "present",
         "role": "hygiene",
         "path": "scripts/lvs-regen.sh",
         "passed": true,
-        "content_hash": "sha256:b3ec594476a3ed2edeb69dbe8ed2e37da2c7ba2d8d4b5893d622f4c99c90eee0"
-      },
-      {
-        "check": "present",
-        "role": "hygiene",
-        "path": "scripts/pnr-lib.sh",
-        "passed": true,
-        "content_hash": "sha256:68979cc4a2922f3ef261c74aade4f382adf1041db403170966aae289ade01485"
+        "content_hash": "sha256:782412601fdade45f9705730a817487833883bf4c8efcb27d536c3240ed5f8d9"
       },
       {
         "check": "present",
         "role": "hygiene",
         "path": "scripts/pnr-regen.sh",
         "passed": true,
-        "content_hash": "sha256:7ae56782312cbcce226b326be60dd7a42cce2a9a7749aacf9f8aa52788989675"
+        "content_hash": "sha256:82eed2efba2d9ec33544fa37942f8db6d45a5d698e5a219d342590fd7549d78e"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/synth-regen.sh",
+        "passed": true,
+        "content_hash": "sha256:2b32d17b491f9410f5f86f17af8435f57813915c23d0564d919f6a093fb060ad"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/test-pnr-fresh-liberty.sh",
+        "passed": true,
+        "content_hash": "sha256:4e5360b929936a11ef7193ff51bd5bf93c181beec2ab7f5cb011bcbd08fb8045"
       },
       {
         "check": "present",
         "role": "hygiene",
         "path": "scripts/test-reserve-record-dir.sh",
         "passed": true,
-        "content_hash": "sha256:fb977b63a1285948a679e14a344e4730bfb8169d7f66b14ede1a70a34ce04a2b"
+        "content_hash": "sha256:7af95f3a55f26a9108f8bb47e45df401bbd5702ae5186718fa7558264924d1f1"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/test-sta-paths-liberty.sh",
+        "passed": true,
+        "content_hash": "sha256:be1a326227308e32ad43562173b9f86059bc36ffd414958ef7d67044f7cdc2a4"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/test-synth-fresh-liberty.sh",
+        "passed": true,
+        "content_hash": "sha256:086bf2f2696886a6ba93169e20cfbfe6713d25f85c9a4344f458e0c25217fa66"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/test-synth-missing-yosys.sh",
+        "passed": true,
+        "content_hash": "sha256:aeeac2abfa70ec484a9cf057f449cf73f81a3ddd2996c88f912d9c259c7c2e8e"
       },
       {
         "check": "present",
         "role": "hygiene",
         "path": "sim/bench/gen_inventory.py",
         "passed": true,
-        "content_hash": "sha256:7347844923ea99baad399fa7ef82579a6ca6249b16b9dd03fa3b8459e6096cc7"
+        "content_hash": "sha256:63e07c6f0026b4218b6d0b8b113c3e3c4ded5e62ff0668c2edc36133b94720fa"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "sim/bench/test_gen_inventory.py",
+        "passed": true,
+        "content_hash": "sha256:b1d0446eaf9f3401b01bcd8f5472f6e74e3d92cb7b427ad5feb75521893e8f66"
       },
       {
         "check": "present",
@@ -115,14 +157,14 @@
         "role": "hygiene",
         "path": "sim/tools/record-dir.sh",
         "passed": true,
-        "content_hash": "sha256:43384f35162c649ce10754005e0f9a3d9daf612b2f18a85bee0f476aa779eb06"
+        "content_hash": "sha256:c76406d7f0d6ef1d48908e73d1e3556207038059efc2bbce3fcf94bf633003ef"
       },
       {
         "check": "present",
         "role": "hygiene",
         "path": "sim/tools/test-record-dir.sh",
         "passed": true,
-        "content_hash": "sha256:0e5bd4c0687967b115712eab0305acc7bde80c25eb2c478c4cdb23d946e4e0f8"
+        "content_hash": "sha256:84e5c353d3d7fd3d333622242e7f39f66ebe5a174a4a396564ecfcc5317df6a8"
       },
       {
         "check": "command",
@@ -172,7 +214,7 @@
         "path": "manifests/evidence/item10.inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:4666abb284feb004f0d40f8e8ec5955bfa98ebd85d1fcf4e477284bc0b036755"
+      "content_hash": "sha256:bc3b07e39c53db105a160481b1175e0a6f1fb8b9bd0c6c38b792ac6b4b25dc53"
     }
   }
 }

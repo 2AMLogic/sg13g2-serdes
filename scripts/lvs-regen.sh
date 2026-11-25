@@ -18,15 +18,21 @@
 #         not `match`; the report is still written so the first mismatch is kept.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-# shellcheck source=scripts/pnr-lib.sh
-. "$ROOT/scripts/pnr-lib.sh"
-pnr_env
+# shellcheck source=scripts/klt-lib.sh
+. "$ROOT/scripts/klt-lib.sh"
+klt_env
+# No openroad here: this flow runs klt extract and klt lvs only. The LEF feeds
+# extract's abstract cells; klt lvs reads the stdcell SPICE for pin orders.
+require_pdk_file ihp-sg13g2/libs.ref/sg13g2_stdcell/lef/sg13g2_stdcell.lef \
+  "lvs-regen: SG13G2 stdcell LEF not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
+require_pdk_file ihp-sg13g2/libs.ref/sg13g2_stdcell/spice/sg13g2_stdcell.spice \
+  "lvs-regen: SG13G2 stdcell SPICE not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
+PNR_REQ="$ROOT/layout/digital/place-and-route.request.json"
 
-REC="$(pnr_latest_record)"
+REC="$(latest_record_dir "$ROOT/layout/digital/records")"
 [ -n "$REC" ] || { echo "lvs-regen: no place-and-route record (run scripts/pnr-regen.sh)" >&2; exit 1; }
 TOP="$(jq -r .hdl_toplevel "$PNR_REQ")"
 LEF="$PDK_ROOT/ihp-sg13g2/libs.ref/sg13g2_stdcell/lef/sg13g2_stdcell.lef"
-[ -f "$LEF" ] || { echo "lvs-regen: $LEF missing" >&2; exit 3; }
 
 SHA="$(git -C "$ROOT" rev-parse --short=7 HEAD)"
 DEST="$ROOT/layout/digital/lvs-records/$(date -u +%Y-%m-%d)-$SHA"

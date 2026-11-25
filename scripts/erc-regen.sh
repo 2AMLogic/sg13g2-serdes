@@ -21,8 +21,8 @@
 #         erc_status is not clean; the report is still written so a first
 #         failure is kept. Single-unit local run: about one minute measured
 #         (one process, never fanned out as a grid). No PDK install and no
-#         openroad are needed -- unlike lvs-regen.sh this must NOT source
-#         pnr-lib.sh, whose require_tool openroad would refuse on a runner.
+#         openroad are needed: like every klt-lib.sh caller this checks only
+#         the tools it actually runs, and `klt erc` runs neither.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # shellcheck source=scripts/klt-lib.sh
@@ -32,7 +32,7 @@ klt_env
 ERC_RECORDS="$ROOT/layout/digital/erc-records"
 SPEC="$ROOT/layout/erc/digital.erc.json"
 TOP="$(jq -r .hdl_toplevel "$ROOT/layout/digital/place-and-route.request.json")"
-REC="$(ls -d "$ROOT"/layout/digital/records/*/ 2>/dev/null | sort | tail -1 | sed 's:/$::')"
+REC="$(latest_record_dir "$ROOT/layout/digital/records")"
 [ -n "$REC" ] || { echo "erc-regen: no place-and-route record (run scripts/pnr-regen.sh)" >&2; exit 1; }
 GDS="$REC/$TOP.gds"
 [ -f "$GDS" ] || { echo "erc-regen: $GDS missing" >&2; exit 1; }
