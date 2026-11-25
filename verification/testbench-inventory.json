@@ -340,7 +340,18 @@
       }
     },
     {
-      "path": "sim/bench/link_r8.py",
+      "path": "sim/bench/link_bench.py",
+      "cold_start": {
+        "argv": [
+          "scripts/run-bench.sh",
+          "link-r15-method"
+        ],
+        "timeout_s": 300,
+        "local_only": true
+      }
+    },
+    {
+      "path": "sim/bench/linkcore.py",
       "cold_start": {
         "argv": [
           "scripts/run-bench.sh",
@@ -351,44 +362,11 @@
       }
     },
     {
-      "path": "sim/bench/link_r11.py",
+      "path": "sim/bench/cdrmodel.py",
       "cold_start": {
         "argv": [
           "scripts/run-bench.sh",
           "link-r11-cdr-lock"
-        ],
-        "timeout_s": 300,
-        "local_only": true
-      }
-    },
-    {
-      "path": "sim/bench/link_r12.py",
-      "cold_start": {
-        "argv": [
-          "scripts/run-bench.sh",
-          "link-r12-jtol"
-        ],
-        "timeout_s": 300,
-        "local_only": true
-      }
-    },
-    {
-      "path": "sim/bench/link_r13.py",
-      "cold_start": {
-        "argv": [
-          "scripts/run-bench.sh",
-          "link-r13-offset"
-        ],
-        "timeout_s": 300,
-        "local_only": true
-      }
-    },
-    {
-      "path": "sim/bench/link_r15.py",
-      "cold_start": {
-        "argv": [
-          "scripts/run-bench.sh",
-          "link-r15-method"
         ],
         "timeout_s": 300,
         "local_only": true

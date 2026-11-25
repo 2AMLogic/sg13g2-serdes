@@ -1,5 +1,6 @@
 * TX tx_lvl_cml2cmos sizing bench (issue #80). SIZING EVIDENCE, not a spec result.
-* Input: ideal complementary 2.5 GHz (first divided clock), vdd-referenced CML levels,
+* Input: ideal complementary 625 MHz word-boundary clock (DR-014, conditional on
+* DR-008 B1; before DR-014 this bench ran at 2.5 GHz), vdd-referenced CML levels,
 * 300 mV single-ended (high = vdd, low = vdd-0.3). Load: 20 fF on the CMOS output.
 * Circuit body only: klt sim supplies .lib / .control / .end.
 Vdd vdd 0 dc 1.2
@@ -20,7 +21,7 @@ XMP3 out o1 vdd vdd sg13_lv_pmos w=4u l=0.13u ng=1 m=1
 XMN3 out o1 vss vss sg13_lv_nmos w=2u l=0.13u ng=1 m=1
 .ends
 
-Vq q 0 pulse(0 1 0 20p 20p 1.8e-10 4e-10)
+Vq q 0 pulse(0 1 0 20p 20p 7.8e-10 1.6e-09)
 Binp inp 0 V='v(vdd)-0.3*(1-v(q))'
 Binn inn 0 V='v(vdd)-0.3*v(q)'
 Xlvl vdd 0 inp inn out tx_lvl_cml2cmos

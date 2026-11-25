@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 9,
-  "summary": "T1 item 9 (Testbenches shipped): 68/68 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 9 (Testbenches shipped): 64/64 attestation checks passed (klt signoff --attest)",
   "source": "verification/testbench-inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 68,
-    "passed_count": 68,
+    "check_count": 64,
+    "passed_count": 64,
     "checks": [
       {
         "check": "present",
@@ -73,42 +73,28 @@
         "role": "testbench",
         "path": "sim/bench/benches.json",
         "passed": true,
-        "content_hash": "sha256:5f83105ccfd681be506a92b701671f4a110ba8005425be5065bf51cd303943b9"
+        "content_hash": "sha256:172af076d992575dfbcd220b5ffb5438cf1afd3b0a9f707eebdb2f11d4068be5"
       },
       {
         "check": "present",
         "role": "testbench",
-        "path": "sim/bench/link_r11.py",
+        "path": "sim/bench/cdrmodel.py",
         "passed": true,
-        "content_hash": "sha256:06b11f213c59ee2f7c0ac166b9ebf8639a24b1e9b2f3a16a0e4bdda5ad035c67"
+        "content_hash": "sha256:8ca49bb454decfc556a910598e405fef010a94bf5d37b5dcc8923ae9bfd8e65a"
       },
       {
         "check": "present",
         "role": "testbench",
-        "path": "sim/bench/link_r12.py",
+        "path": "sim/bench/link_bench.py",
         "passed": true,
-        "content_hash": "sha256:cac7950084493b4413fe04010f9722b5fe4988a7571a3316eb8daa799a5bd89a"
+        "content_hash": "sha256:b2b4e5af1d817b8905dfc8f20e60089b9da0e28b185d54956123e5d4a7e4692f"
       },
       {
         "check": "present",
         "role": "testbench",
-        "path": "sim/bench/link_r13.py",
+        "path": "sim/bench/linkcore.py",
         "passed": true,
-        "content_hash": "sha256:7e10cf5ddb73a4c4a93ee73249abbe9f082cb251c150f042bd071431acaf80b7"
-      },
-      {
-        "check": "present",
-        "role": "testbench",
-        "path": "sim/bench/link_r15.py",
-        "passed": true,
-        "content_hash": "sha256:0623d9feb40bfdee2b554abd9e5f78e213cb00c404d2e98e2220f86914803c24"
-      },
-      {
-        "check": "present",
-        "role": "testbench",
-        "path": "sim/bench/link_r8.py",
-        "passed": true,
-        "content_hash": "sha256:3f7b4f80f21dadca7153384112051fc6599712a09c9b866963a27633570397b4"
+        "content_hash": "sha256:0f77cd22fe50ab58a308a6ce4987571a94c949c522e49131e9379f6718aab157"
       },
       {
         "check": "present",
@@ -143,14 +129,14 @@
         "role": "testbench",
         "path": "sim/rx/ctle_op.request.json",
         "passed": true,
-        "content_hash": "sha256:f1846b27c9171225b2d9e40e49f2059f1fde1bee6cfb69d796b34ae2b906b595"
+        "content_hash": "sha256:1ce986460eff4936bd892b6c0fa83d33b55dea1aa71eff40348a30f21a138bf3"
       },
       {
         "check": "present",
         "role": "testbench",
         "path": "sim/rx/latch_regen.request.json",
         "passed": true,
-        "content_hash": "sha256:0dba1770a1e98ca2e2b897a8d89bc02ae4e06fcbcf251349defdbe055d610943"
+        "content_hash": "sha256:3bc719ae931929102053a5500216c0f554fd5045d9142e22a57f721f9e54fb69"
       },
       {
         "check": "present",
@@ -185,7 +171,7 @@
         "role": "testbench",
         "path": "sim/tx/tx_mos_ffe_en.request.json",
         "passed": true,
-        "content_hash": "sha256:f51dc102d5f4dc7f1e6f51750cce2c9117a14ad84ba77d92a66730a621c15b3d"
+        "content_hash": "sha256:3dec90f406e3447e04609f83d5cc649f66220c93fd40dd5633119b5f010d3365"
       },
       {
         "check": "present",
@@ -206,42 +192,42 @@
         "role": "testbench",
         "path": "sim/tx/tx_sizing_ffe0_bcs.request.json",
         "passed": true,
-        "content_hash": "sha256:b297897e45457b146f44bddbefa6b2fcdbcfe6c2e23d098f8a44a3309eea3004"
+        "content_hash": "sha256:3355c21c9d32f326980ee546791508d8a3f375986d344c8f0dc8bf213cc0173d"
       },
       {
         "check": "present",
         "role": "testbench",
         "path": "sim/tx/tx_sizing_ffe0_typ.request.json",
         "passed": true,
-        "content_hash": "sha256:c8cf3984b3befd270d0b3a0f81a33f9e72492614cffb77987bb865a91c785996"
+        "content_hash": "sha256:03b106b815609bc010c25d868c6d8296cc802c07a25911fc67dd78550c461aa6"
       },
       {
         "check": "present",
         "role": "testbench",
         "path": "sim/tx/tx_sizing_ffe0_wcs.request.json",
         "passed": true,
-        "content_hash": "sha256:5a321dade89a26787563d15edc6c15aa962a61f619cc6f704f6059b14eae8d12"
+        "content_hash": "sha256:cb93ad45c7e18dafbbb6185895fef46179f9629861e43fb7728c39ac71a31b5e"
       },
       {
         "check": "present",
         "role": "testbench",
         "path": "sim/tx/tx_sizing_ffe1_bcs.request.json",
         "passed": true,
-        "content_hash": "sha256:e8044fa56d2a9d39f303965805c12fbede74b706f5b257b7afeff7e8d403802f"
+        "content_hash": "sha256:0b7ec62999b6616d13b802ab699f9b3d4a162db0fe3c5751474eb193095ed43d"
       },
       {
         "check": "present",
         "role": "testbench",
         "path": "sim/tx/tx_sizing_ffe1_typ.request.json",
         "passed": true,
-        "content_hash": "sha256:10cde4577135351da08a70738caf40413862da4364beb90bb147bbfb58dc5c0a"
+        "content_hash": "sha256:09561f8af23db2130bc102c44b06accc9c7cb763915d0581458de3dedc886238"
       },
       {
         "check": "present",
         "role": "testbench",
         "path": "sim/tx/tx_sizing_ffe1_wcs.request.json",
         "passed": true,
-        "content_hash": "sha256:941403b88cb2f0ec1ccd9817f18e588a0c39386fcf8e7cccf212bbe8f01bff6a"
+        "content_hash": "sha256:fafe5717e56b2c23032a23e563a054a65087b1cca0284e37be2f5ec37049b6fb"
       },
       {
         "check": "command",
@@ -363,7 +349,7 @@
       {
         "check": "command",
         "role": "cold_start",
-        "testbench": "sim/bench/link_r11.py",
+        "testbench": "sim/bench/cdrmodel.py",
         "argv": [
           "scripts/run-bench.sh",
           "link-r11-cdr-lock"
@@ -376,33 +362,7 @@
       {
         "check": "command",
         "role": "cold_start",
-        "testbench": "sim/bench/link_r12.py",
-        "argv": [
-          "scripts/run-bench.sh",
-          "link-r12-jtol"
-        ],
-        "cwd": ".",
-        "exit_status": 0,
-        "passed": true,
-        "local_only": true
-      },
-      {
-        "check": "command",
-        "role": "cold_start",
-        "testbench": "sim/bench/link_r13.py",
-        "argv": [
-          "scripts/run-bench.sh",
-          "link-r13-offset"
-        ],
-        "cwd": ".",
-        "exit_status": 0,
-        "passed": true,
-        "local_only": true
-      },
-      {
-        "check": "command",
-        "role": "cold_start",
-        "testbench": "sim/bench/link_r15.py",
+        "testbench": "sim/bench/link_bench.py",
         "argv": [
           "scripts/run-bench.sh",
           "link-r15-method"
@@ -415,7 +375,7 @@
       {
         "check": "command",
         "role": "cold_start",
-        "testbench": "sim/bench/link_r8.py",
+        "testbench": "sim/bench/linkcore.py",
         "argv": [
           "scripts/run-bench.sh",
           "link-r8-sensitivity"
@@ -743,7 +703,7 @@
         "path": "verification/testbench-inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:c2aac5105ef5302b65f235f33918d595b3f109e9e193c6f5c4ba447fa111f93f"
+      "content_hash": "sha256:69351f85922b9b85444c795f1e567857f304872fe5c0aca6855018d2d0c07a7d"
     }
   }
 }

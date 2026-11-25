@@ -8,6 +8,8 @@ set -uo pipefail
 cd "$(dirname "$0")/.." || exit 1
 # shellcheck source=scripts/erc-fresh-lib.sh
 . scripts/erc-fresh-lib.sh
+# shellcheck source=scripts/analog-cell-evidence-lib.sh
+. scripts/analog-cell-evidence-lib.sh
 # The klt pin lives in exactly one place: layout/toolchain.json's klt_install.
 KLT_VERSION=$(jq -r '.klt_install // empty' layout/toolchain.json)
 KLT_VERSION=${KLT_VERSION#klayout-tools==}
@@ -86,20 +88,35 @@ check_harness() {
   uv run --no-project --with "${bench_install}" -- \
     python -I sim/bench/test_link_bench.py || {
     echo "::error file=sim/bench/test_link_bench.py::bench self-test failed" >&2; return 1; }
+  echo "harness: sim/bench/test_gen_inventory.py"
+  python3 -I sim/bench/test_gen_inventory.py || {
+    echo "::error file=sim/bench/test_gen_inventory.py::inventory self-test failed" >&2; return 1; }
   echo "harness: sim/tools/test-record-dir.sh"
   bash sim/tools/test-record-dir.sh || {
     echo "::error file=sim/tools/test-record-dir.sh::record-dir reservation self-test failed" >&2; return 1; }
   echo "harness: scripts/test-reserve-record-dir.sh"
   bash scripts/test-reserve-record-dir.sh || {
     echo "::error file=scripts/test-reserve-record-dir.sh::record-dir reservation self-test failed" >&2; return 1; }
+  echo "harness: scripts/test-pnr-fresh-liberty.sh"
+  bash scripts/test-pnr-fresh-liberty.sh || {
+    echo "::error file=scripts/test-pnr-fresh-liberty.sh::P&R freshness Liberty-corner self-test failed" >&2; return 1; }
+  echo "harness: scripts/test-synth-missing-yosys.sh"
+  bash scripts/test-synth-missing-yosys.sh || {
+    echo "::error file=scripts/test-synth-missing-yosys.sh::synth tool-gap exit-3 self-test failed" >&2; return 1; }
+  echo "harness: scripts/test-synth-fresh-liberty.sh"
+  bash scripts/test-synth-fresh-liberty.sh || {
+    echo "::error file=scripts/test-synth-fresh-liberty.sh::synth freshness Liberty-corner self-test failed" >&2; return 1; }
+  echo "harness: scripts/test-sta-paths-liberty.sh"
+  bash scripts/test-sta-paths-liberty.sh || {
+    echo "::error file=scripts/test-sta-paths-liberty.sh::sta-paths Liberty-corner self-test failed" >&2; return 1; }
 }
 
 # check_fresh -- the committed evidence records still describe the committed
-# artifacts they name, on six axes that need only jq, sha256sum, cmp and
+# artifacts they name, on eight axes that need only jq, sha256sum, cmp and
 # python3 (no klt, no openroad, no yosys, nothing under PDK_ROOT):
 #   1. rtl/synth/<top>.synth.json .netlist_sha256 == sha256sum of the committed
 #      gate-level netlist (the want/got block check-synth-fresh.sh runs behind
-#      synth_env).
+#      klt_env).
 #   2. newest layout/digital/records/*/report.json
 #      .provenance.input.content_hash (sha256: prefix stripped) == that same
 #      .netlist_sha256. This is the seam issue #151 slipped through: klt
@@ -120,6 +137,9 @@ check_harness() {
 #   6. item 11.digital cites the newest clean ERC report. Its GDS path and
 #      hash match the newest P&R record, and its spec hash matches both the
 #      canonical supply spec and the archived copy that signoff reads.
+#   7. the newest RX and TX converter LVS records both report a match.
+#   8. each converter's LVS report identifies the GDS in its record and
+#      the standalone reference subcircuit in design/ by their hashes.
 # This is the PDK-free subset of check-pnr-fresh.sh / check-lvs-fresh.sh /
 # check-erc-fresh.sh; they stay the full local gates (the liberty/deck axis
 # hashes a file under PDK_ROOT and remains local-only; the ERC local gate
@@ -128,8 +148,8 @@ check_harness() {
 # committed, so their absence is a repo defect -- exit 0 means verified,
 # never skipped (.loom/docs/ci-principles.md rule 6).
 # Newest-record selection uses git ls-files (committed state, not worktree
-# residue) and is spelled locally because pnr_latest_record reads $PNR_RECORDS
-# from pnr_env, whose require_tool openroad exits 3 on this runner.
+# residue) rather than klt-lib.sh's latest_record_dir, which reads the
+# worktree.
 # CHECK_FRESH_PNR_RECORD / CHECK_FRESH_LVS_RECORD / CHECK_FRESH_ERC_RECORD
 # override the newest-record selection for negative testing only; CI never
 # sets them.
@@ -320,8 +340,19 @@ check_fresh() {
     rc=1
   fi
 
+  # Axes 7-8: the newest generator record of each routed analog partition
+  # carries DRC-clean + LVS-match evidence bound to that record's own GDS and
+  # the standalone subckt reference (scripts/analog-cell-evidence-lib.sh; the
+  # local gate scripts/check-analog-lvs-fresh.sh adds the klt-powered --check).
+  local cell_spec cell_part cell cell_ref
+  for cell_spec in "rx lvl_cml2cmos design/rx/netlists/lvl_cml2cmos.spice" \
+                   "tx tx_lvl_cml2cmos design/tx/netlists/tx_lvl_cml2cmos.spice"; do
+    read -r cell_part cell cell_ref <<<"$cell_spec"
+    analog_cell_verify "$PWD" "$cell_part" "$cell" "$cell_ref" "fresh axis 7-8 (analog $cell)" || rc=1
+  done
+
   if [ "$rc" = 0 ]; then
-    echo "fresh: 6 axis(es) verified (pnr=$prec lvs=$lrec erc=$erec; sim decks match generators)"
+    echo "fresh: 8 axis(es) verified (pnr=$prec lvs=$lrec erc=$erec; sim decks match generators; analog cells bound to newest records)"
   else
     echo "fresh: FAILED (pnr=$prec lvs=$lrec erc=$erec)" >&2
   fi

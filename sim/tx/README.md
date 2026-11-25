@@ -6,10 +6,10 @@ a spec result and not a measurement.**
 | Path | What |
 |---|---|
 | `make_tb.py` | generates the decks and requests below from `design/tx/netlists/` |
-| `tx_sizing_ffe{0,1}_{typ,bcs,wcs}.sp` / `.request.json` | six `klt sim` requests, each 3 supplies (1.08/1.2/1.32 V) x 3 temperatures (-40/27/125 C) = 54 corners; FFE off or all three post-cursor slices on; HBT, capacitor and resistor corners move together |
+| `tx_sizing_ffe{0,1}_{typ,bcs,wcs}.sp` / `.request.json` | six `klt sim` requests, each 3 supplies (1.08/1.2/1.32 V) x 3 temperatures (-40/27/125 C) = 9 corners (54 over the six); FFE off or all three post-cursor slices on; HBT, capacitor and resistor corners move together |
 | `tx_mos_{mux2to1_cml,tx_lvl_cml2cmos,ffe_en}.sp` / `.request.json` | three MOS-cell `klt sim` requests (issue #80), each 5 process pairings x 3 supplies x 3 temperatures = 45 corners; PSP103 and the real `r3_cmc` resistors via `osdi_preload` |
-| `run_sizing.sh [mos]` | runs the six HBT requests, or with `mos` the three MOS requests (batch fleet via `KLT_SIM_BACKEND=batch`; no local fallback) and writes `records/<id>/` (`<id>-mos/` for the MOS set) |
-| `make_record.py` / `make_record_mos.py` | render `records/<id>/record.md` for the HBT / MOS set |
+| `run_sizing.sh [mos\|vce]` | runs the six HBT requests, `mos` the three MOS requests, `vce` the R3 per-device Vce set -- six HBT + mux2to1_cml + ffe_en, every TX bench with an HBT (batch fleet via `KLT_SIM_BACKEND=batch`; no local fallback) and writes `records/<id>/` (`<id>-mos/` / `<id>-vce/` for the MOS / VCE sets) |
+| `make_record.py` / `make_record_mos.py` / `make_record_vce.py` | render `records/<id>/record.md` for the HBT / MOS / VCE set |
 | `records/<id>/` | append-only run records; never edited after the fact |
 
 Reproduce: `source scripts/env.sh && python3 -I sim/tx/make_tb.py && sim/tx/run_sizing.sh`.
@@ -28,7 +28,7 @@ behavioural resistor):
 | Cell | Bench | Measured |
 |---|---|---|
 | `mux2to1_cml` | ideal 5 GHz complementary clock (0.4 V swing, an assumption), A held 1 / B held 0 so the output is a 1010 stream, loaded by the `predriver` main input + 20 fF | differential swing, rise/fall between fixed +-30 mV crossings (not a conforming 20-80 %), collector V and reverse Vbe per HBT, Vce |
-| `tx_lvl_cml2cmos` | ideal 2.5 GHz CML input (300 mV), 20 fF load | CMOS high/low, duty, propagation delay |
+| `tx_lvl_cml2cmos` | ideal 625 MHz CML input (300 mV; the word-boundary clock, DR-014 — before DR-014 this bench ran at 2.5 GHz), 20 fF load | CMOS high/low, duty, propagation delay |
 | `ffe_en` | enable codes 000, 001, 011, 111 stepped, vbn from the real `bias` cell, vbp unloaded | `vbp0..2` against `vbn` per code |
 
 Corner pairing (MOS / HBT / CAP / RES sections moved together): `mos_tt`/`hbt_typ`,
@@ -71,6 +71,38 @@ MOS-set run status:
     75 s with the same 36 pass / 7 fail / 2 error on `mux2to1_cml` and no timeouts.
   - Rise/fall stays at the fixed +-30 mV thresholds (artifacts at low swing, see above);
     no 20-80 % derivation was added because the benches keep no waveforms.
+- `records/20261123-035024-5214c04-mos/` (DR-014, issue #252): the converter bench moved to
+  the 625 MHz word-boundary clock (`make_tb.py` `LV_T = 1.6 ns`, was 400 ps; the request is
+  unchanged -- same corners, measurements and window). `tx_lvl_cml2cmos` 45/45 corners pass
+  at 625 MHz (out 1.087..1.349 V high, -0.036..-0.015 V low, tpd 60..216 ps, 0.20..0.49 mA);
+  `mux2to1_cml` and `ffe_en` re-ran on unchanged decks with the same results as
+  `20261110-224611-4092fc2-mos` (36 pass / 7 fail / 2 error, and 45/45). The 2.5 GHz
+  converter records above are now margin data points (4x the intended rate, DR-014), not
+  evidence at 625 MHz.
+  - Duty (both rates): the column is a single-period trig/targ edge-pairing result --
+    ngspice searches `trig` and `targ` independently from their own `td`. At 2.5 GHz it is
+    a valid pulse width: **27.30..39.22 %** over the 45 corners of the two archived records,
+    equal to the 50 % input duty plus the measured tpd skew (tpd HL - tpd LH) to within
+    0.001 percentage points at every corner, i.e. real pulse-width distortion, not an
+    artifact. At 625 MHz the `targ` edge is found in a different cycle than `trig`,
+    `t_high_s` is negative and the renderer marks duty n/a in all 45 corners; no same-cycle
+    duty is measured at 625 MHz. tpd, out hi/lo and Idd are unaffected.
+  - `make_record_mos.py` takes the converter input rate from the reported `t_period_s`
+    (heading included) and refuses to write when the corners disagree, so a record cannot
+    be re-rendered under a rate its reports do not show.
+
+## R3 per-device Vce pass (issue #242)
+
+`run_sizing.sh vce` writes one record, `records/<id>-vce/`, that closes the R3 evidence
+gap of gate G2 (tracker #238): a per-device table (24 rows) of collector / Vce /
+reverse-Vbe worst cases over each bench family's full grid including the 1.32 V supply,
+for every HBT on TX. Since that pass, the `tx_sizing_*` decks carry a **limited**
+`vce_max_*` card (open-base BVCEO 1.4 V) for every HBT -- the post-cursor slice pairs and
+tails, the predriver tails and the bias device were the missing ones -- and the `ffe_en`
+bench measures the same three stress values for its one HBT (bias `XQref`). `tx_lvl_cml2cmos`
+is not run for Vce: it has no HBT (R3 Vce n/a; its CMOS evidence is the `-mos` record).
+Violations are kept and marked in the table, not dropped and not fixed there. First record:
+`records/20261123-022802-fedf656-vce/`.
 
 ## Pad ESD benches (issue #94)
 

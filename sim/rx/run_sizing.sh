@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # run_sizing.sh -- run the RX sizing grids through `klt sim` and write a record.
 #
-#   source scripts/env.sh && sim/rx/run_sizing.sh          # the four HBT grids
+#   source scripts/env.sh && sim/rx/run_sizing.sh [vce]    # the five HBT grids
 #   source scripts/env.sh && sim/rx/run_sizing.sh mos      # lvl_cml2cmos (MOS set)
 #
 # Each request is a multi-corner grid, so `klt sim` routes it to the batch
@@ -9,6 +9,8 @@
 # a failed submit is recorded as-is. Records under sim/rx/records/<id>/ are
 # append-only evidence -- never edit or delete an earlier record directory.
 # The requests and bench bodies are generated: sim/rx/tools/gen_requests.py.
+# `vce`: record id suffixed -vce (the R3 per-device Vce pass of issue #242); the
+#        same five HBT requests run.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "${HERE}/../.." && pwd)"
@@ -19,12 +21,16 @@ command -v klt >/dev/null 2>&1 || { echo "run_sizing.sh: klt not on PATH" >&2; e
 "${REPO_DIR}/design/check-netlists.sh" >/dev/null || { echo "run_sizing.sh: netlists are stale or missing; run design/check-netlists.sh" >&2; exit 3; }
 
 # `mos`: the lvl_cml2cmos bench (PSP103 via osdi_preload, 45-corner MOS set,
-# record id suffixed -mos), issue #241. No argument: the four HBT grids.
+# record id suffixed -mos), issue #241. No argument: the five HBT grids.
 SET="${1:-hbt}"
 case "${SET}" in
-  hbt) REQS=(ctle_ac ctle_op pad_ac latch_regen); SUFFIX=""; RECORD=make_record.py ;;
+  hbt|vce)
+    REQS=(ctle_ac ctle_op ctle_tran pad_ac latch_regen)
+    SUFFIX=""
+    [[ "${SET}" == "vce" ]] && SUFFIX="-vce"
+    RECORD=make_record.py ;;
   mos) REQS=(lvl_cml2cmos); SUFFIX="-mos"; RECORD=make_record_mos.py ;;
-  *) echo "run_sizing.sh: unknown set '${SET}' (hbt|mos)" >&2; exit 2 ;;
+  *) echo "run_sizing.sh: unknown set '${SET}' (hbt|vce|mos)" >&2; exit 2 ;;
 esac
 
 # Exclusive reservation: a same-second relaunch refuses instead of overwriting

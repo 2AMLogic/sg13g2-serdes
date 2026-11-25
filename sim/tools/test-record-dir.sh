@@ -40,9 +40,10 @@ cp "$REPO/sim/rx/run_sizing.sh" "$TMP/repo/sim/rx/"
 cp "$REPO/sim/rx/tools/make_record.py" "$TMP/repo/sim/rx/tools/"
 cp "$REPO"/sim/rx/*.request.json "$TMP/repo/sim/rx/"
 cp "$REPO/sim/tx/run_sizing.sh" "$TMP/repo/sim/tx/"
-cp "$REPO/sim/tx/make_record.py" "$REPO/sim/tx/make_record_mos.py" "$TMP/repo/sim/tx/"
-cp "$REPO/sim/tx/tx_sizing_ffe0_typ.request.json" \
-   "$REPO/sim/tx/tx_mos_ffe_en.request.json" "$TMP/repo/sim/tx/"
+cp "$REPO/sim/tx/make_record.py" "$REPO/sim/tx/make_record_mos.py" "$REPO/sim/tx/make_record_vce.py" "$TMP/repo/sim/tx/"
+# every request the TX runner names (hbt: 6 sizing, mos: 3 MOS cells, vce: 6 + 2)
+cp "$REPO"/sim/tx/tx_sizing_*.request.json "$REPO"/sim/tx/tx_mos_*.request.json \
+   "$TMP/repo/sim/tx/"
 cp "$REPO/sim/smoke/run_smoke.sh" "$REPO/sim/smoke/make_record.py" "$TMP/repo/sim/smoke/"
 cp "$REPO"/sim/smoke/*.request.json "$TMP/repo/sim/smoke/"
 
@@ -90,7 +91,7 @@ check_runner() { # check_runner <name> <script> [set-arg] [id-suffix] [sim-calls
   shopt -s nullglob
   for e in "$dir"/* "$dir"/.[!.]* "$dir"/..?*; do
     case "${e##*/}" in
-      "${FIXED_TS}-${SHA}"|"${FIXED_TS}-${SHA}-mos") ;;
+      "${FIXED_TS}-${SHA}"|"${FIXED_TS}-${SHA}-mos"|"${FIXED_TS}-${SHA}-vce") ;;
       *) bad="${bad:+$bad }${e##*/}" ;;
     esac
   done
@@ -149,8 +150,9 @@ check_runner() { # check_runner <name> <script> [set-arg] [id-suffix] [sim-calls
   echo "test-record-dir: PASS: $name (naming, retry refused untouched, race: one launcher)"
 }
 
-check_runner rx      sim/rx/run_sizing.sh   ""   ""     4
+check_runner rx      sim/rx/run_sizing.sh   ""   ""     5
 check_runner smoke   sim/smoke/run_smoke.sh ""   ""     3
-check_runner tx-hbt  sim/tx/run_sizing.sh   ""   ""     1
-check_runner tx-mos  sim/tx/run_sizing.sh   mos  "-mos" 1
+check_runner tx-hbt  sim/tx/run_sizing.sh   ""   ""     6
+check_runner tx-mos  sim/tx/run_sizing.sh   mos  "-mos" 3
+check_runner tx-vce  sim/tx/run_sizing.sh   vce  "-vce" 8
 echo "test-record-dir: all runners hold the reservation contract"

@@ -65,8 +65,9 @@ mkdir -p "$TMP/repo/scripts" "$TMP/repo/layout/digital" "$TMP/repo/layout/erc" \
          "$TMP/repo/layout/analog/pads" "$TMP/repo/layout/analog/top" \
          "$TMP/repo/layout/analog/rx" "$TMP/repo/layout/analog/tx/scripts" \
          "$TMP/repo/.venv/bin" \
-         "$TMP/bin" "$TMP/pdk/ihp-sg13g2/libs.ref/sg13g2_stdcell/lef"
-cp "$SRC/scripts/klt-lib.sh" "$SRC/scripts/pnr-lib.sh" \
+         "$TMP/bin" "$TMP/pdk/ihp-sg13g2/libs.ref/sg13g2_stdcell/lef" \
+         "$TMP/pdk/ihp-sg13g2/libs.ref/sg13g2_stdcell/spice"
+cp "$SRC/scripts/klt-lib.sh" \
    "$SRC/scripts/pnr-regen.sh" "$SRC/scripts/lvs-regen.sh" \
    "$SRC/scripts/erc-regen.sh" "$TMP/repo/scripts/"
 cp "$SRC/layout/analog/pads/regen.sh" "$TMP/repo/layout/analog/pads/"
@@ -78,6 +79,7 @@ cp "$SRC/layout/digital/place-and-route.request.json" \
    "$SRC/layout/digital/lvs.request.json" "$TMP/repo/layout/digital/"
 cp "$SRC/layout/erc/digital.erc.json" "$TMP/repo/layout/erc/"
 : > "$TMP/pdk/ihp-sg13g2/libs.ref/sg13g2_stdcell/lef/sg13g2_stdcell.lef"
+: > "$TMP/pdk/ihp-sg13g2/libs.ref/sg13g2_stdcell/spice/sg13g2_stdcell.spice"
 
 # analog generator stand-ins: the wrappers exec their real python on these
 # scripts, so the stubs log one GEN_LOG line per invocation and write a mock
@@ -113,13 +115,6 @@ case "\$*" in
   "-u +%Y-%m-%d" | "-u +%F") echo "$FIXED_DATE" ;;
   *) exec /usr/bin/date "\$@" ;;
 esac
-EOF
-
-# PNR and LVS check for OpenROAD on PATH. Their tool calls go through mock uvx.
-cat > "$TMP/bin/openroad" <<'EOF'
-#!/bin/sh
-echo "test-reserve-record-dir: unexpected direct invocation of openroad" >&2
-exit 1
 EOF
 
 # mock uvx: klt stand-in. Logs each invocation (argv after the pin args) to
@@ -172,7 +167,7 @@ case "$sub" in
   *) echo "mock uvx: unhandled klt subcommand ${sub:-<none>}" >&2; exit 9 ;;
 esac
 EOF
-chmod +x "$TMP/bin/date" "$TMP/bin/openroad" "$TMP/bin/uvx"
+chmod +x "$TMP/bin/date" "$TMP/bin/uvx"
 export PATH="$TMP/bin:$PATH" KLT_LOG="$TMP/klt.log" GEN_LOG="$TMP/gen.log" PDK_ROOT="$TMP/pdk"
 : > "$KLT_LOG"
 : > "$GEN_LOG"
@@ -217,6 +212,14 @@ race_one_refusal() { # race_one_refusal <name> <out-prefix> -- exactly one stder
     || fail "$1: race did not produce exactly one append-only refusal"
 }
 # --- pnr-regen.sh: naming, retry, race ---------------------------------------
+# pnr-regen.sh preflights require_tool openroad; the flow itself goes through
+# mock uvx, and the shim refuses any direct invocation.
+cat > "$TMP/bin/openroad" <<'EOF'
+#!/bin/sh
+echo "test-reserve-record-dir: unexpected direct invocation of openroad" >&2
+exit 1
+EOF
+chmod +x "$TMP/bin/openroad"
 PNR_DIR="$TMP/repo/layout/digital/records"
 PNR_REC="$PNR_DIR/$FIXED_DATE-$SHA"
 writer pnr-regen.sh >"$TMP/pnr1.out" 2>"$TMP/pnr1.err" \
@@ -255,6 +258,10 @@ race_one_refusal pnr pnr-race
 echo "test-reserve-record-dir: PASS: pnr-regen.sh (naming, retry refused untouched, race: one writer)"
 
 # --- lvs-regen.sh: naming, retry, race ---------------------------------------
+# The openroad shim is gone from here on: lvs-regen.sh runs klt extract and
+# klt lvs only, so with the harness offering no openroad of its own this
+# section doubles as the proof that the flow needs none (#236).
+rm -f "$TMP/bin/openroad"
 LVS_DIR="$TMP/repo/layout/digital/lvs-records"
 LVS_REC="$LVS_DIR/$FIXED_DATE-$SHA"
 : > "$KLT_LOG"

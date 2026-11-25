@@ -19,7 +19,12 @@ violated on hosted runners and nowhere else.
 
 Both via workflow_dispatch of the CI workflow on `feature/issue-220`, which
 carried the temporary dispatch-gated probe job (reverted in the final PR; the
-permanent instrument is `.github/workflows/record-dir-race-probe.yml`):
+standalone probe that followed it, `record-dir-race-probe.sh` and
+`.github/workflows/record-dir-race-probe.yml`, was removed on 2026-11-23 once
+this investigation concluded -- operator ruling on #234 -- and is retrievable
+from history at `42fd372`, the revision that produced the full evidence set
+(run 44969548534; run 44969040860's rows were taken at `de832e9`);
+see "Reproducing"):
 
 - Run [44969040860](https://github.com/2AMLogic/sg13g2-serdes/actions/runs/44969040860)
   (branch @ `de832e9`) — first reproduction, instrument commit.
@@ -97,8 +102,9 @@ same fresh path; "both-succeeded" = both processes exited 0:
 | 44969548534 | workspace | python `os.mkdir` | no | **0** |
 | 44969548534 | workspace | python `os.mkdir` | `taskset -c 0` | **0** |
 
-Full runner race (`record-dir-race-probe.sh race`, 150 concurrent pairs per
-case, fixed clock, mock `klt`, per-launcher logs):
+Full runner race (`record-dir-race-probe.sh race` -- the probe script as of
+`42fd372`, since removed; 150 concurrent pairs per case, fixed clock, mock
+`klt`, per-launcher logs):
 
 | revision | case | doubles (both reserved) | mkdir refusals | `.reserved` refusals | loser exit 3 |
 |---|---|---|---|---|---|
@@ -171,8 +177,31 @@ passes prove nothing, which is why the original reds looked irreproducible.
 
 ## Reproducing
 
-Post-merge: `gh workflow run record-dir-race-probe.yml -f attempts=150
--f micro_rounds=1000` (manual dispatch only; not part of the PR gate). The
+2026-11-23: the probe was removed once this investigation concluded (operator
+ruling on #234). Nothing in the tree runs it and there is no workflow to
+dispatch; it is reproduced from history. `42fd372` is the revision that
+produced the full evidence set (run 44969548534); the first-reproduction rows
+of run 44969040860 (micro-benchmark rows 1-4 and the full-contract spot check)
+were taken at `de832e9`, whose 205-line script predates the `os.mkdir` control:
+
+    git show 42fd372:sim/tools/record-dir-race-probe.sh
+    git show 42fd372:.github/workflows/record-dir-race-probe.yml
+
+The script saw two further changes before its removal. `f9e563c` made it
+measure both the two-claim and the delegated revisions (220 -> 235 lines).
+Then #245 (commit `597f1de`, 235 -> 249 lines) taught it to classify the post-#244 delegated `record-dir.sh` shape and stage
+`scripts/klt-lib.sh` (see the Erratum below). That revision is retrieved the
+same way, `git show 597f1de:sim/tools/record-dir-race-probe.sh`; it produced no
+measurement recorded here, and the workflow did not change after `42fd372`.
+
+The workflow at `42fd372` is the recipe for the recorded runs (the linked runs
+themselves went through a temporary dispatch-gated job, see below). It only runs on a host whose
+`mkdir --version` reports uutils coreutils (see "Runner environment" above; a
+GNU host does not reproduce): add the two pinned revisions as worktrees,
+`d436b53` (pre-guard) and `4367f60` (guarded), then run the script's modes
+`env <pinned-repo>`, `micro <parent-dir> <rounds> [pin|python|pin-python]`
+and `race <pinned-repo> <rx|smoke|tx-hbt|tx-mos> <attempts>` with the bounds
+the linked runs used (`attempts=150`, `micro_rounds=1000`). The
 linked runs above used the same probe script through a temporary
 dispatch-gated job in `ci.yml` (branch commits `de832e9`/`42fd372`), removed
 again in the final PR. Anomaly dumps (record dir with hidden entries,
@@ -202,3 +231,12 @@ the pinned revision has it, reports `guarded=yes` only for the `.reserved` two-c
 counts the `record-dir: ... exists (records are append-only)` refusal under
 `mkdir-refusals`; it refuses a delegated pin whose `klt-lib.sh` is missing
 rather than printing a summary.
+
+## Removal (2026-11-23)
+
+Per the operator ruling on #234 the probe the Erratum above describes -- the
+script and its `workflow_dispatch` workflow -- was removed once this
+investigation concluded; the Erratum's present-tense description of it refers
+to the pre-removal tree. Nothing in the tree runs it. Reproduction from
+history, and the revisions to retrieve, are given under "Reproducing" above.
+No finding, table or measurement in this record is changed by the removal.
