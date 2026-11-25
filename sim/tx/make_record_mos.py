@@ -18,6 +18,15 @@ pdk, tool = rc.load_pins(repo)
 CELLS = ["mux2to1_cml", "tx_lvl_cml2cmos", "ffe_en"]
 sha = rc.sha
 
+reps, missing = {}, []
+for c in CELLS:
+    rep, msg = rc.report_or_error(out, f"tx_mos_{c}")
+    if rep is not None:
+        reps[c] = rep
+    else:
+        missing.append((c, msg))
+
+
 L = [f"# TX MOS-cell sizing record {out.name}", "",
      rc.SIZING_BANNER + " Simulated, first-cut "
      "sizes, ideal-source drive. No `spec/` row is graded here.", "",
@@ -25,7 +34,13 @@ L = [f"# TX MOS-cell sizing record {out.name}", "",
      f"- PDK: {pdk['source']} {pdk['release_tag']} (sim/pdk.json), tarball sha256 `{pdk['tarball_sha256']}`",
      f"- klt: `{tool['klt_last_verified_commit']}`"]
 for c in CELLS:
-    L.append(f"- `tx_mos_{c}.sp` sha256 `{sha(tx / f'tx_mos_{c}.sp')}`, "
+    # The deck the simulator used is the one the run recorded (environment.netlist_sha256);
+    # the working-tree deck may have changed since an archived run. Fall back to the
+    # working tree only when the run wrote no report, and say so.
+    staged = (reps[c]["environment"].get("netlist_sha256") if c in reps else None)
+    deck = (f"`{staged}`" if staged
+            else f"`{sha(tx / f'tx_mos_{c}.sp')}` (working tree; the run recorded no staged hash)")
+    L.append(f"- `tx_mos_{c}.sp` sha256 {deck}, "
              f"`tx_mos_{c}.request.json` sha256 `{sha(tx / f'tx_mos_{c}.request.json')}`")
     L.append(f"- netlist `design/tx/netlists/{c}.spice` sha256 "
              f"`{sha(repo / 'design' / 'tx' / 'netlists' / (c + '.spice'))}`")
@@ -34,13 +49,6 @@ L.append("")
 
 exit_codes = "; ".join(rc.exit_codes(out))
 L += ["## Run", f"- {exit_codes}"]
-reps, missing = {}, []
-for c in CELLS:
-    rep, msg = rc.report_or_error(out, f"tx_mos_{c}")
-    if rep is not None:
-        reps[c] = rep
-    else:
-        missing.append((c, msg))
 for c, msg in missing:
     L.append(f"- {c}: NO REPORT: {msg}")
 corners = {}
@@ -107,18 +115,40 @@ if "mux2to1_cml" in corners:
 
 if "tx_lvl_cml2cmos" in corners:
     ks = sorted(corners["tx_lvl_cml2cmos"], key=lambda k: k["corner_id"])
-    L += ["## tx_lvl_cml2cmos (2.5 GHz input, 20 fF load)", "",
+    periods = {round(val(k, "t_period_s"), 15) for k in ks if val(k, "t_period_s")}
+    if len(periods) > 1:
+        sys.exit(f"tx_lvl_cml2cmos: reported t_period_s is not one value across corners "
+                 f"({sorted(periods)}); refusing to write a record with an unverifiable input rate")
+    # No measured period (e.g. every corner errored): keep the summary and diagnostics
+    # above, mark the period unavailable, and do not assert a rate.
+    period_s = periods.pop() if periods else None
+    rate_hz = 1.0 / period_s if period_s else None
+    if rate_hz is None:
+        rate, ref, ptxt = "input rate unavailable", "", "period unavailable: no corner measured t_period_s"
+    else:
+        rate = (f"{rate_hz / 1e9:g} GHz" if rate_hz >= 1e9 else f"{rate_hz / 1e6:g} MHz") + " input"
+        ref = "; DR-014" if abs(rate_hz - 625e6) < 1e3 else ""
+        ptxt = f"period {period_s * 1e12:g} ps from the reports"
+    L += [f"## tx_lvl_cml2cmos ({rate}, {ptxt}; 20 fF load{ref})", "",
           "| corner | out hi (V) | out lo (V) | duty (%) | tpd LH (ps) | tpd HL (ps) | Idd (mA) |",
           "|---|---|---|---|---|---|---|"]
+    n_bad = 0
     for k in ks:
         th, tp = val(k, "t_high_s"), val(k, "t_period_s")
         duty = None if th is None or not tp else 100.0 * th / tp
+        if duty is not None and not 0.0 <= duty <= 100.0:
+            duty, n_bad = None, n_bad + 1  # impossible value: edge pairing, not a duty
         L.append(f"| {k['corner_id']} | {fmt(val(k, 'out_hi'))} | {fmt(val(k, 'out_lo'))} | "
                  f"{fmt(duty)} | {fmt(val(k, 'tpd_lh_s'), 1e12)} | {fmt(val(k, 'tpd_hl_s'), 1e12)} | "
                  f"{fmt(val(k, 'idd_avg'), 1e3)} |")
-    L += ["", "Duty = time above vdd/2 over the period (`t_high_s` / `t_period_s`). Delay is from the "
-          "differential input zero crossing to the output vdd/2 crossing. 'n/a' = no crossing.", ""]
-
+    L += ["", "Delay is from the differential input zero crossing to the output vdd/2 crossing. "
+          "'n/a' = no crossing, or no valid duty.", ""]
+    if n_bad:
+        L += [f"Duty is n/a in {n_bad} of {len(ks)} corners: `t_high_s` / `t_period_s` came out outside "
+              "0..100 % (negative `t_high_s`). `t_high_s` pairs a `trig` and a `targ` edge that ngspice "
+              "searches independently from their own `td`; here the `targ` edge it finds precedes the "
+              "`trig` edge (different cycles), so the difference is not a pulse width. No same-cycle "
+              "duty is measured; tpd, out hi/lo and Idd are unaffected.", ""]
 if "ffe_en" in corners:
     ks = sorted(corners["ffe_en"], key=lambda k: k["corner_id"])
     L += ["## ffe_en (vbp0..2 minus vbn at each enable code; slices enabled = 0..3)", "",

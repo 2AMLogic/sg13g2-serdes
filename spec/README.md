@@ -19,7 +19,7 @@ superseded, never edited.
 ## Decision records
 
 Every file in [`decisions/`](decisions/) that is a record, in filename order.
-All fifteen are **proposed** — none is ratified.
+All listed records are **proposed**.
 
 | Record | Subject |
 |---|---|
@@ -38,6 +38,7 @@ All fifteen are **proposed** — none is ratified.
 | [`DR-011-pad-model-source.md`](decisions/DR-011-pad-model-source.md) | Pad + ESD model source for R18/R19, and what the present evidence supports |
 | [`DR-012-pad-cap-extracted-r18.md`](decisions/DR-012-pad-cap-extracted-r18.md) | R18 pad capacitance from extracted pad metal, and the G5 reading |
 | [`DR-013-r19-extracted-clamp-iv.md`](decisions/DR-013-r19-extracted-clamp-iv.md) | R19 evaluated as a DC clamp IV on the extracted `pad_esd` devices |
+| [`DR-014-ckd-cmos-rate.md`](decisions/DR-014-ckd-cmos-rate.md) | Proposed 625 MHz TX divided clock and its digital consumer, conditional on DR-008 B1 |
 
 **Two numbers are each carried by two different records**: DR-005 and DR-011.
 The collisions happened when records landed concurrently. The permanent ID is

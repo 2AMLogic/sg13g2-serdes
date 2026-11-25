@@ -2,6 +2,20 @@
   "schema_version": 1,
   "note": "Single source of truth for the shipped testbenches (T1 item 9). Graded against the PROPOSED spec rows (#2, not ratified) and DR-001 to DR-004. No bench output is a measurement; figures a bench prints are simulated. verification/testbench-inventory.json is generated from this file by sim/bench/gen_inventory.py.",
   "pdk": "sim/pdk.json",
+  "behavioural_sources": [
+    {
+      "path": "sim/bench/link_bench.py",
+      "bench": "link-r15-method"
+    },
+    {
+      "path": "sim/bench/linkcore.py",
+      "bench": "link-r8-sensitivity"
+    },
+    {
+      "path": "sim/bench/cdrmodel.py",
+      "bench": "link-r11-cdr-lock"
+    }
+  ],
   "unbenched_rows": [],
   "not_simulation_rows": {
     "R1": "graded by R15",
@@ -249,7 +263,7 @@
         "r6_sdd22_max_to_5g_db",
         "r6_sdd22_max_to_7p5g_db"
       ],
-      "limitations": "Pad: the PDK bondpad model has no capacitance, so each bondpad is the extracted pad-metal C (70.66 fF to ground, quasi-static lumped, layout/analog/pads/records/2026-11-12-fc8a7fa) plus the PDK ESD diodes; no bondwire/package, no pad-to-pad coupling, no distributed 5 GHz effect; PDK dantenna/dpantenna equivalence to the clamp not established (LVS #27); only the TX padp leg; simulated, not measured. DC is approximated by 1 MHz (AC-coupled port). Driver-on is the FFE-off balanced-pair small-signal point; FFE-on slices and the mux/predriver input stage are not exercised (mux outputs replaced by their DC mid level). rsil is the behavioural stand-in at typical rsh, no resistor corner. No limits are attached: the bench reports SDD22, it does not claim a pass"
+      "limitations": "Pad: the PDK bondpad model has no capacitance, so each bondpad is the extracted pad-metal C (70.66 fF to ground, quasi-static lumped, layout/analog/pads/records/2026-11-12-fc8a7fa) plus the PDK ESD diodes; no bondwire/package, no pad-to-pad coupling, no distributed 5 GHz effect; PDK dantenna/dpantenna equivalence to the clamp not established (LVS #27); both TX legs carry the same extracted per-leg capacitance (the extraction covers the padp leg and takes padn as identical); simulated, not measured. DC is approximated by 1 MHz (AC-coupled port). Driver-on is the FFE-off balanced-pair small-signal point; FFE-on slices and the mux/predriver input stage are not exercised (mux outputs replaced by their DC mid level). rsil is the behavioural stand-in at typical rsh, no resistor corner. No limits are attached: the bench reports SDD22, it does not claim a pass"
     },
     {
       "id": "rx-clk-quality",
@@ -371,8 +385,10 @@
       "rows": [
         "R8"
       ],
-      "entry": "sim/bench/link_r8.py",
-      "args": [],
+      "entry": "sim/bench/link_bench.py",
+      "args": [
+        "r8"
+      ],
       "description": "Statistical eye over R14 with sampler offset Monte Carlo: pad amplitude for BER 1e-12 by dual-Dirac Q-scale extrapolation",
       "corner_set": "27-pt HBT PVT-full (ctle_ac record corners) x sampler offset MC draws",
       "limitations": "Behavioural (DR-002): fitted only to the ctle_ac record (gain at 0.1/2.5/5 GHz per corner). UNFITTED ASSUMPTIONS, printed by every run: sampler offset/noise (no sampler Monte Carlo record exists), RJ/DJ, PD decision noise, CTLE roll-off above 5 GHz, analog loop delay (DR-007). TX FFE off; channel phase is a pure delay (symmetric pulse). No fit validation on held-out corners (DR-002 step 3). Figures are simulated/extrapolated, never measured."
@@ -383,8 +399,10 @@
       "rows": [
         "R11"
       ],
-      "entry": "sim/bench/link_r11.py",
-      "args": [],
+      "entry": "sim/bench/link_bench.py",
+      "args": [
+        "r11"
+      ],
       "description": "Behavioural bang-bang CDR (rtl/serdes_cdr_filter.v loop via serdes_ref) lock and hold from a phase offset, PRBS-31",
       "corner_set": "PVT-edge declared corner-independent: loop model has no per-corner input",
       "limitations": "Behavioural (DR-002): fitted only to the ctle_ac record (gain at 0.1/2.5/5 GHz per corner). UNFITTED ASSUMPTIONS, printed by every run: sampler offset/noise (no sampler Monte Carlo record exists), RJ/DJ, PD decision noise, CTLE roll-off above 5 GHz, analog loop delay (DR-007). TX FFE off; channel phase is a pure delay (symmetric pulse). No fit validation on held-out corners (DR-002 step 3). Figures are simulated/extrapolated, never measured."
@@ -395,8 +413,10 @@
       "rows": [
         "R12"
       ],
-      "entry": "sim/bench/link_r12.py",
-      "args": [],
+      "entry": "sim/bench/link_bench.py",
+      "args": [
+        "r12"
+      ],
       "description": "SJ amplitude vs frequency through the behavioural CDR, graded against the R12 mask and the per-corner 1e-12 eye",
       "corner_set": "4 PVT-edge corners (bcs, wcs x {1.08 V, 125 C} and {1.32 V, -40 C}) for the eye; loop corner-independent",
       "limitations": "Behavioural (DR-002): fitted only to the ctle_ac record (gain at 0.1/2.5/5 GHz per corner). UNFITTED ASSUMPTIONS, printed by every run: sampler offset/noise (no sampler Monte Carlo record exists), RJ/DJ, PD decision noise, CTLE roll-off above 5 GHz, analog loop delay (DR-007). TX FFE off; channel phase is a pure delay (symmetric pulse). No fit validation on held-out corners (DR-002 step 3). Figures are simulated/extrapolated, never measured."
@@ -407,8 +427,10 @@
       "rows": [
         "R13"
       ],
-      "entry": "sim/bench/link_r13.py",
-      "args": [],
+      "entry": "sim/bench/link_bench.py",
+      "args": [
+        "r13"
+      ],
       "description": "+-300 ppm offset behavioural run, zero slips over 1e6 UI, with analog-delay sensitivity",
       "corner_set": "PVT-edge declared corner-independent; analog delay 0/assumed/2 instead",
       "limitations": "Behavioural (DR-002): fitted only to the ctle_ac record (gain at 0.1/2.5/5 GHz per corner). UNFITTED ASSUMPTIONS, printed by every run: sampler offset/noise (no sampler Monte Carlo record exists), RJ/DJ, PD decision noise, CTLE roll-off above 5 GHz, analog loop delay (DR-007). TX FFE off; channel phase is a pure delay (symmetric pulse). No fit validation on held-out corners (DR-002 step 3). Figures are simulated/extrapolated, never measured."
@@ -419,8 +441,10 @@
       "rows": [
         "R15"
       ],
-      "entry": "sim/bench/link_r15.py",
-      "args": [],
+      "entry": "sim/bench/link_bench.py",
+      "args": [
+        "r15"
+      ],
       "description": "Error-rate method entry point: PRBS-31 statistical eye + behavioural CDR jitter, 1e-12 by dual-Dirac wall extrapolation",
       "corner_set": "27-pt HBT PVT-full (ctle_ac record corners)",
       "limitations": "Behavioural (DR-002): fitted only to the ctle_ac record (gain at 0.1/2.5/5 GHz per corner). UNFITTED ASSUMPTIONS, printed by every run: sampler offset/noise (no sampler Monte Carlo record exists), RJ/DJ, PD decision noise, CTLE roll-off above 5 GHz, analog loop delay (DR-007). TX FFE off; channel phase is a pure delay (symmetric pulse). No fit validation on held-out corners (DR-002 step 3). Figures are simulated/extrapolated, never measured."

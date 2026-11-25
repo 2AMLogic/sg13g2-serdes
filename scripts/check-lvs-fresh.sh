@@ -13,11 +13,19 @@
 # netlist is the committed extraction, so this does not repeat the extraction).
 set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-# shellcheck source=scripts/pnr-lib.sh
-. "$ROOT/scripts/pnr-lib.sh"
-pnr_env
+# shellcheck source=scripts/klt-lib.sh
+. "$ROOT/scripts/klt-lib.sh"
+klt_env
+# Cheap mode re-hashes only and reads nothing under PDK_ROOT. A --rerun compare
+# re-runs the gate-level-Verilog conversion, which reads the stdcell SPICE pin
+# orders, so that sentinel is required in --rerun mode alone. Neither mode
+# invokes openroad or reads the stdcell LEF.
+if [ "${1:-}" = "--rerun" ]; then
+  require_pdk_file ihp-sg13g2/libs.ref/sg13g2_stdcell/spice/sg13g2_stdcell.spice \
+    "check-lvs-fresh: SG13G2 stdcell SPICE not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
+fi
 
-LREC="$(ls -d "$ROOT"/layout/digital/lvs-records/*/ 2>/dev/null | sort | tail -1 | sed 's:/$::')"
+LREC="$(latest_record_dir "$ROOT/layout/digital/lvs-records")"
 [ -n "$LREC" ] && [ -f "$LREC/lvs.report.json" ] || { echo "check-lvs-fresh: no committed record (run scripts/lvs-regen.sh)" >&2; exit 1; }
 R="$LREC/lvs.report.json"
 [ "$(jq -r .status "$R")" = match ] || { echo "check-lvs-fresh: committed report status is not match" >&2; exit 1; }
@@ -26,7 +34,7 @@ pc="$(jq -r .power_connectivity.status "$R")"
 
 # The reference must be the newest place-and-route record's netlist, and the
 # extraction must be of that record's GDS (a newer pnr record makes this stale).
-PREC="$(pnr_latest_record)"; TOP="$(jq -r .hdl_toplevel "$PNR_REQ")"
+PREC="$(latest_record_dir "$ROOT/layout/digital/records")"; TOP="$(jq -r .hdl_toplevel "$ROOT/layout/digital/place-and-route.request.json")"
 want="$(sha256sum "$PREC/${TOP}_postroute.v" | awk '{print $1}')"
 [ "$want" = "$(jq -r .environment.reference_sha256 "$R")" ] || { echo "check-lvs-fresh: STALE -- newest place-and-route record's netlist is not the one LVS compared; run scripts/lvs-regen.sh" >&2; exit 3; }
 

@@ -1,11 +1,13 @@
 # klt-lib.sh -- shared klt/PDK environment preflight (sourced).
-# One copy of what pnr-lib.sh and synth-lib.sh used to duplicate: the jq/uvx
-# preflight, the pinned klt runner (layout/toolchain.json via a throwaway uvx
-# env), the $PDK_ROOT fallback (sim/pdk.json -> .cache/pdk), and the
-# PDK_ROOT/PDK exports, plus reserve_record_dir, the exclusive record-directory
-# reservation every regen writer makes before its first record write (#208,
-# #219). The per-flow checks -- which tool the flow runs and which PDK
-# sentinel it needs -- stay with the caller through require_tool /
+# One copy of the jq/uvx preflight, the pinned klt runner
+# (layout/toolchain.json via a throwaway uvx env), the $PDK_ROOT fallback
+# (sim/pdk.json -> .cache/pdk), the PDK_ROOT/PDK exports, latest_record_dir
+# (the newest dated record directory), and reserve_record_dir, the exclusive
+# record-directory reservation every regen writer makes before its first record
+# write (#208, #219) and -- through the sim-side id builder
+# sim/tools/record-dir.sh (#244) -- the sim runners too: the one such
+# reservation primitive. The per-flow checks -- which tool the flow runs and
+# which PDK sentinel it needs -- stay with the caller through require_tool /
 # require_pdk_file; every refusal exits 3, this repo's tool-gap exit.
 # shellcheck shell=bash
 
@@ -36,6 +38,10 @@ require_pdk_file() { # require_pdk_file <relpath-under-$PDK_ROOT> [message]
   }
 }
 
+latest_record_dir() { # latest_record_dir <records-dir> -- newest dated record dir
+  ls -d "$1"/*/ 2>/dev/null | sort | tail -1 | sed 's:/$::'
+}
+
 pdk_default_root() { # pdk_default_root <repo-root> -- the $PDK_ROOT fallback
   # return (not exit): env.sh sources this library and must survive the refusal.
   # Exit-code contract is unchanged: the caller turns the non-zero into exit 3.
@@ -45,20 +51,28 @@ pdk_default_root() { # pdk_default_root <repo-root> -- the $PDK_ROOT fallback
   echo "$1/.cache/pdk/$v"
 }
 
-reserve_record_dir() { # reserve_record_dir <dest> <diag-prefix>
+reserve_record_dir() { # reserve_record_dir <dest> <diag-prefix> [occupied-exit]
   # uutils mkdir can report success to both racing callers. Read the mkdir
   # syscall result directly so only the writer that created the record proceeds.
-  python3 -I - "$1" "$2" <<'PY'
+  # An occupied destination exits 1, or the caller's third argument when it
+  # must keep another status (the analog writers' historical 2, #228); every
+  # other filesystem error keeps the distinct mkdir diagnostic and exits 1.
+  # A trailing-slash destination (the TX wrapper takes caller-supplied output
+  # directories) reserves the final directory component; diagnostics print the
+  # argument exactly as the caller passed it.
+  python3 -I - "$1" "$2" "${3:-1}" <<'PY'
 import os
 import sys
 
-dest, prefix = sys.argv[1:]
+dest, prefix, occupied = sys.argv[1], sys.argv[2], int(sys.argv[3])
+target = dest.rstrip("/") or "/"
 try:
-    os.makedirs(os.path.dirname(dest) or ".", exist_ok=True)
+    os.makedirs(os.path.dirname(target) or ".", exist_ok=True)
     try:
-        os.mkdir(dest)
+        os.mkdir(target)
     except FileExistsError:
-        sys.exit(f"{prefix}: {dest} exists (records are append-only)")
+        print(f"{prefix}: {dest} exists (records are append-only)", file=sys.stderr)
+        sys.exit(occupied)
 except OSError as error:
     sys.exit(f"{prefix}: mkdir: {error}")
 PY
