@@ -10,6 +10,8 @@ cd "$(dirname "$0")/.." || exit 1
 . scripts/erc-fresh-lib.sh
 # shellcheck source=scripts/analog-cell-evidence-lib.sh
 . scripts/analog-cell-evidence-lib.sh
+# shellcheck source=scripts/klt-lib.sh
+. scripts/klt-lib.sh
 # The klt pin lives in exactly one place: layout/toolchain.json's klt_install.
 KLT_VERSION=$(jq -r '.klt_install // empty' layout/toolchain.json)
 KLT_VERSION=${KLT_VERSION#klayout-tools==}
@@ -109,6 +111,9 @@ check_harness() {
   echo "harness: scripts/test-sta-paths-liberty.sh"
   bash scripts/test-sta-paths-liberty.sh || {
     echo "::error file=scripts/test-sta-paths-liberty.sh::sta-paths Liberty-corner self-test failed" >&2; return 1; }
+  echo "harness: scripts/test-analog-lvs-verdict.sh"
+  bash scripts/test-analog-lvs-verdict.sh || {
+    echo "::error file=scripts/test-analog-lvs-verdict.sh::analog evidence one-verdict self-test failed" >&2; return 1; }
 }
 
 # check_fresh -- the committed evidence records still describe the committed
@@ -137,7 +142,8 @@ check_harness() {
 #   6. item 11.digital cites the newest clean ERC report. Its GDS path and
 #      hash match the newest P&R record, and its spec hash matches both the
 #      canonical supply spec and the archived copy that signoff reads.
-#   7. the newest RX and TX converter LVS records both report a match.
+#   7. the newest RX and TX converter LVS records both report a match with
+#      power connectivity not mismatch.
 #   8. each converter's LVS report identifies the GDS in its record and
 #      the standalone reference subcircuit in design/ by their hashes.
 # This is the PDK-free subset of check-pnr-fresh.sh / check-lvs-fresh.sh /
@@ -344,11 +350,12 @@ check_fresh() {
   # carries DRC-clean + LVS-match evidence bound to that record's own GDS and
   # the standalone subckt reference (scripts/analog-cell-evidence-lib.sh; the
   # local gate scripts/check-analog-lvs-fresh.sh adds the klt-powered --check).
-  local cell_spec cell_part cell cell_ref
+  local cell_spec cell_part cell cell_ref cell_rec
   for cell_spec in "rx lvl_cml2cmos design/rx/netlists/lvl_cml2cmos.spice" \
                    "tx tx_lvl_cml2cmos design/tx/netlists/tx_lvl_cml2cmos.spice"; do
     read -r cell_part cell cell_ref <<<"$cell_spec"
-    analog_cell_verify "$PWD" "$cell_part" "$cell" "$cell_ref" "fresh axis 7-8 (analog $cell)" || rc=1
+    cell_rec="$(latest_record_dir "layout/analog/$cell_part/records")"
+    analog_cell_verify "$PWD" "$cell_rec" "$cell" "$cell_ref" "fresh axis 7-8 (analog $cell)" || rc=1
   done
 
   if [ "$rc" = 0 ]; then

@@ -9,10 +9,12 @@
 # With no argument both partitions are processed; naming one or more
 # partitions restricts the run to them (a new TX record regenerates TX without
 # touching RX, and vice versa). A partition whose newest record already carries
-# evidence is validated (scripts/analog-cell-evidence-lib.sh: clean/match and
-# the hashes bound to that record's GDS and the reference) and SKIPPED, never
-# rewritten -- a failed validation is an error, so existing evidence stays
-# append-only.
+# evidence is validated (scripts/analog-cell-evidence-lib.sh) and SKIPPED,
+# never rewritten -- a failed validation is an error, so existing evidence
+# stays append-only. Freshly written reports get the SAME verdict (issue #281):
+# both paths accept only on the shared verifier's DRC/LVS statuses, power rule
+# and hash binding to that record's GDS and the reference, so a first write
+# and a rerun over the same files cannot disagree.
 #
 # For each of (rx lvl_cml2cmos, tx tx_lvl_cml2cmos) in the newest
 # layout/analog/{rx,tx}/records/*/<cell>/ dir:
@@ -23,9 +25,10 @@
 #                                        subckt-call), anchor_top_level_pins on,
 #                                        combine_devices on (the TX converter
 #                                        folds ng=2 fingers and the rppd body)
-# Single-unit local run (seconds per cell); exit 1 if any DRC is not clean or
-# any LVS is not `match` -- the reports are still written so a first mismatch
-# is kept for the record.
+# Single-unit local run (seconds per cell); exit 1 if the shared verifier
+# rejects the evidence (DRC not clean, LVS not `match`, power connectivity
+# mismatch, or a hash not bound to that record's GDS / the reference) -- the
+# reports are still written so a first mismatch is kept for the record.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # shellcheck source=scripts/klt-lib.sh
@@ -34,18 +37,16 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 . "$ROOT/scripts/analog-cell-evidence-lib.sh"
 klt_env
 
-latest_record() { ls -d "$ROOT/layout/analog/$1/records"/*/ 2>/dev/null | sort | tail -1 | sed 's:/$::'; }
-
 run_cell() {  # run_cell <partition> <cell> <reference-netlist> <combine_devices>
   local part="$1" cell="$2" ref="$3" combine="$4"
   local rec dir
-  rec="$(latest_record "$part")"
+  rec="$(latest_record_dir "$ROOT/layout/analog/$part/records")"
   [ -n "$rec" ] || { echo "analog-lvs-regen: no $part record (run the $part regen script)" >&2; exit 1; }
   dir="$rec/$cell"
   [ -f "$rec/$cell.gds" ] || { echo "analog-lvs-regen: $rec/$cell.gds missing" >&2; exit 1; }
   if [ -f "$dir/lvs.report.json" ]; then
     # completed record: validate it, leave it untouched
-    analog_cell_verify "$ROOT" "$part" "$cell" "${ref#../../../../../../}" "analog-lvs-regen" \
+    analog_cell_verify "$ROOT" "$rec" "$cell" "${ref#../../../../../../}" "analog-lvs-regen" \
       || { echo "analog-lvs-regen: $dir has evidence that fails validation (records are append-only; regenerate into a new record)" >&2; return 1; }
     echo "$cell: evidence already recorded and valid (record ${rec#"$ROOT"/}); skipped"
     return 0
@@ -79,10 +80,9 @@ EOF
   lvs_s="$(jq -r .status "$dir/lvs.report.json")"
   power="$(jq -r .power_connectivity.status "$dir/lvs.report.json")"
   echo "$cell: drc=$drcs lvs=$lvs_s power=$power (record ${rec#"$ROOT"/})"
-  [ "$drcs" = clean ] || rc=1
-  [ "$lvs_s" = match ] || rc=1
-  [ "$power" != mismatch ] || rc=1
-  return "${rc:-0}"
+  analog_cell_verify "$ROOT" "$rec" "$cell" "${ref#../../../../../../}" "analog-lvs-regen" \
+    || { echo "analog-lvs-regen: $cell evidence fails validation; reports kept for the record" >&2; return 1; }
+  return 0
 }
 
 rc=0
