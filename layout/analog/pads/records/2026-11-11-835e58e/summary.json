@@ -1,0 +1,43 @@
+{
+ "pdk": "ihp-sg13g2",
+ "pr_gds": "libs.ref/sg13g2_pr/gds/sg13g2_pr.gds",
+ "claims": "placed and net-labelled only; no routing/DRC/LVS/capacitance/5 GHz claim",
+ "cells": [
+  {
+   "cell": "pad_esd",
+   "blocks": 8,
+   "pins": [
+    "cp",
+    "padp",
+    "cn",
+    "padn"
+   ],
+   "routed": false,
+   "bbox_um": {
+    "x0": -20.0,
+    "y0": 0.0,
+    "x1": 160.0,
+    "y1": 137.055
+   }
+  },
+  {
+   "cell": "rx_term_pad",
+   "blocks": 8,
+   "pins": [
+    "padp",
+    "inp",
+    "vcm",
+    "padn",
+    "inn",
+    "vcm"
+   ],
+   "routed": false,
+   "bbox_um": {
+    "x0": -4.24,
+    "y0": 0.0,
+    "x1": 84.98,
+    "y1": 67.05000000000001
+   }
+  }
+ ]
+}

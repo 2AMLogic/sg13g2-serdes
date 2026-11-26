@@ -7,8 +7,9 @@
         # local check; never the grid, never a recorded result
 
 Node-stress measurements are derived from the exported netlists in
-design/rx/netlists/, so they follow the schematics. Everything measured here is
-sizing evidence, not a spec result.
+design/rx/netlists/, so they follow the schematics: max collector voltage,
+max Vce (against BVCEO 1.4 V, issue #242) and max reverse Vbe of every HBT.
+Everything measured here is sizing evidence, not a spec result.
 """
 import json
 import os
@@ -19,28 +20,27 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SIM = os.path.join(HERE, "..")
 NET = os.path.join(SIM, "..", "..", "design", "rx", "netlists")
 
-HBT_LIB = "libs.tech/ngspice/models/cornerHBT.lib"
-CAP_LIB = "libs.tech/ngspice/models/cornerCAP.lib"
-DIO_LIB = "libs.tech/ngspice/models/cornerDIO.lib"
-
-# HBT-family PVT grid: 3 HBT corners (ganged with CAP and DIO sections, the
-# spec's own ganging proposal) x 3 supplies x 3 temperatures = 27 points. It is
-# a crossed grid, not `corners.units`: the fleet runner (klt 0.7.0) silently
-# ignores `corners.units` and runs one default corner.
-PROCESS = [
-    {"name": "hbt_typ", "sections": [{"lib": HBT_LIB, "section": "hbt_typ"},
-                                     {"lib": CAP_LIB, "section": "cap_typ"},
-                                     {"lib": DIO_LIB, "section": "dio_tt"}]},
-    {"name": "hbt_bcs", "sections": [{"lib": HBT_LIB, "section": "hbt_bcs"},
-                                     {"lib": CAP_LIB, "section": "cap_bcs"},
-                                     {"lib": DIO_LIB, "section": "dio_ff"}]},
-    {"name": "hbt_wcs", "sections": [{"lib": HBT_LIB, "section": "hbt_wcs"},
-                                     {"lib": CAP_LIB, "section": "cap_wcs"},
-                                     {"lib": DIO_LIB, "section": "dio_ss"}]},
-]
+sys.path.insert(0, os.path.join(SIM, "..", "tools"))
+from hbt_corners import HBT_LIB, corner_axes  # noqa: E402
 
 VC_MAX = 1.32   # DR-003: no HBT collector node above this
+VCE_MAX = 1.4   # DR-003: npn13G2 open-base BVCEO (target-spec HBT breakdown table), hard limit (issues #242, #256)
 VBE_REV = 1.0   # DR-003: no reverse Vbe above this
+
+# Differential input amplitudes of the ctle_tran bench (issue #256), as the
+# single-ended half-swing A of each source about vcm: each side swings +-A, so
+# the differential peak-to-peak swing is 4*A (mVppd). The spec declares no
+# MAXIMUM RX input swing -- R8 gives only the minimum sensitivity -- so both
+# levels are bench bounds named here and restated in the record, not spec
+# limits:
+# - lo: 50 mVppd -- R8 nominal RX input sensitivity (spec/target-spec.md R8),
+#   the smallest swing the RX must resolve, so the stress floor.
+# - hi: 800 mVppd -- R4 stretch TX output swing (the R4 maximum), taken as the
+#   pad amplitude at zero channel loss: the committed channel model
+#   (spec/channel/) has S11 = S22 = 0 and IL(f) -> 0 dB as f -> 0, so the
+#   largest pad amplitude it admits is the TX swing itself.
+CTLE_TRAN_SENS_V = 0.0125
+CTLE_TRAN_MAX_V = 0.2
 
 
 def parse_subckt(cell):
@@ -60,12 +60,15 @@ def parse_subckt(cell):
     return ports, qs
 
 
-def stress_meas(inst, cell, portmap, prefix, kind):
-    """`.meas` cards for max collector V and max reverse Vbe of every HBT.
+def stress_meas(inst, cell, portmap, prefix, kind, vce=True, vce_first=False):
+    """`.meas` cards for max collector V, max Vce and max reverse Vbe of every HBT.
 
     kind "dc": operating-point value via a two-point dummy sweep (`at=0`);
     kind "tran": maximum over the run. Plain `spice` cards, because the fleet
-    runner's `expr` support is not usable (see sim/rx/README.md).
+    runner's `expr` support is not usable (see sim/rx/README.md). Unless
+    `vce=False`, a third card per HBT, max Vce (DR-003/BVCEO), through another
+    B source (issues #242, #256). `vce_first` only orders that card before
+    `_vbe_rev_max`, as the ctle_tran request has it.
     """
     ports, qs = parse_subckt(cell)
 
@@ -83,7 +86,19 @@ def stress_meas(inst, cell, portmap, prefix, kind):
         base = "%s_%s_%s" % (prefix, inst.lower(), q.lower())
         vbe = base + "_vbe_node"
         lines.append("B%s %s 0 V=v(%s)-v(%s)" % (vbe, vbe, node(e), node(b)))
-        for suffix, sig, lim in (("_vc_max", "v(%s)" % node(c), VC_MAX), ("_vbe_rev_max", "v(%s)" % vbe, VBE_REV)):
+        cards = [("_vc_max", "v(%s)" % node(c), VC_MAX)]
+        if vce:
+            vce_node = base + "_vce_node"
+            lines.append("B%s %s 0 V=v(%s)-v(%s)" % (vce_node, vce_node, node(c), node(e)))
+            vce_card = ("_vce_max", "v(%s)" % vce_node, VCE_MAX)
+            vbe_card = ("_vbe_rev_max", "v(%s)" % vbe, VBE_REV)
+            # Card order is kept per bench so every already-committed request
+            # (and the record generated from it) stays byte-identical:
+            # ctle_tran (issue #256) lists vce before vbe_rev, the others after.
+            cards += [vce_card, vbe_card] if vce_first else [vbe_card, vce_card]
+        else:
+            cards.append(("_vbe_rev_max", "v(%s)" % vbe, VBE_REV))
+        for suffix, sig, lim in cards:
             name = base + suffix
             if kind == "dc":
                 card = ".meas dc %s find %s at=0" % (name, sig)
@@ -105,13 +120,6 @@ def request(netlist, analysis, measurements, corners, extra_options=None):
         "measurements": measurements,
         "options": opts,
     }
-
-
-def corner_axes(debug):
-    if debug:
-        return {"process": PROCESS[:1], "temperature_c": [27], "supply_v": {"vdd": [1.2]}}
-    return {"process": PROCESS, "temperature_c": [-40, 27, 125],
-            "supply_v": {"vdd": [1.08, 1.2, 1.32]}}
 
 
 # ---------------------------------------------------------------- CTLE bench
@@ -175,6 +183,101 @@ def ctle_op_meas():
     return lines, m
 
 
+def _tran_pwl(amp, sign):
+    """PWL text for one source of the ctle_tran bench: +-`amp` about vcm,
+    `sign` = +1 for the p side, -1 for the n side (the pair is complementary).
+    Both polarities of the long run are exercised, so every device of the
+    symmetric pair sees its settled worst-case collector level:
+      0-2 ns      settled at -amp (the .op state)
+      2-3 ns      5 cycles of 5 GHz alternation (200 ps, 20 ps edges), first
+                  edge -amp -> +amp
+      3-6 ns      held at +amp (3 ns > 8*tau of the 300 ps Rca*Cca feed-forward,
+                  so hpp/hpn settle back to vcm)
+      6-7 ns      5 cycles of 5 GHz alternation, first edge +amp -> -amp
+      7-7.1 ns    held at +amp
+    """
+    E, P = 20e-12, 200e-12   # edge time, period
+    pts = [(0.0, -amp)]
+
+    def alt(t0, lvl):
+        for i in range(5):
+            t = t0 + i * P
+            pts.extend([(t, lvl), (t + E, -lvl), (t + P / 2, -lvl), (t + P / 2 + E, lvl)])
+        return t0 + 5 * P
+
+    t = alt(2e-9, -amp)            # ends at -amp
+    pts.extend([(t, -amp), (t + E, amp)])   # then held at +amp until alt() at 6 ns
+    alt(6e-9, amp)                 # ends at +amp
+    pts.append((7.1e-9, amp))
+    return "pwl(" + " ".join("%.4gn %g" % (a * 1e9, sign * b) for a, b in pts) + ")"
+
+
+def ctle_tran_body(extra=()):
+    """16 copies of ctle (codes 0-7 at each of two differential input levels)
+    driven by ideal differential PWL sources that exercise BOTH polarities of
+    the settled long run (see _tran_pwl): the ctle input network is a
+    symmetric pair with AC-coupled feed-forward paths, so a single-polarity
+    long run under-stresses one half of it."""
+    L = ["* CTLE transient node-stress bench (issue #256): ctle_op's stress cards",
+         "* are quiescent (Vip/Vin at dc 0); this bench drives a real differential",
+         "* swing so the R3 per-device table gets transient peaks. 16 copies of",
+         "* ctle: codes 0-7 at each of two input levels (lo/hi below), same ideal",
+         "* source, same placeholder 80 fF load as ctle_ac/ctle_op. Stimulus per",
+         "* side (pwl, both polarities): 2 ns settled, 1 ns of 5 GHz alternation",
+         "* (200 ps period, 20 ps edges), a 3 ns long run at the opposite polarity,",
+         "* then 1 ns of 5 GHz alternation again. Sizing evidence, not a spec",
+         "* result.",
+         ".include ../../design/rx/netlists/ctle.spice",
+         "Vdd vdd 0 1.2",
+         "Bvcm vcm 0 V=0.7917*v(vdd)",
+         "Vip inp vcm " + _tran_pwl(CTLE_TRAN_SENS_V, +1),
+         "Vin inn vcm " + _tran_pwl(CTLE_TRAN_SENS_V, -1),
+         "Vjp jnp vcm " + _tran_pwl(CTLE_TRAN_MAX_V, +1),
+         "Vjn jnn vcm " + _tran_pwl(CTLE_TRAN_MAX_V, -1)]
+    _ctle_copies(L, "l", "inp", "inn")
+    _ctle_copies(L, "h", "jnp", "jnn")
+    L += list(extra)
+    return "\n".join(L) + "\n"
+
+
+def _ctle_copies(L, tag, inp, inn):
+    """Append the 8 peaking-code copies of ctle for one input source pair,
+    with node names prefixed `tag` so the two amplitude levels of ctle_tran
+    (and the ac/op benches) never collide."""
+    for c in range(8):
+        for k in range(3):
+            bit = (c >> k) & 1
+            hi, lo = "v(vdd)", "v(vdd)-0.25"
+            L.append("Bk%s%d_%d %s%dk%d 0 V=%s" % (tag, c, k, tag, c, k, hi if bit else lo))
+            L.append("Bk%s%d_%db %s%dk%db 0 V=%s" % (tag, c, k, tag, c, k, lo if bit else hi))
+        L.append("Xd%s%d %s %s vcm vdd 0 %s%dk0 %s%dk0b %s%dk1 %s%dk1b %s%dk2 %s%dk2b op%s%d on%s%d ctle"
+                 % (tag, c, inp, inn, tag, c, tag, c, tag, c, tag, c, tag, c, tag, c, tag, c, tag, c))
+        L.append("Clp%s%d op%s%d 0 80f" % (tag, c, tag, c))
+        L.append("Cln%s%d on%s%d 0 80f" % (tag, c, tag, c))
+        L.append("Bd%s%d dif%s%d 0 V=v(op%s%d)-v(on%s%d)" % (tag, c, tag, c, tag, c, tag, c))
+
+
+def ctle_tran_meas():
+    """Stress cards (with Vce) per HBT per code per level, plus the
+    differential output max/min per copy as nonzero-swing evidence."""
+    lines, m = [], []
+    for lvl, tag, inp, inn in (("lo", "l", "inp", "inn"), ("hi", "h", "jnp", "jnn")):
+        for c in range(8):
+            pm = {"inp": inp, "inn": inn, "vcm": "vcm", "vdd": "vdd",
+                  "outp": "op%s%d" % (tag, c), "outn": "on%s%d" % (tag, c)}
+            for k in range(3):
+                pm["c%d" % k] = "%s%dk%d" % (tag, c, k)
+                pm["c%db" % k] = "%s%dk%db" % (tag, c, k)
+            l_, m_ = stress_meas("Xd%s%d" % (tag, c), "ctle", pm, "ctle_%s_c%d" % (lvl, c), "tran", vce_first=True)
+            lines += l_
+            m += m_
+            for ext, fn in (("_dif_max_v", "max"), ("_dif_min_v", "min")):
+                n = "ctle_%s_c%d%s" % (lvl, c, ext)
+                m.append({"name": n, "unit": "V",
+                          "spice": ".meas tran %s %s v(dif%s%d)" % (n, fn, tag, c)})
+    return lines, m
+
+
 # ----------------------------------------------------------- pad/term bench
 def pad_body():
     L = ["* Termination + pad first-look bench (issue #22). PLACEHOLDER pad capacitance",
@@ -229,18 +332,58 @@ def latch_body(extra=()):
     return "\n".join(L) + "\n"
 
 
+# Regeneration decision levels, in volts of |q|. Two fixed absolute levels are
+# measured at every corner; neither is swing-relative (a `.meas` card cannot
+# reference an earlier `.meas` result -- ngspice rejects it with "Undefined
+# parameter" and aborts the whole deck -- and `measurements[].expr` is not
+# usable on the fleet runner, klayout-tools#4217. See sim/rx/README.md).
+#
+# DECISION_LEVEL_V is the level the link benches care about: the sampler
+# decision threshold the downstream CMOS stage needs. It is NOT a fixed
+# fraction of the swing -- peak |q| over this grid runs 0.148 V to 0.569 V, so
+# 0.25 V is 96 % of peak |q| at the weakest corner that reaches it and 44 % at
+# the strongest. At the six 1.080 V corners peak |q| never reaches it at all,
+# which `on_unreached: "null"` records as `not_reached` rather than an error.
+DECISION_LEVEL_V = 0.25
+# FLOOR_LEVEL_V is a low fixed level every corner in the grid crosses, so a
+# regeneration *speed* is returned even where the decision level is not
+# reached. Chosen against the measured worst-case peak |q| in the 27-point grid
+# (0.1482 V at hbt_wcs/1.080V/-40C, record 20261110-222737-506b37e), which
+# leaves ~1.5x margin; validated at both grid extremes (hbt_wcs/1.080V/-40C and
+# hbt_bcs/1.320V/125C) to cross after the trigger edge, inside the intended
+# hold phase.
+FLOOR_LEVEL_V = 0.10
+
+
 def latch_meas():
     # Regeneration time: from the clock edge that closes the sample phase (ck
-    # falling through 0) to |q| reaching 0.25 V, about 85 % of the +-0.3 V
-    # swing. The hold pair regenerates only during that phase. First-look
-    # limit: the half period at 5 GHz (100 ps), after which the next sample
-    # phase opens. Cycle selection is by td= (data toggles at 250 ps + 400 ps k).
+    # falling through 0) to |q| reaching a decision level. The hold pair
+    # regenerates only during that phase. First-look limit for both levels: the
+    # half period at 5 GHz (100 ps), after which the next sample phase opens.
+    # Cycle selection is by td= (data toggles at 250 ps + 400 ps k).
+    #
+    # Two levels per edge, both plain `.meas` cards:
+    #   *_up / *_dn      at DECISION_LEVEL_V, `on_unreached: "null"` so a
+    #                    corner whose swing never reaches it is recorded as
+    #                    `not_reached` (an explicit "does not regenerate to the
+    #                    decision level" verdict) instead of erroring the corner.
+    #   *_up_lo / *_dn_lo at FLOOR_LEVEL_V, which every corner crosses, so a
+    #                    regeneration speed is always returned. This separates
+    #                    "too slow" from "too weak": a corner that misses the
+    #                    decision level but returns a fast floor-level time is
+    #                    swing-limited, not speed-limited.
     m = [
         {"name": "latch_t_regen_up", "unit": "s",
-         "spice": ".meas tran latch_t_regen_up trig v(ck) val=0 fall=1 td=2.35n targ v(q) val=0.25 rise=1 td=2.35n",
-         "limits": {"max": 100e-12}},
+         "spice": ".meas tran latch_t_regen_up trig v(ck) val=0 fall=1 td=2.35n targ v(q) val=%g rise=1 td=2.35n" % DECISION_LEVEL_V,
+         "limits": {"max": 100e-12}, "on_unreached": "null"},
         {"name": "latch_t_regen_dn", "unit": "s",
-         "spice": ".meas tran latch_t_regen_dn trig v(ck) val=0 fall=1 td=2.55n targ v(q) val=-0.25 fall=1 td=2.55n",
+         "spice": ".meas tran latch_t_regen_dn trig v(ck) val=0 fall=1 td=2.55n targ v(q) val=%g fall=1 td=2.55n" % -DECISION_LEVEL_V,
+         "limits": {"max": 100e-12}, "on_unreached": "null"},
+        {"name": "latch_t_regen_up_lo", "unit": "s",
+         "spice": ".meas tran latch_t_regen_up_lo trig v(ck) val=0 fall=1 td=2.35n targ v(q) val=%g rise=1 td=2.35n" % FLOOR_LEVEL_V,
+         "limits": {"max": 100e-12}},
+        {"name": "latch_t_regen_dn_lo", "unit": "s",
+         "spice": ".meas tran latch_t_regen_dn_lo trig v(ck) val=0 fall=1 td=2.55n targ v(q) val=%g fall=1 td=2.55n" % -FLOOR_LEVEL_V,
          "limits": {"max": 100e-12}},
         {"name": "latch_q_max_v", "unit": "V", "spice": ".meas tran latch_q_max_v max v(q) from=2n to=3n"},
         {"name": "latch_q_min_v", "unit": "V", "spice": ".meas tran latch_q_min_v min v(q) from=2n to=3n"},
@@ -260,18 +403,23 @@ def main(argv):
     os.makedirs(out, exist_ok=True)
     units = corner_axes(debug)
     op_lines, op_meas = ctle_op_meas()
+    tran_lines, tran_meas = ctle_tran_meas()
     lat_lines, lat_meas = latch_meas()
     files = {
         "ctle_ac": (ctle_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, ctle_ac_meas()),
         "ctle_op": (ctle_op_body(op_lines), {"kind": "dc", "args": "Vdmy 0 1m 1m"}, op_meas),
+        "ctle_tran": (ctle_tran_body(tran_lines), {"kind": "tran", "args": "2p 7.1n"}, tran_meas),
         "pad_ac": (pad_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, pad_meas()),
         "latch_regen": (latch_body(lat_lines), {"kind": "tran", "args": "2p 3n"}, lat_meas),
     }
+    # 16 CTLE copies at 7.1 ns is a much larger transient deck than
+    # latch_regen; give it a longer per-unit timeout than the default 120 s.
+    timeouts = {"ctle_tran": {"timeout_s": 1800}}
     for name, (body, ana, meas) in files.items():
         rel = os.path.relpath(NET, out)
         with open(os.path.join(out, name + ".sp"), "w") as f:
             f.write(body.replace("../../design/rx/netlists", rel))
-        req = request(name + ".sp", ana, meas, units)
+        req = request(name + ".sp", ana, meas, units, timeouts.get(name))
         with open(os.path.join(out, name + ".request.json"), "w") as f:
             json.dump(req, f, indent=2)
             f.write("\n")

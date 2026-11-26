@@ -1,0 +1,15 @@
+{
+  "layout": {
+    "file": "../../../rx/records/2026-11-12-0193777/ctle/XQa0.gds",
+    "top": "ctle_XQa0"
+  },
+  "reference": {
+    "netlist": "placed.ref.cir",
+    "top": "ctle_XQa0"
+  },
+  "engine": "klayout-runset",
+  "deck_file": "../../../../../.cache/pdk/IHP-Open-PDK-0.3.0/ihp-sg13g2/libs.tech/klayout/tech/lvs/sg13g2.lvs",
+  "deck_vars": {
+    "ignore_top_ports_mismatch": "true"
+  }
+}

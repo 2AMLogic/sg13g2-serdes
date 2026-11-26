@@ -10,22 +10,30 @@
 # the host openroad; installs nothing. PDK from $PDK_ROOT or .cache/pdk.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-# shellcheck source=scripts/synth-lib.sh
-. "$ROOT/scripts/synth-lib.sh"
-synth_env
+# shellcheck source=scripts/klt-lib.sh
+. "$ROOT/scripts/klt-lib.sh"
+klt_env
+require_tool openroad "sta-paths: openroad missing (worker-spec gap; do not install here)"
 OUT="${1:-$ROOT/.cache/sta}"; mkdir -p "$OUT"
 REQ="$ROOT/rtl/synth/request.json"
 TOP="$(jq -r .hdl_toplevel "$REQ")"
 PERIOD="$(jq -r .constraints.clock_period_ns "$REQ")"
+# The Liberty read is the one the request routes: <cell_library>_<corner>.lib,
+# never a fixed corner (same contract as check-pnr-fresh.sh).
+CELL_LIB="$(jq -r .pdk.cell_library "$REQ")"
 CORNER="$(jq -r .pdk.corner "$REQ")"
+require_pdk_file "ihp-sg13g2/libs.ref/$CELL_LIB/lib/${CELL_LIB}_${CORNER}.lib" \
+  "sta-paths: ${CELL_LIB}_${CORNER}.lib liberty not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
+require_pdk_file "ihp-sg13g2/libs.ref/$CELL_LIB/lef/sg13g2_stdcell.lef" \
+  "sta-paths: SG13G2 stdcell LEF not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
 cat >"$OUT/sta_request.json" <<J
 {"schema":"klt.sta.request/1","verilog":"$ROOT/rtl/synth/${TOP}_synth.v","hdl_toplevel":"$TOP",
- "pdk":{"cell_library":"sg13g2_stdcell","corner":"$CORNER"},
+ "pdk":{"cell_library":"$CELL_LIB","corner":"$CORNER"},
  "constraints":{"clock_port":"clk","clock_period_ns":$PERIOD}}
 J
 "${KLT[@]}" sta "$OUT/sta_request.json" --format json >"$OUT/klt_sta.json"
-S="$PDK_ROOT/ihp-sg13g2/libs.ref/sg13g2_stdcell"
-sed -e "s|@LIB@|$S/lib/sg13g2_stdcell_$CORNER.lib|" -e "s|@LEF_TECH@|$S/lef/sg13g2_tech.lef|" \
+S="$PDK_ROOT/ihp-sg13g2/libs.ref/$CELL_LIB"
+sed -e "s|@LIB@|$S/lib/${CELL_LIB}_${CORNER}.lib|" -e "s|@LEF_TECH@|$S/lef/sg13g2_tech.lef|" \
     -e "s|@LEF_CELL@|$S/lef/sg13g2_stdcell.lef|" -e "s|@NETLIST@|$ROOT/rtl/synth/${TOP}_synth.v|" \
     -e "s|@TOP@|$TOP|" -e "s|@PERIOD@|$PERIOD|" "$ROOT/scripts/sta-paths.tcl" >"$OUT/sta-paths.run.tcl"
 openroad -no_init -exit "$OUT/sta-paths.run.tcl" >"$OUT/paths.txt" 2>&1

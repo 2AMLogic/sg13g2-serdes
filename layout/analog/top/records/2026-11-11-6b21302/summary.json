@@ -1,0 +1,128 @@
+{
+ "top": "serdes_analog_top",
+ "partition": {
+  "tx_top": [
+   {
+    "cell": "tx_lvl_cml2cmos",
+    "x_um": 0.0,
+    "y_um": 0.0,
+    "w_um": 65.04,
+    "h_um": 7.26
+   },
+   {
+    "cell": "driver_ffe",
+    "x_um": 85.04,
+    "y_um": 0.0,
+    "w_um": 113.98,
+    "h_um": 116.32
+   },
+   {
+    "cell": "predriver",
+    "x_um": 219.02,
+    "y_um": 0.0,
+    "w_um": 106.4,
+    "h_um": 28.01
+   },
+   {
+    "cell": "mux2to1_cml",
+    "x_um": 345.42,
+    "y_um": 0.0,
+    "w_um": 110.18,
+    "h_um": 100.3
+   },
+   {
+    "cell": "ffe_en",
+    "x_um": 475.6,
+    "y_um": 0.0,
+    "w_um": 118.724,
+    "h_um": 42.1
+   },
+   {
+    "cell": "bias",
+    "x_um": 614.324,
+    "y_um": 0.0,
+    "w_um": 103.25,
+    "h_um": 13.3
+   },
+   {
+    "cell": "pad_esd",
+    "x_um": 737.574,
+    "y_um": 0.0,
+    "w_um": 180.0,
+    "h_um": 137.055
+   }
+  ],
+  "rx_top": [
+   {
+    "cell": "lvl_cml2cmos",
+    "x_um": 0.0,
+    "y_um": 0.0,
+    "w_um": 22.69,
+    "h_um": 12.64
+   },
+   {
+    "cell": "clk_buf_quad",
+    "x_um": 42.69,
+    "y_um": 0.0,
+    "w_um": 102.89,
+    "h_um": 17.52
+   },
+   {
+    "cell": "latch_cml",
+    "x_um": 165.58,
+    "y_um": 0.0,
+    "w_um": 107.4,
+    "h_um": 10.53
+   },
+   {
+    "cell": "ctle",
+    "x_um": 292.98,
+    "y_um": 0.0,
+    "w_um": 160.88,
+    "h_um": 75.1
+   },
+   {
+    "cell": "rx_term_pad",
+    "x_um": 473.86,
+    "y_um": 0.0,
+    "w_um": 89.22,
+    "h_um": 67.05
+   }
+  ]
+ },
+ "sources": [
+  {
+   "stream": "layout/analog/tx/records/2026-11-11-835e58e/tx_core_lib.gds",
+   "top_cells": [
+    "tx_lvl_cml2cmos",
+    "driver_ffe",
+    "predriver",
+    "mux2to1_cml",
+    "ffe_en",
+    "bias"
+   ]
+  },
+  {
+   "stream": "layout/analog/pads/records/2026-11-11-835e58e/pad_esd.gds",
+   "top_cells": [
+    "pad_esd"
+   ]
+  },
+  {
+   "stream": "layout/analog/rx/records/2026-11-11-835e58e/rx_core.gds",
+   "top_cells": [
+    "lvl_cml2cmos",
+    "clk_buf_quad",
+    "latch_cml",
+    "ctle"
+   ]
+  },
+  {
+   "stream": "layout/analog/pads/records/2026-11-11-835e58e/rx_term_pad.gds",
+   "top_cells": [
+    "rx_term_pad"
+   ]
+  }
+ ],
+ "claims": "placed only; no routing/DRC/LVS/extraction/capacitance/5 GHz claim"
+}

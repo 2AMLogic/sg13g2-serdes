@@ -1,0 +1,6 @@
+* extracted by klt extract --deck sg13g2
+
+* cell ctle_XQa0
+* pin vsubs
+.SUBCKT ctle_XQa0 vsubs
+.ENDS ctle_XQa0

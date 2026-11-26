@@ -2,16 +2,34 @@
   "schema_version": 1,
   "kind": "t1-attestation-inventory",
   "t1_item": 10,
-  "description": "Repo hygiene: README (what the block is, spec table, Reproduce), license, CI workflow and the scripts it runs.",
+  "description": "Repo hygiene: README (what the block is, spec table, Reproduce), license, CI workflow and the scripts it runs. Membership rule: the hygiene list attests the harness self-tests that gate CI (every scripts/test-*.sh / sim/tools/test-*.sh run from check_harness()) plus the scripts, libs and regenerators the CI workflow depends on; the check-*-fresh.sh freshness gates are covered by the fresh axis and are not individually listed.",
   "hygiene": [
     "README.md",
     "LICENSE",
     ".github/workflows/ci.yml",
     "scripts/check-ci.sh",
+    "scripts/erc-fresh-lib.sh",
+    "scripts/analog-cell-evidence-lib.sh",
+    "scripts/klt-lib.sh",
+    "scripts/pnr-regen.sh",
+    "scripts/lvs-regen.sh",
+    "scripts/erc-regen.sh",
+    "scripts/synth-regen.sh",
+    "scripts/test-reserve-record-dir.sh",
+    "scripts/test-pnr-fresh-liberty.sh",
+    "scripts/test-synth-fresh-liberty.sh",
+    "scripts/test-synth-missing-yosys.sh",
+    "scripts/test-sta-paths-liberty.sh",
+    "sim/bench/gen_inventory.py",
+    "sim/bench/test_link_bench.py",
+    "sim/bench/test_gen_inventory.py",
+    "sim/tools/test-record-dir.sh",
+    "sim/tools/record-dir.sh",
     "package.json"
   ],
   "checks": [
     {"name": "ci-json", "argv": ["scripts/check-ci.sh", "json"]},
-    {"name": "ci-links", "argv": ["scripts/check-ci.sh", "links"]}
+    {"name": "ci-links", "argv": ["scripts/check-ci.sh", "links"]},
+    {"name": "ci-fresh", "argv": ["scripts/check-ci.sh", "fresh"]}
   ]
 }

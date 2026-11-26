@@ -5,12 +5,12 @@
     python3 -I sim/bench/gen_inventory.py --check    # exit 1 if the committed file differs
 
 The inventory is derived, never hand-edited, so it cannot drift from the bench files.
-Each bench contributes one testbench entry per request file (analog) or per cocotb
+Each bench contributes one testbench entry per request file (analog), per behavioural source file (benches.json
+behavioural_sources: the model, not the entry point), or per cocotb
 test module (digital), each with its own cold-start command. Cold starts are
 local_only: they need klt, jq, iverilog and a cocotb uvx environment, which the CI
 runner does not provision, so `--attest 9 --check` in CI re-hashes the files and
 carries the committed outcome (re-run with --attest 9 -o on a provisioned host).
-test module (digital), each with its own cold-start command.
 """
 import json
 import pathlib
@@ -26,15 +26,35 @@ def build():
     tools = json.loads((REPO / "sim/toolchain.json").read_text())
     rtl = json.loads((REPO / "layout/tools.json").read_text())
     lock = json.loads((REPO / "reuse.lock.json").read_text())["imports"][0]
-    klt = (REPO / "scripts/klt-pin.env").read_text().split("=")[1].strip()
+    klt_install = json.loads((REPO / "layout/toolchain.json").read_text())["klt_install"]
+    klt = klt_install.removeprefix("klayout-tools==")
+    if not klt:
+        sys.exit("layout/toolchain.json: klt_install missing or empty")
     benches = []
     for b in man["benches"]:
         if b["partition"] == "digital":
             paths = [(f"rtl/tests/test_{b['rtl_bench']}.py", ["scripts/run-bench.sh", b["id"]])]
+        elif b["partition"] == "behavioural":
+            paths = []  # inventoried once per model source file, below
         else:
             paths = [(r, ["scripts/run-bench.sh", b["id"], "--request", r]) for r in b["requests"]]
         for path, argv in paths:
             benches.append({"path": path, "cold_start": {"argv": argv, "timeout_s": 300, "local_only": True}})
+    # klt refuses a path listed twice, so each behavioural source file carries one bench's cold start.
+    # run-bench.sh only sees the id at cold start (local_only, never in CI), so a typo'd
+    # behavioural_sources entry must fail here -- in build(), so --check mode fails too.
+    partitions = {b["id"]: b["partition"] for b in man["benches"]}
+    for src in man["behavioural_sources"]:
+        if src["bench"] not in partitions:
+            sys.exit(f"sim/bench/benches.json: behavioural_sources bench '{src['bench']}' is not a benches[].id")
+        if partitions[src["bench"]] != "behavioural":
+            sys.exit(f"sim/bench/benches.json: behavioural_sources bench '{src['bench']}' has partition "
+                     f"'{partitions[src['bench']]}', not 'behavioural'")
+        if not (REPO / src["path"]).is_file():
+            sys.exit(f"sim/bench/benches.json: behavioural_sources path '{src['path']}' does not exist")
+    for src in man["behavioural_sources"]:
+        benches.append({"path": src["path"],
+                        "cold_start": {"argv": ["scripts/run-bench.sh", src["bench"]], "timeout_s": 300, "local_only": True}})
     benches.append({"path": "sim/bench/benches.json",
                     "cold_start": {"argv": ["scripts/run-bench.sh", "--list"], "local_only": True}})
     return {

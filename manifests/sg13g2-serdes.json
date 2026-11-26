@@ -4,20 +4,50 @@
   "evidence": {
     "1": {
       "file": "manifests/evidence/item1.json",
-      "content_hash": "sha256:efbb3cf1945ab98343c0d3004507b0b194199e993b9c4f2bc7d675c4d44a4ed3"
+      "content_hash": "sha256:abe33cf3f6b8b92271edc0da049d75a50a452a9a4040d30eb7a99045b8774e58"
     },
     "9": {
       "file": "manifests/evidence/item9.json",
-      "content_hash": "sha256:5f68f3b0037410e8c37ec50dbedbc7d75b602f7a7141d41b128b962800be8eb0"
+      "content_hash": "sha256:96df56d06c0a07d3753763c97144b85b31d33ca382b7802bacd945493d1b8ca6"
     },
     "10": {
       "file": "manifests/evidence/item10.json",
-      "content_hash": "sha256:0ae256afaa7bd7ec2e913a54da8703f403df6c8fa172cf1fac0404f1d8b0447e"
+      "content_hash": "sha256:bc3b07e39c53db105a160481b1175e0a6f1fb8b9bd0c6c38b792ac6b4b25dc53"
     },
     "2.digital": {
       "file": "manifests/evidence/item2.json",
-      "content_hash": "sha256:24be966f1f92c9d0355a8325d5e8e00c07b90dfcd5f53ad305d439529d4fdf23"
-    }
+      "content_hash": "sha256:2d781d749448a8b2607b2ca3fb576767b0fddd6a8f231715cd6306fc077c2182"
+    },
+    "2.analog": {
+      "file": "manifests/evidence/item2.analog-top.json",
+      "content_hash": "sha256:17f981b294eb2daf015fc7abe249d07680a65c73c619aa57f2565aee2856985e"
+    },
+    "3.digital": {
+      "file": "layout/digital/records/2026-11-21-eec180f/drc.json",
+      "content_hash": "sha256:2d781d749448a8b2607b2ca3fb576767b0fddd6a8f231715cd6306fc077c2182"
+    },
+    "3.analog": {
+      "file": "layout/analog/top/records/2026-11-12-0193777/drc.json",
+      "content_hash": "sha256:17f981b294eb2daf015fc7abe249d07680a65c73c619aa57f2565aee2856985e"
+    },
+    "4.digital": {
+      "file": "manifests/evidence/item4.json",
+      "content_hash": "sha256:2995f15b44717ebc7e625f0b1978fe5e17a28a26d34f0bd84dfe75ff8e2d6e30"
+    },
+    "11.digital": [
+      {
+        "file": "layout/digital/erc-records/2026-11-23-51dde9f/erc.report.json",
+        "content_hash": "sha256:2d781d749448a8b2607b2ca3fb576767b0fddd6a8f231715cd6306fc077c2182"
+      },
+      {
+        "file": "layout/digital/records/2026-11-21-eec180f/report.json",
+        "content_hash": "sha256:08b90805a96b63df1e768a0055cf664b94796e26108ff1ada66ba285d709c7d8"
+      },
+      {
+        "file": "manifests/evidence/item4.json",
+        "content_hash": "sha256:2995f15b44717ebc7e625f0b1978fe5e17a28a26d34f0bd84dfe75ff8e2d6e30"
+      }
+    ]
   },
   "partition_boundary": {
     "analog": "design/tx and design/rx CML cells (HBT CML from the serial pad down to the 625 MHz word boundary, including the CML-to-CMOS level converter design/rx/lvl_cml2cmos and its TX counterpart); the pads and ESD",

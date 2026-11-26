@@ -12,12 +12,14 @@ set -uo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "${HERE}/../.." && pwd)"
+# shellcheck source=../tools/record-dir.sh
+. "${REPO_DIR}/sim/tools/record-dir.sh"
 command -v klt >/dev/null 2>&1 || { echo "run_smoke.sh: klt not on PATH -- 'source scripts/env.sh' after scripts/setup-env.sh" >&2; exit 3; }
 [[ -n "${PDK_ROOT:-}" ]] || { echo "run_smoke.sh: PDK_ROOT unset -- 'source scripts/env.sh'" >&2; exit 3; }
 
-ID="$(date -u +%Y%m%d-%H%M%S)-$(git -C "${REPO_DIR}" rev-parse --short HEAD)"
-OUT="${HERE}/records/${ID}"
-mkdir -p "${OUT}"
+# Exclusive reservation: a same-second relaunch refuses instead of overwriting
+# the saved record (issue #202).
+OUT="$(reserve_sim_record_dir "${HERE}/records")" || exit 3
 
 rc=0
 for req in hbt_gummel mos_inv_dc mixed_tran; do

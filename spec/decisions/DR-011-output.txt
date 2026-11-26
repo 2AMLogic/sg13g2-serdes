@@ -1,0 +1,640 @@
+# DR-011 raw output (simulated/extrapolated; nothing measured). Commands: python3 -I sim/bench/link_bench.py <r15|r12|r11|r13> --corners full [candidate flags]; python3 -I sim/bench/link_sensitivity.py --section arch
+
+##### [0-RTL-KP16-KI1] link_bench.py r15 --corners full 
+== R15: R15 PRBS-31 statistical eye + CDR, 1e-12 by dual-Dirac extrapolation ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+CDR recovered-clock jitter feeds the eye (DR-002 step d): PRBS-31, 0 ppm, locked
+  recovered-clock error: rms 0.1053 UI, peak 0.2188 UI [simulated (behavioural bang-bang, loop per above; vote noise UNFITTED)]
+
+corner                 floor BER   width@1e-12 (extrap.)  fit resid  direct BER@best  w/o CDR jitter  label
+hbt_typ/1.080V/-40C    1.60e-05         FAILED                 -     1.60e-05             +0.368 UI  extrapolation failed: bathtub floor 1.60e-05 never reaches 1e-09: no data to extrapolate from
+hbt_typ/1.080V/27C     1.65e-05         FAILED                 -     1.65e-05             +0.373 UI  extrapolation failed: bathtub floor 1.65e-05 never reaches 1e-09: no data to extrapolate from
+hbt_typ/1.080V/125C    1.65e-05         FAILED                 -     1.65e-05             +0.375 UI  extrapolation failed: bathtub floor 1.65e-05 never reaches 1e-09: no data to extrapolate from
+hbt_typ/1.200V/-40C    1.70e-05         FAILED                 -     1.70e-05             +0.372 UI  extrapolation failed: bathtub floor 1.70e-05 never reaches 1e-09: no data to extrapolate from
+hbt_typ/1.200V/27C     1.72e-05         FAILED                 -     1.72e-05             +0.371 UI  extrapolation failed: bathtub floor 1.72e-05 never reaches 1e-09: no data to extrapolate from
+hbt_typ/1.200V/125C    1.69e-05         FAILED                 -     1.69e-05             +0.373 UI  extrapolation failed: bathtub floor 1.69e-05 never reaches 1e-09: no data to extrapolate from
+hbt_typ/1.320V/-40C    1.73e-05         FAILED                 -     1.73e-05             +0.371 UI  extrapolation failed: bathtub floor 1.73e-05 never reaches 1e-09: no data to extrapolate from
+hbt_typ/1.320V/27C     1.75e-05         FAILED                 -     1.75e-05             +0.369 UI  extrapolation failed: bathtub floor 1.75e-05 never reaches 1e-09: no data to extrapolate from
+hbt_typ/1.320V/125C    1.67e-05         FAILED                 -     1.67e-05             +0.375 UI  extrapolation failed: bathtub floor 1.67e-05 never reaches 1e-09: no data to extrapolate from
+hbt_bcs/1.080V/-40C    1.93e-05         FAILED                 -     1.93e-05             +0.350 UI  extrapolation failed: bathtub floor 1.93e-05 never reaches 1e-09: no data to extrapolate from
+hbt_bcs/1.080V/27C     1.93e-05         FAILED                 -     1.93e-05             +0.357 UI  extrapolation failed: bathtub floor 1.93e-05 never reaches 1e-09: no data to extrapolate from
+hbt_bcs/1.080V/125C    1.86e-05         FAILED                 -     1.86e-05             +0.363 UI  extrapolation failed: bathtub floor 1.86e-05 never reaches 1e-09: no data to extrapolate from
+hbt_bcs/1.200V/-40C    2.00e-05         FAILED                 -     2.00e-05             +0.355 UI  extrapolation failed: bathtub floor 2.00e-05 never reaches 1e-09: no data to extrapolate from
+hbt_bcs/1.200V/27C     1.98e-05         FAILED                 -     1.98e-05             +0.357 UI  extrapolation failed: bathtub floor 1.98e-05 never reaches 1e-09: no data to extrapolate from
+hbt_bcs/1.200V/125C    1.87e-05         FAILED                 -     1.87e-05             +0.364 UI  extrapolation failed: bathtub floor 1.87e-05 never reaches 1e-09: no data to extrapolate from
+hbt_bcs/1.320V/-40C    2.03e-05         FAILED                 -     2.03e-05             +0.355 UI  extrapolation failed: bathtub floor 2.03e-05 never reaches 1e-09: no data to extrapolate from
+hbt_bcs/1.320V/27C     1.99e-05         FAILED                 -     1.99e-05             +0.357 UI  extrapolation failed: bathtub floor 1.99e-05 never reaches 1e-09: no data to extrapolate from
+hbt_bcs/1.320V/125C    1.74e-05         FAILED                 -     1.74e-05             +0.369 UI  extrapolation failed: bathtub floor 1.74e-05 never reaches 1e-09: no data to extrapolate from
+hbt_wcs/1.080V/-40C    1.34e-05         FAILED                 -     1.34e-05             +0.383 UI  extrapolation failed: bathtub floor 1.34e-05 never reaches 1e-09: no data to extrapolate from
+hbt_wcs/1.080V/27C     1.43e-05         FAILED                 -     1.43e-05             +0.385 UI  extrapolation failed: bathtub floor 1.43e-05 never reaches 1e-09: no data to extrapolate from
+hbt_wcs/1.080V/125C    1.52e-05         FAILED                 -     1.52e-05             +0.379 UI  extrapolation failed: bathtub floor 1.52e-05 never reaches 1e-09: no data to extrapolate from
+hbt_wcs/1.200V/-40C    1.46e-05         FAILED                 -     1.46e-05             +0.386 UI  extrapolation failed: bathtub floor 1.46e-05 never reaches 1e-09: no data to extrapolate from
+hbt_wcs/1.200V/27C     1.54e-05         FAILED                 -     1.54e-05             +0.379 UI  extrapolation failed: bathtub floor 1.54e-05 never reaches 1e-09: no data to extrapolate from
+hbt_wcs/1.200V/125C    1.61e-05         FAILED                 -     1.61e-05             +0.373 UI  extrapolation failed: bathtub floor 1.61e-05 never reaches 1e-09: no data to extrapolate from
+hbt_wcs/1.320V/-40C    1.52e-05         FAILED                 -     1.52e-05             +0.383 UI  extrapolation failed: bathtub floor 1.52e-05 never reaches 1e-09: no data to extrapolate from
+hbt_wcs/1.320V/27C     1.60e-05         FAILED                 -     1.60e-05             +0.375 UI  extrapolation failed: bathtub floor 1.60e-05 never reaches 1e-09: no data to extrapolate from
+hbt_wcs/1.320V/125C    1.67e-05         FAILED                 -     1.67e-05             +0.375 UI  extrapolation failed: bathtub floor 1.67e-05 never reaches 1e-09: no data to extrapolate from
+
+worst eye width at BER 1e-12: n/a; extrapolation failures: 27
+BER figures are simulated/extrapolated, not measured. Fit validation on held-out corners (DR-002 step 3) is NOT done: there is no transistor-level link-level result to validate against.
+result: a proposed-spec threshold is NOT met (see above)
+
+##### [0-RTL-KP16-KI1] link_bench.py r12 --corners full 
+== R12: R12 sinusoidal jitter tolerance vs mask ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+SJ sweep through the behavioural CDR: peak recovered-clock error vs SJ amplitude (UIpp), per frequency
+Strict tolerance = largest amplitude whose peak error stays within half the 1e-12 eye width of the corner (eye without CDR jitter; the CDR's own dither is in the peak error). 0.00 = the eye is already consumed at the smallest swept amplitude. Slip-free bound = largest amplitude with peak error < 0.5 UI.
+corner                 eye@1e-12      0.1M     0.3M       1M       3M      10M      30M     100M   vs mask
+hbt_typ/1.080V/-40C    +0.368 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_typ/1.080V/27C     +0.373 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_typ/1.080V/125C    +0.375 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_typ/1.200V/-40C    +0.372 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_typ/1.200V/27C     +0.371 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_typ/1.200V/125C    +0.373 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_typ/1.320V/-40C    +0.371 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_typ/1.320V/27C     +0.369 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_typ/1.320V/125C    +0.375 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_bcs/1.080V/-40C    +0.350 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_bcs/1.080V/27C     +0.357 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_bcs/1.080V/125C    +0.363 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_bcs/1.200V/-40C    +0.355 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_bcs/1.200V/27C     +0.357 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_bcs/1.200V/125C    +0.364 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_bcs/1.320V/-40C    +0.355 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_bcs/1.320V/27C     +0.357 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_bcs/1.320V/125C    +0.369 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_wcs/1.080V/-40C    +0.383 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_wcs/1.080V/27C     +0.385 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_wcs/1.080V/125C    +0.379 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_wcs/1.200V/-40C    +0.386 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_wcs/1.200V/27C     +0.379 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_wcs/1.200V/125C    +0.373 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_wcs/1.320V/-40C    +0.383 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_wcs/1.320V/27C     +0.375 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+hbt_wcs/1.320V/125C    +0.375 UI     0.00     0.00     0.00     0.00     0.00     0.00     0.00   BELOW MASK
+slip-free bound (corner-independent)    30.00    30.00     9.70     0.70     0.33     0.48     0.48
+mask UIpp                            15.00     5.00     1.50     0.50     0.15     0.15     0.15
+labels: eye width = extrapolated (dual-Dirac Q-scale wall fit, BER 1e-9..1e-4) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac); tolerance = simulated (behavioural bang-bang). Not measured. Grid ceiling 30 UIpp: a value of 30 means 'at least'.
+result: a proposed-spec threshold is NOT met (see above)
+
+##### [0-RTL-KP16-KI1] link_bench.py r11 --corners full 
+== R11: R11 CDR lock/hold (behavioural bang-bang) ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+Lock/hold of the behavioural CDR from a 0.4 UI initial phase offset (lock = 64-word mean of e within 0.05 UI for the rest of the run)
+ppm     lock after (words)   hold: peak |e| UI   rms UI   slips   label
+   +0        35872           0.2125              0.1051     0    simulated (behavioural bang-bang) DOES NOT LOCK/HOLD
+ +300        33020           0.2079              0.1050     0    simulated (behavioural bang-bang) DOES NOT LOCK/HOLD
+ -300        38436           0.2492              0.1059     0    simulated (behavioural bang-bang) DOES NOT LOCK/HOLD
+PVT-edge: the loop model has no per-corner input (PI/sampler delay and aperture jitter have no record). The latch fit enters through R12's eye; R11 is corner-independent and says so.
+result: a proposed-spec threshold is NOT met (see above)
+
+##### [0-RTL-KP16-KI1] link_bench.py r13 --corners full 
+== R13: R13 +-300 ppm offset, slips over 1e6 UI ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+Frequency offset: lock for 30000 words, then count slips (|e| >= 0.5 UI) over 1000000 UI
+ppm     analog delay   peak |e| UI   slips   label
+ +300   assumed        0.2542            0   simulated (behavioural bang-bang) no slips
+ +300   0 (sens.)      0.1759            0   simulated (behavioural bang-bang) no slips
+ +300   2 (sens.)      0.2795            0   simulated (behavioural bang-bang) no slips
+ -300   assumed        0.2143            0   simulated (behavioural bang-bang) no slips
+ -300   0 (sens.)      0.1721            0   simulated (behavioural bang-bang) no slips
+ -300   2 (sens.)      0.2790            0   simulated (behavioural bang-bang) no slips
+ +500   assumed        0.2203            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ +500   0 (sens.)      0.1782            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ +500   2 (sens.)      0.2964            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ -500   assumed        0.2360            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ -500   0 (sens.)      0.1695            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ -500   2 (sens.)      0.2742            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+PVT-edge: corner-independent in this model (see r11); analog delay sensitivity shown instead.
+proposed R13 (+-300 ppm, zero slips over 1e6 UI): MET
+result: thresholds met
+
+##### [1-DR009-KP8-KI0] link_bench.py r15 --corners full --kp 8 --ki 0
+== R15: R15 PRBS-31 statistical eye + CDR, 1e-12 by dual-Dirac extrapolation ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+LOOP WHAT-IF: KP=8 KI=0 override the RTL values in the MODEL only (simulated what-if; rtl/ is unchanged)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+CDR recovered-clock jitter feeds the eye (DR-002 step d): PRBS-31, 0 ppm, locked
+  recovered-clock error: rms 0.0286 UI, peak 0.0625 UI [simulated (behavioural bang-bang, loop per above; vote noise UNFITTED)]
+
+corner                 floor BER   width@1e-12 (extrap.)  fit resid  direct BER@best  w/o CDR jitter  label
+hbt_typ/1.080V/-40C    5.56e-22      +0.218 UI             0.017     5.56e-22             +0.368 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.080V/27C     2.26e-22      +0.219 UI             0.018     2.26e-22             +0.373 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.080V/125C    1.73e-22      +0.220 UI             0.019     1.73e-22             +0.375 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.200V/-40C    2.11e-22      +0.217 UI             0.019     2.11e-22             +0.372 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.200V/27C     2.52e-22      +0.216 UI             0.019     2.52e-22             +0.371 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.200V/125C    2.10e-22      +0.217 UI             0.019     2.10e-22             +0.373 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.320V/-40C    2.32e-22      +0.215 UI             0.019     2.32e-22             +0.371 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.320V/27C     2.91e-22      +0.214 UI             0.019     2.91e-22             +0.369 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.320V/125C    1.62e-22      +0.219 UI             0.019     1.62e-22             +0.375 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.080V/-40C    4.45e-21      +0.200 UI             0.014     4.45e-21             +0.350 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.080V/27C     1.88e-21      +0.203 UI             0.014     1.88e-21             +0.357 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.080V/125C    9.12e-22      +0.209 UI             0.014     9.12e-22             +0.363 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.200V/-40C    2.07e-21      +0.201 UI             0.015     2.07e-21             +0.355 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.200V/27C     1.75e-21      +0.202 UI             0.015     1.75e-21             +0.357 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.200V/125C    8.17e-22      +0.209 UI             0.014     8.17e-22             +0.364 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.320V/-40C    2.04e-21      +0.200 UI             0.015     2.04e-21             +0.355 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.320V/27C     1.71e-21      +0.202 UI             0.015     1.71e-21             +0.357 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.320V/125C    3.04e-22      +0.214 UI             0.019     3.04e-22             +0.369 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.080V/-40C    8.43e-23      +0.234 UI             0.012     8.43e-23             +0.383 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.080V/27C     3.14e-23      +0.232 UI             0.013     3.14e-23             +0.385 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.080V/125C    5.71e-23      +0.226 UI             0.014     5.71e-23             +0.379 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.200V/-40C    1.91e-23      +0.231 UI             0.014     1.91e-23             +0.386 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.200V/27C     4.80e-23      +0.225 UI             0.014     4.80e-23             +0.379 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.200V/125C    1.10e-22      +0.219 UI             0.014     1.10e-22             +0.373 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.320V/-40C    2.56e-23      +0.228 UI             0.014     2.56e-23             +0.383 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.320V/27C     7.46e-23      +0.221 UI             0.015     7.46e-23             +0.375 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.320V/125C    1.65e-22      +0.219 UI             0.019     1.65e-22             +0.375 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+
+worst eye width at BER 1e-12: +0.200 UI; extrapolation failures: 0
+BER figures are simulated/extrapolated, not measured. Fit validation on held-out corners (DR-002 step 3) is NOT done: there is no transistor-level link-level result to validate against.
+result: thresholds met
+
+##### [1-DR009-KP8-KI0] link_bench.py r12 --corners full --kp 8 --ki 0
+== R12: R12 sinusoidal jitter tolerance vs mask ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+LOOP WHAT-IF: KP=8 KI=0 override the RTL values in the MODEL only (simulated what-if; rtl/ is unchanged)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+SJ sweep through the behavioural CDR: peak recovered-clock error vs SJ amplitude (UIpp), per frequency
+Strict tolerance = largest amplitude whose peak error stays within half the 1e-12 eye width of the corner (eye without CDR jitter; the CDR's own dither is in the peak error). 0.00 = the eye is already consumed at the smallest swept amplitude. Slip-free bound = largest amplitude with peak error < 0.5 UI.
+corner                 eye@1e-12      0.1M     0.3M       1M       3M      10M      30M     100M   vs mask
+hbt_typ/1.080V/-40C    +0.368 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.080V/27C     +0.373 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.080V/125C    +0.375 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.200V/-40C    +0.372 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.200V/27C     +0.371 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.200V/125C    +0.373 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.320V/-40C    +0.371 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.320V/27C     +0.369 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.320V/125C    +0.375 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.080V/-40C    +0.350 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.080V/27C     +0.357 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.080V/125C    +0.363 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.200V/-40C    +0.355 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.200V/27C     +0.357 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.200V/125C    +0.364 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.320V/-40C    +0.355 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.320V/27C     +0.357 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.320V/125C    +0.369 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_wcs/1.080V/-40C    +0.383 UI    15.00     5.00     1.50     0.50     0.23     0.23     0.23   meets
+hbt_wcs/1.080V/27C     +0.385 UI    15.00     5.00     1.50     0.50     0.23     0.23     0.23   meets
+hbt_wcs/1.080V/125C    +0.379 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_wcs/1.200V/-40C    +0.386 UI    15.00     5.00     1.50     0.50     0.23     0.23     0.23   meets
+hbt_wcs/1.200V/27C     +0.379 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_wcs/1.200V/125C    +0.373 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_wcs/1.320V/-40C    +0.383 UI    15.00     5.00     1.50     0.50     0.23     0.23     0.23   meets
+hbt_wcs/1.320V/27C     +0.375 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_wcs/1.320V/125C    +0.375 UI    15.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+slip-free bound (corner-independent)    15.00     5.00     2.15     1.01     0.70     0.70     0.70
+mask UIpp                            15.00     5.00     1.50     0.50     0.15     0.15     0.15
+labels: eye width = extrapolated (dual-Dirac Q-scale wall fit, BER 1e-9..1e-4) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac); tolerance = simulated (behavioural bang-bang). Not measured. Grid ceiling 30 UIpp: a value of 30 means 'at least'.
+result: thresholds met
+
+##### [1-DR009-KP8-KI0] link_bench.py r11 --corners full --kp 8 --ki 0
+== R11: R11 CDR lock/hold (behavioural bang-bang) ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+LOOP WHAT-IF: KP=8 KI=0 override the RTL values in the MODEL only (simulated what-if; rtl/ is unchanged)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+Lock/hold of the behavioural CDR from a 0.4 UI initial phase offset (lock = 64-word mean of e within 0.05 UI for the rest of the run)
+ppm     lock after (words)   hold: peak |e| UI   rms UI   slips   label
+   +0          108           0.0562              0.0282     0    simulated (behavioural bang-bang) locks+holds
+ +300          419           0.0737              0.0134     0    simulated (behavioural bang-bang) locks+holds
+ -300        16416           0.0806              0.0134     0    simulated (behavioural bang-bang) locks+holds
+PVT-edge: the loop model has no per-corner input (PI/sampler delay and aperture jitter have no record). The latch fit enters through R12's eye; R11 is corner-independent and says so.
+result: thresholds met
+
+##### [1-DR009-KP8-KI0] link_bench.py r13 --corners full --kp 8 --ki 0
+== R13: R13 +-300 ppm offset, slips over 1e6 UI ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+LOOP WHAT-IF: KP=8 KI=0 override the RTL values in the MODEL only (simulated what-if; rtl/ is unchanged)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+Frequency offset: lock for 30000 words, then count slips (|e| >= 0.5 UI) over 1000000 UI
+ppm     analog delay   peak |e| UI   slips   label
+ +300   assumed        0.0815            0   simulated (behavioural bang-bang) no slips
+ +300   0 (sens.)      0.0738            0   simulated (behavioural bang-bang) no slips
+ +300   2 (sens.)      0.0906            0   simulated (behavioural bang-bang) no slips
+ -300   assumed        0.0871            0   simulated (behavioural bang-bang) no slips
+ -300   0 (sens.)      0.0786            0   simulated (behavioural bang-bang) no slips
+ -300   2 (sens.)      0.0957            0   simulated (behavioural bang-bang) no slips
+ +500   assumed        22.3360        62500   simulated (behavioural bang-bang) SLIPS (stretch column, not graded)
+ +500   0 (sens.)      22.3280        62500   simulated (behavioural bang-bang) SLIPS (stretch column, not graded)
+ +500   2 (sens.)      22.3440        62500   simulated (behavioural bang-bang) SLIPS (stretch column, not graded)
+ -500   assumed        22.3204        62500   simulated (behavioural bang-bang) SLIPS (stretch column, not graded)
+ -500   0 (sens.)      22.3124        62500   simulated (behavioural bang-bang) SLIPS (stretch column, not graded)
+ -500   2 (sens.)      22.3284        62500   simulated (behavioural bang-bang) SLIPS (stretch column, not graded)
+PVT-edge: corner-independent in this model (see r11); analog delay sensitivity shown instead.
+proposed R13 (+-300 ppm, zero slips over 1e6 UI): MET
+result: thresholds met
+
+##### [2-recommended-KP8-KI1-frac6-decim16] link_bench.py r15 --corners full --kp 8 --ki 1 --frac 6 --decim 16
+== R15: R15 PRBS-31 statistical eye + CDR, 1e-12 by dual-Dirac extrapolation ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+LOOP WHAT-IF: KP=8 KI=1 override the RTL values in the MODEL only (simulated what-if; rtl/ is unchanged)
+ARCH WHAT-IF (DR-011, model only; rtl/ is unchanged): integral frac bits 6, integral decimation 16, gear off (kp_acq,ki_acq,words), vote sum, digital delay 7 (DR-007) words, PI step 2^7 LSB (1/64 UI)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+CDR recovered-clock jitter feeds the eye (DR-002 step d): PRBS-31, 0 ppm, locked
+  recovered-clock error: rms 0.0281 UI, peak 0.0625 UI [simulated (behavioural bang-bang, loop per above; vote noise UNFITTED)]
+
+corner                 floor BER   width@1e-12 (extrap.)  fit resid  direct BER@best  w/o CDR jitter  label
+hbt_typ/1.080V/-40C    2.68e-22      +0.220 UI             0.014     2.68e-22             +0.368 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.080V/27C     1.06e-22      +0.221 UI             0.015     1.06e-22             +0.373 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.080V/125C    8.09e-23      +0.222 UI             0.015     8.09e-23             +0.375 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.200V/-40C    9.89e-23      +0.219 UI             0.015     9.89e-23             +0.372 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.200V/27C     1.18e-22      +0.221 UI             0.020     1.18e-22             +0.371 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.200V/125C    9.85e-23      +0.219 UI             0.015     9.85e-23             +0.373 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.320V/-40C    1.09e-22      +0.221 UI             0.020     1.09e-22             +0.371 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.320V/27C     1.36e-22      +0.219 UI             0.020     1.36e-22             +0.369 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.320V/125C    7.59e-23      +0.221 UI             0.015     7.59e-23             +0.375 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.080V/-40C    2.19e-21      +0.205 UI             0.014     2.19e-21             +0.350 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.080V/27C     8.97e-22      +0.208 UI             0.015     8.97e-22             +0.357 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.080V/125C    4.32e-22      +0.211 UI             0.020     4.32e-22             +0.363 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.200V/-40C    9.87e-22      +0.206 UI             0.015     9.87e-22             +0.355 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.200V/27C     8.30e-22      +0.207 UI             0.015     8.30e-22             +0.357 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.200V/125C    3.86e-22      +0.211 UI             0.020     3.86e-22             +0.364 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.320V/-40C    9.71e-22      +0.205 UI             0.015     9.71e-22             +0.355 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.320V/27C     8.10e-22      +0.207 UI             0.015     8.10e-22             +0.357 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.320V/125C    1.43e-22      +0.219 UI             0.020     1.43e-22             +0.369 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.080V/-40C    4.03e-23      +0.239 UI             0.012     4.03e-23             +0.383 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.080V/27C     1.47e-23      +0.237 UI             0.014     1.47e-23             +0.385 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.080V/125C    2.67e-23      +0.231 UI             0.014     2.67e-23             +0.379 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.200V/-40C    8.85e-24      +0.236 UI             0.014     8.85e-24             +0.386 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.200V/27C     2.23e-23      +0.230 UI             0.015     2.23e-23             +0.379 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.200V/125C    5.14e-23      +0.224 UI             0.015     5.14e-23             +0.373 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.320V/-40C    1.19e-23      +0.233 UI             0.015     1.19e-23             +0.383 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.320V/27C     3.47e-23      +0.226 UI             0.015     3.47e-23             +0.375 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.320V/125C    7.69e-23      +0.221 UI             0.015     7.69e-23             +0.375 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+
+worst eye width at BER 1e-12: +0.205 UI; extrapolation failures: 0
+BER figures are simulated/extrapolated, not measured. Fit validation on held-out corners (DR-002 step 3) is NOT done: there is no transistor-level link-level result to validate against.
+result: thresholds met
+
+##### [2-recommended-KP8-KI1-frac6-decim16] link_bench.py r12 --corners full --kp 8 --ki 1 --frac 6 --decim 16
+== R12: R12 sinusoidal jitter tolerance vs mask ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+LOOP WHAT-IF: KP=8 KI=1 override the RTL values in the MODEL only (simulated what-if; rtl/ is unchanged)
+ARCH WHAT-IF (DR-011, model only; rtl/ is unchanged): integral frac bits 6, integral decimation 16, gear off (kp_acq,ki_acq,words), vote sum, digital delay 7 (DR-007) words, PI step 2^7 LSB (1/64 UI)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+SJ sweep through the behavioural CDR: peak recovered-clock error vs SJ amplitude (UIpp), per frequency
+Strict tolerance = largest amplitude whose peak error stays within half the 1e-12 eye width of the corner (eye without CDR jitter; the CDR's own dither is in the peak error). 0.00 = the eye is already consumed at the smallest swept amplitude. Slip-free bound = largest amplitude with peak error < 0.5 UI.
+corner                 eye@1e-12      0.1M     0.3M       1M       3M      10M      30M     100M   vs mask
+hbt_typ/1.080V/-40C    +0.368 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.080V/27C     +0.373 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.080V/125C    +0.375 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.200V/-40C    +0.372 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.200V/27C     +0.371 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.200V/125C    +0.373 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.320V/-40C    +0.371 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.320V/27C     +0.369 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_typ/1.320V/125C    +0.375 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.080V/-40C    +0.350 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.080V/27C     +0.357 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.080V/125C    +0.363 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.200V/-40C    +0.355 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.200V/27C     +0.357 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.200V/125C    +0.364 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.320V/-40C    +0.355 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.320V/27C     +0.357 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_bcs/1.320V/125C    +0.369 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_wcs/1.080V/-40C    +0.383 UI    30.00     5.00     1.50     0.50     0.23     0.23     0.23   meets
+hbt_wcs/1.080V/27C     +0.385 UI    30.00     5.00     1.50     0.50     0.23     0.23     0.23   meets
+hbt_wcs/1.080V/125C    +0.379 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_wcs/1.200V/-40C    +0.386 UI    30.00     5.00     1.50     0.50     0.23     0.23     0.23   meets
+hbt_wcs/1.200V/27C     +0.379 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_wcs/1.200V/125C    +0.373 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_wcs/1.320V/-40C    +0.383 UI    30.00     5.00     1.50     0.50     0.23     0.23     0.23   meets
+hbt_wcs/1.320V/27C     +0.375 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+hbt_wcs/1.320V/125C    +0.375 UI    30.00     5.00     1.50     0.50     0.15     0.23     0.23   meets
+slip-free bound (corner-independent)    30.00     6.66     1.50     0.70     0.70     0.70     0.70
+mask UIpp                            15.00     5.00     1.50     0.50     0.15     0.15     0.15
+labels: eye width = extrapolated (dual-Dirac Q-scale wall fit, BER 1e-9..1e-4) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac); tolerance = simulated (behavioural bang-bang). Not measured. Grid ceiling 30 UIpp: a value of 30 means 'at least'.
+result: thresholds met
+
+##### [2-recommended-KP8-KI1-frac6-decim16] link_bench.py r11 --corners full --kp 8 --ki 1 --frac 6 --decim 16
+== R11: R11 CDR lock/hold (behavioural bang-bang) ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+LOOP WHAT-IF: KP=8 KI=1 override the RTL values in the MODEL only (simulated what-if; rtl/ is unchanged)
+ARCH WHAT-IF (DR-011, model only; rtl/ is unchanged): integral frac bits 6, integral decimation 16, gear off (kp_acq,ki_acq,words), vote sum, digital delay 7 (DR-007) words, PI step 2^7 LSB (1/64 UI)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+Lock/hold of the behavioural CDR from a 0.4 UI initial phase offset (lock = 64-word mean of e within 0.05 UI for the rest of the run)
+ppm     lock after (words)   hold: peak |e| UI   rms UI   slips   label
+   +0          104           0.0562              0.0282     0    simulated (behavioural bang-bang) locks+holds
+ +300          264           0.0649              0.0286     0    simulated (behavioural bang-bang) locks+holds
+ -300          155           0.0666              0.0281     0    simulated (behavioural bang-bang) locks+holds
+PVT-edge: the loop model has no per-corner input (PI/sampler delay and aperture jitter have no record). The latch fit enters through R12's eye; R11 is corner-independent and says so.
+result: thresholds met
+
+##### [2-recommended-KP8-KI1-frac6-decim16] link_bench.py r13 --corners full --kp 8 --ki 1 --frac 6 --decim 16
+== R13: R13 +-300 ppm offset, slips over 1e6 UI ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+LOOP WHAT-IF: KP=8 KI=1 override the RTL values in the MODEL only (simulated what-if; rtl/ is unchanged)
+ARCH WHAT-IF (DR-011, model only; rtl/ is unchanged): integral frac bits 6, integral decimation 16, gear off (kp_acq,ki_acq,words), vote sum, digital delay 7 (DR-007) words, PI step 2^7 LSB (1/64 UI)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+Frequency offset: lock for 30000 words, then count slips (|e| >= 0.5 UI) over 1000000 UI
+ppm     analog delay   peak |e| UI   slips   label
+ +300   assumed        0.0670            0   simulated (behavioural bang-bang) no slips
+ +300   0 (sens.)      0.0606            0   simulated (behavioural bang-bang) no slips
+ +300   2 (sens.)      0.0767            0   simulated (behavioural bang-bang) no slips
+ -300   assumed        0.0691            0   simulated (behavioural bang-bang) no slips
+ -300   0 (sens.)      0.0583            0   simulated (behavioural bang-bang) no slips
+ -300   2 (sens.)      0.0751            0   simulated (behavioural bang-bang) no slips
+ +500   assumed        0.0671            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ +500   0 (sens.)      0.0600            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ +500   2 (sens.)      0.0774            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ -500   assumed        0.0684            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ -500   0 (sens.)      0.0640            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ -500   2 (sens.)      0.0780            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+PVT-edge: corner-independent in this model (see r11); analog delay sensitivity shown instead.
+proposed R13 (+-300 ppm, zero slips over 1e6 UI): MET
+result: thresholds met
+
+##### [3-shorter-latency-digital3-RTLgain] link_bench.py r15 --corners full --digital-delay 3
+== R15: R15 PRBS-31 statistical eye + CDR, 1e-12 by dual-Dirac extrapolation ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+ARCH WHAT-IF (DR-011, model only; rtl/ is unchanged): integral frac bits 0, integral decimation 1, gear off (kp_acq,ki_acq,words), vote sum, digital delay 3 words, PI step 2^7 LSB (1/64 UI)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+CDR recovered-clock jitter feeds the eye (DR-002 step d): PRBS-31, 0 ppm, locked
+  recovered-clock error: rms 0.0309 UI, peak 0.0938 UI [simulated (behavioural bang-bang, loop per above; vote noise UNFITTED)]
+
+corner                 floor BER   width@1e-12 (extrap.)  fit resid  direct BER@best  w/o CDR jitter  label
+hbt_typ/1.080V/-40C    1.81e-20      +0.195 UI             0.016     1.81e-20             +0.368 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.080V/27C     1.06e-20      +0.196 UI             0.017     1.06e-20             +0.373 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.080V/125C    8.97e-21      +0.197 UI             0.017     8.97e-21             +0.375 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.200V/-40C    1.10e-20      +0.196 UI             0.013     1.10e-20             +0.372 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.200V/27C     1.27e-20      +0.195 UI             0.013     1.27e-20             +0.371 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.200V/125C    1.09e-20      +0.196 UI             0.013     1.09e-20             +0.373 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.320V/-40C    1.24e-20      +0.194 UI             0.013     1.24e-20             +0.371 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.320V/27C     1.47e-20      +0.193 UI             0.013     1.47e-20             +0.369 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_typ/1.320V/125C    9.08e-21      +0.198 UI             0.013     9.08e-21             +0.375 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.080V/-40C    1.13e-19      +0.180 UI             0.016     1.13e-19             +0.350 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.080V/27C     6.09e-20      +0.183 UI             0.017     6.09e-20             +0.357 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.080V/125C    3.45e-20      +0.185 UI             0.013     3.45e-20             +0.363 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.200V/-40C    6.98e-20      +0.181 UI             0.017     6.98e-20             +0.355 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.200V/27C     6.09e-20      +0.182 UI             0.017     6.09e-20             +0.357 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.200V/125C    3.24e-20      +0.185 UI             0.013     3.24e-20             +0.364 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.320V/-40C    7.08e-20      +0.180 UI             0.017     7.08e-20             +0.355 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.320V/27C     6.08e-20      +0.182 UI             0.017     6.08e-20             +0.357 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_bcs/1.320V/125C    1.48e-20      +0.193 UI             0.013     1.48e-20             +0.369 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.080V/-40C    3.36e-21      +0.214 UI             0.014     3.36e-21             +0.383 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.080V/27C     2.16e-21      +0.212 UI             0.016     2.16e-21             +0.385 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.080V/125C    3.70e-21      +0.206 UI             0.016     3.70e-21             +0.379 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.200V/-40C    1.78e-21      +0.211 UI             0.016     1.78e-21             +0.386 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.200V/27C     3.54e-21      +0.205 UI             0.016     3.54e-21             +0.379 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.200V/125C    6.51e-21      +0.199 UI             0.017     6.51e-21             +0.373 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.320V/-40C    2.40e-21      +0.207 UI             0.016     2.40e-21             +0.383 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.320V/27C     5.14e-21      +0.201 UI             0.017     5.14e-21             +0.375 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+hbt_wcs/1.320V/125C    9.08e-21      +0.198 UI             0.013     9.08e-21             +0.375 UI  extrapolated (dual-Dirac Q-scale wall fit, BER 1e-09..1e-04) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+
+worst eye width at BER 1e-12: +0.180 UI; extrapolation failures: 0
+BER figures are simulated/extrapolated, not measured. Fit validation on held-out corners (DR-002 step 3) is NOT done: there is no transistor-level link-level result to validate against.
+result: thresholds met
+
+##### [3-shorter-latency-digital3-RTLgain] link_bench.py r12 --corners full --digital-delay 3
+== R12: R12 sinusoidal jitter tolerance vs mask ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+ARCH WHAT-IF (DR-011, model only; rtl/ is unchanged): integral frac bits 0, integral decimation 1, gear off (kp_acq,ki_acq,words), vote sum, digital delay 3 words, PI step 2^7 LSB (1/64 UI)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+SJ sweep through the behavioural CDR: peak recovered-clock error vs SJ amplitude (UIpp), per frequency
+Strict tolerance = largest amplitude whose peak error stays within half the 1e-12 eye width of the corner (eye without CDR jitter; the CDR's own dither is in the peak error). 0.00 = the eye is already consumed at the smallest swept amplitude. Slip-free bound = largest amplitude with peak error < 0.5 UI.
+corner                 eye@1e-12      0.1M     0.3M       1M       3M      10M      30M     100M   vs mask
+hbt_typ/1.080V/-40C    +0.368 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_typ/1.080V/27C     +0.373 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_typ/1.080V/125C    +0.375 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_typ/1.200V/-40C    +0.372 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_typ/1.200V/27C     +0.371 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_typ/1.200V/125C    +0.373 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_typ/1.320V/-40C    +0.371 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_typ/1.320V/27C     +0.369 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_typ/1.320V/125C    +0.375 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_bcs/1.080V/-40C    +0.350 UI    30.00    30.00     9.70     1.01     0.23     0.11     0.23   BELOW MASK
+hbt_bcs/1.080V/27C     +0.357 UI    30.00    30.00     9.70     1.01     0.23     0.11     0.23   BELOW MASK
+hbt_bcs/1.080V/125C    +0.363 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_bcs/1.200V/-40C    +0.355 UI    30.00    30.00     9.70     1.01     0.23     0.11     0.23   BELOW MASK
+hbt_bcs/1.200V/27C     +0.357 UI    30.00    30.00     9.70     1.01     0.23     0.11     0.23   BELOW MASK
+hbt_bcs/1.200V/125C    +0.364 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_bcs/1.320V/-40C    +0.355 UI    30.00    30.00     9.70     1.01     0.23     0.11     0.23   BELOW MASK
+hbt_bcs/1.320V/27C     +0.357 UI    30.00    30.00     9.70     1.01     0.23     0.11     0.23   BELOW MASK
+hbt_bcs/1.320V/125C    +0.369 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_wcs/1.080V/-40C    +0.383 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_wcs/1.080V/27C     +0.385 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_wcs/1.080V/125C    +0.379 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_wcs/1.200V/-40C    +0.386 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_wcs/1.200V/27C     +0.379 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_wcs/1.200V/125C    +0.373 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_wcs/1.320V/-40C    +0.383 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_wcs/1.320V/27C     +0.375 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+hbt_wcs/1.320V/125C    +0.375 UI    30.00    30.00     9.70     1.01     0.23     0.15     0.23   meets
+slip-free bound (corner-independent)    30.00    30.00     9.70     1.01     0.33     0.48     0.70
+mask UIpp                            15.00     5.00     1.50     0.50     0.15     0.15     0.15
+labels: eye width = extrapolated (dual-Dirac Q-scale wall fit, BER 1e-9..1e-4) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac); tolerance = simulated (behavioural bang-bang). Not measured. Grid ceiling 30 UIpp: a value of 30 means 'at least'.
+result: a proposed-spec threshold is NOT met (see above)
+
+##### [3-shorter-latency-digital3-RTLgain] link_bench.py r11 --corners full --digital-delay 3
+== R11: R11 CDR lock/hold (behavioural bang-bang) ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+ARCH WHAT-IF (DR-011, model only; rtl/ is unchanged): integral frac bits 0, integral decimation 1, gear off (kp_acq,ki_acq,words), vote sum, digital delay 3 words, PI step 2^7 LSB (1/64 UI)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+Lock/hold of the behavioural CDR from a 0.4 UI initial phase offset (lock = 64-word mean of e within 0.05 UI for the rest of the run)
+ppm     lock after (words)   hold: peak |e| UI   rms UI   slips   label
+   +0           49           0.0875              0.0307     0    simulated (behavioural bang-bang) locks+holds
+ +300           85           0.0816              0.0308     0    simulated (behavioural bang-bang) locks+holds
+ -300           39           0.0820              0.0307     0    simulated (behavioural bang-bang) locks+holds
+PVT-edge: the loop model has no per-corner input (PI/sampler delay and aperture jitter have no record). The latch fit enters through R12's eye; R11 is corner-independent and says so.
+result: thresholds met
+
+##### [3-shorter-latency-digital3-RTLgain] link_bench.py r13 --corners full --digital-delay 3
+== R13: R13 +-300 ppm offset, slips over 1e6 UI ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json (27 corners; latch record carries q swing only - no sampler offset/noise statistics)
+link       : CH-A @ 10 Gb/s, pad swing 500 mVppd, CTLE code 7, PRBS-31 treated as independent symbols over +-24 cursors
+CDR loop   : KP=16 KI=1 FMAX=1023 from rtl/serdes_cdr_filter.v via rtl/tests/serdes_ref.CdrFilter; delay 7 digital (DR-007, cited) + 1 analog (UNFITTED ASSUMPTION, DR-007)
+ARCH WHAT-IF (DR-011, model only; rtl/ is unchanged): integral frac bits 0, integral decimation 1, gear off (kp_acq,ki_acq,words), vote sum, digital delay 3 words, PI step 2^7 LSB (1/64 UI)
+UNFITTED ASSUMPTIONS (no transistor-level record): sampler noise 2.0 mV rms, sampler offset 5.0 mV 1-sigma, RJ 0.02 UI rms, DJ 0.0625 UIpp, PD decision noise 0.02 UI rms, CTLE >5 GHz roll-off, TX FFE off
+
+Frequency offset: lock for 30000 words, then count slips (|e| >= 0.5 UI) over 1000000 UI
+ppm     analog delay   peak |e| UI   slips   label
+ +300   assumed        0.0874            0   simulated (behavioural bang-bang) no slips
+ +300   0 (sens.)      0.0596            0   simulated (behavioural bang-bang) no slips
+ +300   2 (sens.)      0.1127            0   simulated (behavioural bang-bang) no slips
+ -300   assumed        0.0851            0   simulated (behavioural bang-bang) no slips
+ -300   0 (sens.)      0.0618            0   simulated (behavioural bang-bang) no slips
+ -300   2 (sens.)      0.1115            0   simulated (behavioural bang-bang) no slips
+ +500   assumed        0.0850            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ +500   0 (sens.)      0.0606            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ +500   2 (sens.)      0.1160            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ -500   assumed        0.0814            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ -500   0 (sens.)      0.0668            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+ -500   2 (sens.)      0.1114            0   simulated (behavioural bang-bang) no slips (stretch column, not graded)
+PVT-edge: corner-independent in this model (see r11); analog delay sensitivity shown instead.
+proposed R13 (+-300 ppm, zero slips over 1e6 UI): MET
+result: thresholds met
+
+##### link_sensitivity.py --section arch
+== CDR dither closure attribution (issue #102) ==  (nothing below is measured)
+fit record : sim/rx/records/20261110-222737-506b37e/ctle_ac.report.json; 27 corners; CH-A @ 10 Gb/s, 500 mVppd, CTLE code 7
+baseline   : KP=16 KI=1 delay 7 digital + 1 analog; PD noise 0.02 UI, sampler 2.0 mV rms (offset 0), RJ 0.02 UI, DJ 0.0625 UIpp
+ALL VARIED INPUTS ARE UNFITTED ASSUMPTIONS (no record). labels: CDR rms/peak/slips = simulated (behavioural bang-bang); width = extrapolated (dual-Dirac Q-scale wall fit) over simulated (behavioural, fitted to sim/rx/records/20261110-222737-506b37e/ctle_ac)
+
+== DR-011 loop architecture comparison ==  (simulated / extrapolated, nothing measured)
+PI step 1/64 UI (pi_code), vote = sum of the word's PD decisions unless stated, delay 7 digital + 1 analog, frac = integral accumulator fractional bits, decim = integral update every N words.
+
+E1. candidates (baseline inputs)
+candidate / input changed                         rms     pk worst w extrap  slips+-300   slips+-500   pk@mask  lock 0/+300/-300  verdict
+RTL KP=16 KI=1 (baseline)                      0.1049 0.2031    n/a   0/27     0/0         0/0      0.216  35872/33020/38436  FAIL
+DR-009 KP=8 KI=0                               0.0284 0.0625  +0.202 27/27     0/0     20000/20000  0.113    108/  419/16416  pass+margin
+2nd-order KP=8 KI=1 frac6 decim16 (recommended) 0.0281 0.0625  +0.205 27/27     0/0         0/0      0.083    104/  264/  155  pass+margin
+2nd-order, decim 1 (integral every word)       0.0288 0.0625  +0.198 27/27     0/0         0/0      0.084    103/  259/  151  pass+margin
+2nd-order, decim 64                            0.0284 0.0625  +0.202 27/27     0/0         0/0      0.076    105/  277/  173  pass+margin
+KP=8 KI=1 frac0 decim16 (no fractional bits)   6.8113 10.1562    n/a   0/27 19437/19444 19408/19410 10.609  39968/39968/39968  FAIL
+RTL gain, digital delay 3 (shorter latency)    0.0311 0.0781  +0.178 27/27     0/0         0/0      0.082     49/   85/   39  pass+margin
+KP=16 KI=0, digital delay 3                    0.0265 0.0625  +0.218 27/27     0/0         0/0      0.085     68/  125/   47  pass+margin
+2nd-order, digital delay 4                     0.0110 0.0469  +0.323 27/27     0/0         0/0      0.048     99/  257/  121  pass+margin
+sign vote KP=8 KI=0                            0.0043 0.0156  +0.345 27/27 20000/20000 20000/20000  7.966    385/39968/39968  FAIL
+sign vote KP=16 KI=0                           0.0076 0.0312  +0.339 27/27 20000/20000 20000/20000  7.332    200/39968/39968  FAIL
+sign vote KP=16 KI=1 frac6 decim16             0.0076 0.0312  +0.339 27/27     0/0         0/0     10.725    190/ 3238/ 3140  FAIL
+KP=8 KI=0, PI step 1/256 UI                    0.0283 0.0625  +0.203 27/27     0/0     20000/20000  0.109    107/16414/  157  pass+margin
+2nd-order, PI step 1/256 UI                    0.0282 0.0625  +0.204 27/27     0/0         0/0      0.072    103/  262/  150  pass+margin
+2nd-order + gear 24,2,2000                     0.0281 0.0625  +0.205 27/27     0/0         0/0      0.083     59/   83/   46  pass+margin
+
+E2. passing region of the 2nd-order loop: KP x integral fractional bits (KI=1, decim16)
+candidate / input changed                         rms     pk worst w extrap  slips+-300   slips+-500   pk@mask  lock 0/+300/-300  verdict
+KP=5 KI=1 frac3 decim16                        0.0102 0.0312  +0.328 27/27     0/0         0/0      0.037    177/  265/  208  pass+margin
+KP=5 KI=1 frac4 decim16                        0.0102 0.0312  +0.328 27/27     0/0         0/0      0.039    164/  296/  238  pass+margin
+KP=5 KI=1 frac6 decim16                        0.0107 0.0312  +0.325 27/27     0/0         0/0      0.044    129/  442/  364  pass+margin
+KP=5 KI=1 frac8 decim16                        0.0103 0.0312  +0.327 27/27     0/0         0/0      2.344    137/  872/  645  FAIL
+KP=5 KI=1 frac10 decim16                       0.0103 0.0312  +0.327 27/27     0/0         0/0      3.726    139/ 1749/ 1225  FAIL
+KP=5 KI=1 frac12 decim16                       0.0103 0.0312  +0.327 27/27     0/0      7796/6785   3.363    139/ 3616/ 4151  FAIL
+KP=6 KI=1 frac3 decim16                        0.0151 0.0469  +0.298 27/27     0/0         0/0      0.056    134/  219/  189  pass+margin
+KP=6 KI=1 frac4 decim16                        0.0143 0.0469  +0.303 27/27     0/0         0/0      0.050    104/  212/  214  pass+margin
+KP=6 KI=1 frac6 decim16                        0.0149 0.0469  +0.300 27/27     0/0         0/0      0.055    116/  377/  267  pass+margin
+KP=6 KI=1 frac8 decim16                        0.0151 0.0469  +0.298 27/27     0/0         0/0      0.516    122/  636/  384  FAIL
+KP=6 KI=1 frac10 decim16                       0.0151 0.0469  +0.298 27/27     0/0         0/0      1.814    124/  925/  569  FAIL
+KP=6 KI=1 frac12 decim16                       0.0151 0.0469  +0.298 27/27     0/0         0/0      1.782    124/ 1220/  598  FAIL
+KP=7 KI=1 frac3 decim16                        0.0204 0.0625  +0.265 27/27     0/0         0/0      0.062     86/  149/  170  pass+margin
+KP=7 KI=1 frac4 decim16                        0.0214 0.0469  +0.261 27/27     0/0         0/0      0.063     98/  199/  187  pass+margin
+KP=7 KI=1 frac6 decim16                        0.0218 0.0469  +0.257 27/27     0/0         0/0      0.067    109/  322/  208  pass+margin
+KP=7 KI=1 frac8 decim16                        0.0220 0.0469  +0.256 27/27     0/0         0/0      0.096    112/  459/  219  pass+margin
+KP=7 KI=1 frac10 decim16                       0.0220 0.0469  +0.256 27/27     0/0         0/0      0.607    113/  584/  315  FAIL
+KP=7 KI=1 frac12 decim16                       0.0220 0.0469  +0.256 27/27     0/0         0/0      0.642    113/  641/  318  FAIL
+KP=8 KI=1 frac3 decim16                        0.0279 0.0625  +0.206 27/27     0/0         0/0      0.069     83/  141/  145  pass+margin
+KP=8 KI=1 frac4 decim16                        0.0278 0.0625  +0.208 27/27     0/0         0/0      0.076     93/  183/  152  pass+margin
+KP=8 KI=1 frac6 decim16                        0.0281 0.0625  +0.205 27/27     0/0         0/0      0.083    104/  264/  155  pass+margin
+KP=8 KI=1 frac8 decim16                        0.0284 0.0625  +0.202 27/27     0/0         0/0      0.083    108/  366/  159  pass+margin
+KP=8 KI=1 frac10 decim16                       0.0284 0.0625  +0.202 27/27     0/0         0/0      0.104    108/  404/  161  pass+margin
+KP=8 KI=1 frac12 decim16                       0.0284 0.0625  +0.202 27/27     0/0         0/0      0.111    108/  419/  161  pass+margin
+KP=9 KI=1 frac3 decim16                        0.0330 0.0781  +0.157 27/27     0/0         0/0      0.077     79/  136/  129  pass+margin
+KP=9 KI=1 frac4 decim16                        0.0333 0.0625  +0.155 27/27     0/0         0/0      0.082     88/  173/  125  pass+margin
+KP=9 KI=1 frac6 decim16                        0.0335 0.0781  +0.152 27/27     0/0         0/0      0.090     96/  239/  121  pass+margin
+KP=9 KI=1 frac8 decim16                        0.0339 0.0781  +0.148 27/27     0/0         0/0      0.097     98/  279/  115  pass+margin
+KP=9 KI=1 frac10 decim16                       0.0339 0.0781  +0.148 27/27     0/0         0/0      0.092     98/  316/  293  pass+margin
+KP=9 KI=1 frac12 decim16                       0.0339 0.0781  +0.148 27/27     0/0         0/0      0.092     98/  319/  293  pass+margin
+KP=10 KI=1 frac3 decim16                       0.0379 0.0938  +0.110 27/27     0/0         0/0      0.089     78/  127/  114  pass+margin
+KP=10 KI=1 frac4 decim16                       0.0384 0.0781  +0.107 27/27     0/0         0/0      0.091     85/  158/  107  pass+margin
+KP=10 KI=1 frac6 decim16                       0.0387 0.0781  +0.103 27/27     0/0         0/0      0.105     90/  211/   99  pass+margin
+KP=10 KI=1 frac8 decim16                       0.0388 0.0781  +0.102 27/27     0/0         0/0      0.106     92/  240/   95  pass+margin
+KP=10 KI=1 frac10 decim16                      0.0388 0.0781  +0.102 27/27     0/0         0/0      0.110     92/  295/   95  pass+margin
+KP=10 KI=1 frac12 decim16                      0.0388 0.0781  +0.102 27/27     0/0         0/0      0.110     92/  297/   95  pass+margin
+KP=12 KI=1 frac3 decim16                       0.0477 0.1094  +0.008 27/27     0/0         0/0      0.110     74/  116/  118  pass
+KP=12 KI=1 frac4 decim16                       0.0478 0.0938  +0.006 27/27     0/0         0/0      0.112     78/  136/   49  pass
+KP=12 KI=1 frac6 decim16                       0.0481 0.1094  +0.003 27/27     0/0         0/0      0.137     81/  176/   51  pass
+KP=12 KI=1 frac8 decim16                       0.0484 0.1094  -0.002 27/27     0/0         0/0      0.142     82/  187/   51  FAIL
+KP=12 KI=1 frac10 decim16                      0.0484 0.1094  -0.002 27/27     0/0         0/0      0.138     82/ 1298/   51  FAIL
+KP=12 KI=1 frac12 decim16                      0.0484 0.1094  -0.002 27/27     0/0         0/0      0.134     82/ 8225/ 8226  FAIL
+KP=16 KI=1 frac3 decim16                       0.0655 0.1406    n/a   0/27     0/0         0/0      0.140     98/  104/   47  FAIL
+KP=16 KI=1 frac4 decim16                       0.0656 0.1250    n/a   0/27     0/0         0/0      0.154     67/  124/   49  FAIL
+KP=16 KI=1 frac6 decim16                       0.0664 0.1406    n/a   0/27     0/0         0/0      0.175     70/  123/   49  FAIL
+KP=16 KI=1 frac8 decim16                       0.0662 0.1406    n/a   0/27     0/0         0/0      0.185     70/  490/ 1060  FAIL
+KP=16 KI=1 frac10 decim16                      0.0662 0.1406    n/a   0/27     0/0         0/0      0.182     70/ 4095/ 8188  FAIL
+KP=16 KI=1 frac12 decim16                      0.0662 0.1406    n/a   0/27     0/0         0/0      0.182     70/16422/ 9346  FAIL
+passing points (KP, frac): (5,3), (5,4), (5,6), (6,3), (6,4), (6,6), (7,3), (7,4), (7,6), (7,8), (8,3), (8,4), (8,6), (8,8), (8,10), (8,12), (9,3), (9,4), (9,6), (9,8), (9,10), (9,12), (10,3), (10,4), (10,6), (10,8), (10,10), (10,12), (12,3), (12,4), (12,6)
+
+E4. slew margin: largest SJ amplitude with no slip (peak error < 0.5 UI), UIpp (ratio to the R12 mask amplitude)
+loop                                      0.1 MHz         0.3 MHz           1 MHz           3 MHz          10 MHz
+DR-009 KP=8 KI=0                    16.68 (1.11x)    5.94 (1.19x)    2.25 (1.50x)    1.02 (2.03x)    0.78 (5.18x)   min 1.11x
+2nd-order KP=5 KI=1 frac6 d16       27.89 (1.86x)    5.21 (1.04x)    1.41 (0.94x)    0.90 (1.80x)    0.82 (5.46x)   min 0.94x
+2nd-order KP=6 KI=1 frac6 d16       30.53 (2.04x)    5.70 (1.14x)    1.67 (1.11x)    0.93 (1.85x)    0.81 (5.39x)   min 1.11x
+2nd-order KP=7 KI=1 frac6 d16       33.07 (2.20x)    6.25 (1.25x)    1.92 (1.28x)    0.95 (1.89x)    0.79 (5.28x)   min 1.25x
+2nd-order KP=8 KI=1 frac6 d16       34.71 (2.31x)    6.78 (1.36x)    2.14 (1.43x)    0.97 (1.95x)    0.78 (5.18x)   min 1.36x
+2nd-order KP=9 KI=1 frac6 d16       35.39 (2.36x)    7.34 (1.47x)    2.35 (1.57x)    1.02 (2.05x)    0.76 (5.07x)   min 1.47x
+2nd-order KP=10 KI=1 frac6 d16      36.12 (2.41x)    7.91 (1.58x)    2.57 (1.71x)    1.06 (2.12x)    0.75 (5.01x)   min 1.58x
+2nd-order KP=12 KI=1 frac6 d16      38.06 (2.54x)    8.99 (1.80x)    2.93 (1.95x)    1.15 (2.30x)    0.74 (4.95x)   min 1.80x
+
+E3. unfitted inputs, DR-009 setting vs the 2nd-order loop (same ranges as section A)
+candidate / input changed                         rms     pk worst w extrap  slips+-300   slips+-500   pk@mask  lock 0/+300/-300  verdict
+DR-009: baseline                               0.0284 0.0625  +0.202 27/27     0/0     20000/20000  0.113    108/  419/16416  pass+margin
+DR-009: PD noise 0.0                           0.0000 0.0000  +0.350 27/27     0/0     20000/20000  0.126    109/39950/39715  FAIL
+DR-009: PD noise 0.01                          0.0330 0.0625  +0.157 27/27     0/0     20000/20000  0.096    108/16426/32790  FAIL
+DR-009: PD noise 0.03                          0.0162 0.0625  +0.295 27/27     0/0     20000/20000  0.131    107/32804/32803  FAIL
+DR-009: PD noise 0.05                          0.0109 0.0312  +0.324 27/27     0/0     20000/20000  0.175    107/39347/39348  FAIL
+DR-009: analog delay 0                         0.0218 0.0469  +0.257 27/27     0/0     20000/20000  0.112    107/  416/  149  pass+margin
+DR-009: analog delay 2                         0.0340 0.0781  +0.147 27/27     0/0     20000/20000  0.111    108/  423/16418  pass+margin
+DR-009: analog delay 3                         0.0393 0.0781  +0.097 27/27     0/0     20000/20000  0.112    107/32789/32800  FAIL
+DR-009: analog delay 5                         0.0489 0.0938  -0.007 27/27     0/0     20000/20000  0.137    105/38464/38476  FAIL
+DR-009: RJ 0.008 (grid floor), DJ 0            0.0284 0.0625  +0.313 27/27     0/0     20000/20000  0.113    108/  419/16416  pass+margin
+DR-009: sampler noise 1 mV                     0.0284 0.0625  +0.206 27/27     0/0     20000/20000  0.113    108/  419/16416  pass+margin
+DR-009: sampler noise 4 mV                     0.0284 0.0625  +0.161 27/27     0/0     20000/20000  0.113    108/  419/16416  pass+margin
+DR-009: sampler offset 5 mV                    0.0284 0.0625  +0.157 27/27     0/0     20000/20000  0.113    108/  419/16416  pass+margin
+DR-009: sampler offset 10 mV                   0.0284 0.0625  +0.111 27/27     0/0     20000/20000  0.113    108/  419/16416  pass+margin
+2nd-order KP8: baseline                        0.0281 0.0625  +0.205 27/27     0/0         0/0      0.083    104/  264/  155  pass+margin
+2nd-order KP8: PD noise 0.0                    0.0000 0.0000  +0.350 27/27     0/0         0/0      0.107    104/  263/  151  pass+margin
+2nd-order KP8: PD noise 0.01                   0.0332 0.0781  +0.156 27/27     0/0         0/0      0.100    104/  264/  145  pass+margin
+2nd-order KP8: PD noise 0.03                   0.0162 0.0469  +0.295 27/27     0/0         0/0      0.067    103/  265/  159  pass+margin
+2nd-order KP8: PD noise 0.05                   0.0109 0.0312  +0.324 27/27     0/0         0/0      0.065    102/  269/  200  pass+margin
+2nd-order KP8: analog delay 0                  0.0216 0.0625  +0.259 27/27     0/0         0/0      0.072    103/  262/  141  pass+margin
+2nd-order KP8: analog delay 2                  0.0338 0.0781  +0.149 27/27     0/0         0/0      0.097    104/  266/  174  pass+margin
+2nd-order KP8: analog delay 3                  0.0392 0.0781  +0.098 27/27     0/0         0/0      0.107    103/  267/  183  pass
+2nd-order KP8: analog delay 5                  0.0489 0.0938  -0.007 27/27     0/0         0/0      0.131    103/  270/  272  FAIL
+2nd-order KP8: RJ 0.008 (grid floor), DJ 0     0.0281 0.0625  +0.317 27/27     0/0         0/0      0.083    104/  264/  155  pass+margin
+2nd-order KP8: sampler noise 1 mV              0.0281 0.0625  +0.209 27/27     0/0         0/0      0.083    104/  264/  155  pass+margin
+2nd-order KP8: sampler noise 4 mV              0.0281 0.0625  +0.164 27/27     0/0         0/0      0.083    104/  264/  155  pass+margin
+2nd-order KP8: sampler offset 5 mV             0.0281 0.0625  +0.160 27/27     0/0         0/0      0.083    104/  264/  155  pass+margin
+2nd-order KP8: sampler offset 10 mV            0.0281 0.0625  +0.114 27/27     0/0         0/0      0.083    104/  264/  155  pass+margin
+
+No result above is measured; the varied inputs need transistor-level records (sampler, PI, deserialiser) that do not exist yet.

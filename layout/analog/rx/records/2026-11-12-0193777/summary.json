@@ -1,0 +1,125 @@
+[
+ {
+  "cell": "ctle",
+  "devices": 38,
+  "orientation": {},
+  "nets_routed": [
+   "vcm",
+   "vdd",
+   "vss"
+  ],
+  "nets_unrouted": [],
+  "pins_labelled": [
+   "inp",
+   "inn",
+   "vcm",
+   "vdd",
+   "vss",
+   "c0",
+   "c0b",
+   "c1",
+   "c1b",
+   "c2",
+   "c2b",
+   "outp",
+   "outn"
+  ],
+  "ports_without_pin": []
+ },
+ {
+  "cell": "latch_cml",
+  "devices": 10,
+  "orientation": {},
+  "nets_routed": [
+   "vdd",
+   "vss"
+  ],
+  "nets_unrouted": [],
+  "pins_labelled": [
+   "dp",
+   "dn",
+   "clkp",
+   "clkn",
+   "vdd",
+   "vss",
+   "qp",
+   "qn"
+  ],
+  "ports_without_pin": []
+ },
+ {
+  "cell": "clk_buf_quad",
+  "devices": 20,
+  "orientation": {
+   "XQi1b": "mirror_x",
+   "RLi1b": "mirror_x",
+   "XQi2b": "mirror_x",
+   "RLi2b": "mirror_x",
+   "XQq1b": "mirror_x",
+   "RLq1b": "mirror_x",
+   "XQq2b": "mirror_x",
+   "RLq2b": "mirror_x"
+  },
+  "nets_routed": [
+   "vdd"
+  ],
+  "nets_unrouted": [
+   {
+    "net": "vss",
+    "reason": null
+   }
+  ],
+  "pins_labelled": [
+   "ck0",
+   "ck180",
+   "ck90",
+   "ck270",
+   "vdd",
+   "vss",
+   "b0",
+   "b180",
+   "b90",
+   "b270"
+  ],
+  "ports_without_pin": []
+ },
+ {
+  "cell": "lvl_cml2cmos",
+  "devices": 9,
+  "orientation": {},
+  "nets_routed": [
+   "op",
+   "tl"
+  ],
+  "nets_unrouted": [
+   {
+    "net": "vdd",
+    "reason": null
+   },
+   {
+    "net": "vss",
+    "reason": null
+   },
+   {
+    "net": "x",
+    "reason": null
+   },
+   {
+    "net": "y",
+    "reason": null
+   },
+   {
+    "net": "z",
+    "reason": null
+   }
+  ],
+  "pins_labelled": [
+   "ip",
+   "in",
+   "vdd",
+   "vss",
+   "op"
+  ],
+  "ports_without_pin": []
+ }
+]

@@ -8,6 +8,8 @@
 #                                          bench for real (digital). No PDK, no fleet.
 #   scripts/run-bench.sh <id> [--run] [--request <path>]
 #                                          --request restricts to one of the bench's requests
+#   scripts/run-bench.sh link-<row>-*      behavioural DR-002 benches (R8 R11 R12 R13 R15): run for real, locally,
+#                                          numpy only; add --quick for a short configuration
 #   scripts/run-bench.sh <id> --run        analog only: submit the full corner grid with
 #                                          `klt sim --wait-for-capacity 600` (batch fleet
 #                                          when KLT_SIM_BACKEND=batch). Needs
@@ -18,16 +20,20 @@
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 MAN="${REPO}/sim/bench/benches.json"
-die() { echo "run-bench.sh: $*" >&2; exit "${2:-2}"; }
+die() { echo "run-bench.sh: $1" >&2; exit "${2:-2}"; }
 command -v jq >/dev/null 2>&1 || die "jq not on PATH" 3
 [[ $# -ge 1 ]] || die "usage: run-bench.sh --list | <id> [--run]"
 if [[ "$1" == "--list" ]]; then
-  jq -r '.benches[] | "\(.id)\t\(.partition)\t\(.rows|join(","))\t\(.corner_set)"' "${MAN}"; exit 0
+  # exec: propagate jq's exit status (a malformed registry must fail the caller's
+  # cold-start check, not be masked by a forced success; issue #224).
+  exec jq -r '.benches[] | "\(.id)\t\(.partition)\t\(.rows|join(","))\t\(.corner_set)"' "${MAN}"
 fi
-ID="$1"; shift; MODE=check; ONLY=""
+ID="$1"; shift; MODE=check; ONLY=""; QUICK=()
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --run) MODE="--run" ;;
+    --quick) QUICK+=(--quick) ;;
+    --strict) QUICK+=(--strict) ;;
     --request) ONLY="${2:-}"; [[ -n "${ONLY}" ]] || die "--request needs a path"; shift ;;
     *) die "unknown argument '$1'" ;;
   esac
@@ -36,12 +42,42 @@ done
 B="$(jq -c --arg id "${ID}" '.benches[] | select(.id==$id)' "${MAN}")"
 [[ -n "${B}" ]] || die "unknown bench '${ID}' (see --list)"
 
+if [[ "$(jq -r .partition <<<"${B}")" == "behavioural" ]]; then
+  # DR-002 behavioural/statistical benches: numpy only, one local process, no fleet. --strict (passed through) exits 3 when a
+  # proposed spec threshold is not met (reported, never relaxed).
+  # Resolve the interpreter by path, not from PATH: `klt signoff --attest 9` runs
+  # cold_start commands in a sanitized environment -- no ${REPO}/.venv/bin on
+  # PATH and no VIRTUAL_ENV -- so a bare `python3` would be the host interpreter
+  # and its numpy would be whatever that host happens to carry (issue #158).
+  if [[ -x "${REPO}/.venv/bin/python3" ]]; then
+    BENCH_PY="${REPO}/.venv/bin/python3"
+  else
+    command -v python3 >/dev/null 2>&1 || die "python3 not on PATH (and no ${REPO}/.venv/bin/python3; run scripts/setup-env.sh)" 3
+    BENCH_PY="python3"
+  fi
+  mapfile -t BARGS < <(jq -r '.args[]' <<<"${B}")
+  exec "${BENCH_PY}" -I "${REPO}/$(jq -r .entry <<<"${B}")" "${BARGS[@]}" "${QUICK[@]}"
+fi
 if [[ "$(jq -r .partition <<<"${B}")" == "digital" ]]; then
   [[ "${MODE}" == "check" ]] || die "--run applies to analog benches; the digital bench always runs"
   exec "${REPO}/rtl/tests/run.sh" "$(jq -r .rtl_bench <<<"${B}")"
 fi
 
-command -v klt >/dev/null 2>&1 || die "klt not on PATH (source scripts/env.sh)" 3
+# Resolve klt by path, not from PATH: `klt signoff --attest 9` runs cold_start
+# commands in a sanitized environment -- no ${REPO}/.venv/bin on PATH and no
+# VIRTUAL_ENV -- so a bare `klt` grades these checks with whatever klt the host
+# happens to carry, while the evidence envelope asserts klayout-tools==0.9.0
+# twice and neither assertion describes it (issue #176; upstream:
+# 2AMLogic/klayout-tools#5565). The .venv binary is already a verified pin:
+# scripts/setup-env.sh refuses to finish unless `.venv/bin/klt --version`
+# equals layout/toolchain.json's klt_install, so this resolution adds no
+# second, weaker version check of its own.
+if [[ -x "${REPO}/.venv/bin/klt" ]]; then
+  BENCH_KLT="${REPO}/.venv/bin/klt"
+else
+  command -v klt >/dev/null 2>&1 || die "klt not on PATH (and no ${REPO}/.venv/bin/klt; run scripts/setup-env.sh)" 3
+  BENCH_KLT="klt"
+fi
 want_units="$(jq -r .units_per_request <<<"${B}")"
 rc=0
 seen=0
@@ -51,11 +87,11 @@ while IFS= read -r req; do
   dir="$(dirname "${REPO}/${req}")"; base="$(basename "${req}")"
   if [[ "${MODE}" == "--run" ]]; then
     [[ -n "${PDK_ROOT:-}" ]] || die "PDK_ROOT unset: run scripts/setup-env.sh, then source scripts/env.sh" 3
-    ( cd "${dir}" && klt sim --wait-for-capacity 600 "${base}" ); e=$?
+    ( cd "${dir}" && "${BENCH_KLT}" sim --wait-for-capacity 600 "${base}" ); e=$?
     [[ ${e} -eq 0 || ${e} -eq 3 ]] || rc=1   # 3 = a declared limit failed; the report is still complete
     continue
   fi
-  out="$(cd "${dir}" && klt sim --dry-run --format json "${base}")" || { echo "run-bench.sh: ${req}: dry-run failed" >&2; rc=1; continue; }
+  out="$(cd "${dir}" && "${BENCH_KLT}" sim --dry-run --format json "${base}")" || { echo "run-bench.sh: ${req}: dry-run failed" >&2; rc=1; continue; }
   got="$(jq -r .unit_count <<<"${out}")"
   [[ "${got}" == "${want_units}" ]] || { echo "run-bench.sh: ${req}: expands to ${got} units, bench declares ${want_units}" >&2; rc=1; }
   while IFS= read -r m; do

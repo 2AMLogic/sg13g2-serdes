@@ -83,12 +83,30 @@
       "spice": ".meas tran latch_t_regen_up trig v(ck) val=0 fall=1 td=2.35n targ v(q) val=0.25 rise=1 td=2.35n",
       "limits": {
         "max": 1e-10
-      }
+      },
+      "on_unreached": "null"
     },
     {
       "name": "latch_t_regen_dn",
       "unit": "s",
       "spice": ".meas tran latch_t_regen_dn trig v(ck) val=0 fall=1 td=2.55n targ v(q) val=-0.25 fall=1 td=2.55n",
+      "limits": {
+        "max": 1e-10
+      },
+      "on_unreached": "null"
+    },
+    {
+      "name": "latch_t_regen_up_lo",
+      "unit": "s",
+      "spice": ".meas tran latch_t_regen_up_lo trig v(ck) val=0 fall=1 td=2.35n targ v(q) val=0.1 rise=1 td=2.35n",
+      "limits": {
+        "max": 1e-10
+      }
+    },
+    {
+      "name": "latch_t_regen_dn_lo",
+      "unit": "s",
+      "spice": ".meas tran latch_t_regen_dn_lo trig v(ck) val=0 fall=1 td=2.55n targ v(q) val=-0.1 fall=1 td=2.55n",
       "limits": {
         "max": 1e-10
       }
@@ -120,6 +138,14 @@
       }
     },
     {
+      "name": "clk_xclk_qi1a_vce_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qi1a_vce_max max v(clk_xclk_qi1a_vce_node)",
+      "limits": {
+        "max": 1.4
+      }
+    },
+    {
       "name": "clk_xclk_qi1b_vc_max",
       "unit": "V",
       "spice": ".meas tran clk_xclk_qi1b_vc_max max v(xclk.mip)",
@@ -133,6 +159,14 @@
       "spice": ".meas tran clk_xclk_qi1b_vbe_rev_max max v(clk_xclk_qi1b_vbe_node)",
       "limits": {
         "max": 1.0
+      }
+    },
+    {
+      "name": "clk_xclk_qi1b_vce_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qi1b_vce_max max v(clk_xclk_qi1b_vce_node)",
+      "limits": {
+        "max": 1.4
       }
     },
     {
@@ -152,6 +186,14 @@
       }
     },
     {
+      "name": "clk_xclk_qi2a_vce_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qi2a_vce_max max v(clk_xclk_qi2a_vce_node)",
+      "limits": {
+        "max": 1.4
+      }
+    },
+    {
       "name": "clk_xclk_qi2b_vc_max",
       "unit": "V",
       "spice": ".meas tran clk_xclk_qi2b_vc_max max v(b0)",
@@ -165,6 +207,14 @@
       "spice": ".meas tran clk_xclk_qi2b_vbe_rev_max max v(clk_xclk_qi2b_vbe_node)",
       "limits": {
         "max": 1.0
+      }
+    },
+    {
+      "name": "clk_xclk_qi2b_vce_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qi2b_vce_max max v(clk_xclk_qi2b_vce_node)",
+      "limits": {
+        "max": 1.4
       }
     },
     {
@@ -184,6 +234,14 @@
       }
     },
     {
+      "name": "clk_xclk_qq1a_vce_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qq1a_vce_max max v(clk_xclk_qq1a_vce_node)",
+      "limits": {
+        "max": 1.4
+      }
+    },
+    {
       "name": "clk_xclk_qq1b_vc_max",
       "unit": "V",
       "spice": ".meas tran clk_xclk_qq1b_vc_max max v(xclk.mqp)",
@@ -197,6 +255,14 @@
       "spice": ".meas tran clk_xclk_qq1b_vbe_rev_max max v(clk_xclk_qq1b_vbe_node)",
       "limits": {
         "max": 1.0
+      }
+    },
+    {
+      "name": "clk_xclk_qq1b_vce_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qq1b_vce_max max v(clk_xclk_qq1b_vce_node)",
+      "limits": {
+        "max": 1.4
       }
     },
     {
@@ -216,6 +282,14 @@
       }
     },
     {
+      "name": "clk_xclk_qq2a_vce_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qq2a_vce_max max v(clk_xclk_qq2a_vce_node)",
+      "limits": {
+        "max": 1.4
+      }
+    },
+    {
       "name": "clk_xclk_qq2b_vc_max",
       "unit": "V",
       "spice": ".meas tran clk_xclk_qq2b_vc_max max v(b90)",
@@ -229,6 +303,14 @@
       "spice": ".meas tran clk_xclk_qq2b_vbe_rev_max max v(clk_xclk_qq2b_vbe_node)",
       "limits": {
         "max": 1.0
+      }
+    },
+    {
+      "name": "clk_xclk_qq2b_vce_max",
+      "unit": "V",
+      "spice": ".meas tran clk_xclk_qq2b_vce_max max v(clk_xclk_qq2b_vce_node)",
+      "limits": {
+        "max": 1.4
       }
     },
     {
@@ -248,6 +330,14 @@
       }
     },
     {
+      "name": "latch_xl_qs1_vce_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qs1_vce_max max v(latch_xl_qs1_vce_node)",
+      "limits": {
+        "max": 1.4
+      }
+    },
+    {
       "name": "latch_xl_qs2_vc_max",
       "unit": "V",
       "spice": ".meas tran latch_xl_qs2_vc_max max v(qp)",
@@ -261,6 +351,14 @@
       "spice": ".meas tran latch_xl_qs2_vbe_rev_max max v(latch_xl_qs2_vbe_node)",
       "limits": {
         "max": 1.0
+      }
+    },
+    {
+      "name": "latch_xl_qs2_vce_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qs2_vce_max max v(latch_xl_qs2_vce_node)",
+      "limits": {
+        "max": 1.4
       }
     },
     {
@@ -280,6 +378,14 @@
       }
     },
     {
+      "name": "latch_xl_qh1_vce_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qh1_vce_max max v(latch_xl_qh1_vce_node)",
+      "limits": {
+        "max": 1.4
+      }
+    },
+    {
       "name": "latch_xl_qh2_vc_max",
       "unit": "V",
       "spice": ".meas tran latch_xl_qh2_vc_max max v(qp)",
@@ -293,6 +399,14 @@
       "spice": ".meas tran latch_xl_qh2_vbe_rev_max max v(latch_xl_qh2_vbe_node)",
       "limits": {
         "max": 1.0
+      }
+    },
+    {
+      "name": "latch_xl_qh2_vce_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qh2_vce_max max v(latch_xl_qh2_vce_node)",
+      "limits": {
+        "max": 1.4
       }
     },
     {
@@ -312,6 +426,14 @@
       }
     },
     {
+      "name": "latch_xl_qts_vce_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qts_vce_max max v(latch_xl_qts_vce_node)",
+      "limits": {
+        "max": 1.4
+      }
+    },
+    {
       "name": "latch_xl_qth_vc_max",
       "unit": "V",
       "spice": ".meas tran latch_xl_qth_vc_max max v(xl.eh)",
@@ -325,6 +447,14 @@
       "spice": ".meas tran latch_xl_qth_vbe_rev_max max v(latch_xl_qth_vbe_node)",
       "limits": {
         "max": 1.0
+      }
+    },
+    {
+      "name": "latch_xl_qth_vce_max",
+      "unit": "V",
+      "spice": ".meas tran latch_xl_qth_vce_max max v(latch_xl_qth_vce_node)",
+      "limits": {
+        "max": 1.4
       }
     }
   ],
