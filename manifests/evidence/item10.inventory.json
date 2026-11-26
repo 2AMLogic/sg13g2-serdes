@@ -27,6 +27,7 @@
     "sim/tools/test-record-dir.sh",
     "sim/tools/test-osdi-missing-dpkg-deb.sh",
     "sim/tools/record-dir.sh",
+    "layout/analog/test_layout_common.py",
     "package.json"
   ],
   "checks": [
