@@ -1,7 +1,8 @@
 # sim/rx
 
 Sizing benches for the RX path in `design/rx/` (issue #22). **Sizing evidence,
-not spec results**: `spec/target-spec.md` is PROPOSED, resistors are ideal, the
+not spec results**: `spec/target-spec.md` is PROPOSED, resistors are ideal (the
+`rppd` termination-corner bench of issue #240 is the exception), the
 pad capacitance and the CTLE load are placeholders, the clock source is ideal.
 
 | File | What |
@@ -11,10 +12,14 @@ pad capacitance and the CTLE load are placeholders, the clock source is ideal.
 | `ctle_tran.sp` | 16 copies of `ctle` (8 codes x 2 input levels): transient max Vc, Vce and reverse Vbe per HBT over a driven run (both polarities of a settled long run, each followed by 5 GHz alternation) |
 | `latch_regen.sp` | clock buffer + latch at 5 GHz: regeneration time to two fixed \|q\| levels (0.25 V decision, 0.10 V floor), collector/Vbe stress |
 | `pad_ac.sp` | termination + pad + CTLE: differential drive current, so \|Zdiff\| at 0.1 and 5 GHz |
-| `*.request.json` | `klt sim` requests: HBT corners (ganged with CAP and DIO sections) x 1.08/1.2/1.32 V x -40/27/125 C |
+| `pad_ac_rppd.sp` | `pad_ac` with the two ideal 50 Ω termination legs replaced by PDK `rppd` instances (`r3_cmc` OSDI, w=2 µm as p.11 recommends), over the RES library corners ganged with the same-index HBT/CAP/DIO sections (issue #240, R9 gate G1) |
+| `pad_ac_rppd_p11win.sp` | same circuit with `rsh_rppd` overridden to the process-spec p.11 window edges folded at w=2 µm (derived in `spec/sources/rppd-tolerance-window.md`) |
+| `*.request.json` | `klt sim` requests: HBT corners (ganged with CAP and DIO sections) x 1.08/1.2/1.32 V x -40/27/125 C; the two `*_rppd*` ones add the RES sections and `osdi_preload` |
 | `run_sizing.sh [vce]` | submits the five requests (batch fleet) and writes `records/<id>/`; `vce` suffixes the record id `-vce` (R3 per-device Vce pass, issue #242) |
+| `run_rppd_corners.sh` | submits the two rppd requests (batch fleet) and writes `records/<id>-rppd-corners/` (issue #240) |
 | `tools/gen_requests.py` | generates the `.sp` bodies and requests; the node-stress `.meas` cards follow the exported netlists |
 | `tools/make_record.py` | renders `record.md` from the reports |
+| `tools/make_record_rppd.py` | renders `record.md` for the rppd-corner record family |
 
 Requests and bodies are generated: edit `tools/gen_requests.py`, rerun it,
 commit the output.
@@ -167,4 +172,4 @@ by an Erratum in that record. The 5 mV collector margin is a sizing finding for 
 
 - `.meas` cards only (see above). Operating-point values use a two-point dummy dc sweep (`Vdmy`), differences go through `B` sources (ngspice caps `par()` at 99 calls per deck, klayout-tools#4218).
 - **No swing-relative threshold.** A `.meas` card cannot reference an earlier `.meas` result: `.meas tran vpk max v(q)` followed by `.meas tran t when v(q)='0.5*vpk'` fails with `Undefined parameter [vpk]` and aborts the whole deck (verified on ngspice 47), and `measurements[].expr` is refused by the fleet runner (klayout-tools#4217). Regeneration levels are therefore fixed absolute volts, with a floor level low enough that every corner crosses it.
-- The PDK resistors (`rsil`, `rppd`) are `r3_cmc` OSDI models and the PSP103 MOS models need OSDI, so neither is simulated (`sim/README.md`, klayout-tools#3818).
+- The PDK resistors (`rsil`, `rppd`) are `r3_cmc` OSDI models and the PSP103 MOS models need OSDI, so neither is in the five main benches (`sim/README.md`, klayout-tools#3818). The `rppd` termination-corner bench (issue #240, `run_rppd_corners.sh`) loads `r3_cmc` via `osdi_preload` on the batch fleet, as the TX MOS benches do; the CTLE-internal and latch resistors are still ideal.

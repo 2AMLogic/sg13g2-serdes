@@ -21,7 +21,7 @@ SIM = os.path.join(HERE, "..")
 NET = os.path.join(SIM, "..", "..", "design", "rx", "netlists")
 
 sys.path.insert(0, os.path.join(SIM, "..", "tools"))
-from hbt_corners import HBT_LIB, corner_axes  # noqa: E402
+from hbt_corners import HBT_LIB, CAP_LIB, DIO_LIB, corner_axes  # noqa: E402
 
 VC_MAX = 1.32   # DR-003: no HBT collector node above this
 VCE_MAX = 1.4   # DR-003: npn13G2 open-base BVCEO (target-spec HBT breakdown table), hard limit (issues #242, #256)
@@ -108,13 +108,13 @@ def stress_meas(inst, cell, portmap, prefix, kind, vce=True, vce_first=False):
     return lines, out
 
 
-def request(netlist, analysis, measurements, corners, extra_options=None):
+def request(netlist, analysis, measurements, corners, extra_options=None, lib=HBT_LIB):
     opts = {"stage_model_inputs": True, "timeout_s": 120, "keep_artifacts": False}
     opts.update(extra_options or {})
     return {
         "engine": "ngspice",
         "netlist": netlist,
-        "models": {"pdk": "ihp-sg13g2", "lib": HBT_LIB},
+        "models": {"pdk": "ihp-sg13g2", "lib": lib},
         "corners": corners,
         "analysis": analysis,
         "measurements": measurements,
@@ -308,6 +308,128 @@ def pad_meas():
     ]
 
 
+# ---------------------------------------------- rppd termination bench (#240)
+# RX termination bench with the PDK's own rppd model (r3_cmc OSDI) in place of
+# the ideal 50 ohm legs of design/rx/netlists/rx_term_pad.spice, run over the
+# resistor corners (R9 gate G1 of #238). The tolerance figures and the p.11
+# window members trace to spec/sources/rppd-tolerance-window.md. design/rx
+# itself is unchanged (the termination re-point is #143): the series 4 ohm
+# legs are metal stand-ins and stay ideal, as do the CTLE-internal resistors.
+RES_LIB = "libs.tech/ngspice/models/cornerRES.lib"
+OSDI = ["$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/" + f
+        for f in ("psp103.osdi", "psp103_nqs.osdi", "r3_cmc.osdi", "mosvar.osdi")]
+# Geometry: p.11 recommends w >= 2 um for precision resistors, and the layout
+# minimums (SG13G2_os_layout_rules.pdf 6.3: 0.50 um GatPoly width and SalBlock
+# length) rule out short single strips. The r3_cmc model puts the terminal
+# resistance rc = rz in series with the channel, rz = rzspec/w = 35 R·um / w
+# (RCRPPD p.11, model rzspec = 35e-6), unscaled by m -- the bench records of
+# this family reproduce R_side = rz + rsh*l/(m*(w+xw)) within ~0.7 % at every
+# corner. The strip is therefore sized for the channel term 50 - 17.5 =
+# 32.5 ohm: l = 32.5*2*2.006/260 = 0.5015 um (>= 0.50 um minimum), m = 2
+# strips in parallel.
+RPPD_W, RPPD_L, RPPD_M = "2u", "0.5015u", 2
+# Window edges from the source note: the p.11 min/max rsh and DWRPPD columns
+# folded into one effective sheet resistance at w = 2 um (the r3_cmc model has
+# no width-delta parameter; xw is fixed at the 6 nm target):
+#   235 * 2.006/2.036 = 231.537,  285 * 2.006/1.976 = 289.327.
+RSH_RPPD_P11_LO = 231.537
+RSH_RPPD_P11_HI = 289.327
+
+
+def pad_rppd_body(win=False):
+    L = ["* RX termination rppd corner bench (issue #240, R9 gate G1): the two ideal",
+         "* 50 ohm legs of design/rx/rx_term_pad are replaced by PDK rppd instances",
+         "* (w=%s, l=%s, m=%d; R_side = rz + rsh*l/(m*(w+xw)) with rz = 35 R·um/w = 17.5," % (RPPD_W, RPPD_L, RPPD_M),
+         "* -> 50.000 ohm per side, 100.000 ohm differential at rsh = 260); everything else",
+         "* is pad_ac as-is: PLACEHOLDER pad capacitance, ideal 4 ohm metal series",
+         "* stand-ins, ideal CTLE-internal resistors, code-0 CTLE hanging on the pad.",
+         "* NOT a return-loss result: R9 SDD11 is graded on extracted layout (#24/#28).",
+         "* Tolerance figures trace to spec/sources/rppd-tolerance-window.md (PDK",
+         "* process spec Rev. 1.2 p.11 vs cornerRES.lib; discrepancy reported, not",
+         "* reconciled). Sizing evidence from a simulation, never a measurement."]
+    if win:
+        L += ["* p.11 window member: the corners.params axis overrides rsh_rppd with",
+              "* the width-delta-folded window edges derived in the source note (the",
+              "* deck-level .param below is the default the override addresses)."]
+    L.append(".include ../../design/rx/netlists/ctle.spice")
+    if win:
+        L.append(".param rsh_rppd = 260.0")
+    # rx_term_pad inlined: its ideal termination legs become rppd instances
+    # (r3_cmc needs the body node bn, tied to ground), the cell's vss port maps
+    # to ground exactly as the Xpad call in pad_ac does, and the subckt wrapper
+    # is dropped. A changed netlist fails generation instead of substituting
+    # silently.
+    nsub = 0
+    for line in open(os.path.join(NET, "rx_term_pad.spice")):
+        if line.startswith("**") or line.startswith(".subckt") or line.startswith(".ends"):
+            continue
+        t = line.split()
+        if not t or line.startswith("*"):
+            continue
+        if t[0] in ("Rtp", "Rtn") and len(t) >= 4 and t[3] == "50":
+            L.append("X%s %s %s 0 rppd w=%s l=%s m=%d b=0" % (t[0], t[1], t[2], RPPD_W, RPPD_L, RPPD_M))
+            nsub += 1
+            continue
+        L.append(" ".join("0" if x == "vss" else x for x in t))
+    if nsub != 2:
+        raise SystemExit("gen_requests.py: expected exactly 2 ideal termination legs in "
+                         "rx_term_pad.spice, found %d -- the netlist changed, revisit the "
+                         "rppd substitution" % nsub)
+    L += ["Vdd vdd 0 1.2",
+          "Bvcm vcm 0 V=0.7917*v(vdd)",
+          "Vip padp vcm dc 0 ac 0.5",
+          "Vin padn vcm dc 0 ac -0.5",
+          "Xc inp inn vcm vdd 0 kl klb kl klb kl klb op on ctle",
+          "Bkl kl 0 V=v(vdd)-0.25",
+          "Bklb klb 0 V=v(vdd)",
+          "Clp op 0 80f", "Cln on 0 80f",
+          "Hip iz 0 Vip 1"]
+    return "\n".join(L) + "\n"
+
+
+# RES corner -> the HBT/CAP/DIO corner it is ganged with (same typ/bcs/wcs
+# index, mirroring the TX MOS benches and the spec's ganging proposal).
+RES_GANG = (("res_typ", "hbt_typ", "cap_typ", "dio_tt"),
+            ("res_bcs", "hbt_bcs", "cap_bcs", "dio_ff"),
+            ("res_wcs", "hbt_wcs", "cap_wcs", "dio_ss"))
+
+
+def res_axes(debug=False):
+    """The 27-point grid with the RES corner as the named process axis."""
+    gang = RES_GANG[:1] if debug else RES_GANG
+    return {
+        "process": [
+            {"name": res, "sections": [
+                {"lib": RES_LIB, "section": res},
+                {"lib": HBT_LIB, "section": hbt},
+                {"lib": CAP_LIB, "section": cap},
+                {"lib": DIO_LIB, "section": dio},
+            ]}
+            for res, hbt, cap, dio in gang
+        ],
+        "temperature_c": [27] if debug else [-40, 27, 125],
+        "supply_v": {"vdd": [1.2] if debug else [1.08, 1.2, 1.32]},
+    }
+
+
+def p11win_axes():
+    """The two p.11 window members: typical ganged sections, nominal V and T,
+    rsh_rppd overridden to the source-note window edges."""
+    res, hbt, cap, dio = RES_GANG[0]
+    return {
+        "process": [
+            {"name": "res_typ_p11win", "sections": [
+                {"lib": RES_LIB, "section": res},
+                {"lib": HBT_LIB, "section": hbt},
+                {"lib": CAP_LIB, "section": cap},
+                {"lib": DIO_LIB, "section": dio},
+            ]}
+        ],
+        "temperature_c": [27],
+        "params": {"rsh_rppd": [RSH_RPPD_P11_LO, RSH_RPPD_P11_HI]},
+    }
+
+
 # --------------------------------------------------------------- latch bench
 def latch_body(extra=()):
     L = ["* Latch + clock-buffer sizing bench (issue #22). Sizing evidence, not a spec result.",
@@ -412,18 +534,31 @@ def main(argv):
         "pad_ac": (pad_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, pad_meas()),
         "latch_regen": (latch_body(lat_lines), {"kind": "tran", "args": "2p 3n"}, lat_meas),
     }
+    rppd_files = {
+        "pad_ac_rppd": (pad_rppd_body(), {"kind": "ac", "args": "lin 300 1e8 3e10"}, pad_meas(),
+                        res_axes(debug)),
+        "pad_ac_rppd_p11win": (pad_rppd_body(win=True), {"kind": "ac", "args": "lin 300 1e8 3e10"},
+                               pad_meas(), p11win_axes()),
+    }
     # 16 CTLE copies at 7.1 ns is a much larger transient deck than
     # latch_regen; give it a longer per-unit timeout than the default 120 s.
     timeouts = {"ctle_tran": {"timeout_s": 1800}}
     for name, (body, ana, meas) in files.items():
-        rel = os.path.relpath(NET, out)
-        with open(os.path.join(out, name + ".sp"), "w") as f:
-            f.write(body.replace("../../design/rx/netlists", rel))
-        req = request(name + ".sp", ana, meas, units, timeouts.get(name))
-        with open(os.path.join(out, name + ".request.json"), "w") as f:
-            json.dump(req, f, indent=2)
-            f.write("\n")
+        write_bench(out, name, body, ana, meas, units, extra_options=timeouts.get(name))
+    for name, (body, ana, meas, corners) in rppd_files.items():
+        write_bench(out, name, body, ana, meas, corners,
+                    extra_options={"osdi_preload": OSDI}, lib=RES_LIB)
     return 0
+
+
+def write_bench(out, name, body, ana, meas, corners, extra_options=None, lib=HBT_LIB):
+    rel = os.path.relpath(NET, out)
+    with open(os.path.join(out, name + ".sp"), "w") as f:
+        f.write(body.replace("../../design/rx/netlists", rel))
+    req = request(name + ".sp", ana, meas, corners, extra_options, lib)
+    with open(os.path.join(out, name + ".request.json"), "w") as f:
+        json.dump(req, f, indent=2)
+        f.write("\n")
 
 
 if __name__ == "__main__":
