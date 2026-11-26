@@ -122,7 +122,7 @@
         "role": "hygiene",
         "path": "scripts/test-reserve-record-dir.sh",
         "passed": true,
-        "content_hash": "sha256:7af95f3a55f26a9108f8bb47e45df401bbd5702ae5186718fa7558264924d1f1"
+        "content_hash": "sha256:7ab97e36a30c28b723fe8b5acc0eb871d6e39fc43d1b10d8a4149342c47ef1fb"
       },
       {
         "check": "present",

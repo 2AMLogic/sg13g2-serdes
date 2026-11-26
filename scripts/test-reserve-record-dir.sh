@@ -211,6 +211,44 @@ race_one_refusal() { # race_one_refusal <name> <out-prefix> -- exactly one stder
   [ "$(grep -l 'exists (records are append-only)' "$TMP/$2.a.err" "$TMP/$2.b.err" | wc -l)" -eq 1 ] \
     || fail "$1: race did not produce exactly one append-only refusal"
 }
+analog_wrapper_checks() { # analog_wrapper_checks <name> <explicit-sha> -- the pads/top/rx record contract
+  local name=$1 explicit=$2 rc h0
+  local wrapper="layout/analog/$name/regen.sh" gen="^$name-gen "
+  local dir="$TMP/repo/layout/analog/$name/records"
+  local rec="$dir/$FIXED_DATE-$SHA"
+  : > "$GEN_LOG"
+  awriter "$wrapper" >"$TMP/${name}1.out" 2>"$TMP/${name}1.err" \
+    || fail "$name: first launch failed: $(cat "$TMP/${name}1.err")"
+  [ -d "$rec" ] || fail "$name: first launch reserved no record at $rec"
+  [ -f "$rec/mock_record.json" ] || fail "$name: record missing the generator output"
+  [ "$(find "$dir" -mindepth 1 -maxdepth 1 | wc -l)" -eq 1 ] || fail "$name: unexpected entries in records/"
+  [ "$(grep -c "$gen" "$GEN_LOG")" -eq 1 ] || fail "$name: first launch reached the generator more than once"
+
+  echo "do not touch" >"$rec/record.md"
+  h0="$(tree_hash "$rec")"
+  rc=0; awriter "$wrapper" >"$TMP/${name}2.out" 2>"$TMP/${name}2.err" || rc=$?
+  [ "$rc" -eq 2 ] || fail "$name: relaunch against the saved record exited $rc (want 2)"
+  grep -qx "regen.sh: $rec exists (records are append-only)" "$TMP/${name}2.err" \
+    || fail "$name: relaunch diagnostic changed: $(cat "$TMP/${name}2.err")"
+  [ "$(tree_hash "$rec")" = "$h0" ] || fail "$name: relaunch changed the saved record"
+  [ "$(grep -c "$gen" "$GEN_LOG")" -eq 1 ] || fail "$name: relaunch reached the generator"
+
+  awriter "$wrapper" "$explicit" >"$TMP/${name}3.out" 2>"$TMP/${name}3.err" \
+    || fail "$name: explicit-sha launch failed: $(cat "$TMP/${name}3.err")"
+  [ -d "$dir/$FIXED_DATE-$explicit" ] || fail "$name: explicit sha lost from the record name"
+  [ "$(grep -c "$gen" "$GEN_LOG")" -eq 2 ] || fail "$name: explicit-sha launch did not reach the generator exactly once"
+
+  rm -rf "$dir"
+  : > "$GEN_LOG"
+  race_two_a "$wrapper" "$name-race"
+  [ -d "$rec" ] || fail "$name: race reserved no record"
+  [ "$(find "$dir" -mindepth 1 -maxdepth 1 | wc -l)" -eq 1 ] || fail "$name: race left more than the one record"
+  [ -f "$rec/mock_record.json" ] || fail "$name: raced record missing the generator output"
+  races_exits_0_2 "$name"
+  race_one_refusal "$name" "$name-race"
+  [ "$(grep -c "$gen" "$GEN_LOG")" -eq 1 ] \
+    || fail "$name: race admitted $(grep -c "$gen" "$GEN_LOG") writers to the generator (want exactly 1)"
+}
 # --- pnr-regen.sh: naming, retry, race ---------------------------------------
 # pnr-regen.sh preflights require_tool openroad; the flow itself goes through
 # mock uvx, and the shim refuses any direct invocation.
@@ -339,40 +377,7 @@ echo "test-reserve-record-dir: PASS: erc-regen.sh (naming, retry refused untouch
 # called) and a race (one winner exits 0 and reaches the generator; the loser
 # exits 2). pads/top/rx also prove the explicit <sha> argument, top/rx the
 # interpreter preflight, TX a caller-supplied outdir.
-PADS_DIR="$TMP/repo/layout/analog/pads/records"
-PADS_REC="$PADS_DIR/$FIXED_DATE-$SHA"
-: > "$GEN_LOG"
-awriter layout/analog/pads/regen.sh >"$TMP/pads1.out" 2>"$TMP/pads1.err" \
-  || fail "pads: first launch failed: $(cat "$TMP/pads1.err")"
-[ -d "$PADS_REC" ] || fail "pads: first launch reserved no record at $PADS_REC"
-[ -f "$PADS_REC/mock_record.json" ] || fail "pads: record missing the generator output"
-[ "$(find "$PADS_DIR" -mindepth 1 -maxdepth 1 | wc -l)" -eq 1 ] || fail "pads: unexpected entries in records/"
-[ "$(grep -c '^pads-gen ' "$GEN_LOG")" -eq 1 ] || fail "pads: first launch reached the generator more than once"
-
-echo "do not touch" >"$PADS_REC/record.md"
-h0="$(tree_hash "$PADS_REC")"
-rc=0; awriter layout/analog/pads/regen.sh >"$TMP/pads2.out" 2>"$TMP/pads2.err" || rc=$?
-[ "$rc" -eq 2 ] || fail "pads: relaunch against the saved record exited $rc (want 2)"
-grep -qx "regen.sh: $PADS_REC exists (records are append-only)" "$TMP/pads2.err" \
-  || fail "pads: relaunch diagnostic changed: $(cat "$TMP/pads2.err")"
-[ "$(tree_hash "$PADS_REC")" = "$h0" ] || fail "pads: relaunch changed the saved record"
-[ "$(grep -c '^pads-gen ' "$GEN_LOG")" -eq 1 ] || fail "pads: relaunch reached the generator"
-
-awriter layout/analog/pads/regen.sh cafefe0 >"$TMP/pads3.out" 2>"$TMP/pads3.err" \
-  || fail "pads: explicit-sha launch failed: $(cat "$TMP/pads3.err")"
-[ -d "$PADS_DIR/$FIXED_DATE-cafefe0" ] || fail "pads: explicit sha lost from the record name"
-[ "$(grep -c '^pads-gen ' "$GEN_LOG")" -eq 2 ] || fail "pads: explicit-sha launch did not reach the generator exactly once"
-
-rm -rf "$PADS_DIR"
-: > "$GEN_LOG"
-race_two_a layout/analog/pads/regen.sh pads-race
-[ -d "$PADS_REC" ] || fail "pads: race reserved no record"
-[ "$(find "$PADS_DIR" -mindepth 1 -maxdepth 1 | wc -l)" -eq 1 ] || fail "pads: race left more than the one record"
-[ -f "$PADS_REC/mock_record.json" ] || fail "pads: raced record missing the generator output"
-races_exits_0_2 pads
-race_one_refusal pads pads-race
-[ "$(grep -c '^pads-gen ' "$GEN_LOG")" -eq 1 ] \
-  || fail "pads: race admitted $(grep -c '^pads-gen ' "$GEN_LOG") writers to the generator (want exactly 1)"
+analog_wrapper_checks pads cafefe0
 echo "test-reserve-record-dir: PASS: pads/regen.sh (naming, sha arg, retry refused untouched, race: one writer)"
 
 TOP_DIR="$TMP/repo/layout/analog/top/records"
@@ -384,39 +389,7 @@ grep -q "regen.sh: $TMP/no-such-python missing; run scripts/setup-env.sh first" 
   || fail "top: preflight diagnostic changed: $(cat "$TMP/toppf.err")"
 [ ! -e "$TOP_DIR" ] || fail "top: preflight refusal reserved a record"
 
-TOP_REC="$TOP_DIR/$FIXED_DATE-$SHA"
-: > "$GEN_LOG"
-awriter layout/analog/top/regen.sh >"$TMP/top1.out" 2>"$TMP/top1.err" \
-  || fail "top: first launch failed: $(cat "$TMP/top1.err")"
-[ -d "$TOP_REC" ] || fail "top: first launch reserved no record at $TOP_REC"
-[ -f "$TOP_REC/mock_record.json" ] || fail "top: record missing the generator output"
-[ "$(find "$TOP_DIR" -mindepth 1 -maxdepth 1 | wc -l)" -eq 1 ] || fail "top: unexpected entries in records/"
-[ "$(grep -c '^top-gen ' "$GEN_LOG")" -eq 1 ] || fail "top: first launch reached the generator more than once"
-
-echo "do not touch" >"$TOP_REC/record.md"
-h0="$(tree_hash "$TOP_REC")"
-rc=0; awriter layout/analog/top/regen.sh >"$TMP/top2.out" 2>"$TMP/top2.err" || rc=$?
-[ "$rc" -eq 2 ] || fail "top: relaunch against the saved record exited $rc (want 2)"
-grep -qx "regen.sh: $TOP_REC exists (records are append-only)" "$TMP/top2.err" \
-  || fail "top: relaunch diagnostic changed: $(cat "$TMP/top2.err")"
-[ "$(tree_hash "$TOP_REC")" = "$h0" ] || fail "top: relaunch changed the saved record"
-[ "$(grep -c '^top-gen ' "$GEN_LOG")" -eq 1 ] || fail "top: relaunch reached the generator"
-
-awriter layout/analog/top/regen.sh cafefe1 >"$TMP/top3.out" 2>"$TMP/top3.err" \
-  || fail "top: explicit-sha launch failed: $(cat "$TMP/top3.err")"
-[ -d "$TOP_DIR/$FIXED_DATE-cafefe1" ] || fail "top: explicit sha lost from the record name"
-[ "$(grep -c '^top-gen ' "$GEN_LOG")" -eq 2 ] || fail "top: explicit-sha launch did not reach the generator exactly once"
-
-rm -rf "$TOP_DIR"
-: > "$GEN_LOG"
-race_two_a layout/analog/top/regen.sh top-race
-[ -d "$TOP_REC" ] || fail "top: race reserved no record"
-[ "$(find "$TOP_DIR" -mindepth 1 -maxdepth 1 | wc -l)" -eq 1 ] || fail "top: race left more than the one record"
-[ -f "$TOP_REC/mock_record.json" ] || fail "top: raced record missing the generator output"
-races_exits_0_2 top
-race_one_refusal top top-race
-[ "$(grep -c '^top-gen ' "$GEN_LOG")" -eq 1 ] \
-  || fail "top: race admitted $(grep -c '^top-gen ' "$GEN_LOG") writers to the generator (want exactly 1)"
+analog_wrapper_checks top cafefe1
 echo "test-reserve-record-dir: PASS: top/regen.sh (preflight, naming, sha arg, retry refused untouched, race: one writer)"
 
 RX_DIR="$TMP/repo/layout/analog/rx/records"
@@ -428,39 +401,7 @@ grep -q "regen.sh: $TMP/repo/.venv/bin/python missing; run scripts/setup-env.sh 
   || fail "rx: preflight diagnostic changed: $(cat "$TMP/rxpf.err")"
 [ ! -e "$RX_DIR" ] || fail "rx: preflight refusal reserved a record"
 
-RX_REC="$RX_DIR/$FIXED_DATE-$SHA"
-: > "$GEN_LOG"
-awriter layout/analog/rx/regen.sh >"$TMP/rx1.out" 2>"$TMP/rx1.err" \
-  || fail "rx: first launch failed: $(cat "$TMP/rx1.err")"
-[ -d "$RX_REC" ] || fail "rx: first launch reserved no record at $RX_REC"
-[ -f "$RX_REC/mock_record.json" ] || fail "rx: record missing the generator output"
-[ "$(find "$RX_DIR" -mindepth 1 -maxdepth 1 | wc -l)" -eq 1 ] || fail "rx: unexpected entries in records/"
-[ "$(grep -c '^rx-gen ' "$GEN_LOG")" -eq 1 ] || fail "rx: first launch reached the generator more than once"
-
-echo "do not touch" >"$RX_REC/record.md"
-h0="$(tree_hash "$RX_REC")"
-rc=0; awriter layout/analog/rx/regen.sh >"$TMP/rx2.out" 2>"$TMP/rx2.err" || rc=$?
-[ "$rc" -eq 2 ] || fail "rx: relaunch against the saved record exited $rc (want 2)"
-grep -qx "regen.sh: $RX_REC exists (records are append-only)" "$TMP/rx2.err" \
-  || fail "rx: relaunch diagnostic changed: $(cat "$TMP/rx2.err")"
-[ "$(tree_hash "$RX_REC")" = "$h0" ] || fail "rx: relaunch changed the saved record"
-[ "$(grep -c '^rx-gen ' "$GEN_LOG")" -eq 1 ] || fail "rx: relaunch reached the generator"
-
-awriter layout/analog/rx/regen.sh cafefe2 >"$TMP/rx3.out" 2>"$TMP/rx3.err" \
-  || fail "rx: explicit-sha launch failed: $(cat "$TMP/rx3.err")"
-[ -d "$RX_DIR/$FIXED_DATE-cafefe2" ] || fail "rx: explicit sha lost from the record name"
-[ "$(grep -c '^rx-gen ' "$GEN_LOG")" -eq 2 ] || fail "rx: explicit-sha launch did not reach the generator exactly once"
-
-rm -rf "$RX_DIR"
-: > "$GEN_LOG"
-race_two_a layout/analog/rx/regen.sh rx-race
-[ -d "$RX_REC" ] || fail "rx: race reserved no record"
-[ "$(find "$RX_DIR" -mindepth 1 -maxdepth 1 | wc -l)" -eq 1 ] || fail "rx: race left more than the one record"
-[ -f "$RX_REC/mock_record.json" ] || fail "rx: raced record missing the generator output"
-races_exits_0_2 rx
-race_one_refusal rx rx-race
-[ "$(grep -c '^rx-gen ' "$GEN_LOG")" -eq 1 ] \
-  || fail "rx: race admitted $(grep -c '^rx-gen ' "$GEN_LOG") writers to the generator (want exactly 1)"
+analog_wrapper_checks rx cafefe2
 echo "test-reserve-record-dir: PASS: rx/regen.sh (preflight, naming, sha arg, retry refused untouched, race: one writer)"
 
 TX_DIR="$TMP/repo/layout/analog/tx/records"
