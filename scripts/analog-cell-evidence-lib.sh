@@ -12,10 +12,13 @@
 #     .provenance.input.content_hash == sha256 of <rec>/<cell>.gds;
 #   - <rec>/<cell>/lvs.report.json: status match, .environment.layout_sha256
 #     == sha256 of <rec>/<cell>.gds, .environment.reference_sha256 == sha256 of
-#     the standalone reference subcircuit netlist.
+#     the standalone reference subcircuit netlist, .power_connectivity.status
+#     not mismatch (the one verdict for fresh and stored reports alike,
+#     issue #281).
 # An older record's evidence never stands in for a newer record's GDS.
 # Return: 0 verified, 3 stale (newest record lacks evidence for the cell),
-# 1 evidence present but not clean / not a match / bound to other inputs.
+# 1 evidence present but not clean / not a match / power connectivity
+# mismatch / bound to other inputs.
 # Errors go to stderr as `::error file=...::<tag>: ...` annotations.
 
 analog_cell_verify() {
@@ -41,6 +44,8 @@ analog_cell_verify() {
     || { echo "::error file=$rec/$cell/drc.report.json::$tag: DRC input hash '${got}' is not $rec/$cell.gds (sha256:$want)" >&2; rc=1; }
   [ "$(jq -r .status "$lvs")" = match ] \
     || { echo "::error file=$rec/$cell/lvs.report.json::$tag: LVS status is not match" >&2; rc=1; }
+  [ "$(jq -r '.power_connectivity.status // empty' "$lvs")" != mismatch ] \
+    || { echo "::error file=$rec/$cell/lvs.report.json::$tag: power connectivity status is mismatch" >&2; rc=1; }
   got=$(jq -r '.environment.layout_sha256 // empty' "$lvs")
   [ "$got" = "$want" ] \
     || { echo "::error file=$rec/$cell/lvs.report.json::$tag: LVS layout hash '${got}' is not $rec/$cell.gds ($want)" >&2; rc=1; }

@@ -109,6 +109,9 @@ check_harness() {
   echo "harness: scripts/test-sta-paths-liberty.sh"
   bash scripts/test-sta-paths-liberty.sh || {
     echo "::error file=scripts/test-sta-paths-liberty.sh::sta-paths Liberty-corner self-test failed" >&2; return 1; }
+  echo "harness: scripts/test-analog-lvs-verdict.sh"
+  bash scripts/test-analog-lvs-verdict.sh || {
+    echo "::error file=scripts/test-analog-lvs-verdict.sh::analog evidence one-verdict self-test failed" >&2; return 1; }
 }
 
 # check_fresh -- the committed evidence records still describe the committed
@@ -137,7 +140,8 @@ check_harness() {
 #   6. item 11.digital cites the newest clean ERC report. Its GDS path and
 #      hash match the newest P&R record, and its spec hash matches both the
 #      canonical supply spec and the archived copy that signoff reads.
-#   7. the newest RX and TX converter LVS records both report a match.
+#   7. the newest RX and TX converter LVS records both report a match with
+#      power connectivity not mismatch.
 #   8. each converter's LVS report identifies the GDS in its record and
 #      the standalone reference subcircuit in design/ by their hashes.
 # This is the PDK-free subset of check-pnr-fresh.sh / check-lvs-fresh.sh /
