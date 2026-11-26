@@ -69,3 +69,7 @@
 ## Run
 - batch-set exit=4
 
+
+## Erratum 2026-11-26
+
+This record uses a buffered main-tail bias. Its REM current is XQTM emitter current, and its reverse-Vbe card reads the shared bias node. The operating-point recommendation based on these runs has been withdrawn. [Corrected comparison and probe checks in PR #288](../20261126-r4sweep-verdict/verdict.md#erratum-2026-11-26)

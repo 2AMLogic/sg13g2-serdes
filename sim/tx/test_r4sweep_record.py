@@ -18,6 +18,13 @@ class RecordTest(unittest.TestCase):
             shutil.copy(STAGE3 / "exit-codes.txt", out)
             batch = out / "batch"
             shutil.copytree(STAGE3 / "batch", batch)
+            # Both directory conventions occur in real klt manifests.
+            manifest_path = batch / "set-manifest.json"
+            manifest = json.loads(manifest_path.read_text())
+            control = next(item for item in manifest["requests"] if "_ctl_" in item["request"])
+            control["dir"] += ".request"
+            (batch / "r4sweep_ctl_wcs").rename(batch / Path(control["dir"]).name)
+            manifest_path.write_text(json.dumps(manifest))
             shutil.rmtree(batch / "r4sweep_c_p80_r400_wcs")
 
             path = batch / "r4sweep_c_p80_r600_wcs/report.json"

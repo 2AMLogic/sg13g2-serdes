@@ -94,3 +94,17 @@ at this load; the thresholds are not a conforming 20-80 % at low swing, see `sim
   fallback with R3 deferred, or to pursue a termination/bias change together with a predriver R3 fix.
 - Not done / out of scope: FFE-on behaviour of the candidates, the revised #270 load return, the mux and clock
   margin, PVT-full coverage, and any production circuit or layout change.
+
+## Erratum 2026-11-26
+
+**The original operating-point recommendation and its R3 bounds are withdrawn.** R3 and R4 are proposed in the [target specification](../../../../spec/target-spec.md). The four fleet records above used a ground-referenced buffer that supplied XQTM's base current. They describe a different bias load, including at zero offset. In those records the reverse-Vbe card used `vbn` in place of XQTM's base and the REM current is emitter current. At +80 mV the card overstates reverse Vbe by 80 mV. At −40 mV it understates it by 40 mV. Across the 27 control corners the largest static-swing shift was 12.196 mVppd at WCS, 1.32 V, 125 °C (519.647 in the original uninstrumented control and 531.843 with the buffer). [Correcting PR #288](https://github.com/2AMLogic/sg13g2-serdes/pull/288)
+
+Recomputing the **original buffered runs** from their per-corner measurements and counting repeat WCS runs once gives 183 completed candidate/corner pairs out of 189. Six RT ×6 transients errored. These figures correct the historical comparison:
+
+- At WCS, 1.08 V, −40 °C, the highest of the 13 static swings is **452.825 mVppd** at +80 mV, RT ×4. All 13 fall below 500. At +80 mV, RT ×3, six of 27 static swings fall below 500: all three WCS temperatures at 1.08 V, WCS at 1.20 V / 125 °C (493.961), and TYP at 1.08 V / −40 °C and 125 °C.
+- The maximum absolute difference between static and PRBS-run swing in the 1.08 V / −40 °C rows is 1.116 mV. Across the completed grid 25 of 183 differences exceed 1.2 mV. The largest is 5.111 mV at +80 mV, RT ×3, BCS, 1.32 V, −40 °C (903.516 static and 898.405 PRBS-run mVppd).
+- Across the 27 RT ×3, +80 mV corners the fixed-threshold rise times span 2.259–114.306 ps and fall times span 2.251–113.751 ps. Both maxima occur at that same BCS corner. These cards time crossings of fixed ±60 mV levels. The bandwidth conclusion is withdrawn.
+
+The corrected bench (`d13baf3`) inserts a floating series offset in the bias connection, probes XQTM's physical base, and measures collector and emitter currents separately. Two single-corner simulations with the updated probes give **207.063 mVppd** at zero offset and **408.519 mVppd** at +80 mV, RT ×3, both at WCS, 1.08 V, −40 °C. The first matches the uninstrumented control. The second is 91.481 mV below 500 and 108.519 mV above 300 at this corner. [Requests and raw reports](../20261126-101904-d13baf3-r4sweep-control-check/record.md)
+
+The corrected 13 WCS, four TYP and four BCS requests all stopped before fleet submission because the worker lacked the `batch-runner-submit` profile. All 189 corrected fleet points remain missing. Selection of the best supported design, its worst swing and R3 margins, and the headroom conclusion on the corrected grid remain open for #249. [WCS attempt](../20261126-101847-d13baf3-r4sweep-wcs-series/record.md) · [TYP attempt](../20261126-101851-d13baf3-r4sweep-typ-series/record.md) · [BCS attempt](../20261126-101854-d13baf3-r4sweep-bcs-series/record.md) · [Operator decision](https://github.com/2AMLogic/sg13g2-serdes/issues/249)

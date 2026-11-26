@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "requests": [
+    {
+      "index": 0,
+      "request": "r4sweep_ctl_bcs.request.json",
+      "dir": "/workspace/work/2amlogic-sg13g2-serdes-65744dfe/.loom/worktrees/2amlogic-sg13g2-serdes-65744dfe/issue-286/sim/tx/records/20261126-101854-d13baf3-r4sweep-bcs-series/batch/r4sweep_ctl_bcs.request",
+      "status": "error",
+      "job_id": null,
+      "job_ids": [],
+      "attempts": 1
+    },
+    {
+      "index": 1,
+      "request": "r4sweep_c_p80_r300_bcs.request.json",
+      "dir": "/workspace/work/2amlogic-sg13g2-serdes-65744dfe/.loom/worktrees/2amlogic-sg13g2-serdes-65744dfe/issue-286/sim/tx/records/20261126-101854-d13baf3-r4sweep-bcs-series/batch/r4sweep_c_p80_r300_bcs.request",
+      "status": "error",
+      "job_id": null,
+      "job_ids": [],
+      "attempts": 1
+    },
+    {
+      "index": 2,
+      "request": "r4sweep_c_p80_r400_bcs.request.json",
+      "dir": "/workspace/work/2amlogic-sg13g2-serdes-65744dfe/.loom/worktrees/2amlogic-sg13g2-serdes-65744dfe/issue-286/sim/tx/records/20261126-101854-d13baf3-r4sweep-bcs-series/batch/r4sweep_c_p80_r400_bcs.request",
+      "status": "error",
+      "job_id": null,
+      "job_ids": [],
+      "attempts": 1
+    },
+    {
+      "index": 3,
+      "request": "r4sweep_c_p80_r600_bcs.request.json",
+      "dir": "/workspace/work/2amlogic-sg13g2-serdes-65744dfe/.loom/worktrees/2amlogic-sg13g2-serdes-65744dfe/issue-286/sim/tx/records/20261126-101854-d13baf3-r4sweep-bcs-series/batch/r4sweep_c_p80_r600_bcs.request",
+      "status": "error",
+      "job_id": null,
+      "job_ids": [],
+      "attempts": 1
+    }
+  ]
+}

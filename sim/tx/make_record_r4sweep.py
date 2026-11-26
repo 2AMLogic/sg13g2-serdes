@@ -25,13 +25,18 @@ LIM = "wcs/1.080V/-40C"   # control cross-check row (wcs process)
 PLIM = f"{proc}/1.080V/-40C"  # limiting-corner row for this record's process
 candidates = {c["id"]: c for c in json.loads((tx / "r4sweep_candidates.json").read_text())}
 manifest_path = out / "batch" / "set-manifest.json"
+directories = {}
 if manifest_path.is_file():
-    filenames = [item["request"] for item in json.loads(manifest_path.read_text())["requests"]]
-else:
-    # klt can stop before writing its manifest. The runner saves its exact input list.
-    filenames = (out / "requests.txt").read_text().splitlines()
+    for item in json.loads(manifest_path.read_text())["requests"]:
+        # The manifest carries the submitter's absolute path. Reports travel with the batch.
+        directories[pathlib.Path(item["request"]).name] = pathlib.Path(item["dir"]).name
+filenames = list(directories)
+input_list = out / "requests.txt"
+if input_list.is_file():
+    # Preserve inputs even if klt stops before finishing its manifest.
+    filenames.extend(name for name in input_list.read_text().splitlines() if name not in directories)
 if not filenames:
-    sys.exit("Empty R4 sweep manifest")
+    sys.exit("No requested candidates in the batch manifest or requests.txt")
 
 CANDS = []
 reports = {}
@@ -41,7 +46,7 @@ for filename in filenames:
     cand = name.removeprefix("r4sweep_").removesuffix(f"_{proc}.request.json")
     CANDS.append(candidates[cand])
     requests[cand] = json.loads((tx / name).read_text())
-    path = out / "batch" / name.removesuffix(".request.json") / "report.json"
+    path = out / "batch" / directories.get(name, name.removesuffix(".request.json")) / "report.json"
     if path.is_file():
         reports[cand] = json.loads(path.read_text())
 
@@ -229,7 +234,7 @@ for tag, cid in (("tx_sizing_ffe0_wcs", LIM), ("tx_sizing_ffe1_wcs", LIM),
         cc = corner(rep, cid)
         mine = static(cc or {})
     L.append(f"| {tag} | {cid} | {mv(ctl)} | {mv(mine)} |")
-L += ["", "## Run", "- " + "; ".join(rc.exit_codes(out)), ""]
+L += ["", "## Run", "- " + "; ".join(rc.exit_codes(out))]
 (out / "record.md").write_text("\n".join(L) + "\n")
 print(f"wrote {out / 'record.md'}")
 if incomplete:
