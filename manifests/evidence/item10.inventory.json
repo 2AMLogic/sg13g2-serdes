@@ -25,6 +25,7 @@
     "sim/bench/test_link_bench.py",
     "sim/bench/test_gen_inventory.py",
     "sim/tools/test-record-dir.sh",
+    "sim/tools/test-osdi-missing-dpkg-deb.sh",
     "sim/tools/record-dir.sh",
     "package.json"
   ],
