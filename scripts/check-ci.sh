@@ -96,6 +96,9 @@ check_harness() {
   echo "harness: sim/tools/test-record-dir.sh"
   bash sim/tools/test-record-dir.sh || {
     echo "::error file=sim/tools/test-record-dir.sh::record-dir reservation self-test failed" >&2; return 1; }
+  echo "harness: sim/tools/test-osdi-missing-dpkg-deb.sh"
+  bash sim/tools/test-osdi-missing-dpkg-deb.sh || {
+    echo "::error file=sim/tools/test-osdi-missing-dpkg-deb.sh::osdi missing-dpkg-deb diagnostic self-test failed" >&2; return 1; }
   echo "harness: scripts/test-reserve-record-dir.sh"
   bash scripts/test-reserve-record-dir.sh || {
     echo "::error file=scripts/test-reserve-record-dir.sh::record-dir reservation self-test failed" >&2; return 1; }

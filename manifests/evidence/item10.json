@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 10,
-  "summary": "T1 item 10 (Repo hygiene): 26/26 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 10 (Repo hygiene): 27/27 attestation checks passed (klt signoff --attest)",
   "source": "manifests/evidence/item10.inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 26,
-    "passed_count": 26,
+    "check_count": 27,
+    "passed_count": 27,
     "checks": [
       {
         "check": "present",
@@ -52,7 +52,7 @@
         "role": "hygiene",
         "path": "scripts/check-ci.sh",
         "passed": true,
-        "content_hash": "sha256:d9c8ef9b2898a8c7e9e7be556ef350f7aea476679afc4890c4e66adc490b138f"
+        "content_hash": "sha256:0dda2c6ca98f77319aa13e906815513bd7a43be3faaea69b1ca5380c7fb17991"
       },
       {
         "check": "present",
@@ -169,6 +169,13 @@
       {
         "check": "present",
         "role": "hygiene",
+        "path": "sim/tools/test-osdi-missing-dpkg-deb.sh",
+        "passed": true,
+        "content_hash": "sha256:b2561b1f392e3b83488e4d55c3e7f35b6016ef518748eccb29695425d66b2479"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
         "path": "sim/tools/test-record-dir.sh",
         "passed": true,
         "content_hash": "sha256:84e5c353d3d7fd3d333622242e7f39f66ebe5a174a4a396564ecfcc5317df6a8"
@@ -221,7 +228,7 @@
         "path": "manifests/evidence/item10.inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:0aa9f5359a02fbf3cb1ef4708292fd9d9708a4957233eb9c53b485f9f18b9cec"
+      "content_hash": "sha256:7f40d945721dd980e3e59669f619c7a467b6b08406b43b7134efea223628ca69"
     }
   }
 }
