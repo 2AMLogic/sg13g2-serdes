@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "status": "error",
+  "request_count": 4,
+  "max_in_flight": 2,
+  "submitted": 4,
+  "refused": 1,
+  "refused_codes": [],
+  "requests": [
+    {
+      "index": 0,
+      "request": "r4sweep_ctl_bcs.request.json",
+      "status": "fail",
+      "exit_code": 3,
+      "job_id": "klt-sim-3cca8fe07ca8",
+      "job_ids": [
+        "klt-sim-3cca8fe07ca8"
+      ],
+      "report": "/home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-286/sim/tx/records/20261126-095254-5c4eac5-r4sweep-bcs/batch/r4sweep_ctl_bcs/report.json",
+      "error": null,
+      "shards": [
+        {
+          "job_id": "klt-sim-3cca8fe07ca8",
+          "last_state": "failed",
+          "interrupted_observations": 0
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "request": "r4sweep_c_p80_r300_bcs.request.json",
+      "status": "fail",
+      "exit_code": 3,
+      "job_id": "klt-sim-4adf10f4e0fc",
+      "job_ids": [
+        "klt-sim-4adf10f4e0fc"
+      ],
+      "report": "/home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-286/sim/tx/records/20261126-095254-5c4eac5-r4sweep-bcs/batch/r4sweep_c_p80_r300_bcs/report.json",
+      "error": null,
+      "shards": [
+        {
+          "job_id": "klt-sim-4adf10f4e0fc",
+          "last_state": "failed",
+          "interrupted_observations": 0
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "request": "r4sweep_c_p80_r400_bcs.request.json",
+      "status": "fail",
+      "exit_code": 3,
+      "job_id": "klt-sim-3640b054f4e5",
+      "job_ids": [
+        "klt-sim-3640b054f4e5"
+      ],
+      "report": "/home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-286/sim/tx/records/20261126-095254-5c4eac5-r4sweep-bcs/batch/r4sweep_c_p80_r400_bcs/report.json",
+      "error": null,
+      "shards": [
+        {
+          "job_id": "klt-sim-3640b054f4e5",
+          "last_state": "failed",
+          "interrupted_observations": 0
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "request": "r4sweep_c_p80_r600_bcs.request.json",
+      "status": "error",
+      "exit_code": 4,
+      "job_id": "klt-sim-519db87223ab",
+      "job_ids": [
+        "klt-sim-519db87223ab"
+      ],
+      "report": "/home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-286/sim/tx/records/20261126-095254-5c4eac5-r4sweep-bcs/batch/r4sweep_c_p80_r600_bcs/report.json",
+      "error": null,
+      "shards": [
+        {
+          "job_id": "klt-sim-519db87223ab",
+          "last_state": "failed",
+          "interrupted_observations": 0
+        }
+      ]
+    }
+  ]
+}

@@ -10,6 +10,7 @@ a spec result and not a measurement.**
 | `tx_mos_{mux2to1_cml,tx_lvl_cml2cmos,ffe_en}.sp` / `.request.json` | three MOS-cell `klt sim` requests (issue #80), each 5 process pairings x 3 supplies x 3 temperatures = 45 corners; PSP103 and the real `r3_cmc` resistors via `osdi_preload` |
 | `run_sizing.sh [mos\|vce]` | runs the six HBT requests, `mos` the three MOS requests, `vce` the R3 per-device Vce set -- six HBT + mux2to1_cml + ffe_en, every TX bench with an HBT (batch fleet via `KLT_SIM_BACKEND=batch`; no local fallback) and writes `records/<id>/` (`<id>-mos/` / `<id>-vce/` for the MOS / VCE sets) |
 | `make_record.py` / `make_record_mos.py` / `make_record_vce.py` | render `records/<id>/record.md` for the HBT / MOS / VCE set |
+| `make_sweep_r4.py` / `run_r4sweep.sh <proc> [tag]` / `make_record_r4sweep.py` | the R4 swing-shortfall sweep (issue #286): tail-bias and back-termination candidates on the TX sizing bench, FFE off, `r4sweep_<cand>_<proc>.{sp,request.json}`, one batch set per process pairing, record id suffixed `-r4sweep-<proc>`; the verdict is `records/20261126-r4sweep-verdict/verdict.md` |
 | `records/<id>/` | append-only run records; never edited after the fact |
 
 Reproduce: `source scripts/env.sh && python3 -I sim/tx/make_tb.py && sim/tx/run_sizing.sh`.
