@@ -4,7 +4,7 @@
   "evidence": {
     "1": {
       "file": "manifests/evidence/item1.json",
-      "content_hash": "sha256:abe33cf3f6b8b92271edc0da049d75a50a452a9a4040d30eb7a99045b8774e58"
+      "content_hash": "sha256:7e440e90000695e9ae8260332e334840b25d9e659276f0d5a8955f4f3a0c752d"
     },
     "9": {
       "file": "manifests/evidence/item9.json",

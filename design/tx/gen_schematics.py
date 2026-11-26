@@ -137,7 +137,9 @@ for ph, (dp, dn, sq) in {"a": ("dap", "dan", "sqa"), "b": ("dbp", "dbn", "sqb")}
         nmos("MT" + ph, "e" + ph, sq, "s" + ph, "20u", ng=4),
         res("Rs" + ph, "s" + ph, "vss", 60, 8),
     ]
-_mux += [res("RLp", "vdd", "outp", 100, 8), res("RLn", "vdd", "outn", 100, 8)]
+# R3 (#265): loads return to vlm, one series resistor below the rail (DR-005 option 1)
+_mux += [res("RSm", "vdd", "vlm", 8, 8),
+         res("RLp", "vlm", "outp", 100, 8), res("RLn", "vlm", "outn", 100, 8)]
 cell("mux2to1_cml",
      "Final 2:1 mux (DR-001 decision 2). Two HBT data pairs share resistive loads; each "
      "pair's tail is a thin-oxide NMOS gated by a rail-swing copy of one 5 GHz phase "
@@ -157,7 +159,9 @@ cell("predriver",
                 ("outp", "out"), ("outn", "out")],
      [npn("Q1", "outn", "inp", "e", 4), npn("Q2", "outp", "inn", "e", 4),
       npn("Qt", "e", "vbn", "et", 4), res("Re", "et", "vss", 16, 8),
-      res("RL1", "vdd", "outp", 60, 8), res("RL2", "vdd", "outn", 60, 8)])
+      # R3 (#265): loads return to vl, one series resistor below the rail (DR-005 option 1)
+      res("RS", "vdd", "vl", 10, 8),
+      res("RL1", "vl", "outp", 60, 8), res("RL2", "vl", "outn", 60, 8)])
 
 # --- driver_ffe: main pair + 3 post-cursor slices, 50 ohm back-termination
 _drv = [npn("QM1", "outn", "inp", "em", 8), npn("QM2", "outp", "inn", "em", 8),

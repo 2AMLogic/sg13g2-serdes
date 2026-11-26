@@ -1,4 +1,4 @@
-** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-21/design/tx/mux2to1_cml.sch
+** sch_path: /home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-265/design/tx/mux2to1_cml.sch
 .subckt mux2to1_cml vdd vss ckp ckn dap dan dbp dbn outp outn
 *.iopin vdd
 *.iopin vss
@@ -30,6 +30,7 @@ XQb1 outn dbp eb vss npn13G2 Nx=2
 XQb2 outp dbn eb vss npn13G2 Nx=2
 XMTb eb sqb sb vss sg13_lv_nmos w=20u l=0.13u ng=4 m=1
 XRsb sb vss vss rsil w=8u l=68.57u m=1 b=0
-XRLp vdd outp vss rsil w=8u l=114.3u m=1 b=0
-XRLn vdd outn vss rsil w=8u l=114.3u m=1 b=0
+XRSm vdd vlm vss rsil w=8u l=9.143u m=1 b=0
+XRLp vlm outp vss rsil w=8u l=114.3u m=1 b=0
+XRLn vlm outn vss rsil w=8u l=114.3u m=1 b=0
 .ends

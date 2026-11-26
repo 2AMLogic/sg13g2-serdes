@@ -153,9 +153,7 @@ for dev, setname, vc, vce, vb in ROWS:
         flag = " **>%.4g**" % lim if over else ""
         row.append(f"{v:.4f}{flag} ({cid})")
     L.append("| " + " | ".join(row) + " |")
-L += ["", f"- cells over an R3 limit in these grids: **{viol}** "
-      "(the mux collector findings at the 1.32 V supply are the known open ones, kept "
-      "from `records/20261110-224611-4092fc2-mos/`; see the failing-corners list above).", ""]
+L += ["", f"- The per-device table has **{viol}** values above an R3 limit in the recorded grids.", ""]
 
 L += ["## Grids and caveats", "",
       "- tx_sizing (HBT set): hbt typ/bcs/wcs ganged with cap + res and the matching "

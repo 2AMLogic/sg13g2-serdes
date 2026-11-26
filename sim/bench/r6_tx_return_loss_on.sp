@@ -31,8 +31,9 @@ XQ1 outn inp e vss npn13G2 Nx=4
 XQ2 outp inn e vss npn13G2 Nx=4
 XQt e vbn et vss npn13G2 Nx=4
 XRe et vss vss rsil w=8u l=18.29u m=1 b=0
-XRL1 vdd outp vss rsil w=8u l=68.57u m=1 b=0
-XRL2 vdd outn vss rsil w=8u l=68.57u m=1 b=0
+XRS vdd vl vss rsil w=8u l=11.43u m=1 b=0
+XRL1 vl outp vss rsil w=8u l=68.57u m=1 b=0
+XRL2 vl outn vss rsil w=8u l=68.57u m=1 b=0
 .ends
 
 .subckt driver_ffe vdd vss inp inn pip pin vbn vbp0 vbp1 vbp2 outp outn

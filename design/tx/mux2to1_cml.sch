@@ -182,13 +182,18 @@ N 360 930 360 910 {}
 C {lab_pin.sym} 360 910 0 0 {name=l67 lab=sb}
 N 360 990 360 1010 {}
 C {lab_pin.sym} 360 1010 0 0 {name=l68 lab=vss}
-C {sg13g2_pr/rsil.sym} 620 960 0 0 {name=RLp model=rsil spiceprefix=X w=8u l=114.3u b=0 m=1 body=vss}
+C {sg13g2_pr/rsil.sym} 620 960 0 0 {name=RSm model=rsil spiceprefix=X w=8u l=9.143u b=0 m=1 body=vss}
 N 620 930 620 910 {}
 C {lab_pin.sym} 620 910 0 0 {name=l69 lab=vdd}
 N 620 990 620 1010 {}
-C {lab_pin.sym} 620 1010 0 0 {name=l70 lab=outp}
-C {sg13g2_pr/rsil.sym} 880 960 0 0 {name=RLn model=rsil spiceprefix=X w=8u l=114.3u b=0 m=1 body=vss}
+C {lab_pin.sym} 620 1010 0 0 {name=l70 lab=vlm}
+C {sg13g2_pr/rsil.sym} 880 960 0 0 {name=RLp model=rsil spiceprefix=X w=8u l=114.3u b=0 m=1 body=vss}
 N 880 930 880 910 {}
-C {lab_pin.sym} 880 910 0 0 {name=l71 lab=vdd}
+C {lab_pin.sym} 880 910 0 0 {name=l71 lab=vlm}
 N 880 990 880 1010 {}
-C {lab_pin.sym} 880 1010 0 0 {name=l72 lab=outn}
+C {lab_pin.sym} 880 1010 0 0 {name=l72 lab=outp}
+C {sg13g2_pr/rsil.sym} 1140 960 0 0 {name=RLn model=rsil spiceprefix=X w=8u l=114.3u b=0 m=1 body=vss}
+N 1140 930 1140 910 {}
+C {lab_pin.sym} 1140 910 0 0 {name=l73 lab=vlm}
+N 1140 990 1140 1010 {}
+C {lab_pin.sym} 1140 1010 0 0 {name=l74 lab=outn}
