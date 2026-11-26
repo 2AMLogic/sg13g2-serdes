@@ -1,0 +1,13 @@
+r4sweep_ctl_wcs.request.json
+r4sweep_dvb_m40_wcs.request.json
+r4sweep_dvb_p40_wcs.request.json
+r4sweep_dvb_p80_wcs.request.json
+r4sweep_dvb_p120_wcs.request.json
+r4sweep_rtk_125_wcs.request.json
+r4sweep_rtk_150_wcs.request.json
+r4sweep_rtk_200_wcs.request.json
+r4sweep_c_p80_r200_wcs.request.json
+r4sweep_c_p80_r300_wcs.request.json
+r4sweep_c_p120_r300_wcs.request.json
+r4sweep_c_p80_r400_wcs.request.json
+r4sweep_c_p80_r600_wcs.request.json

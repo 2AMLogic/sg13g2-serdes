@@ -1,0 +1,67 @@
+[
+  {
+    "id": "ctl",
+    "dvb_v": 0.0,
+    "rt_length_scale": 1.0
+  },
+  {
+    "id": "dvb_m40",
+    "dvb_v": -0.04,
+    "rt_length_scale": 1.0
+  },
+  {
+    "id": "dvb_p40",
+    "dvb_v": 0.04,
+    "rt_length_scale": 1.0
+  },
+  {
+    "id": "dvb_p80",
+    "dvb_v": 0.08,
+    "rt_length_scale": 1.0
+  },
+  {
+    "id": "dvb_p120",
+    "dvb_v": 0.12,
+    "rt_length_scale": 1.0
+  },
+  {
+    "id": "rtk_125",
+    "dvb_v": 0.0,
+    "rt_length_scale": 1.25
+  },
+  {
+    "id": "rtk_150",
+    "dvb_v": 0.0,
+    "rt_length_scale": 1.5
+  },
+  {
+    "id": "rtk_200",
+    "dvb_v": 0.0,
+    "rt_length_scale": 2.0
+  },
+  {
+    "id": "c_p80_r200",
+    "dvb_v": 0.08,
+    "rt_length_scale": 2.0
+  },
+  {
+    "id": "c_p80_r300",
+    "dvb_v": 0.08,
+    "rt_length_scale": 3.0
+  },
+  {
+    "id": "c_p120_r300",
+    "dvb_v": 0.12,
+    "rt_length_scale": 3.0
+  },
+  {
+    "id": "c_p80_r400",
+    "dvb_v": 0.08,
+    "rt_length_scale": 4.0
+  },
+  {
+    "id": "c_p80_r600",
+    "dvb_v": 0.08,
+    "rt_length_scale": 6.0
+  }
+]

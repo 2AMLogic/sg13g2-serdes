@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "status": "error",
+  "request_count": 4,
+  "max_in_flight": 2,
+  "submitted": 0,
+  "refused": 4,
+  "refused_codes": [],
+  "requests": [
+    {
+      "index": 0,
+      "request": "r4sweep_ctl_bcs.request.json",
+      "status": "error",
+      "exit_code": 1,
+      "job_id": null,
+      "job_ids": [],
+      "report": null,
+      "error": {
+        "message": "batch backend failed: aws s3 cp (netlist input) failed (exit 255): The config profile (batch-runner-submit) could not be found",
+        "code": null
+      },
+      "shards": []
+    },
+    {
+      "index": 1,
+      "request": "r4sweep_c_p80_r300_bcs.request.json",
+      "status": "error",
+      "exit_code": 1,
+      "job_id": null,
+      "job_ids": [],
+      "report": null,
+      "error": {
+        "message": "batch backend failed: aws s3 cp (netlist input) failed (exit 255): The config profile (batch-runner-submit) could not be found",
+        "code": null
+      },
+      "shards": []
+    },
+    {
+      "index": 2,
+      "request": "r4sweep_c_p80_r400_bcs.request.json",
+      "status": "error",
+      "exit_code": 1,
+      "job_id": null,
+      "job_ids": [],
+      "report": null,
+      "error": {
+        "message": "batch backend failed: aws s3 cp (netlist input) failed (exit 255): The config profile (batch-runner-submit) could not be found",
+        "code": null
+      },
+      "shards": []
+    },
+    {
+      "index": 3,
+      "request": "r4sweep_c_p80_r600_bcs.request.json",
+      "status": "error",
+      "exit_code": 1,
+      "job_id": null,
+      "job_ids": [],
+      "report": null,
+      "error": {
+        "message": "batch backend failed: aws s3 cp (netlist input) failed (exit 255): The config profile (batch-runner-submit) could not be found",
+        "code": null
+      },
+      "shards": []
+    }
+  ]
+}

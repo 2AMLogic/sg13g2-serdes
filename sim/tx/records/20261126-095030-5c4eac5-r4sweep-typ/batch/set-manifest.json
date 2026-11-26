@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "requests": [
+    {
+      "index": 0,
+      "request": "r4sweep_ctl_typ.request.json",
+      "dir": "/home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-286/sim/tx/records/20261126-095030-5c4eac5-r4sweep-typ/batch/r4sweep_ctl_typ",
+      "status": "fail",
+      "job_id": "klt-sim-7ed52a831882",
+      "job_ids": [
+        "klt-sim-7ed52a831882"
+      ],
+      "attempts": 1
+    },
+    {
+      "index": 1,
+      "request": "r4sweep_c_p80_r300_typ.request.json",
+      "dir": "/home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-286/sim/tx/records/20261126-095030-5c4eac5-r4sweep-typ/batch/r4sweep_c_p80_r300_typ",
+      "status": "fail",
+      "job_id": "klt-sim-101ad33b7c7d",
+      "job_ids": [
+        "klt-sim-101ad33b7c7d"
+      ],
+      "attempts": 1
+    },
+    {
+      "index": 2,
+      "request": "r4sweep_c_p80_r400_typ.request.json",
+      "dir": "/home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-286/sim/tx/records/20261126-095030-5c4eac5-r4sweep-typ/batch/r4sweep_c_p80_r400_typ",
+      "status": "fail",
+      "job_id": "klt-sim-172ef30e9938",
+      "job_ids": [
+        "klt-sim-172ef30e9938"
+      ],
+      "attempts": 1
+    },
+    {
+      "index": 3,
+      "request": "r4sweep_c_p80_r600_typ.request.json",
+      "dir": "/home/ubuntu/GitHub/sg13g2-serdes/.loom/worktrees/issue-286/sim/tx/records/20261126-095030-5c4eac5-r4sweep-typ/batch/r4sweep_c_p80_r600_typ",
+      "status": "error",
+      "job_id": "klt-sim-488130f25a74",
+      "job_ids": [
+        "klt-sim-488130f25a74"
+      ],
+      "attempts": 1
+    }
+  ]
+}

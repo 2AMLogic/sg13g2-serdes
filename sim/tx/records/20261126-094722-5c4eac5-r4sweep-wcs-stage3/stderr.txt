@@ -1,0 +1,22 @@
+klt: batch job klt-sim-12b6fa92228a submitting to s3://<bucket>/jobs/klt-sim-12b6fa92228a
+klt: batch job klt-sim-60b92f3b7979 submitting to s3://<bucket>/jobs/klt-sim-60b92f3b7979
+klt sim: batch job klt-sim-12b6fa92228a (r4sweep_c_p80_r300_wcs.request.json): submitted
+klt sim: batch job klt-sim-60b92f3b7979 (r4sweep_ctl_wcs.request.json): submitted
+klt sim: batch job klt-sim-12b6fa92228a launched; re-attach with `klt sim <request> --backend batch --attach klt-sim-12b6fa92228a`
+klt sim: batch job klt-sim-60b92f3b7979 launched; re-attach with `klt sim <request> --backend batch --attach klt-sim-60b92f3b7979`
+klt sim: batch job klt-sim-12b6fa92228a state=no status.json yet elapsed=1s
+klt sim: batch job klt-sim-60b92f3b7979 state=no status.json yet elapsed=1s
+klt sim: batch job klt-sim-60b92f3b7979 (r4sweep_ctl_wcs.request.json): failed
+klt: batch job klt-sim-c2c76e6778a1 submitting to s3://<bucket>/jobs/klt-sim-c2c76e6778a1
+klt sim: batch job klt-sim-c2c76e6778a1 (r4sweep_c_p80_r400_wcs.request.json): submitted
+klt sim: batch job klt-sim-c2c76e6778a1 launched; re-attach with `klt sim <request> --backend batch --attach klt-sim-c2c76e6778a1`
+klt sim: batch job klt-sim-c2c76e6778a1 state=no status.json yet elapsed=1s
+klt sim: batch job klt-sim-12b6fa92228a (r4sweep_c_p80_r300_wcs.request.json): failed
+klt: batch job klt-sim-60c4a7eaf965 submitting to s3://<bucket>/jobs/klt-sim-60c4a7eaf965
+klt sim: batch job klt-sim-60c4a7eaf965 (r4sweep_c_p80_r600_wcs.request.json): submitted
+klt sim: batch job klt-sim-60c4a7eaf965 launched; re-attach with `klt sim <request> --backend batch --attach klt-sim-60c4a7eaf965`
+klt sim: batch job klt-sim-60c4a7eaf965 state=no status.json yet elapsed=1s
+klt sim: batch job klt-sim-c2c76e6778a1 (r4sweep_c_p80_r400_wcs.request.json): failed
+klt sim: batch job klt-sim-60c4a7eaf965 (r4sweep_c_p80_r600_wcs.request.json): running
+klt sim: batch job klt-sim-60c4a7eaf965 state=running elapsed=32s
+klt sim: batch job klt-sim-60c4a7eaf965 (r4sweep_c_p80_r600_wcs.request.json): failed
