@@ -117,6 +117,9 @@ check_harness() {
   echo "harness: scripts/test-analog-lvs-verdict.sh"
   bash scripts/test-analog-lvs-verdict.sh || {
     echo "::error file=scripts/test-analog-lvs-verdict.sh::analog evidence one-verdict self-test failed" >&2; return 1; }
+  echo "harness: layout/analog/test_layout_common.py"
+  python3 -I layout/analog/test_layout_common.py || {
+    echo "::error file=layout/analog/test_layout_common.py::analog record host-path rewrite self-test failed" >&2; return 1; }
 }
 
 # check_fresh -- the committed evidence records still describe the committed

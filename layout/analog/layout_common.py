@@ -1,16 +1,18 @@
 """Shared helpers for the analog layout generators under layout/analog/.
 
-One `.subckt` netlist parser, one `klt` subprocess runner and one SPICE
-length-to-micrometre converter, used by rx/gen_rx_cells.py, tx/gen_tx_core.py
-and pads/gen_pad_cells.py. The device-to-`klt gen` mapping stays in each
-generator (it legitimately differs). The generators run under `python3 -I`, so
-each puts this directory on sys.path itself before importing.
+One `.subckt` netlist parser, one `klt` subprocess runner, one SPICE
+length-to-micrometre converter and one host-path rewrite for the JSON records,
+used by rx/gen_rx_cells.py, tx/gen_tx_core.py and pads/gen_pad_cells.py. The
+device-to-`klt gen` mapping stays in each generator (it legitimately differs).
+The generators run under `python3 -I`, so each puts this directory on sys.path
+itself before importing.
 
 The body-tie straps (issue #199) and the composed-route plan helpers below are
 shared by the RX and TX per-cell routed generators.
 """
 import json
 import math
+import os
 import re
 import subprocess
 import sys
@@ -215,6 +217,62 @@ def run_klt(args, **kw):
     if r.returncode not in (0, 3):
         sys.exit(f"{' '.join(args)} failed ({r.returncode}):\n{r.stderr}{r.stdout}")
     return json.loads(r.stdout)
+
+
+REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+# Consume keys with their colon so only string values are eligible for rewriting.
+_JSON_STRING = re.compile(r'"(?:[^"\\]|\\.)*"(?P<key>\s*:)?')
+# Each match spells one decoded character, including a UTF-16 surrogate pair.
+_JSON_CHAR = re.compile(r'\\u[dD][89a-bA-B]..\\u[dD][c-fC-F]..|\\u....|\\.|.', re.DOTALL)
+
+
+def scrub_host_paths(out, pdk_root=None):
+    """Rewrite host paths in JSON values, preserving the bytes around each root.
+
+    Prefer the output directory, then the configured PDK, then the checkout.
+    A relative PDK_ROOT is relative to the generator's working directory.
+    """
+    out = os.path.abspath(out)
+    if pdk_root is None:
+        pdk_root = os.environ.get("PDK_ROOT")
+    roots = {out: "."}
+    if pdk_root:
+        roots.setdefault(os.path.abspath(pdk_root), "$PDK_ROOT")
+    roots.setdefault(REPO, "<repo>")
+
+    # Paths also occur after whitespace in klt diagnostics ("read from /...").
+    boundary = rf"(?={re.escape(os.sep)}|\Z)"
+    prefixes = [re.escape(root) + ("" if root.endswith(os.sep) else boundary) for root in roots]
+    path_root = re.compile(r"(?<!\S)(?:" + "|".join(prefixes) + ")")
+
+    def rewrite_value(token):
+        if token["key"]:
+            return token[0]
+        value = json.loads(token[0])
+        matches = list(path_root.finditer(value))
+        if not matches:
+            return token[0]
+        # Splice at decoded character offsets but retain the original spelling
+        # of escapes everywhere outside the roots, even inside a changed value.
+        chars = _JSON_CHAR.findall(token[0][1:-1])
+        for match in reversed(matches):
+            root = match[0]
+            end = match.end()
+            if root.endswith(os.sep) and end < len(value):
+                end -= 1  # keep the filesystem root's separator before a descendant
+            chars[match.start():end] = [roots[root]]
+        return '"' + "".join(chars) + '"'
+
+    for root, _, files in os.walk(out):
+        for f in files:
+            if f.endswith(".json"):
+                p = os.path.join(root, f)
+                with open(p, encoding="utf-8", newline="") as s:
+                    txt = s.read()
+                rewritten = _JSON_STRING.sub(rewrite_value, txt)
+                if rewritten != txt:
+                    with open(p, "w", encoding="utf-8", newline="") as s:
+                        s.write(rewritten)
 
 
 # ---------------------------------------------------------------------------

@@ -18,7 +18,7 @@ import json, math, os, subprocess, sys, tempfile
 import klayout.db as db
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
-from layout_common import parse_subckts, um
+from layout_common import parse_subckts, scrub_host_paths, um
 
 CELLS = ["bias", "ffe_en", "mux2to1_cml", "predriver", "driver_ffe", "tx_lvl_cml2cmos"]
 GAP, ROW_W, PIN = 4.0, 120.0, 0.5
@@ -357,16 +357,8 @@ def main():
     for cell in CELLS:
         lib.read(os.path.join(out, f"{cell}.gds"), opt)
     lib.write(os.path.join(out, "tx_core_lib.gds"))
-    # records must not leak host paths: rewrite the absolute output dir and
-    # repo root the compose request/response embed (same rule as gen_rx_cells)
-    repo = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-    for root, _, files in os.walk(out):
-        for f in files:
-            if f.endswith(".json"):
-                fp = os.path.join(root, f)
-                txt = open(fp).read()
-                txt = txt.replace(os.path.abspath(out), ".").replace(repo, "<repo>")
-                open(fp, "w").write(txt)
+    # records must not leak host paths: shared rewrite to ./, $PDK_ROOT and <repo>
+    scrub_host_paths(out)
     json.dump(summary, open(os.path.join(out, "plan.json"), "w"), indent=2, sort_keys=True)
 
 
