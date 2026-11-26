@@ -20,13 +20,8 @@ klt_env
 # No yosys check: `klt synthesize --check` hashes the sources and the liberty,
 # it never runs the synthesizer. The liberty sentinel is the one PDK file the
 # hash walk reads.
-# The liberty is the one the request routes: <cell_library>_<corner>.lib, never a fixed corner.
-CELL_LIB="$(jq -r .pdk.cell_library "$ROOT/rtl/synth/request.json")"
-CORNER="$(jq -r .pdk.corner "$ROOT/rtl/synth/request.json")"
-require_pdk_file "ihp-sg13g2/libs.ref/$CELL_LIB/lib/${CELL_LIB}_${CORNER}.lib" \
-  "check-synth-fresh: ${CELL_LIB}_${CORNER}.lib liberty not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
-
 REQ="$ROOT/rtl/synth/request.json"
+require_request_liberty "$REQ" check-synth-fresh
 TOP="$(jq -r .hdl_toplevel "$REQ")"
 REPORT="$ROOT/rtl/synth/${TOP}.synth.json"
 NETLIST="$ROOT/rtl/synth/${TOP}_synth.v"

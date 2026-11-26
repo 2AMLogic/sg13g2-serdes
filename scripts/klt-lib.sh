@@ -8,7 +8,8 @@
 # sim/tools/record-dir.sh (#244) -- the sim runners too: the one such
 # reservation primitive. The per-flow checks -- which tool the flow runs and
 # which PDK sentinel it needs -- stay with the caller through require_tool /
-# require_pdk_file; every refusal exits 3, this repo's tool-gap exit.
+# require_pdk_file / require_request_liberty; every refusal exits 3, this
+# repo's tool-gap exit.
 # shellcheck shell=bash
 
 klt_env() { # needs $ROOT (the repo root, as set by the sourcing script)
@@ -36,6 +37,20 @@ require_pdk_file() { # require_pdk_file <relpath-under-$PDK_ROOT> [message]
     echo "${2:-klt-lib: required PDK file $1 not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)}" >&2
     exit 3
   }
+}
+
+require_request_liberty() { # require_request_liberty <request.json> [diag-prefix]
+  # Resolve the Liberty timing file a klt request routes (<cell_library>_<corner>.lib,
+  # never a fixed corner) and verify it under $PDK_ROOT. Leaves CELL_LIB, CORNER
+  # and LIBERTY ($PDK_ROOT-resolved path) set for callers such as sta-paths.sh.
+  local rel
+  CELL_LIB="$(jq -r .pdk.cell_library "$1")"
+  CORNER="$(jq -r .pdk.corner "$1")"
+  rel="ihp-sg13g2/libs.ref/$CELL_LIB/lib/${CELL_LIB}_${CORNER}.lib"
+  require_pdk_file "$rel" \
+    "${2:-klt-lib}: ${CELL_LIB}_${CORNER}.lib liberty not found under PDK_ROOT=$PDK_ROOT (run scripts/setup-env.sh)"
+  # shellcheck disable=SC2034 # consumed by sourcing callers (sta-paths.sh)
+  LIBERTY="$PDK_ROOT/$rel"
 }
 
 latest_record_dir() { # latest_record_dir <records-dir> -- newest dated record dir
