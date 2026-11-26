@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # run_sizing.sh -- TX sizing grids through `klt sim`; commits an append-only record.
 #
-#   source scripts/env.sh && python3 -I sim/tx/make_tb.py && sim/tx/run_sizing.sh [mos|vce]
+#   source scripts/env.sh && python3 -I sim/tx/make_tb.py && sim/tx/run_sizing.sh [mos|vce|ckswing]
 #
+# `ckswing`: the mux clock-swing sweep (tx_mosck_*, issue #98), record id suffixed -ckswing.
 # No argument: the six HBT requests (tx_sizing_*). `mos`: the three MOS-cell requests
 # (tx_mos_*: mux2to1_cml, tx_lvl_cml2cmos, ffe_en; issue #80), record id suffixed -mos.
 # `vce`: the R3 per-device Vce pass (issue #242) -- the six HBT requests plus the
@@ -22,11 +23,18 @@ command -v klt >/dev/null 2>&1 || { echo "run_sizing.sh: klt not on PATH -- sour
 SIZING=(tx_sizing_ffe0_bcs tx_sizing_ffe0_typ tx_sizing_ffe0_wcs
         tx_sizing_ffe1_bcs tx_sizing_ffe1_typ tx_sizing_ffe1_wcs)
 SET="${1:-hbt}"
+CAPACITY_WAIT=900
 case "${SET}" in
   hbt) REQS=("${SIZING[@]}"); SUFFIX=""; RECORD=make_record.py ;;
   mos) REQS=(tx_mos_mux2to1_cml tx_mos_tx_lvl_cml2cmos tx_mos_ffe_en); SUFFIX="-mos"; RECORD=make_record_mos.py ;;
   vce) REQS=("${SIZING[@]}" tx_mos_mux2to1_cml tx_mos_ffe_en); SUFFIX="-vce"; RECORD=make_record_vce.py ;;
-  *) echo "run_sizing.sh: unknown set '${SET}' (hbt|mos|vce)" >&2; exit 2 ;;
+  ckswing)
+    REQS=(tx_mosck_mux2to1_cml_sw{100,200,300})
+    SUFFIX="-ckswing"
+    RECORD=make_record_ckswing.py
+    CAPACITY_WAIT=600
+    ;;
+  *) echo "run_sizing.sh: unknown set '${SET}' (hbt|mos|vce|ckswing)" >&2; exit 2 ;;
 esac
 # Exclusive reservation: a same-second relaunch refuses instead of overwriting
 # the saved record (issue #202).
@@ -34,7 +42,7 @@ OUT="$(reserve_sim_record_dir "${HERE}/records" "${SUFFIX}")" || exit 3
 r=0
 : > "${OUT}/exit-codes.txt"
 for tag in "${REQS[@]}"; do
-  ( cd "${HERE}" && klt sim --format json --wait-for-capacity 900 \
+  ( cd "${HERE}" && klt sim --format json --wait-for-capacity "${CAPACITY_WAIT}" \
       --report-out "${OUT}/${tag}.report.json" "${tag}.request.json" \
       >/dev/null 2>"${OUT}/${tag}.stderr.txt" )
   e=$?

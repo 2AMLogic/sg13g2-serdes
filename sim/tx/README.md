@@ -8,8 +8,8 @@ a spec result and not a measurement.**
 | `make_tb.py` | generates the decks and requests below from `design/tx/netlists/` |
 | `tx_sizing_ffe{0,1}_{typ,bcs,wcs}.sp` / `.request.json` | six `klt sim` requests, each 3 supplies (1.08/1.2/1.32 V) x 3 temperatures (-40/27/125 C) = 9 corners (54 over the six); FFE off or all three post-cursor slices on; HBT, capacitor and resistor corners move together |
 | `tx_mos_{mux2to1_cml,tx_lvl_cml2cmos,ffe_en}.sp` / `.request.json` | three MOS-cell `klt sim` requests (issue #80), each 5 process pairings x 3 supplies x 3 temperatures = 45 corners; PSP103 and the real `r3_cmc` resistors via `osdi_preload` |
-| `run_sizing.sh [mos\|vce]` | runs the six HBT requests, `mos` the three MOS requests, `vce` the R3 per-device Vce set -- six HBT + mux2to1_cml + ffe_en, every TX bench with an HBT (batch fleet via `KLT_SIM_BACKEND=batch`; no local fallback) and writes `records/<id>/` (`<id>-mos/` / `<id>-vce/` for the MOS / VCE sets) |
-| `make_record.py` / `make_record_mos.py` / `make_record_vce.py` | render `records/<id>/record.md` for the HBT / MOS / VCE set |
+| `run_sizing.sh [mos\|vce\|ckswing]` | Runs six HBT requests by default, three MOS requests with `mos`, all eight TX benches containing HBTs with `vce` (six HBT + mux2to1_cml + ffe_en), or three mux clock-swing requests with `ckswing` (`tx_mosck_*`, issue #98). Each set runs on the batch fleet (`KLT_SIM_BACKEND=batch`) and writes to `records/<id>/` with the suffix `-mos`, `-vce` or `-ckswing` for the named modes. |
+| `make_record.py` / `make_record_mos.py` / `make_record_vce.py` / `make_record_ckswing.py` | render `records/<id>/record.md` for the HBT, MOS, VCE and clock-swing sets, respectively |
 | `records/<id>/` | append-only run records; never edited after the fact |
 
 Reproduce: `source scripts/env.sh && python3 -I sim/tx/make_tb.py && sim/tx/run_sizing.sh`.
@@ -27,7 +27,7 @@ behavioural resistor):
 
 | Cell | Bench | Measured |
 |---|---|---|
-| `mux2to1_cml` | ideal 5 GHz complementary clock (0.4 V swing, an assumption), A held 1 / B held 0 so the output is a 1010 stream, loaded by the `predriver` main input + 20 fF | differential swing, rise/fall between fixed +-30 mV crossings (not a conforming 20-80 %), collector V and reverse Vbe per HBT, Vce |
+| `mux2to1_cml` | ideal 5 GHz complementary clock (0.4 Vpp per side), A held 1 / B held 0 so the output is a 1010 stream, loaded by the `predriver` main input + 20 fF | differential swing, rise/fall between fixed +-30 mV crossings (not a conforming 20-80 %), collector V and reverse Vbe per HBT, Vce |
 | `tx_lvl_cml2cmos` | ideal 625 MHz CML input (300 mV; the word-boundary clock, DR-014 — before DR-014 this bench ran at 2.5 GHz), 20 fF load | CMOS high/low, duty, propagation delay |
 | `ffe_en` | enable codes 000, 001, 011, 111 stepped, vbn from the real `bias` cell, vbp unloaded | `vbp0..2` against `vbn` per code |
 
@@ -46,24 +46,22 @@ MOS-set run status:
   - The 7 failures are `vc_max_mux_outp/outn` over the 1.32 V collector limit (about 1 to
     5 mV over at 1.32 V supply, same class as the RX latch finding), kept and reported.
   - The 2 errors (`ss_wcs/1.080V` at -40C and 27C) are the fixed +-30 mV rise/fall
-    thresholds never being crossed: the output swing there is under 30 mV. At other
+    thresholds never both being crossed. At other
     low-swing corners the same thresholds give rise/fall values (some negative) that are
     threshold artifacts, not 20-80 % times. Do not read rise/fall from this record.
   - Not changed in this pass: node names and `.ic` values were exercised and the benches
     ran. The rise/fall measurement still needs a 20-80 % derivation from the measured swing.
-  - 0.4 V clock swing, checked against the records (issue #80, no new run): it cannot be
-    validated against the predriver record `20261027-024044-2e55774`. That record measures
-    the driver output (R4) and collector stress at the predriver outputs, not a predriver
-    output swing, and the mux clock is not driven by the predriver anyway (it comes from
-    the clock provider, `spec/clock-requirement.md`). The only written figure is the
-    `sg13g2-vco` row there, "swing >= 0.40 Vpp at the tank nodes". The bench source is
-    0.4 V to 0.8 V on each of `ckp`/`ckn` (0.4 V per side, 0.8 V differential
-    peak-to-peak); whether the sibling's 0.40 Vpp is per node or differential is not
-    stated, so the bench is at or above that floor and is not shown to match it. The
-    swing is kept as is and remains an assumption, no generator change and no re-run.
-    Open: the clock provider should state its swing at the mux input (per node or
-    differential, with its buffer load), after which `mux2to1_cml` should be re-run at
-    that swing on the fleet in a new append-only record.
+  - The default bench matches the proposed mux lower bound. Each clock node swings
+    from 0.4 to 0.8 V in antiphase (0.4 Vpp per side, 0.8 Vpp differential). The
+    VCO's 0.40 Vpp differential target applies at the tank alone. The ring PLL
+    specifies levels for one buffer output into ≤ 50 fF, and the LC PLL budgets
+    tank loading while leaving the output buffer open. None specifies this drive
+    at the mux squarers. [Clock requirement](../../spec/clock-requirement.md)
+  - The issue #98 fleet sweep adds 0.1, 0.2 and 0.3 Vpp per side to the default
+    0.4 Vpp point. Output swing kept rising through 0.4 Vpp per side. At that drive,
+    `ss_wcs`/1.08 V produced only 4.1 mV differential peak-to-peak at −40 °C and
+    31 mV at 27 °C. A sufficient swing for full switching is still open.
+    [Sweep record](records/20261110-232100-f7361f7-ckswing/record.md) · [DR-015](../../spec/decisions/DR-015-mux-clock-swing.md)
   - Request bound: each 45-unit job finished in about 100 s, so the 45 x 1800 s
     `timeout_s` bound warning was advisory. `timeout_s` is now 75 s per unit in the MOS
     requests (45 x 75 s = 3375 s, under the fleet's 3600 s ceiling); per-unit runtime was

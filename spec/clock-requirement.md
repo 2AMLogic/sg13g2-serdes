@@ -16,7 +16,7 @@ sibling candidates by name and commit. It does not edit the manifest.
 | Random jitter | ≤ 0.5 ps rms, integrated above the CDR high-pass corner (≈ 1 MHz) to 2.5 GHz | ≤ 0.8 ps rms | proposal: about half the ≈ 1 ps rms total-link RJ that leaves a 14σ ≈ 14 % UI budget at 1e-12 |
 | Deterministic jitter (clock path) | ≤ 3 ps peak-peak (3 % UI) | ≤ 5 ps | proposal |
 | Frequency accuracy | ±300 ppm tracking range (target-spec R13) | ±100 ppm | R13 |
-| Level / load | differential CML levels into the clock buffer; load stated by the receiver and graded at the interface | | to be fixed with the sibling |
+| Level / load | Differential CML levels into the clock buffer, graded at the receiver's stated load. The TX mux lower bound is **0.4 Vpp per side (0.8 Vpp differential)**, centred near 0.6 V, into the `mux2to1_cml` AC-coupled, self-biased squarers. Switching still fails at this swing at `ss_wcs`/1.08 V. | | None of the pinned sibling specs establishes this swing at the loaded mux inputs. [DR-015](decisions/DR-015-mux-clock-swing.md) |
 | Supply | separate filtered rail, ≤ 1 mV rms noise in 100 kHz–100 MHz *(proposal)* | | DR-003 |
 
 ## Sibling comparison (refreshed 2026-11-02)
@@ -41,7 +41,7 @@ provider.
 | Phase count | 4 (0/90/180/270°) | **Gap**: a differential tank gives 2 phases; no row | **Gap**: not stated, band already fails | **Not stated**: no phase-count row found in the spec (my reading; the owner should confirm) |
 | Duty-cycle error | ≤ ±1 % | **Gap**: no row | **Gap**: reference-input duty 30–70 % is an input, not an output spec | **Not stated** |
 | Quadrature error | ≤ ±2° | **Gap**: no row | **Gap**: none | **Not stated** |
-| Buffer / load | differential CML into the receiver clock buffer, load stated | **Gap by design**: ratified "no output buffer in v1"; swing ≥ 0.40 Vpp *at the tank nodes*; any added load detunes it (3 % of C_tot shifts f0 by 1.5 %) | n/a | **Open**: its Q1 says a buffer, "if needed", is designed there and supersedes the VCO no-buffer statement; load not stated |
+| Buffer / load | ≥ 0.8 Vpp differential at the TX mux squarers | Row 7 targets ≥ 0.40 Vpp differential (0.20 Vpp per antiphase node) with the tank as its only load. This is half the mux bound, before loading. | Row 14 proposes VOH ≥ 0.9 × VDD and VOL ≤ 0.1 × VDD into ≤ 50 fF on one buffer output. Delivery of the 5 GHz differential pair is unspecified. | I6 imports the VCO tank target. The 2.1 fF differential budget is for the first stage and routing at the tank. Q1 leaves the output buffer open, so swing at the mux is unspecified. |
 | Jitter definition | RJ rms integrated ≈ 1 MHz–2.5 GHz, ≤ 0.5 ps (above) | **Not comparable**: a single-offset figure, ≤ −105 dBc/Hz @ 1 MHz (and ≤ −125 @ 10 MHz), method open. A single-offset target does not determine an integrated jitter without the whole spectrum | **Not assessed** | **Not comparable**: ≤ 1.0 ps rms integrated **10 kHz–10 MHz** of a locked PLL, linear model; the band excludes everything above 10 MHz that our figure includes, and includes the loop-shaped low-frequency part that a CDR tracks |
 | Deterministic jitter | ≤ 3 ps pp | not stated | not stated | not stated (reference spur ≤ −50 dBc is the nearest, a different quantity) |
 | Spec maturity | n/a | ratified **targets, not met** | draft | ratified **targets, not met**; pre-design |
