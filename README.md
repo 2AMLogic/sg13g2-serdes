@@ -9,13 +9,16 @@ on the analog side and Yosys/OpenROAD on the digital side.
 
 **Status: design in progress against a PROPOSED specification.** The target
 spec is not ratified (issue #2), so nothing in [`spec/`](spec/README.md) binds
-design work yet. What is on `main` today, by partition — *analog*: TX and RX
-CML schematics in [`design/`](design/) with simulated PVT corner records under
-[`sim/`](sim/README.md), plus placed (not routed) RX-core and pad/ESD layout
-under `layout/analog/`; *digital*: the CMOS partition in [`rtl/`](rtl/) with
-cocotb benches, synthesized and routed into an append-only record under
-`layout/digital/`. The two partitions are not assembled into a top-level
-block, and nothing has been fabricated or measured. The T1 evidence position
+design work yet. The analog partition has TX and RX CML schematics in
+[`design/`](design/) with simulated PVT corner records under [`sim/`](sim/README.md).
+The [analog top](layout/analog/top/records/2026-11-12-0193777/record.md)
+has placed cells, with inter-cell routing still outstanding. Within individual cells,
+the [RX level converter](layout/analog/rx/records/2026-11-23-9f3e17c/record.md)
+is routed, and each [TX pad net](layout/analog/pads/records/2026-11-12-fc8a7fa/record.md)
+connects its seam resistor, ESD diodes and bondpad. The digital partition has
+CMOS RTL in [`rtl/`](rtl/), cocotb benches, and an append-only synthesis and
+routing record under `layout/digital/`. The two partitions are not assembled
+into a top-level block, and nothing has been fabricated or measured. The T1 evidence position
 of record is
 [`manifests/sg13g2-serdes.signoff.json`](manifests/sg13g2-serdes.signoff.json)
 (`t1_met_count` of `t1_item_count`) — read the counts from that file rather
