@@ -31,7 +31,7 @@
         "role": "hygiene",
         "path": "README.md",
         "passed": true,
-        "content_hash": "sha256:3ac1aa304ded7691f154ae4bd3f7b1ce2ecef416a53983930280a1a001c8889b"
+        "content_hash": "sha256:2e110e4a3109328fe7be6e587c3644e9699a143b453e00724570bdee8ab0043e"
       },
       {
         "check": "present",
@@ -136,7 +136,7 @@
         "role": "hygiene",
         "path": "sim/bench/gen_inventory.py",
         "passed": true,
-        "content_hash": "sha256:63e07c6f0026b4218b6d0b8b113c3e3c4ded5e62ff0668c2edc36133b94720fa"
+        "content_hash": "sha256:1a21d0a927bdb99e20098fdda7b503e7212dc9f03e0dd6c048af33db71818786"
       },
       {
         "check": "present",

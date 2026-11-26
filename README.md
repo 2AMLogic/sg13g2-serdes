@@ -106,9 +106,10 @@ Repo checks (JSON validity, README links, signoff record): `npm run check:ci`
 (runs `scripts/check-ci.sh`; klt is pinned once, as `klt_install` in `layout/toolchain.json`).
 
 Testbenches (T1 item 9, against the PROPOSED draft rows): `scripts/run-bench.sh --list`, then
-`scripts/run-bench.sh <id>` from a fresh clone (analog: validates the `klt sim` request and expands the
-corner set; digital: runs the cocotb bench). The full corner grid is `scripts/run-bench.sh <id> --run`
-after `scripts/setup-env.sh`. Table and gaps: `sim/README.md`. Outputs are simulated, never measured.
+`scripts/run-bench.sh <id>`. Analog checks validate the `klt sim` request and expand the corner set.
+Digital checks run the cocotb bench. For RX and TX MOS checks, run `scripts/setup-env.sh` to install
+the PDK and build the OSDI models, then `source scripts/env.sh`. Use the same environment for a full
+analog grid with `scripts/run-bench.sh <id> --run`. Table and gaps: `sim/README.md`. Outputs are simulated, never measured.
 
 ## License
 

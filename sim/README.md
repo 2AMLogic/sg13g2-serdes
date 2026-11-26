@@ -39,11 +39,15 @@ is a new decision, not an edit of an earlier record.
 ## Testbenches (T1 item 9)
 
 Graded against the PROPOSED draft rows (#2, not ratified) and DR-001 to DR-004; re-grade at ratification.
-Entry point: `scripts/run-bench.sh` (`--list`, `<id>`, `<id> --run`). Default mode is a **check**: the
-request is validated, the corner set expanded and the declared measurements asserted (no PDK, no fleet),
-so it runs from a fresh clone. `--run` submits the full grid with `klt sim --wait-for-capacity 600`
-(batch fleet) after `scripts/setup-env.sh` and `source scripts/env.sh`. Digital benches run the cocotb
-test for real. Every printed figure is simulated, never measured, and no bench result is recorded by
+Use `scripts/run-bench.sh --list` to list the bench IDs. For an analog bench,
+`scripts/run-bench.sh <id>` validates its requests locally, expands the corner set and checks the
+declared measurements. The `rx-mos-*` and `tx-mos-*` checks also validate their `osdi_preload`
+files. Run `scripts/setup-env.sh` to install the pinned IHP PDK and build its OSDI models, then
+run `source scripts/env.sh` to set `PDK_ROOT` and select the pinned klt. For example,
+`scripts/run-bench.sh rx-mos-lvl-cml2cmos` should report 45 corner units after setup.
+With the same environment, `scripts/run-bench.sh <id> --run` submits the full analog grid
+with `klt sim --backend batch --wait-for-capacity 600`. Digital benches run the cocotb test.
+Every printed figure is simulated, never measured, and no bench result is recorded by
 this item (recording is T1 item 5). Analog checks grade with the klt pinned in `layout/toolchain.json`:
 `run-bench.sh` resolves `.venv/bin/klt` by path (installed by `scripts/setup-env.sh`), so the pin holds even
 inside `klt signoff --attest 9`'s sanitized cold-start environment; with no `.venv` it falls back to PATH `klt` (#176).

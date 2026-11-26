@@ -94,7 +94,7 @@ L = [f"# RX sizing record {out.name}", "",
 for name in reports:
     line = [l for l in codes if l.startswith(name)]
     r = reports[name]
-    L += ["", f"### {name}", f"- command: `cd sim/rx && klt sim --format json --wait-for-capacity 900 --report-out records/{out.name}/{name}.report.json {name}.request.json`",
+    L += ["", f"### {name}", f"- command: `cd sim/rx && klt sim --backend batch --format json --wait-for-capacity 900 --report-out records/{out.name}/{name}.report.json {name}.request.json`",
           f"- {line[0] if line else 'no exit code recorded'}"]
     if r is None:
         err = (out / f"{name}.stderr.txt").read_text() if (out / f"{name}.stderr.txt").exists() else ""

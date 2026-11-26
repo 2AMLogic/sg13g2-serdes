@@ -4,9 +4,8 @@
 #   source scripts/env.sh && sim/rx/run_sizing.sh [vce]    # the five HBT grids
 #   source scripts/env.sh && sim/rx/run_sizing.sh mos      # lvl_cml2cmos (MOS set)
 #
-# Each request is a multi-corner grid, so `klt sim` routes it to the batch
-# fleet (KLT_SIM_BACKEND=batch). This script never falls back to a local grid:
-# a failed submit is recorded as-is. Records under sim/rx/records/<id>/ are
+# Each request runs on the batch fleet via `klt sim --backend batch`.
+# A failed submission is recorded as-is. Records under sim/rx/records/<id>/ are
 # append-only evidence -- never edit or delete an earlier record directory.
 # The requests and bench bodies are generated: sim/rx/tools/gen_requests.py.
 # `vce`: record id suffixed -vce (the R3 per-device Vce pass of issue #242); the
@@ -39,7 +38,7 @@ OUT="$(reserve_sim_record_dir "${HERE}/records" "${SUFFIX}")" || exit 3
 rc=0
 for req in "${REQS[@]}"; do
   echo "run_sizing.sh: klt sim ${req}.request.json"
-  ( cd "${HERE}" && klt sim --format json --wait-for-capacity 900 \
+  ( cd "${HERE}" && klt sim --backend batch --format json --wait-for-capacity 900 \
       --report-out "${OUT}/${req}.report.json" "${req}.request.json" \
       >/dev/null 2>"${OUT}/${req}.stderr.txt" )
   r=$?

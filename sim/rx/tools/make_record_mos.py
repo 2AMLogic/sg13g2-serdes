@@ -89,7 +89,7 @@ L = [f"# RX MOS-cell sizing record {out.name}", "",
 
 codes = [l for l in rc.exit_codes(out) if l.startswith(NAME)]
 L += ["## Run",
-      f"- command: `cd sim/rx && klt sim --format json --wait-for-capacity 900 --report-out "
+      f"- command: `cd sim/rx && klt sim --backend batch --format json --wait-for-capacity 900 --report-out "
       f"records/{out.name}/{NAME}.report.json {NAME}.request.json`",
       f"- {codes[0] if codes else 'no exit code recorded'} (3 = a first-look limit failed; the report "
       "is complete)"]

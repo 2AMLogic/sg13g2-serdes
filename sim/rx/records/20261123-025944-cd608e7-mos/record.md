@@ -153,3 +153,16 @@ assumed 20 fF load. The 31 falling delays summarized above require an output
 that first crossed vdd/2. Two further raw 10 % crossings occurred without a
 valid high level, at 51.4 ps (`ss_wcs/1.200V/27C`) and 76.1 ps
 (`sf_typ/1.080V/27C`). These clarifications use the original fleet report.
+
+**Run command clarification (2026-11-26).** The archived command under “Run”
+requires the batch backend for `--wait-for-capacity`. To repeat the grid with
+klt 0.9.0 and write the report to a new directory, run the following from
+the repo root after `scripts/setup-env.sh`.
+
+```bash
+source scripts/env.sh
+cd sim/rx
+out=$(mktemp -d)
+klt sim --backend batch --format json --wait-for-capacity 900 \
+  --report-out "$out/lvl_cml2cmos.report.json" lvl_cml2cmos.request.json
+```

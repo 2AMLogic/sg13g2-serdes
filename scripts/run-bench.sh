@@ -5,14 +5,15 @@
 #   scripts/run-bench.sh <id>              CHECK (default): validate the bench's requests,
 #                                          expand the corner set, assert the declared
 #                                          measurements exist (analog); run the cocotb
-#                                          bench for real (digital). No PDK, no fleet.
+#                                          bench for real (digital). Analog checks run
+#                                          locally. MOS checks need the PDK and built OSDI
+#                                          models (scripts/setup-env.sh, then source scripts/env.sh).
 #   scripts/run-bench.sh <id> [--run] [--request <path>]
 #                                          --request restricts to one of the bench's requests
 #   scripts/run-bench.sh link-<row>-*      behavioural DR-002 benches (R8 R11 R12 R13 R15): run for real, locally,
 #                                          numpy only; add --quick for a short configuration
 #   scripts/run-bench.sh <id> --run        analog only: submit the full corner grid with
-#                                          `klt sim --wait-for-capacity 600` (batch fleet
-#                                          when KLT_SIM_BACKEND=batch). Needs
+#                                          `klt sim --backend batch --wait-for-capacity 600`. Needs
 #                                          `scripts/setup-env.sh` then `source scripts/env.sh`.
 #
 # Outputs are simulated figures, never measurements. Multi-corner grids are never
@@ -87,7 +88,7 @@ while IFS= read -r req; do
   dir="$(dirname "${REPO}/${req}")"; base="$(basename "${req}")"
   if [[ "${MODE}" == "--run" ]]; then
     [[ -n "${PDK_ROOT:-}" ]] || die "PDK_ROOT unset: run scripts/setup-env.sh, then source scripts/env.sh" 3
-    ( cd "${dir}" && "${BENCH_KLT}" sim --wait-for-capacity 600 "${base}" ); e=$?
+    ( cd "${dir}" && "${BENCH_KLT}" sim --backend batch --wait-for-capacity 600 "${base}" ); e=$?
     [[ ${e} -eq 0 || ${e} -eq 3 ]] || rc=1   # 3 = a declared limit failed; the report is still complete
     continue
   fi
