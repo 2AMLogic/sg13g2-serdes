@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 10,
-  "summary": "T1 item 10 (Repo hygiene): 25/25 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 10 (Repo hygiene): 26/26 attestation checks passed (klt signoff --attest)",
   "source": "manifests/evidence/item10.inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 25,
-    "passed_count": 25,
+    "check_count": 26,
+    "passed_count": 26,
     "checks": [
       {
         "check": "present",
@@ -45,14 +45,14 @@
         "role": "hygiene",
         "path": "scripts/analog-cell-evidence-lib.sh",
         "passed": true,
-        "content_hash": "sha256:f330ea2c7e4a74916f4111269641437bc8b263210c239f784189ba16fc06183b"
+        "content_hash": "sha256:e284c709afb2186c50b73f32045881e6fac2b2bc4fee2245275ace92fc1ba732"
       },
       {
         "check": "present",
         "role": "hygiene",
         "path": "scripts/check-ci.sh",
         "passed": true,
-        "content_hash": "sha256:36a9fdf8a52d34ab1e1ed69ce954eb50f2c7a228bd3cc1ff692239eee3f5bca9"
+        "content_hash": "sha256:a94864fe1bb8ac20da57af1c0b95f880c304b22571f62d566a4dba7fe378748b"
       },
       {
         "check": "present",
@@ -95,6 +95,13 @@
         "path": "scripts/synth-regen.sh",
         "passed": true,
         "content_hash": "sha256:2b32d17b491f9410f5f86f17af8435f57813915c23d0564d919f6a093fb060ad"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/test-analog-lvs-verdict.sh",
+        "passed": true,
+        "content_hash": "sha256:35e74c7d73afe9b20efb5af61943d038f92f7613b03347154c8488c6ead8e118"
       },
       {
         "check": "present",
@@ -214,7 +221,7 @@
         "path": "manifests/evidence/item10.inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:bc3b07e39c53db105a160481b1175e0a6f1fb8b9bd0c6c38b792ac6b4b25dc53"
+      "content_hash": "sha256:0aa9f5359a02fbf3cb1ef4708292fd9d9708a4957233eb9c53b485f9f18b9cec"
     }
   }
 }
