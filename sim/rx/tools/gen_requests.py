@@ -321,8 +321,9 @@ def latch_body(extra=()):
     L = ["* Latch + clock-buffer sizing bench (issue #22). Sizing evidence, not a spec result.",
          "* Ideal 5 GHz clock source (the SG13G2 clock candidates do not meet R20, see",
          "* spec/clock-requirement.md): common mode 0.8333 vdd, +-150 mV per phase, ideal",
-         "* quadrature and 50 % duty. Data: +-10 mV differential toggling every 200 ps",
-         "* inside the hold phase, common mode 0.8167 vdd (the CTLE output common mode).",
+         "* quadrature and 50 % duty. Opposite data legs swing +-10 mV about 0.8167 vdd",
+         "* (the CTLE output common mode): +-20 mV differential, 40 mV peak to peak.",
+         "* Transitions start every 200 ps inside the hold phase; the period is 400 ps.",
          ".include ../../design/rx/netlists/latch_cml.spice",
          ".include ../../design/rx/netlists/clk_buf_quad.spice",
          "Vdd vdd 0 1.2"]
@@ -368,7 +369,7 @@ def latch_meas():
     # falling through 0) to |q| reaching a decision level. The hold pair
     # regenerates only during that phase. First-look limit for both levels: the
     # half period at 5 GHz (100 ps), after which the next sample phase opens.
-    # Cycle selection is by td= (data toggles at 250 ps + 400 ps k).
+    # Cycle selection is by td= (data rises at 250 ps + 400 ps k and falls 200 ps later).
     #
     # Two levels per edge, both plain `.meas` cards:
     #   *_up / *_dn      at DECISION_LEVEL_V, `on_unreached: "null"` so a
@@ -436,7 +437,7 @@ def lvl_body():
         "* lvl_cml2cmos sizing bench, driven by the latch it loads in rx_top (issue #241,",
         "* evidence gate G3). SIZING EVIDENCE, not a spec result.",
         "* Stimulus and rate: the latch_regen bench below (ideal 5 GHz four-phase clock,",
-        "* +-10 mV data), so qp/qn carries the 1010 stream of a 5 Gb/s per-wire sampler",
+        "* +-20 mV differential data), so qp/qn carries the 1010 stream of a 5 Gb/s per-wire sampler",
         "* output (200 ps per bit) at the latch's own swing and common mode. One",
         "* lvl_cml2cmos sits on qp/qn as Xlvl_d0 does in design/rx/rx_top.spice;",
         "* Xlvl_d180, Xlvl_e90 and Xlvl_e270 are the same cell on equivalent latch outputs.",

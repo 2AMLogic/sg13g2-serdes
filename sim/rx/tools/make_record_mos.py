@@ -43,16 +43,20 @@ def pct(x):
 
 
 LOAD_F = LOAD.rstrip("f") + " fF"
+rep, msg = rc.report_or_error(out, NAME)
+# A saved report can predate comment-only edits to the generated deck.
+recorded_hash = (rep or {}).get("provenance", {}).get("input", {}).get("content_hash")
+deck_sha = recorded_hash.removeprefix("sha256:") if recorded_hash else sha(rx / f"{NAME}.sp")
 
 L = [f"# RX MOS-cell sizing record {out.name}", "",
-     rc.SIZING_BANNER + " Simulated at schematic level: no extracted parasitics (the cell has no",
-     "layout), ideal clock and data sources. No `spec/` row is graded here. The limits in the request are",
+     rc.SIZING_BANNER + " Simulated with schematic netlists, ideal clock and data sources,",
+     "and an assumed lumped output load. No `spec/` row is graded here. The limits in the request are",
      "first-look bounds that grade this record only; DR-008 item 3 leaves the converter unsized and",
      "unspecified.", "",
      "## Pins and inputs",
      f"- PDK: {pdk['source']} {pdk['release_tag']} (sim/pdk.json), tarball sha256 `{pdk['tarball_sha256']}`",
      f"- klt: `{tool['klt_last_verified_commit']}` (layout/toolchain.json)",
-     f"- `sim/rx/{NAME}.sp` sha256 `{sha(rx / (NAME + '.sp'))}`, `{NAME}.request.json` sha256 "
+     f"- `sim/rx/{NAME}.sp` sha256 `{deck_sha}`, `{NAME}.request.json` sha256 "
      f"`{sha(rx / (NAME + '.request.json'))}`",
      "- netlists, via `.include`: " + ", ".join(
          f"`design/rx/netlists/{c}.spice` sha256 "
@@ -63,7 +67,8 @@ L = [f"# RX MOS-cell sizing record {out.name}", "",
      "`Xlvl_e270` are the same cell on equivalent latch outputs (same clock amplitude and buffering), "
      "so this one instance stands for the four.",
      "- Input stimulus: ideal 5 GHz four-phase clock, +-150 mV per phase about 0.8333 vdd, ideal quadrature "
-     "and 50 % duty; +-10 mV differential data toggling every 400 ps. The latch output `qp`/`qn` is "
+     "and 50 % duty. The two data legs swing ±10 mV with opposite polarity (±20 mV differential, "
+     "40 mV peak to peak), with a transition every 200 ps and a 400 ps period. The latch output `qp`/`qn` is "
      "therefore the 1010 stream of a 5 Gb/s per-wire sampler output (200 ps per bit, the fastest toggle "
      "the converter sees) at the latch's own swing and common mode, both read per corner in the table.",
      f"- Load: {LOAD_F} on `d0` to ground, an assumption (the CMOS deserializer behind the converter does "
@@ -82,7 +87,6 @@ L = [f"# RX MOS-cell sizing record {out.name}", "",
      "(half the 5 GHz clock period, the `latch_regen` limit: the time to the next sample phase).",
      ""]
 
-rep, msg = rc.report_or_error(out, NAME)
 codes = [l for l in rc.exit_codes(out) if l.startswith(NAME)]
 L += ["## Run",
       f"- command: `cd sim/rx && klt sim --format json --wait-for-capacity 900 --report-out "
@@ -111,38 +115,61 @@ def ps(c, a, b=None):
     return None if x is None or y is None else (x - y) * PS
 
 
-def f(x, fmt="{:.1f}", none="not reached"):
-    return none if x is None else fmt.format(x)
+def f(x, fmt="{:.1f}"):
+    return "n/a" if x is None else fmt.format(x)
 
 
 rows = []
 no_high, low_high, never10, slow_lh, slow_hl, clean = [], [], [], [], [], []
+graded = set()
 for c in corners:
     cid = c["corner_id"]
     vdd = c["supply_v"]["vdd"]
+    if c.get("status") == "error":
+        rows.append((c, vdd, None, None, "error (see diagnostics below)"))
+        continue
+
     hi, lo = val(c, "lvl_out_hi_v"), val(c, "lvl_out_lo_v")
     t_lh, t_hl = val(c, "lvl_tck_lh90_s"), val(c, "lvl_tck_hl10_s")
+    unreached = {m["name"] for m in c.get("measurements", []) if m.get("status") == "not_reached"}
+    why = []
+    if hi is None or lo is None:
+        why.append("output level unavailable")
     if hi is not None and hi < 0.5 * vdd:
-        why = f"no high level: out hi {hi:.3f} V < vdd/2"
         no_high.append(cid)
-        t_hl = None
+        why.append(f"no high level: out hi {hi:.3f} V < vdd/2")
+        if t_hl is not None:
+            why.append(f"raw {pct(LO)} crossing {t_hl * PS:.1f} ps without a valid high level")
+        t_lh = t_hl = None
+        graded.add(cid)  # The measured maximum alone rules out a full swing.
     else:
-        why = []
-        if t_lh is None:
+        if hi is not None and hi < HI * vdd and "lvl_tck_lh90_s" in unreached:
             low_high.append(cid)
             why.append(f"LH edge stops at {hi:.3f} V, under {pct(HI)} of vdd")
+        elif t_lh is None:
+            why.append("LH timing unavailable")
         elif t_lh * PS > LIM:
             slow_lh.append(cid)
             why.append(f"hold edge to {pct(HI)} LH {t_lh * PS:.1f} ps > {LIM:.0f} ps")
-        if t_hl is None:
+
+        if hi is None:
+            t_hl = None  # No evidence of a high level before this crossing.
+        if hi is not None and lo is not None and lo > LO * vdd and "lvl_tck_hl10_s" in unreached:
             never10.append(cid)
             why.append(f"HL edge stops at {lo:.3f} V, over {pct(LO)} of vdd")
+        elif t_hl is None:
+            why.append("HL timing unavailable")
         elif t_hl * PS > LIM:
             slow_hl.append(cid)
             why.append(f"hold edge to {pct(LO)} HL {t_hl * PS:.1f} ps > {LIM:.0f} ps")
+
+        if (hi is not None and lo is not None
+                and (t_lh is not None or cid in low_high)
+                and (t_hl is not None or cid in never10)):
+            graded.add(cid)
         if not why:
             clean.append(cid)
-        why = "ok" if not why else "; ".join(why)
+    why = "; ".join(why) or "ok"
     rows.append((c, vdd, t_lh, t_hl, why))
 
 L += [f"## lvl_cml2cmos (latch-driven, 5 Gb/s 1010 per wire, {LOAD_F} load)", "",
@@ -153,7 +180,7 @@ L += [f"## lvl_cml2cmos (latch-driven, 5 Gb/s 1010 per wire, {LOAD_F} load)", ""
       f"`tr`/`tf` are the {pct(LO)}-{pct(HI)} output edges and `high`/`low` the time `d0` spends above and "
       "below vdd/2 for one bit (200 ps each at the input). `q swing` and `q CM` are the latch output the "
       "converter actually saw, its input gates being the only extra load on the latch. `Idd` is the "
-      "converter's own supply current (through `Vddc`), averaged over 2-3 ns.", "",
+      "converter's own supply current (through `Vddc`), averaged over 2-3 ns. An n/a timing has no valid edge delay.", "",
       "| corner | q swing (V) | q CM (V) | out hi (V) | out lo (V) | tpd LH (ps) | tpd HL (ps) | "
       f"hold->{pct(HI)} LH (ps) | hold->{pct(LO)} HL (ps) | tr / tf (ps) | high / low (ps) | Idd (mA) | verdict |",
       "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
@@ -165,7 +192,7 @@ for c, vdd, t_lh, t_hl, why in rows:
     L.append(f"| {c['corner_id']} | {f(qs, '{:.2f}')} | {f(qc, '{:.3f}')} | "
              f"{f(val(c, 'lvl_out_hi_v'), '{:.3f}')} | {f(val(c, 'lvl_out_lo_v'), '{:.3f}')} | "
              f"{f(ps(c, 'lvl_t_out_rise_s', 'lvl_t_q_rise_s'))} | {f(ps(c, 'lvl_t_out_fall_s', 'lvl_t_q_fall_s'))} | "
-             f"{f(None if t_lh is None else t_lh * PS)} | {f(None if t_hl is None else t_hl * PS, none='n/a')} | "
+             f"{f(None if t_lh is None else t_lh * PS)} | {f(None if t_hl is None else t_hl * PS)} | "
              f"{f(ps(c, 'lvl_t_out_hi90_s', 'lvl_t_out_rise10_s'))} / "
              f"{f(ps(c, 'lvl_t_out_lo10_s', 'lvl_t_out_fall90_s'))} | "
              f"{f(ps(c, 'lvl_t_out_fall_s', 'lvl_t_out_rise_s'))} / "
@@ -182,7 +209,8 @@ reached_lh = [(t * PS, c["corner_id"]) for c, _, t, _, _ in rows if t is not Non
 reached_hl = [(t * PS, c["corner_id"]) for c, _, _, t, _ in rows if t is not None]
 by_v = {}
 for c, vdd, _, _, _ in rows:
-    by_v.setdefault(vdd, []).append(c["corner_id"] in clean)
+    if c["corner_id"] in graded:
+        by_v.setdefault(vdd, []).append(c["corner_id"] in clean)
 L += ["## Reading the grid", "",
       "- Corners where `d0` never rose above vdd/2 in the window (the converter did not switch high): "
       f"**{len(no_high)}**" + (" -- " + ", ".join(no_high) if no_high else "") + ".",
@@ -194,10 +222,10 @@ L += ["## Reading the grid", "",
       f"**{len(slow_lh)}**" + (" -- " + ", ".join(slow_lh) if slow_lh else "") + ".",
       f"- Corners over the {LIM:.0f} ps first-look limit, hold edge to {pct(LO)} HL: "
       f"**{len(slow_hl)}**" + (" -- " + ", ".join(slow_hl) if slow_hl else "") + ".",
-      f"- Corners inside both first-look limits with full levels: **{len(clean)} of {len(corners)}**"
+      f"- Corners inside both first-look limits with full levels: **{len(clean)} of {len(graded)} graded corners**"
       + (" -- " + ", ".join(clean) if clean else "") + ".",
       f"- Hold edge to {pct(HI)} LH, over the {len(reached_lh)} corners that reached it: {span(reached_lh)}.",
-      f"- Hold edge to {pct(LO)} HL, over the {len(reached_hl)} corners that reached it: {span(reached_hl)}."]
+      f"- Hold edge to {pct(LO)} HL, over the {len(reached_hl)} corners with a valid high level and falling delay: {span(reached_hl)}."]
 for vdd in sorted(by_v):
     L.append(f"- At {vdd:.2f} V: {sum(by_v[vdd])} of {len(by_v[vdd])} corners inside both first-look limits.")
 L.append("")
@@ -207,9 +235,9 @@ bad = [c for c in corners if c.get("status") not in ("pass", "ok")]
 L += ["## Failing or erroring corners (kept, not dropped)", ""]
 for c in bad:
     if c.get("status") == "error":
-        d = (c.get("diagnostics") or [{}])[0]
-        L.append(f"- {c['corner_id']}: error {d.get('code') or ''} "
-                 f"{(d.get('message') or '')[:240]}".rstrip())
+        L.append(f"- {c['corner_id']}: error")
+        for d in c.get("diagnostics") or []:
+            L.append(f"  - {d.get('code') or ''} {d.get('message') or ''}".rstrip())
     else:
         L.append(f"- {c['corner_id']}: {c.get('status')} -- {why_of[c['corner_id']]}")
 L.append(f"- {len(bad)} of {len(corners)} corners are graded other than `pass`; the per-corner cause is "
@@ -218,8 +246,9 @@ L.append(f"- {len(bad)} of {len(corners)} corners are graded other than `pass`; 
 L.append("")
 
 L += ["## What this record does not establish", "",
-      "- Post-layout timing. The cell has no layout; no extracted parasitics, no wire model, no supply "
-      "or ground network, no supply isolation between the CML and CMOS rails.",
+      "- Post-layout timing. The [RX converter layout](../../../../layout/analog/rx/records/"
+      "2026-11-23-9f3e17c/record.md) has clean DRC and matching LVS. The timing bench uses schematic "
+      "netlists without extracted parasitics, a wire or supply network model, or supply isolation.",
       "- The load the converter will actually drive. 20 fF is an assumption; the deserializer that "
       "follows `d0`, `d180`, `e90`, `e270` is not implemented, so its input capacitance, its setup time "
       "and the valid window it needs are unknown.",

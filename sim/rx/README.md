@@ -157,7 +157,7 @@ sample phase. Against them:
   swing limit.
 - At 4 more corners the rising edge stops under 90 % of vdd.
 - Of the 27 corners that reach 90 %, the hold edge to 90 % is 86.4 to 210.2 ps
-  and 24 are over 100 ps; of the 31 that reach 10 %, the hold edge to 10 % is
+  and 24 are over 100 ps; of the 31 that switch high and then reach 10 %, the hold edge to 10 % is
   66.7 to 185.8 ps and 18 are over 100 ps.
 - Typical, `tt_typ/1.200V/27C`: 158.4 ps to 90 % rising, 114.1 ps to 10 %
   falling; the output is high for 158.7 ps and low for 241.2 ps where the input

@@ -6,18 +6,19 @@ rows at target only"): which TX and RX stages exist, at which clock and data rat
 in which circuit family, and what timing evidence each carries. It does not assign
 the stages DR-008 leaves open, does not relax R2 or DR-001, and is not a decision
 record. A conflict named here is resolved by a new decision record, not by editing
-this file's findings. Source files were read at `f9dd877` (line numbers below
-refer to that commit); every figure is simulated, none measured.
+this file's findings. The original index cites line numbers at `f9dd877`. The 2026-11-26
+update in PR #254 includes the TX rate decision and converter layout records
+present at `1907cd5`. All timing figures come from simulation.
 
 [dr014]: https://github.com/2AMLogic/sg13g2-serdes/blob/8f213e390a6d3f278e97494a5a558cdae6d0437f/spec/decisions/DR-014-ratification-scope.md
 
 **G3 stays open.** Section [Gate G3 status](#gate-g3-status) lists what is
-missing. In one line: no serializer or deserializer stage is clocked at or
-above 1.25 GHz today (the only CMOS running that fast is the clock squarer
-inside the TX S4 CML cell), but the implemented RX hands 5 Gb/s CMOS streams
-to a deserializer that does not exist, the two implemented converters have no
-requirement and no post-layout evidence, and the RX converter misses its
-first-look bounds at 43 of 45 corners.
+missing. The TX S4 CML mux and RX CML samplers use a 5 GHz clock.
+No implemented **CMOS serializer or deserializer stage** is clocked at or above
+1.25 GHz. The TX mux contains a 5 GHz CMOS clock squarer. The RX converter is
+combinational and drives 5 Gb/s per wire into an unimplemented deserializer.
+Both converters lack timing requirements and extracted timing results. The RX
+converter misses its first-look bounds at 43 of 45 corners.
 
 ## Rates
 
@@ -39,12 +40,22 @@ Instances are in [`design/tx/netlists/tx_top.spice`](../design/tx/netlists/tx_to
 | Stage | Instance | Clock | Data rate per wire, in -> out | Circuit | DR-001 | DR-008 | Status |
 |---|---|---|---|---|---|---|---|
 | S4, 2:1 to the line | `Xmux_main` (L25), `Xmux_post` (L26), cell `mux2to1_cml` | 5 GHz, `ckp/ckn` | 5 -> 10 Gb/s; four 5 Gb/s differential inputs: `da`, `db` (even/odd UI) and `dpa`, `dpb` (the same two delayed by one UI) | HBT CML pair with thin-oxide MOS tail switches and a self-biased CMOS clock squarer (`sqa`, `sqb`) | decision 2 and 3: final 2:1 mux in CML | S4 "consistent" | implemented |
-| S3, 4:2 | none | 2.5 GHz | 2.5 -> 5 Gb/s; must deliver the four streams above | DR-001 16:1 table: last two stages CML; decision 3: CMOS below 625 MHz | **conflict** (DR-001 prose vs R2; B1 proposes CML) | not implemented |
-| S2, 8:4 | none | 1.25 GHz | 1.25 -> 2.5 Gb/s | DR-001 is silent; its 8:1 row calls 1.25 GHz "too fast for the CMOS standard cells" | **gap** (unassigned) | not implemented |
-| S1, 16:8 | none | 625 MHz | 625 Mb/s -> 1.25 Gb/s | DR-001 is silent; the RTL port comment says "to the CML serialiser, 625 MHz" | **gap** (unassigned) | not implemented |
+| S3, 4:2 | none | 2.5 GHz | 2.5 -> 5 Gb/s; must deliver the four streams above | CML proposed (B1) | 16:1 table: last two stages CML; decision 3: CMOS below 625 MHz | **conflict** (DR-001 prose vs R2; B1 proposes CML) | not implemented |
+| S2, 8:4 | none | 1.25 GHz | 1.25 -> 2.5 Gb/s | unassigned (B1 proposes CML) | its 8:1 row calls 1.25 GHz "too fast for the CMOS standard cells" | **gap** (unassigned) | not implemented |
+| S1, 16:8 | none | 625 MHz | 625 Mb/s -> 1.25 Gb/s | unassigned (B1 proposes CML) | silent; the RTL port comment says "to the CML serialiser, 625 MHz" | **gap** (unassigned) | not implemented |
 | Word, TX | `tx_word[15:0]`, output of `u_lb` (`serdes_digital_top.v` L23, L68) | 625 MHz, `clk` | 16 wires at 625 Mb/s | CMOS standard cells | decision 3 and 4 | "Word: CMOS, assumption" | implemented (RTL, synthesized, routed) |
-| TX clock converter | `Xlvl` (L31), cell `tx_lvl_cml2cmos` | input `ckdp/ckdn`: 2.5 GHz in the only bench, 625 MHz-domain in `design/README.md` | n/a (clock), output `ckd_cmos` | thin-oxide MOS | decision 3: boundary at "the first divided clock" | **conflict**: B1 puts the converter at the 625 MHz word | implemented; no consumer |
+| TX clock converter | `Xlvl` (L31), cell `tx_lvl_cml2cmos` | 625 MHz on `ckdp/ckdn` under proposed B1 | n/a (clock), output `ckd_cmos` | thin-oxide MOS | decision 3: boundary at "the first divided clock" | B1 proposes conversion at the word clock | implemented; intended connection to `serdes_digital_top.clk` unwired |
 | TX word-data converter | none | 625 MHz | 16 x 625 Mb/s, CMOS -> CML | proposed | decision 3 leaves it "a design item" | B1 item 1 | **proposed only**, no implementation |
+
+**2026-11-26 (PR #254).** The [proposed TX clock decision][tx-rate] identifies
+the word-clock input of the digital partition as the consumer, conditional on
+DR-008 B1. The divider and top-level connection remain to be implemented.
+
+[tx-rate]: decisions/DR-014-ckd-cmos-rate.md
+[tx625]: ../sim/tx/records/20261123-035024-5214c04-mos/record.md
+[tx2500]: ../sim/tx/records/20261110-224611-4092fc2-mos/record.md
+[rx-layout]: ../layout/analog/rx/records/2026-11-23-9f3e17c/record.md
+[tx-layout]: ../layout/analog/tx/records/2026-11-23-4e3c174/record.md
 
 The two S4 muxes are the two FFE taps, not two stages in series: `Xmux_main`
 feeds the main tap through `Xpre_main`, `Xmux_post` feeds the post-cursor tap
@@ -62,10 +73,10 @@ the word ports are in `serdes_digital_top.v` (L24, L25).
 | Stage | Instance | Clock | Data rate per wire, in -> out | Circuit | DR-001 | DR-008 | Status |
 |---|---|---|---|---|---|---|---|
 | Samplers (S4 mirror) | `Xlat_d0`, `Xlat_d180`, `Xlat_e90`, `Xlat_e270` (L25, 27, 29, 31), cell `latch_cml`, clocked by `Xclk` `clk_buf_quad` (L24) | 5 GHz, four phases 0/90/180/270 | 10 -> 5 Gb/s on each of four wires (`qp/qn_d0`, `_d180`, `_e90`, `_e270`) | HBT CML | decision 2 and 3: four sampling latches | S4 "consistent" | implemented |
-| RX converter, data and edge | `Xlvl_d0`, `Xlvl_d180`, `Xlvl_e90`, `Xlvl_e270` (L26, 28, 30, 32), cell `lvl_cml2cmos` | none (combinational); input toggles at up to 2.5 GHz | 5 -> 5 Gb/s CMOS on each of `d0`, `d180`, `e90`, `e270` | thin-oxide MOS | decision 3: boundary at "the first divided clock" (2.5 GHz) | **conflict**: B1 item 1 puts the RX converter at the 16 x 625 Mb/s word | implemented at 5 Gb/s |
-| S3 mirror, 1:2 | none | 2.5 GHz | 5 -> 2.5 Gb/s on each of the four wires | B1: CML; after the implemented converter its input is already CMOS, and a CMOS stage here is CMOS at 2.5 GHz, against R2's "CMOS <= 625 MHz" | **unassigned** | not implemented |
-| S2 mirror, 1:2 | none | 1.25 GHz | 2.5 -> 1.25 Gb/s | same | **unassigned** | not implemented |
-| S1 mirror, 1:2 | none | 625 MHz | 1.25 Gb/s -> 625 Mb/s | same | **unassigned** | not implemented |
+| RX converter, data and edge | `Xlvl_d0`, `Xlvl_d180`, `Xlvl_e90`, `Xlvl_e270` (L26, 28, 30, 32), cell `lvl_cml2cmos` | none (combinational) | 5 -> 5 Gb/s CMOS on each of `d0`, `d180`, `e90`, `e270` | thin-oxide MOS | decision 3: boundary at "the first divided clock" (2.5 GHz) | **conflict**: B1 item 1 puts the RX converter at the 16 x 625 Mb/s word | implemented at 5 Gb/s |
+| S3 mirror, 1:2 | none | 2.5 GHz | 5 -> 2.5 Gb/s on each of the four wires | unassigned | decision 3 puts the boundary at the first divided clock | B1 proposes CML; following the implemented converter would require CMOS at 2.5 GHz, in conflict with R2 | not implemented |
+| S2 mirror, 1:2 | none | 1.25 GHz | 2.5 -> 1.25 Gb/s | unassigned | 1.25 GHz family unspecified | B1 proposes CML | not implemented |
+| S1 mirror, 1:2 | none | 625 MHz | 1.25 Gb/s -> 625 Mb/s | unassigned | 625 MHz stage family unspecified | B1 proposes CML down to the word boundary | not implemented |
 | Word, RX | `rx_data_word[15:0]`, `rx_edge_word[15:0]` (`serdes_digital_top.v` L24, L25) | 625 MHz, `clk` | 32 wires at 625 Mb/s (16 data, 16 edge) | CMOS standard cells | decision 3 and 4: a 16-bit word; the edge samples are not mentioned | "Word: 16 wires"; the 16 edge wires are not addressed | implemented as RTL ports; fed by a bench model only |
 
 The implemented RX stops at the converter outputs. Four 5 Gb/s streams hold the
@@ -81,9 +92,13 @@ model in `rtl/tests/test_top.py` (`rtl/README.md`, "Scope").
 | 5 GHz clock, TX | `ckp/ckn`, input port of `tx_top` | 5 GHz | from outside the block (`spec/clock-requirement.md`) |
 | 5 GHz clock, RX | `ck0/ck180/ck90/ck270`, input ports of `rx_top` | 5 GHz, four phases | from outside the block |
 | Divider chain 5 -> 2.5 -> 1.25 -> 0.625 GHz | none in `design/` or `rtl/` | | **gap** (DR-008 table, unassigned) |
-| `ckdp/ckdn` | input port of `tx_top` | 2.5 GHz in the TX bench; "the CML 625 MHz-domain clock" in `design/README.md` | **conflict**, see the TX clock converter row above |
-| `ckd_cmos` | output port of `tx_top` | follows `ckdp/ckdn` | no consumer: the RTL has one clock, `clk` at 625 MHz, and nothing connects `ckd_cmos` |
+| `ckdp/ckdn` | input port of `tx_top` | 625 MHz in the current bench | final CML divider output under proposed B1 |
+| `ckd_cmos` | output port of `tx_top` | follows `ckdp/ckdn` | intended to drive the RTL word clock `clk` under B1; currently unwired |
 | `clk` (word clock) | `serdes_digital_top.v` L12 | 625 MHz | no divider produces it in the committed design |
+
+**2026-11-26 (PR #254).** The [TX clock decision][tx-rate] places
+`ckdp/ckdn` after the last divide-by-two. The 2.5 GHz node is an intermediate
+divider output under this proposal.
 
 ## Converter mapping
 
@@ -91,9 +106,13 @@ Each record is attributed to the one path it exercises.
 
 | Converter | Instance, cell | Direction and signal | Rate | Record | What the record covers |
 |---|---|---|---|---|---|
-| TX clock | `Xlvl`, `tx_lvl_cml2cmos` (`tx_top.spice` L31) | CML -> CMOS, `ckdp/ckdn` -> `ckd_cmos` | 2.5 GHz | [`sim/tx/records/20261110-224611-4092fc2-mos`](../sim/tx/records/20261110-224611-4092fc2-mos/record.md), request `tx_mos_tx_lvl_cml2cmos` | the clock path only, at 2.5 GHz with an ideal source; not the 625 MHz-domain rate `design/README.md` names, and not the word-data path |
+| TX clock | `Xlvl`, `tx_lvl_cml2cmos` (`tx_top.spice` L31) | CML -> CMOS, `ckdp/ckdn` -> `ckd_cmos` | 625 MHz under proposed B1 | [625 MHz sizing run][tx625], [2.5 GHz margin run][tx2500], request `tx_mos_tx_lvl_cml2cmos` | clock conversion with an ideal CML source at both rates |
 | RX data and edge | `Xlvl_d0`, `Xlvl_d180`, `Xlvl_e90`, `Xlvl_e270`, `lvl_cml2cmos` (`rx_top.spice` L26 to L32) | CML -> CMOS, latch outputs `qp/qn_*` -> `d0`, `d180`, `e90`, `e270` | 5 Gb/s per wire | [`sim/rx/records/20261123-025944-cd608e7-mos`](../sim/rx/records/20261123-025944-cd608e7-mos/record.md), request `lvl_cml2cmos` | one instance driven by the latch it loads; the four have the same cell, the same latch type and the same clock amplitude, so one covers four |
 | TX word data | none | CMOS -> CML at the 16 x 625 Mb/s word boundary (DR-008 B1 item 1) | 625 Mb/s per wire | none | **no implementation** at `f9dd877`: no CMOS-to-CML cell exists under `design/`, and no bench drives one |
+
+**2026-11-26 (PR #254).** The November 23 TX record exercises `Xlvl` at the
+proposed rate. The November 10 runs exercise the same clock path at four times
+that rate. The TX word-data converter still has no implementation or record.
 
 ## Evidence per implemented row
 
@@ -102,13 +121,19 @@ clocked at >= 1.25 GHz and for each converter. "First-look bounds" are not
 requirements: they are the limits a request declares so its corners grade, and
 they are stated where used.
 
-| Row | Record | Stimulus | Load | Corner set | Parasitics source | Measured | Applicable requirement | Verdict |
+| Row | Record | Stimulus | Load | Corner set | Parasitics source | Simulation result | Applicable requirement | Verdict |
 |---|---|---|---|---|---|---|---|---|
 | TX S4 clock squarer (CMOS at 5 GHz, inside the CML cell) | `sim/tx/records/20261110-224611-4092fc2-mos`, `tx_mos_mux2to1_cml` | ideal complementary 5 GHz clock, 0.4 V per side (an assumption) | predriver input + 20 fF | 5 MOS x 3 V x 3 T = 45 | none (schematic) | `sqa` high 0.525 to 1.335 V, low -0.014 to 0.264 V; at 3 corners (`ss_wcs/1.080V/-40C`, `ss_wcs/1.080V/27C`, `fs_typ/1.080V/-40C`) its swing is under half of vdd | none (the clock requirement does not reach inside the cell) | partial: ideal clock, no limit, 36/45 pass, 7 fail, 2 error |
-| TX clock converter `Xlvl` | `sim/tx/records/20261110-224611-4092fc2-mos`, `tx_mos_tx_lvl_cml2cmos` | ideal complementary 2.5 GHz, 300 mV single-ended, vdd-referenced CML, 20 ps edges | 20 fF | 45 (MOS corner ganged with HBT/CAP/RES) | none (schematic) | 45/45 "pass" with no limit declared: duty 27.3 to 39.2 % (typ 34.8 %); delay LH 113.7 to 210.4 ps, HL 59.6 to 129.3 ps from the input zero crossing to vdd/2; output high 68 to 101 % of vdd; Idd 0.23 to 0.56 mA | none defined for `ckd_cmos`; the +/-1 % duty in `clock-requirement.md` is on the 5 GHz clock this block receives, not on this output | partial: ideal input, rate in conflict, no limit, no consumer |
-| RX converter `Xlvl_d0/d180/e90/e270` | `sim/rx/records/20261123-025944-cd608e7-mos`, `lvl_cml2cmos` | driven by `latch_cml`: ideal 5 GHz four-phase clock, +/-10 mV data, so the input is the 1010 stream at 5 Gb/s per wire; latch output swing 0.29 to 1.14 V differential, common mode vdd - 0.07 to vdd - 0.30 V | 20 fF (assumed) | 45 (MOS corner ganged with HBT/CAP/RES) | none (schematic; the cell has no layout) | 2/45 inside the first-look bounds; see below | none defined (DR-008 item 3: "not sized, simulated or specified") | **fails its first-look bounds at 43/45**; schematic only |
-| CMOS stage clocked >= 1.25 GHz | none exists | | | | | | | open: S3 and S2 of the RX deserializer would be CMOS at 2.5 and 1.25 GHz if built behind the implemented converter; they are not built |
+| TX clock converter `Xlvl`, proposed B1 rate | [625 MHz run][tx625], `tx_mos_tx_lvl_cml2cmos` | ideal complementary CML clock, 625 MHz (1.6 ns), 300 mV single-ended, 20 ps edges | 20 fF (assumed) | 45 (5 MOS x 3 V x 3 T, ganged HBT/CAP/RES) | schematic | 45/45 sizing passes. Output high 1.087 to 1.349 V, low −0.036 to −0.015 V, delay 60.557 to 215.461 ps, current 0.20 to 0.49 mA. Duty unavailable at all 45 corners because the paired edges fall in different cycles | none defined for `ckd_cmos` | partial; actual load, same-cycle duty and extracted timing remain open |
+| TX clock converter `Xlvl`, 4× rate margin | `sim/tx/records/20261110-224611-4092fc2-mos`, `tx_mos_tx_lvl_cml2cmos` | ideal complementary 2.5 GHz, 300 mV single-ended, vdd-referenced CML, 20 ps edges | 20 fF | 45 (MOS corner ganged with HBT/CAP/RES) | none (schematic) | 45/45 "pass" with no limit declared: duty 27.3 to 39.2 % (typ 34.8 %); delay LH 113.7 to 210.4 ps, HL 59.6 to 129.3 ps from the input zero crossing to vdd/2; output high 68 to 101 % of vdd; Idd 0.23 to 0.56 mA | none defined for `ckd_cmos`; the +/-1 % duty in `clock-requirement.md` is on the 5 GHz clock this block receives, not on this output | archived 2.5 GHz margin data |
+| RX converter `Xlvl_d0/d180/e90/e270` | `sim/rx/records/20261123-025944-cd608e7-mos`, `lvl_cml2cmos` | driven by `latch_cml`: ideal 5 GHz four-phase clock, opposite ±10 mV per data leg (±20 mV differential, 40 mV peak to peak). Data transitions every 200 ps (400 ps period), yielding 1010 at 5 Gb/s per wire; latch output swing 0.29 to 1.14 V differential, common mode vdd - 0.07 to vdd - 0.30 V | 20 fF (assumed) | 45 (MOS corner ganged with HBT/CAP/RES) | schematic, no extracted RC | 2/45 inside the first-look bounds; see below | none defined (DR-008 item 3: "not sized, simulated or specified") | **fails its first-look bounds at 43/45**; schematic only |
+| CMOS serializer/deserializer stage clocked >= 1.25 GHz | none exists | | | | | | | open: S3 and S2 of the RX deserializer would be CMOS at 2.5 and 1.25 GHz if built behind the implemented converter; they are not built |
 | TX word-data CMOS -> CML | no cell | | | | | | | open: not implemented |
+
+**2026-11-26 (PR #254).** The [RX layout][rx-layout] and [TX layout][tx-layout]
+each record DRC `clean` and LVS `match` for the converter cell. Both timing
+benches use schematic netlists and an assumed 20 fF output load. Neither
+timing run includes parasitics extracted from the routed cell.
 
 ### RX converter record, read
 
@@ -127,7 +152,7 @@ the latch's sample phase (half the 5 GHz period, the `latch_regen` limit). All
   vdd (`tt_typ/1.200V/-40C` reaches 1.060 V, 88 %).
 - Of the 27 corners that reach 90 %, the time from the hold edge is 86.4 ps
   (`ff_bcs/1.320V/125C`) to 210.2 ps (`ss_wcs/1.200V/125C`); 24 are over 100 ps.
-  Of the 31 that reach 10 %, 66.7 ps (`ff_bcs/1.320V/-40C`) to 185.8 ps
+  Of the 31 that reach 10 % after switching high, 66.7 ps (`ff_bcs/1.320V/-40C`) to 185.8 ps
   (`sf_typ/1.080V/125C`); 18 are over 100 ps.
 - 2 of 45 are inside both bounds with full levels: `ff_bcs/1.320V/-40C` and
   `ff_bcs/1.320V/27C`. At 1.080 V and at 1.200 V, 0 of 15 each.
@@ -185,17 +210,17 @@ is not the simulation gate G3 of [`validation-plan.md`](validation-plan.md)
 ("does the digital partition hold 625 MHz post-layout", issue #197), and not
 that plan's gate G2, which asks for a converter record at the 625 MHz boundary.
 
-| G3 asks for | State at `f9dd877` | Closes it? |
+| G3 asks for | Evidence through 2026-11-26 | Closes it? |
 |---|---|---|
 | A per-stage clock-domain list | this document; every row traced to a netlist or RTL line | yes |
-| Record for each CMOS stage at >= 1.25 GHz | no serializer or deserializer stage is clocked that fast today; the CMOS that does run at 5 GHz is the TX squarer inside a CML cell (ideal-clock sizing record) and the RX converter output (record above) | partially, schematic only |
-| Record for the level converter | TX clock converter: ideal-input 2.5 GHz sizing record; RX converter: latch-driven schematic record, fails its bounds at 43/45; TX word-data converter: no cell | no |
-| Post-layout | no analog cell has a layout; the converters have no extracted parasitics | no |
+| Record for each CMOS stage at >= 1.25 GHz | no implemented CMOS serializer/deserializer stage is clocked that fast. The CMOS squarer inside the TX CML mux uses 5 GHz. The combinational RX converter carries 5 Gb/s per wire | partially, schematic only |
+| Record for the level converter | TX clock converter: 45/45 sizing passes at 625 MHz, duty unavailable in 45/45; archived 2.5 GHz margin data; RX converter: latch-driven schematic record, fails its bounds at 43/45; TX word-data converter: no cell | no |
+| Post-layout | both converter layouts pass DRC and match LVS. Converter timing uses schematic netlists with an assumed 20 fF load | no |
 | A requirement to grade against | none for either converter (DR-008 item 3) | no |
 | The 1.25 GHz and 2.5 GHz stages assigned | DR-008 is Proposed; S3 conflicts, S2 and S1 are gaps | no |
 | 625 MHz word domain | in-flow post-route STA: five of six corners meet setup, slow 1.08 V misses (#197) | no |
 
-What keeps G3 open, as work items rather than findings:
+**2026-11-26 (PR #254).** The new TX sizing evidence and the two routed layouts leave G3 open. The remaining work is:
 
 1. The RX converter does not work at 43 of 45 corners against bounds that are
    not even requirements. It needs a sized or re-topologised cell and a
@@ -206,10 +231,11 @@ What keeps G3 open, as work items rather than findings:
    output. Until a decision record settles it, the stages behind it cannot be
    assigned, and if it stays at the latch output the first deserializer stage
    is CMOS at 2.5 GHz, which R2 does not allow today (#253).
-3. The TX clock converter's input rate is stated two ways (2.5 GHz in the
-   bench and in decision 3's wording, 625 MHz-domain in `design/README.md`),
-   its only record is at 2.5 GHz from an ideal source, and nothing consumes
-   `ckd_cmos` (#252).
+3. Under the [proposed B1 rate assignment][tx-rate], measure same-cycle duty
+   at 625 MHz, characterize the converter with its actual driver and load, and
+   connect `ckd_cmos` to `serdes_digital_top.clk`. The [625 MHz record][tx625]
+   covers ideal-input delay, output levels and current. The [2.5 GHz
+   record][tx2500] supplies margin data only.
 4. Neither converter has post-layout evidence; neither has a load that is
    known rather than assumed (20 fF).
 5. The divider chain and the TX word-data converter are not implemented; the
@@ -220,13 +246,11 @@ What keeps G3 open, as work items rather than findings:
 ## Conflicts, unassigned and proposed rows
 
 - **Conflicting**: TX S3 (DR-001 prose CML versus R2 unassigned, B1 proposes
-  CML); TX clock converter (2.5 GHz at "the first divided clock" versus B1's
-  625 MHz boundary, and `design/README.md` naming `ckdp/ckdn` the 625 MHz-domain
-  clock); RX converter (implemented at 5 Gb/s per wire, B1 places it at
+  CML); RX converter (implemented at 5 Gb/s per wire, B1 places it at
   625 Mb/s).
 - **Unassigned**: TX S2 and S1; the divider chain; RX S3, S2 and S1 mirrors;
   the RX edge word's 16 wires.
-- **Proposed only**: TX word-data CMOS -> CML converter (DR-008 B1 item 1);
+- **Proposed only**: the TX clock rate assignment and connection to the 625 MHz digital word clock ([TX clock decision][tx-rate], conditional on B1); TX word-data CMOS -> CML converter (DR-008 B1 item 1);
   option B3 (32:1, 312.5 MHz word).
 
 ## Conventions

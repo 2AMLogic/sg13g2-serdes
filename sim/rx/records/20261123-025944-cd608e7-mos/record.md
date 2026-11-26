@@ -144,3 +144,12 @@ unspecified.
 - The latch's own limits. Where the latch does not regenerate enough swing (`latch_regen`, record 20261114-050716-eb34d10: six 1.080 V corners under 0.25 V peak |q|) the converter sees that swing; `q swing` shows it per corner so the cause stays visible.
 - Mismatch, Monte Carlo, sampler offset, noise, jitter or data patterns other than 1010 per wire.
 
+**Erratum (2026-11-26, [PR #254](https://github.com/2AMLogic/sg13g2-serdes/pull/254)).**
+The two latch inputs each swing ±10 mV about the common mode with opposite
+polarity, giving ±20 mV differential (40 mV peak to peak). Transitions start
+every 200 ps and repeat with a 400 ps period. The [RX converter layout](../../../../layout/analog/rx/records/2026-11-23-9f3e17c/record.md)
+has clean DRC and matching LVS. This run used schematic netlists and an
+assumed 20 fF load. The 31 falling delays summarized above require an output
+that first crossed vdd/2. Two further raw 10 % crossings occurred without a
+valid high level, at 51.4 ps (`ss_wcs/1.200V/27C`) and 76.1 ps
+(`sf_typ/1.080V/27C`). These clarifications use the original fleet report.
