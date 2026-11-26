@@ -166,7 +166,7 @@
     {
       "name": "vbe_rev_max_drv_tail_main",
       "unit": "V",
-      "spice": ".meas tran vbe_rev_max_drv_tail_main max par('v(xdrv.etm)-v(vbn)')",
+      "spice": ".meas tran vbe_rev_max_drv_tail_main max par('v(xdrv.etm)-v(xdrv.vbm)')",
       "limits": {
         "max": 1.0
       }
@@ -507,9 +507,14 @@
       "spice": ".meas tran idd_avg avg par('-i(vdd)') from=1.5n to=8.8e-09"
     },
     {
-      "name": "tail_i_main_a",
+      "name": "tail_ic_main_a",
       "unit": "A",
-      "spice": ".meas tran tail_i_main_a avg par('i(v.xdrv.vsm)') from=9e-10 to=1.35e-09"
+      "spice": ".meas tran tail_ic_main_a avg par('i(v.xdrv.vsc)') from=9e-10 to=1.35e-09"
+    },
+    {
+      "name": "tail_ie_main_a",
+      "unit": "A",
+      "spice": ".meas tran tail_ie_main_a avg par('i(v.xdrv.vse)') from=9e-10 to=1.35e-09"
     },
     {
       "name": "r4_prbs_run_hi",

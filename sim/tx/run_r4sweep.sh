@@ -4,7 +4,7 @@
 #   source scripts/env.sh && python3 -I sim/tx/make_sweep_r4.py <proc>... && sim/tx/run_r4sweep.sh <proc> [tag]
 #
 # One request per candidate (sim/tx/r4sweep_<cand>_<proc>.request.json), submitted as one
-# batch set to the Spot fleet (KLT_SIM_BACKEND=batch; never a local fallback). The record id
+# batch set to the Spot fleet (KLT_SIM_BACKEND=batch; never a local fallback).
 # R4_CANDS=a,b limits the set (stage-2 reruns). The record id
 # is suffixed -r4sweep-<proc>[-tag]. Records are append-only.
 set -uo pipefail
@@ -24,6 +24,7 @@ for c in "${CANDS[@]}"; do
 done
 [[ ${#REQS[@]} -gt 0 ]] || { echo "run_r4sweep.sh: no requests for ${PROC} -- run make_sweep_r4.py ${PROC}" >&2; exit 3; }
 OUT="$(reserve_sim_record_dir "${HERE}/records" "-r4sweep-${PROC}${TAG}")" || exit 3
+printf '%s\n' "${REQS[@]}" >"${OUT}/requests.txt"
 ( cd "${HERE}" && klt sim --format json --wait-for-capacity 600 --max-in-flight 2 \
     --batch-set "${REQS[@]}" -o "${OUT}/batch" >"${OUT}/envelope.json" 2>"${OUT}/stderr.txt" )
 e=$?

@@ -54,10 +54,11 @@ XRL2 vdd outn vss rsil w=8u l=68.57u m=1 b=0
 *.iopin outn
 XQM1 outn inp em vss npn13G2 Nx=8
 XQM2 outp inn em vss npn13G2 Nx=8
-XQTM em vbm etm vss npn13G2 Nx=8
+Vsc em ctm 0
+XQTM ctm vbm etm vss npn13G2 Nx=8
+Voffset vbm vbn {dvb}
 XREM etm etmx vss rsil w=16u l=18.29u m=1 b=0
-Vsm etmx vss 0
-Bvbm vbm 0 V='v(vbn)+dvb'
+Vse etmx vss 0
 XRT1 vdd outp vss rsil w=16u l='114.3u*rtk' m=1 b=0
 XRT2 vdd outn vss rsil w=16u l='114.3u*rtk' m=1 b=0
 XQP0a outp pip ep0 vss npn13G2 Nx=1

@@ -16,13 +16,14 @@ candidate in the driver_ffe main stage, FFE off:
 
 The control (dvb 0, rtk 1.00) is the unmodified driver, so it reproduces the
 tx_sizing_ffe0_wcs row. Instrumentation added on top of the issue #21 measurements:
-  - tail_i_*   main-tail current through a 0 V sense source in series with REM;
+  - tail_ic_main_a and tail_ie_main_a: XQTM collector and emitter currents, respectively,
+    measured by series 0 V sources (positive into the collector and out of REM);
   - r4_prbs_*  settled pad swing sampled at the end of the longest run of ones / zeros
                in the PRBS-7 slice, and the pad swing extrema over the whole PRBS-7
                slice, so the static-preamble figure can be compared with the R4
                PRBS-7 method;
   - vce_min_drv_tail_main (already in the issue #21 set) is kept: tail headroom.
-The R3 collector / Vce / reverse-Vbe cards are kept unchanged on every candidate.
+The R3 cards probe the same physical terminals for every candidate.
 
 The corner block per request is one process pairing x 3 supplies x 3 temperatures.
 The resistor sheet scale and the candidate parameters are baked into each deck (the
@@ -73,24 +74,31 @@ def candidate_deck(rscale, dvb, rtk):
     old_tail = "XQTM em vbn etm vss npn13G2 Nx=8"
     old_rem = "XREM etm vss vss rsil w=16u l=18.29u m=1 b=0"
     assert old_tail in text and old_rem in text
-    text = text.replace(old_tail, "XQTM em vbm etm vss npn13G2 Nx=8")
+    text = text.replace(old_tail, "Vsc em ctm 0\n"
+                        "XQTM ctm vbm etm vss npn13G2 Nx=8\n"
+                        "Voffset vbm vbn {dvb}")
     text = text.replace(old_rem, "XREM etm etmx vss rsil w=16u l=18.29u m=1 b=0\n"
-                        "Vsm etmx vss 0\n"
-                        "Bvbm vbm 0 V='v(vbn)+dvb'")
+                        "Vse etmx vss 0")
     for leg in ("XRT1 vdd outp", "XRT2 vdd outn"):
         o = "%s vss rsil w=16u l=%gu m=1 b=0" % (leg, RT_L)
         assert o in text
         text = text.replace(o, "%s vss rsil w=16u l='%gu*rtk' m=1 b=0" % (leg, RT_L))
     # vbm is built inside the subckt from the vbn port; dvb and rtk are bench-level params
-    text +=".param dvb=%g\n.param rtk=%g\n" % (dvb, rtk)
+    text += ".param dvb=%g\n.param rtk=%g\n" % (dvb, rtk)
     return text
 
 
 def meas_list():
     ms = tb.meas_json(0)
+    # The baseline deck connects the base directly to vbn. Probe XQTM after the offset.
+    for card in ms:
+        if card["name"] == "vbe_rev_max_drv_tail_main":
+            card["spice"] = ".meas tran vbe_rev_max_drv_tail_main max par('v(xdrv.etm)-v(xdrv.vbm)')"
+    for name, source in (("tail_ic_main_a", "vsc"), ("tail_ie_main_a", "vse")):
+        ms.append({"name": name, "unit": "A",
+                   "spice": f".meas tran {name} avg par('i(v.xdrv.{source})') "
+                            f"from={T_TAIL_A:g} to={T_TAIL_B:g}"})
     ms += [
-        {"name": "tail_i_main_a", "unit": "A",
-         "spice": ".meas tran tail_i_main_a avg par('i(v.xdrv.vsm)') from=%.4g to=%.4g" % (T_TAIL_A, T_TAIL_B)},
         {"name": "r4_prbs_run_hi", "unit": "V",
          "spice": ".meas tran r4_prbs_run_hi find v(vd) at=%.4g" % T_PRBS_HI},
         {"name": "r4_prbs_run_lo", "unit": "V",
