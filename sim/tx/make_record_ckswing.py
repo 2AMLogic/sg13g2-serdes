@@ -22,15 +22,19 @@ L = [f"# mux2to1_cml clock-swing sweep record {out.name}", "",
      f"- PDK: {pdk['source']} {pdk['release_tag']} (sim/pdk.json), tarball sha256 `{pdk['tarball_sha256']}`",
      f"- klt: `{tool['klt_last_verified_commit']}`",
      f"- `design/tx/netlists/mux2to1_cml.spice` sha256 `{rc.sha(repo / 'design/tx/netlists/mux2to1_cml.spice')}`"]
+reports = {}
 for r in reqs:
     t = r.name[:-len(".request.json")]
-    L.append(f"- `{t}.sp` sha256 `{rc.sha(tx / (t + '.sp'))}`, request sha256 `{rc.sha(r)}`")
+    report, error = rc.report_or_error(out, t)
+    reports[t] = (report, error)
+    staged = report["environment"].get("netlist_sha256") if report else None
+    deck = (f"`{staged}`" if staged
+            else f"`{rc.sha(tx / (t + '.sp'))}` (working tree; the run recorded no staged hash)")
+    L.append(f"- `{t}.sp` sha256 {deck}, request sha256 `{rc.sha(r)}`")
 L += ["", "## Run", "- " + "; ".join(rc.exit_codes(out)), ""]
 L += ["## Output differential swing per corner (V, min of out_diff_min / max of out_diff_max)", ""]
 swings = []
-for r in reqs:
-    t = r.name[:-len(".request.json")]
-    rep, msg = rc.report_or_error(out, t)
+for t, (rep, msg) in reports.items():
     sw = int(t.rsplit("_sw", 1)[1]) / 1000
     if rep is None:
         L.append(f"- swing {sw} V per side: NO REPORT: {msg}")

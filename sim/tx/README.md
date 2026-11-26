@@ -27,7 +27,7 @@ behavioural resistor):
 
 | Cell | Bench | Measured |
 |---|---|---|
-| `mux2to1_cml` | ideal 5 GHz complementary clock (0.4 V swing, an assumption), A held 1 / B held 0 so the output is a 1010 stream, loaded by the `predriver` main input + 20 fF | differential swing, rise/fall between fixed +-30 mV crossings (not a conforming 20-80 %), collector V and reverse Vbe per HBT, Vce |
+| `mux2to1_cml` | ideal 5 GHz complementary clock (0.4 Vpp per side), A held 1 / B held 0 so the output is a 1010 stream, loaded by the `predriver` main input + 20 fF | differential swing, rise/fall between fixed +-30 mV crossings (not a conforming 20-80 %), collector V and reverse Vbe per HBT, Vce |
 | `tx_lvl_cml2cmos` | ideal 625 MHz CML input (300 mV; the word-boundary clock, DR-014 — before DR-014 this bench ran at 2.5 GHz), 20 fF load | CMOS high/low, duty, propagation delay |
 | `ffe_en` | enable codes 000, 001, 011, 111 stepped, vbn from the real `bias` cell, vbp unloaded | `vbp0..2` against `vbn` per code |
 
@@ -46,27 +46,22 @@ MOS-set run status:
   - The 7 failures are `vc_max_mux_outp/outn` over the 1.32 V collector limit (about 1 to
     5 mV over at 1.32 V supply, same class as the RX latch finding), kept and reported.
   - The 2 errors (`ss_wcs/1.080V` at -40C and 27C) are the fixed +-30 mV rise/fall
-    thresholds never being crossed: the output swing there is under 30 mV. At other
+    thresholds never both being crossed. At other
     low-swing corners the same thresholds give rise/fall values (some negative) that are
     threshold artifacts, not 20-80 % times. Do not read rise/fall from this record.
   - Not changed in this pass: node names and `.ic` values were exercised and the benches
     ran. The rise/fall measurement still needs a 20-80 % derivation from the measured swing.
-  - 0.4 V clock swing, checked against the records (issue #80, no new run): it cannot be
-    validated against the predriver record `20261027-024044-2e55774`. That record measures
-    the driver output (R4) and collector stress at the predriver outputs, not a predriver
-    output swing, and the mux clock is not driven by the predriver anyway (it comes from
-    the clock provider, `spec/clock-requirement.md`). The only written figure is the
-    `sg13g2-vco` row there, "swing >= 0.40 Vpp at the tank nodes". The bench source is
-    0.4 V to 0.8 V on each of `ckp`/`ckn` (0.4 V per side, 0.8 V differential
-    peak-to-peak); whether the sibling's 0.40 Vpp is per node or differential is not
-    stated, so the bench is at or above that floor and is not shown to match it. The
-    swing is kept as is and remains an assumption, no generator change and no re-run.
-    Outcome (issue #98, DR-009): swept 0.1/0.2/0.3 V per side on the fleet, record
-    `records/20261110-232100-f7361f7-ckswing/` (`run_sizing.sh ckswing`, decks
-    `tx_mosck_*`). The output keeps rising with swing up to 0.4 V per side, so no
-    minimum for full switching was found; 0.4 V per side is a lower bound and does not
-    switch the mux at `ss_wcs`/1.08 V (4 mV at -40 C, 31 mV at 27 C). The bench swing
-    is unchanged. The requirement is in `spec/clock-requirement.md` (Level / load).
+  - The default bench matches the proposed mux lower bound. Each clock node swings
+    from 0.4 to 0.8 V in antiphase (0.4 Vpp per side, 0.8 Vpp differential). The
+    VCO's 0.40 Vpp differential target applies at the tank alone. The ring PLL
+    specifies levels for one buffer output into ≤ 50 fF, and the LC PLL budgets
+    tank loading while leaving the output buffer open. None specifies this drive
+    at the mux squarers. [Clock requirement](../../spec/clock-requirement.md)
+  - The issue #98 fleet sweep adds 0.1, 0.2 and 0.3 Vpp per side to the default
+    0.4 Vpp point. Output swing kept rising through 0.4 Vpp per side. At that drive,
+    `ss_wcs`/1.08 V produced only 4.1 mV differential peak-to-peak at −40 °C and
+    31 mV at 27 °C. A sufficient swing for full switching is still open.
+    [Sweep record](records/20261110-232100-f7361f7-ckswing/record.md) · [DR-015](../../spec/decisions/DR-015-mux-clock-swing.md)
   - Request bound: each 45-unit job finished in about 100 s, so the 45 x 1800 s
     `timeout_s` bound warning was advisory. `timeout_s` is now 75 s per unit in the MOS
     requests (45 x 75 s = 3375 s, under the fleet's 3600 s ceiling); per-unit runtime was

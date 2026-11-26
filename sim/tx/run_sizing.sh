@@ -23,11 +23,17 @@ command -v klt >/dev/null 2>&1 || { echo "run_sizing.sh: klt not on PATH -- sour
 SIZING=(tx_sizing_ffe0_bcs tx_sizing_ffe0_typ tx_sizing_ffe0_wcs
         tx_sizing_ffe1_bcs tx_sizing_ffe1_typ tx_sizing_ffe1_wcs)
 SET="${1:-hbt}"
+CAPACITY_WAIT=900
 case "${SET}" in
   hbt) REQS=("${SIZING[@]}"); SUFFIX=""; RECORD=make_record.py ;;
   mos) REQS=(tx_mos_mux2to1_cml tx_mos_tx_lvl_cml2cmos tx_mos_ffe_en); SUFFIX="-mos"; RECORD=make_record_mos.py ;;
   vce) REQS=("${SIZING[@]}" tx_mos_mux2to1_cml tx_mos_ffe_en); SUFFIX="-vce"; RECORD=make_record_vce.py ;;
-  ckswing) REQS=(tx_mosck_mux2to1_cml_sw{100,200,300}); SUFFIX="-ckswing"; RECORD=make_record_ckswing.py ;;
+  ckswing)
+    REQS=(tx_mosck_mux2to1_cml_sw{100,200,300})
+    SUFFIX="-ckswing"
+    RECORD=make_record_ckswing.py
+    CAPACITY_WAIT=600
+    ;;
   *) echo "run_sizing.sh: unknown set '${SET}' (hbt|mos|vce|ckswing)" >&2; exit 2 ;;
 esac
 # Exclusive reservation: a same-second relaunch refuses instead of overwriting
@@ -36,7 +42,7 @@ OUT="$(reserve_sim_record_dir "${HERE}/records" "${SUFFIX}")" || exit 3
 r=0
 : > "${OUT}/exit-codes.txt"
 for tag in "${REQS[@]}"; do
-  ( cd "${HERE}" && klt sim --format json --wait-for-capacity 900 \
+  ( cd "${HERE}" && klt sim --format json --wait-for-capacity "${CAPACITY_WAIT}" \
       --report-out "${OUT}/${tag}.report.json" "${tag}.request.json" \
       >/dev/null 2>"${OUT}/${tag}.stderr.txt" )
   e=$?

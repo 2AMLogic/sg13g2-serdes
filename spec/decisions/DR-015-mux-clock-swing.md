@@ -1,20 +1,15 @@
-# DR-009: TX mux clock swing: what the mux needs, and who provides it
+# DR-015: TX mux clock swing
 
 - **Status**: proposed
 - **Date**: 2026-11-10
 - **Decided by**: builder (issue #98); ratification is an operator step
 
-DR-NNN is the next unused number at merge time (DR-008 was the highest on
-`main` at `f7361f7`) and is the permanent ID. This record adds a requirement
-to `spec/clock-requirement.md`; it edits no ratified row.
-
 ## Context
 
-The `mux2to1_cml` bench drives `ckp`/`ckn` with 0.4 V to 0.8 V per side (0.4 V
-per side, 0.8 V differential peak-to-peak), an assumption
-(`sim/tx/make_tb.py`, `sim/tx/README.md`). The only written clock figure is the
-`sg13g2-vco` row "swing >= 0.40 Vpp at the tank nodes", with per-node vs
-differential not stated. Nothing derived the swing the mux needs.
+The `mux2to1_cml` bench drives `ckp` and `ckn` in antiphase from 0.4 to
+0.8 V on each node (0.4 Vpp per side, 0.8 Vpp differential). The sibling
+specs cover different interfaces from the mux's AC-coupled clock inputs.
+The sweep tests how the mux output responds to the assumed input swing.
 
 ## Options considered
 
@@ -53,17 +48,13 @@ requirement at the slow corner; the bench was not adjusted to hide it. The
 needed swing at the slow corner is above 0.4 V per side and was not swept
 (scope: the sweep answers whether 0.4 V is generous; it is not).
 
-**Comparison** (my reading of each sibling's spec as pinned in
-`spec/clock-requirement.md`; owner to confirm):
+**Comparison at the revisions pinned in [the clock requirement](../clock-requirement.md).**
 
-| Sibling | States a clock swing at an interface the mux can use? | Meets >= 0.4 V/side? |
+| Sibling | Specified interface and load | Does it establish 0.8 Vpp differential at the 5 GHz mux inputs? |
 |---|---|---|
-| `sg13g2-vco` | "swing >= 0.40 Vpp at the tank nodes"; per node vs differential not stated; ratified "no output buffer in v1", so no buffered output | Not stated: 0.40 Vpp at the tank nodes is the only figure; per node vs differential is unstated and no buffered output or load exists |
-| `sg13g2-pll` | No swing row | Not stated |
-| `sg13g2-lc-pll` | No swing row found; buffer is "if needed", load not stated | Not stated |
-
-No sibling states or meets it. Requirements are filed on each sibling (links
-in Consequences).
+| `sg13g2-vco` | Row 7 targets ≥ 0.40 Vpp differential across the unbuffered tank, equivalent to 0.20 Vpp per node for equal antiphase swings. The grading load is the tank alone. [VCO row 7](https://github.com/2AMLogic/sg13g2-vco/blob/2f8af57623c8098bbb12b7903616f00f10c818bc/spec/target-spec.md#L126) | No. The tank target is half the mux lower bound, and adding the squarers changes the load. |
+| `sg13g2-pll` | Row 14 proposes single-ended buffer levels of VOH ≥ 0.9 × VDD and VOL ≤ 0.1 × VDD into ≤ 50 fF. The recorded band tops out at 1562 MHz. [PLL rows 1 and 14](https://github.com/2AMLogic/sg13g2-pll/blob/3484d5ed5c25fb65a6694b8ca9254b4b08417a9e/spec/target-spec.md#L79-L92) | No. The levels apply to one pin, and 5 GHz is outside the recorded band. There is no differential swing specification at the squarers. |
+| `sg13g2-lc-pll` | I6 imports the VCO's 0.40 Vpp differential tank target. The first stage and its routing may add at most 2.1 fF differential at 5 GHz. [LC PLL load budget](https://github.com/2AMLogic/sg13g2-lc-pll/blob/0508e2fdb9c0ab2970716d5f39f587140bc1b261/spec/target-spec.md#L42-L70) | No. Q1 leaves the output buffer open, and the spec gives no delivered swing into the squarers. [LC PLL Q1](https://github.com/2AMLogic/sg13g2-lc-pll/blob/0508e2fdb9c0ab2970716d5f39f587140bc1b261/spec/target-spec.md#L191-L192) |
 
 ## Consequences
 
@@ -75,4 +66,6 @@ in Consequences).
 - The mux does not close at `ss_wcs`/1.08 V at 0.4 V per side. Whether a larger
   swing closes it, or the squarer/tail sizing must change, is open work on the
   mux cell, not a clock-provider question alone.
-- Sibling requirement issues filed: `2AMLogic/sg13g2-vco#319`, `2AMLogic/sg13g2-pll#312`, `2AMLogic/sg13g2-lc-pll#206`.
+- The three sibling issues cite this proposal by its draft filename,
+  `DR-009-mux-clock-swing.md`. Its permanent reference is DR-015.
+  [VCO #319](https://github.com/2AMLogic/sg13g2-vco/issues/319) · [PLL #312](https://github.com/2AMLogic/sg13g2-pll/issues/312) · [LC PLL #206](https://github.com/2AMLogic/sg13g2-lc-pll/issues/206)

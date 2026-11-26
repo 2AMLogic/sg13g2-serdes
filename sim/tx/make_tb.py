@@ -261,7 +261,7 @@ def mux_deck(swing=0.4):
     lo, hi = 0.6 - swing / 2, 0.6 + swing / 2
     L = ["* TX mux2to1_cml sizing bench (issue #80). SIZING EVIDENCE, not a spec result.",
          "* Cells inlined from design/tx/netlists/ with the PDK's own MOS / rsil / rppd / cap_cmim.",
-         "* Clock: ideal complementary 5 GHz source, 0.4 V swing (AC-coupled into the squarers; an",
+         f"* Clock: ideal complementary 5 GHz source, {swing:g} V swing (AC-coupled into the squarers; an",
          "* assumption, not a spec value). Data: A held 1, B held 0 (vdd-referenced CML, 300 mV), so",
          "* the output alternates every half clock = a 1010 stream at 10 Gb/s.",
          "* Load: predriver main input (as in the HBT bench) + 20 fF per predriver output.",
