@@ -17,7 +17,7 @@ import json, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 from layout_common import (parse_subckts, run_klt as run, um,
                            write_tie_block, compose_routed_cell, route_plan_summary,
-                           composed_pin, bbox_um)
+                           composed_pin, bbox_um, scrub_host_paths)
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 NETLIST = os.path.join(REPO, "design/rx/netlists/rx_top.spice")
@@ -343,14 +343,8 @@ def main():
     for c in CELLS:
         ly.read(os.path.join(out, f"{c}.gds"), opt)
     ly.write(os.path.join(out, "rx_core.gds"))
-    # records must not leak host paths: rewrite the absolute output dir to "."
-    for root, _, files in os.walk(out):
-        for f in files:
-            if f.endswith(".json"):
-                fp = os.path.join(root, f)
-                txt = open(fp).read()
-                txt = txt.replace(out, ".").replace(REPO, "<repo>")
-                open(fp, "w").write(txt)
+    # records must not leak host paths: shared rewrite to ./, $PDK_ROOT and <repo>
+    scrub_host_paths(out)
     json.dump(summary, open(os.path.join(out, "summary.json"), "w"), indent=1)
     print(json.dumps(summary, indent=1))
 

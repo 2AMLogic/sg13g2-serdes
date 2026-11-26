@@ -21,7 +21,7 @@ Usage: gen_pad_cells.py OUTDIR   (source scripts/env.sh first)
 import json, os, sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
-from layout_common import parse_subckts, run_klt as run
+from layout_common import parse_subckts, run_klt as run, scrub_host_paths
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 PDK = "ihp-sg13g2"
@@ -225,20 +225,8 @@ def main():
                "claims": "placed, net-labelled, pad net strapped in pad_esd only; no LVS/5 GHz claim; extracted interconnect C only",
                "cells": [build_pad_esd(out), build_rx_term_pad(out)]}
     json.dump(summary, open(os.path.join(out, "summary.json"), "w"), indent=1)
-    scrub(out)
+    scrub_host_paths(out)
     print(json.dumps(summary, indent=1))
-
-
-def scrub(out):
-    """Keep host paths out of the committed record: record-relative / $PDK_ROOT."""
-    for d, _, files in os.walk(out):
-        for f in files:
-            if f.endswith(".json"):
-                p = os.path.join(d, f)
-                s = open(p).read()
-                s = s.replace(out, ".").replace(os.environ.get("PDK_ROOT", "\0"), "$PDK_ROOT")
-                s = s.replace(REPO, "<repo>")
-                open(p, "w").write(s)
 
 
 if __name__ == "__main__":

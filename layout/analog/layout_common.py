@@ -1,16 +1,18 @@
 """Shared helpers for the analog layout generators under layout/analog/.
 
-One `.subckt` netlist parser, one `klt` subprocess runner and one SPICE
-length-to-micrometre converter, used by rx/gen_rx_cells.py, tx/gen_tx_core.py
-and pads/gen_pad_cells.py. The device-to-`klt gen` mapping stays in each
-generator (it legitimately differs). The generators run under `python3 -I`, so
-each puts this directory on sys.path itself before importing.
+One `.subckt` netlist parser, one `klt` subprocess runner, one SPICE
+length-to-micrometre converter and one host-path rewrite for the JSON records,
+used by rx/gen_rx_cells.py, tx/gen_tx_core.py and pads/gen_pad_cells.py. The
+device-to-`klt gen` mapping stays in each generator (it legitimately differs).
+The generators run under `python3 -I`, so each puts this directory on sys.path
+itself before importing.
 
 The body-tie straps (issue #199) and the composed-route plan helpers below are
 shared by the RX and TX per-cell routed generators.
 """
 import json
 import math
+import os
 import re
 import subprocess
 import sys
@@ -215,6 +217,40 @@ def run_klt(args, **kw):
     if r.returncode not in (0, 3):
         sys.exit(f"{' '.join(args)} failed ({r.returncode}):\n{r.stderr}{r.stdout}")
     return json.loads(r.stdout)
+
+
+REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+
+def scrub_host_paths(out, pdk_root=None):
+    """Keep host paths out of the committed record: record-relative / $PDK_ROOT / <repo>.
+
+    Rewrites every .json under `out` in place, by plain text substitution so
+    the JSON keeps its formatting and every other record (GDS) is left alone.
+    Roots are substituted most specific first, because each one hides the
+    next: the absolute output dir -> ".", then the PDK root -> "$PDK_ROOT",
+    then the checkout root REPO -> "<repo>". A PDK installed under the
+    checkout therefore reads $PDK_ROOT, never <repo>. pdk_root defaults to
+    $PDK_ROOT. An empty one is no root (as a pattern it would put $PDK_ROOT
+    between every character) and a trailing separator is dropped, since a
+    kept one would fuse the placeholder with the next path component.
+    """
+    out = os.path.abspath(out)
+    pdk_root = os.environ.get("PDK_ROOT", "") if pdk_root is None else pdk_root
+    pdk_root = pdk_root.rstrip(os.sep)
+    subs = [(out, "."), (REPO, "<repo>")]
+    if pdk_root:
+        subs.insert(1, (pdk_root, "$PDK_ROOT"))
+    for root, _, files in os.walk(out):
+        for f in files:
+            if f.endswith(".json"):
+                p = os.path.join(root, f)
+                with open(p, newline="") as s:
+                    txt = s.read()
+                for a, b in subs:
+                    txt = txt.replace(a, b)
+                with open(p, "w", newline="") as s:
+                    s.write(txt)
 
 
 # ---------------------------------------------------------------------------
