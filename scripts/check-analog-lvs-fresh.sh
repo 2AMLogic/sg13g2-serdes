@@ -36,20 +36,19 @@ done
 
 check_cell() {  # check_cell <partition> <cell> <reference-netlist>
   local part="$1" cell="$2" ref="$3" rec dir rc=0 power engine
-  analog_cell_verify "$ROOT" "$part" "$cell" "$ref" "check-analog-lvs-fresh" || rc=$?
+  rec="$(latest_record_dir "$ROOT/layout/analog/$part/records")"
+  analog_cell_verify "$ROOT" "$rec" "$cell" "$ref" "check-analog-lvs-fresh" || rc=$?
   case $rc in
     0) ;;
     3) STALE=1; return ;;
     *) FAIL=1; return ;;
   esac
-  rec="$(ls -d "$ROOT/layout/analog/$part/records"/*/ | sort | tail -1)"
-  rec="${rec%/}/$cell"
-  dir="${rec#"$ROOT"/}"
-  power="$(jq -r .power_connectivity.status "$rec/lvs.report.json")"
-  engine="$(jq -r .engine "$rec/lvs.report.json")"
+  dir="${rec#"$ROOT"/}/$cell"
+  power="$(jq -r .power_connectivity.status "$ROOT/$dir/lvs.report.json")"
+  engine="$(jq -r .engine "$ROOT/$dir/lvs.report.json")"
   [ -n "$engine" ] && [ "$engine" != null ] || { echo "check-analog-lvs-fresh: $dir names no engine" >&2; FAIL=1; return; }
 
-  (cd "$rec" && "${KLT[@]}" lvs --check lvs.report.json "${RERUN[@]}") >/dev/null 2>&1
+  (cd "$ROOT/$dir" && "${KLT[@]}" lvs --check lvs.report.json "${RERUN[@]}") >/dev/null 2>&1
   case $? in
     0) echo "check-analog-lvs-fresh: OK -- $dir matches its inputs (engine $engine, power $power)" ;;
     3) echo "check-analog-lvs-fresh: STALE -- $dir inputs drifted; run the $part regen script + scripts/analog-lvs-regen.sh $part" >&2; STALE=1 ;;

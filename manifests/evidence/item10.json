@@ -45,14 +45,14 @@
         "role": "hygiene",
         "path": "scripts/analog-cell-evidence-lib.sh",
         "passed": true,
-        "content_hash": "sha256:e284c709afb2186c50b73f32045881e6fac2b2bc4fee2245275ace92fc1ba732"
+        "content_hash": "sha256:0f6e6cf7cf6eb3e8c8b05c23de9599f376f4e440c80c422f202a2f2eff3e7260"
       },
       {
         "check": "present",
         "role": "hygiene",
         "path": "scripts/check-ci.sh",
         "passed": true,
-        "content_hash": "sha256:a94864fe1bb8ac20da57af1c0b95f880c304b22571f62d566a4dba7fe378748b"
+        "content_hash": "sha256:d9c8ef9b2898a8c7e9e7be556ef350f7aea476679afc4890c4e66adc490b138f"
       },
       {
         "check": "present",
@@ -101,7 +101,7 @@
         "role": "hygiene",
         "path": "scripts/test-analog-lvs-verdict.sh",
         "passed": true,
-        "content_hash": "sha256:35e74c7d73afe9b20efb5af61943d038f92f7613b03347154c8488c6ead8e118"
+        "content_hash": "sha256:5ce97338dc85b0a4ee38e20bf6b009f7ee54cc64b5a135d73fcf8d0cadb0f70b"
       },
       {
         "check": "present",

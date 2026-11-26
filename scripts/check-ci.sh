@@ -10,6 +10,8 @@ cd "$(dirname "$0")/.." || exit 1
 . scripts/erc-fresh-lib.sh
 # shellcheck source=scripts/analog-cell-evidence-lib.sh
 . scripts/analog-cell-evidence-lib.sh
+# shellcheck source=scripts/klt-lib.sh
+. scripts/klt-lib.sh
 # The klt pin lives in exactly one place: layout/toolchain.json's klt_install.
 KLT_VERSION=$(jq -r '.klt_install // empty' layout/toolchain.json)
 KLT_VERSION=${KLT_VERSION#klayout-tools==}
@@ -348,11 +350,12 @@ check_fresh() {
   # carries DRC-clean + LVS-match evidence bound to that record's own GDS and
   # the standalone subckt reference (scripts/analog-cell-evidence-lib.sh; the
   # local gate scripts/check-analog-lvs-fresh.sh adds the klt-powered --check).
-  local cell_spec cell_part cell cell_ref
+  local cell_spec cell_part cell cell_ref cell_rec
   for cell_spec in "rx lvl_cml2cmos design/rx/netlists/lvl_cml2cmos.spice" \
                    "tx tx_lvl_cml2cmos design/tx/netlists/tx_lvl_cml2cmos.spice"; do
     read -r cell_part cell cell_ref <<<"$cell_spec"
-    analog_cell_verify "$PWD" "$cell_part" "$cell" "$cell_ref" "fresh axis 7-8 (analog $cell)" || rc=1
+    cell_rec="$(latest_record_dir "layout/analog/$cell_part/records")"
+    analog_cell_verify "$PWD" "$cell_rec" "$cell" "$cell_ref" "fresh axis 7-8 (analog $cell)" || rc=1
   done
 
   if [ "$rc" = 0 ]; then

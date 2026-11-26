@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
-# analog-cell-evidence-lib.sh -- sourced by scripts/check-ci.sh (the `fresh`
-# axes 7-8) and scripts/check-analog-lvs-fresh.sh. PDK-free: jq + sha256sum.
+# analog-cell-evidence-lib.sh -- shared by the analog LVS generator and its
+# freshness checks. PDK-free: jq + sha256sum.
 #
-#   analog_cell_verify <repo-root> <partition> <cell> <reference-netlist> [tag]
+#   analog_cell_verify <repo-root> <record-dir> <cell> <reference-netlist> [tag]
 #
-# Selects the NEWEST generator record of the partition first
-# (layout/analog/<part>/records/*/, lexical = date order), then requires that
-# record to carry the evidence for the cell and binds it to that record:
+# The caller selects the newest generator record once. Check the evidence in
+# that directory, even if a newer record appears during generation or checking:
 #   - <rec>/<cell>.gds exists (the routed GDS the generator wrote);
 #   - <rec>/<cell>/drc.report.json: status clean, and its
 #     .provenance.input.content_hash == sha256 of <rec>/<cell>.gds;
@@ -15,25 +14,22 @@
 #     the standalone reference subcircuit netlist, .power_connectivity.status
 #     not mismatch (the one verdict for fresh and stored reports alike,
 #     issue #281).
-# An older record's evidence never stands in for a newer record's GDS.
-# Return: 0 verified, 3 stale (newest record lacks evidence for the cell),
+# Return: 0 verified, 3 stale (no record or missing evidence for the cell),
 # 1 evidence present but not clean / not a match / power connectivity
 # mismatch / bound to other inputs.
 # Errors go to stderr as `::error file=...::<tag>: ...` annotations.
 
 analog_cell_verify() {
-  local root="$1" part="$2" cell="$3" ref="$4" tag="${5:-analog}"
-  local rec drc lvs gds want got rc=0
-  rec=$(ls -d "$root/layout/analog/$part/records"/*/ 2>/dev/null | sort | tail -1)
-  rec=${rec%/}
-  [ -n "$rec" ] || { echo "::error::$tag: no $part generator record" >&2; return 3; }
+  local root="$1" rec="$2" cell="$3" ref="$4" tag="${5:-analog}"
+  local drc lvs gds want got rc=0
+  [ -n "$rec" ] || { echo "::error::$tag: no generator record for $cell" >&2; return 3; }
   rec=${rec#"$root"/}
   gds="$root/$rec/$cell.gds"
   drc="$root/$rec/$cell/drc.report.json"
   lvs="$root/$rec/$cell/lvs.report.json"
-  [ -f "$gds" ] || { echo "::error file=$rec::$tag: newest $part record has no $cell.gds" >&2; return 3; }
+  [ -f "$gds" ] || { echo "::error file=$rec::$tag: record has no $cell.gds" >&2; return 3; }
   if [ ! -f "$drc" ] || [ ! -f "$lvs" ]; then
-    echo "::error file=$rec::$tag: STALE -- newest $part record has no $cell DRC/LVS evidence (run scripts/analog-lvs-regen.sh $part)" >&2
+    echo "::error file=$rec::$tag: STALE -- record has no $cell DRC/LVS evidence (run scripts/analog-lvs-regen.sh)" >&2
     return 3
   fi
   want=$(sha256sum "$gds" | awk '{print $1}')

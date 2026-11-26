@@ -37,18 +37,16 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 . "$ROOT/scripts/analog-cell-evidence-lib.sh"
 klt_env
 
-latest_record() { ls -d "$ROOT/layout/analog/$1/records"/*/ 2>/dev/null | sort | tail -1 | sed 's:/$::'; }
-
 run_cell() {  # run_cell <partition> <cell> <reference-netlist> <combine_devices>
   local part="$1" cell="$2" ref="$3" combine="$4"
   local rec dir
-  rec="$(latest_record "$part")"
+  rec="$(latest_record_dir "$ROOT/layout/analog/$part/records")"
   [ -n "$rec" ] || { echo "analog-lvs-regen: no $part record (run the $part regen script)" >&2; exit 1; }
   dir="$rec/$cell"
   [ -f "$rec/$cell.gds" ] || { echo "analog-lvs-regen: $rec/$cell.gds missing" >&2; exit 1; }
   if [ -f "$dir/lvs.report.json" ]; then
     # completed record: validate it, leave it untouched
-    analog_cell_verify "$ROOT" "$part" "$cell" "${ref#../../../../../../}" "analog-lvs-regen" \
+    analog_cell_verify "$ROOT" "$rec" "$cell" "${ref#../../../../../../}" "analog-lvs-regen" \
       || { echo "analog-lvs-regen: $dir has evidence that fails validation (records are append-only; regenerate into a new record)" >&2; return 1; }
     echo "$cell: evidence already recorded and valid (record ${rec#"$ROOT"/}); skipped"
     return 0
@@ -82,7 +80,7 @@ EOF
   lvs_s="$(jq -r .status "$dir/lvs.report.json")"
   power="$(jq -r .power_connectivity.status "$dir/lvs.report.json")"
   echo "$cell: drc=$drcs lvs=$lvs_s power=$power (record ${rec#"$ROOT"/})"
-  analog_cell_verify "$ROOT" "$part" "$cell" "${ref#../../../../../../}" "analog-lvs-regen" \
+  analog_cell_verify "$ROOT" "$rec" "$cell" "${ref#../../../../../../}" "analog-lvs-regen" \
     || { echo "analog-lvs-regen: $cell evidence fails validation; reports kept for the record" >&2; return 1; }
   return 0
 }
