@@ -171,7 +171,7 @@
         "role": "hygiene",
         "path": "sim/tools/test-osdi-missing-dpkg-deb.sh",
         "passed": true,
-        "content_hash": "sha256:996c47c7f6e0b9cdbb9ff9748e000d819fb98822fcbadcc9911b4f867486af4f"
+        "content_hash": "sha256:b2561b1f392e3b83488e4d55c3e7f35b6016ef518748eccb29695425d66b2479"
       },
       {
         "check": "present",

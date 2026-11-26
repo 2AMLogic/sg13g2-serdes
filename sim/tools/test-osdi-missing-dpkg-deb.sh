@@ -38,13 +38,21 @@ BASH_BIN="$(command -v bash)"
 CACHE_DIR="$TMP/empty-cache"
 mkdir -p "$CACHE_DIR"
 
+run_helper() (
+  cd "$TMP" || exit 1
+  PATH="$BIN" CACHE_DIR="$CACHE_DIR" "$BASH_BIN" "$TMP/helper.sh"
+) >"$TMP/stdout" 2>"$TMP/stderr"
+
 # --- case 1: empty cache, extractor absent -------------------------------
-OUT="$(cd "$TMP" && PATH="$BIN" CACHE_DIR="$CACHE_DIR" "$BASH_BIN" "$TMP/helper.sh" 2>&1)"; RC=$?
-[ "$RC" = 3 ] || fail "dpkg-deb off PATH: want exit 3, got $RC: $OUT"
-case "$OUT" in *dpkg-deb*) ;; *) fail "refusal does not name the missing executable dpkg-deb: $OUT" ;; esac
-case "$OUT" in *install*dpkg*) ;; *) fail "refusal does not name the package that provides dpkg-deb: $OUT" ;; esac
-case "$OUT" in *sim/tools/build-osdi.sh*) ;; *) fail "refusal does not tell the operator to rerun the build: $OUT" ;; esac
-case "$OUT" in *dpkg-deb\ -x*) fail "refusal still prints the manual dpkg-deb -x recipe it just called unusable: $OUT" ;; esac
+run_helper; RC=$?
+ERR=$(<"$TMP/stderr")
+[ "$RC" = 3 ] || fail "dpkg-deb off PATH: want exit 3, got $RC: $ERR"
+[ ! -s "$TMP/stdout" ] || fail "refusal wrote to stdout: $(<"$TMP/stdout")"
+case "$ERR" in *dpkg-deb*) ;; *) fail "refusal does not name the missing executable dpkg-deb: $ERR" ;; esac
+install_dpkg='(^|[[:space:]])[Ii]nstall[[:space:]]+(the[[:space:]]+)?dpkg\.?([^[:alnum:]_.+-]|$)'
+[[ $ERR =~ $install_dpkg ]] || fail "refusal does not tell the operator to install the dpkg package: $ERR"
+case "$ERR" in *sim/tools/build-osdi.sh*) ;; *) fail "refusal does not tell the operator to rerun the build: $ERR" ;; esac
+case "$ERR" in *dpkg-deb\ -x*) fail "refusal still prints the manual dpkg-deb -x recipe it just called unusable: $ERR" ;; esac
 
 # --- case 2: placeholder via LD_LIBRARY_PATH must not bypass -------------
 # Why the removed recipe could never work: a libLLVM.so.21.1 extracted on
@@ -52,9 +60,8 @@ case "$OUT" in *dpkg-deb\ -x*) fail "refusal still prints the manual dpkg-deb -x
 # cache check empty, so the only usable retry is install + rerun.
 mkdir -p "$TMP/placeholder-lib"
 : > "$TMP/placeholder-lib/libLLVM.so.21.1"
-OUT="$(cd "$TMP" && PATH="$BIN" CACHE_DIR="$CACHE_DIR" LD_LIBRARY_PATH="$TMP/placeholder-lib" \
-  "$BASH_BIN" "$TMP/helper.sh" 2>&1)"; RC=$?
-[ "$RC" = 3 ] || fail "placeholder LD_LIBRARY_PATH must not bypass the cache check: want exit 3, got $RC: $OUT"
+LD_LIBRARY_PATH="$TMP/placeholder-lib" run_helper; RC=$?
+[ "$RC" = 3 ] || fail "placeholder LD_LIBRARY_PATH must not bypass the cache check: want exit 3, got $RC: $(<"$TMP/stderr")"
 
 # --- case 3: cache hit short-circuits without dpkg-deb -------------------
 # The pinned download / checksum / cache behavior is untouched by the new
@@ -64,7 +71,8 @@ source <(sed -n '/^LIBLLVM21_DEB_URL=/,/^LIBLLVM21_DEB_ASSET=/p' "$BUILD")
 libdir="${CACHE_DIR}/${LIBLLVM21_DEB_ASSET%.deb}/usr/lib/x86_64-linux-gnu"
 mkdir -p "$libdir"
 : > "$libdir/libLLVM.so.21.1"
-OUT="$(cd "$TMP" && PATH="$BIN" CACHE_DIR="$CACHE_DIR" "$BASH_BIN" "$TMP/helper.sh" 2>&1)"; RC=$?
-[ "$RC" = 0 ] || fail "cache hit must succeed without dpkg-deb: want exit 0, got $RC: $OUT"
+run_helper; RC=$?
+[ "$RC" = 0 ] || fail "cache hit must succeed without dpkg-deb: want exit 0, got $RC: $(<"$TMP/stderr")"
+OUT=$(<"$TMP/stdout")
 [ "$OUT" = "$libdir" ] || fail "cache hit must print the cached libdir on stdout, got: $OUT"
 echo "test-osdi-missing-dpkg-deb: OK"
