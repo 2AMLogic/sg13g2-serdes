@@ -16,6 +16,7 @@ XQts es clkp ets vss npn13G2 Nx=2
 XQth eh clkn eth vss npn13G2 Nx=2
 Rts ets vss 40 m=1
 Rth eth vss 40 m=1
-RLp vdd qp 100 m=1
-RLn vdd qn 100 m=1
+Rsl vdd vl 16 m=1
+RLp vl qp 100 m=1
+RLn vl qn 100 m=1
 .ends

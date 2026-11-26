@@ -55,9 +55,12 @@ C {devices/lab_pin.sym} 260 220 0 0 {name=l26 sig_type=std_logic lab=vss}
 C {devices/res.sym} 580 190 0 0 {name=Rth value=40 m=1}
 C {devices/lab_pin.sym} 580 160 0 0 {name=l27 sig_type=std_logic lab=eth}
 C {devices/lab_pin.sym} 580 220 0 0 {name=l28 sig_type=std_logic lab=vss}
+C {devices/res.sym} 1060 60 0 0 {name=Rsl value=16 m=1}
+C {devices/lab_pin.sym} 1060 30 0 0 {name=l29 sig_type=std_logic lab=vdd}
+C {devices/lab_pin.sym} 1060 90 0 0 {name=l30 sig_type=std_logic lab=vl}
 C {devices/res.sym} 740 60 0 0 {name=RLp value=100 m=1}
-C {devices/lab_pin.sym} 740 30 0 0 {name=l29 sig_type=std_logic lab=vdd}
-C {devices/lab_pin.sym} 740 90 0 0 {name=l30 sig_type=std_logic lab=qp}
+C {devices/lab_pin.sym} 740 30 0 0 {name=l31 sig_type=std_logic lab=vl}
+C {devices/lab_pin.sym} 740 90 0 0 {name=l32 sig_type=std_logic lab=qp}
 C {devices/res.sym} 900 60 0 0 {name=RLn value=100 m=1}
-C {devices/lab_pin.sym} 900 30 0 0 {name=l31 sig_type=std_logic lab=vdd}
-C {devices/lab_pin.sym} 900 90 0 0 {name=l32 sig_type=std_logic lab=qn}
+C {devices/lab_pin.sym} 900 30 0 0 {name=l33 sig_type=std_logic lab=vl}
+C {devices/lab_pin.sym} 900 90 0 0 {name=l34 sig_type=std_logic lab=qn}
