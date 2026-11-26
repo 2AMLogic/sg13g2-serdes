@@ -73,7 +73,7 @@
         "role": "hygiene",
         "path": "scripts/klt-lib.sh",
         "passed": true,
-        "content_hash": "sha256:b5f79385daafd26da59afbad8f2de4d25d3fd4267cc3853cfdd74d5362c9b0cc"
+        "content_hash": "sha256:dc276b5564ebda055c41d004865c0e41cbe4d3ab6b0afc0a26460c19cca9b6c8"
       },
       {
         "check": "present",
@@ -94,7 +94,7 @@
         "role": "hygiene",
         "path": "scripts/synth-regen.sh",
         "passed": true,
-        "content_hash": "sha256:2b32d17b491f9410f5f86f17af8435f57813915c23d0564d919f6a093fb060ad"
+        "content_hash": "sha256:e70e5acdbb3ab24f8de9c0ec53129d593e9e0475e8b4f1b8c9ed7b15bff813e2"
       },
       {
         "check": "present",
