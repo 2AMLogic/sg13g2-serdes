@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 10,
-  "summary": "T1 item 10 (Repo hygiene): 19/19 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 10 (Repo hygiene): 27/27 attestation checks passed (klt signoff --attest)",
   "source": "manifests/evidence/item10.inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 19,
-    "passed_count": 19,
+    "check_count": 27,
+    "passed_count": 27,
     "checks": [
       {
         "check": "present",
@@ -45,14 +45,14 @@
         "role": "hygiene",
         "path": "scripts/analog-cell-evidence-lib.sh",
         "passed": true,
-        "content_hash": "sha256:f330ea2c7e4a74916f4111269641437bc8b263210c239f784189ba16fc06183b"
+        "content_hash": "sha256:0f6e6cf7cf6eb3e8c8b05c23de9599f376f4e440c80c422f202a2f2eff3e7260"
       },
       {
         "check": "present",
         "role": "hygiene",
         "path": "scripts/check-ci.sh",
         "passed": true,
-        "content_hash": "sha256:3a33efaa1fdc0771087700f5144f96122e68a118a2d4ccccea0448fc976ab610"
+        "content_hash": "sha256:0dda2c6ca98f77319aa13e906815513bd7a43be3faaea69b1ca5380c7fb17991"
       },
       {
         "check": "present",
@@ -92,6 +92,27 @@
       {
         "check": "present",
         "role": "hygiene",
+        "path": "scripts/synth-regen.sh",
+        "passed": true,
+        "content_hash": "sha256:2b32d17b491f9410f5f86f17af8435f57813915c23d0564d919f6a093fb060ad"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/test-analog-lvs-verdict.sh",
+        "passed": true,
+        "content_hash": "sha256:5ce97338dc85b0a4ee38e20bf6b009f7ee54cc64b5a135d73fcf8d0cadb0f70b"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/test-pnr-fresh-liberty.sh",
+        "passed": true,
+        "content_hash": "sha256:4e5360b929936a11ef7193ff51bd5bf93c181beec2ab7f5cb011bcbd08fb8045"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
         "path": "scripts/test-reserve-record-dir.sh",
         "passed": true,
         "content_hash": "sha256:7af95f3a55f26a9108f8bb47e45df401bbd5702ae5186718fa7558264924d1f1"
@@ -99,9 +120,37 @@
       {
         "check": "present",
         "role": "hygiene",
+        "path": "scripts/test-sta-paths-liberty.sh",
+        "passed": true,
+        "content_hash": "sha256:be1a326227308e32ad43562173b9f86059bc36ffd414958ef7d67044f7cdc2a4"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/test-synth-fresh-liberty.sh",
+        "passed": true,
+        "content_hash": "sha256:086bf2f2696886a6ba93169e20cfbfe6713d25f85c9a4344f458e0c25217fa66"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "scripts/test-synth-missing-yosys.sh",
+        "passed": true,
+        "content_hash": "sha256:aeeac2abfa70ec484a9cf057f449cf73f81a3ddd2996c88f912d9c259c7c2e8e"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
         "path": "sim/bench/gen_inventory.py",
         "passed": true,
-        "content_hash": "sha256:7347844923ea99baad399fa7ef82579a6ca6249b16b9dd03fa3b8459e6096cc7"
+        "content_hash": "sha256:63e07c6f0026b4218b6d0b8b113c3e3c4ded5e62ff0668c2edc36133b94720fa"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "sim/bench/test_gen_inventory.py",
+        "passed": true,
+        "content_hash": "sha256:b1d0446eaf9f3401b01bcd8f5472f6e74e3d92cb7b427ad5feb75521893e8f66"
       },
       {
         "check": "present",
@@ -116,6 +165,13 @@
         "path": "sim/tools/record-dir.sh",
         "passed": true,
         "content_hash": "sha256:c76406d7f0d6ef1d48908e73d1e3556207038059efc2bbce3fcf94bf633003ef"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "sim/tools/test-osdi-missing-dpkg-deb.sh",
+        "passed": true,
+        "content_hash": "sha256:b2561b1f392e3b83488e4d55c3e7f35b6016ef518748eccb29695425d66b2479"
       },
       {
         "check": "present",
@@ -172,7 +228,7 @@
         "path": "manifests/evidence/item10.inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:755033a4ef21a63addc421cce85ebe6312fdea31e1186013418ff0806e904408"
+      "content_hash": "sha256:7f40d945721dd980e3e59669f619c7a467b6b08406b43b7134efea223628ca69"
     }
   }
 }

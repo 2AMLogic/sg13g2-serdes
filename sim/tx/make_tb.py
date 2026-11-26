@@ -244,7 +244,7 @@ OSDI = ["$PDK_ROOT/ihp-sg13g2/libs.tech/ngspice/osdi/" + f
 PAIRING = [("tt_typ", "tt", "typ"), ("ff_bcs", "ff", "bcs"), ("ss_wcs", "ss", "wcs"),
            ("fs_typ", "fs", "typ"), ("sf_typ", "sf", "typ")]
 CK_T = 200e-12     # 5 GHz clock period (DR-001)
-LV_T = 400e-12     # first divided clock, 2.5 GHz
+LV_T = 1.6e-9      # word-boundary divided clock, 625 MHz (DR-014, conditional on DR-008 B1)
 MOS_T_END = 10e-9
 MOS_T_SETTLE = 6e-9  # measurement window start: the self-biased clock squarers settle first
 
@@ -309,7 +309,8 @@ def mux_meas():
 
 def lvl_deck():
     L = ["* TX tx_lvl_cml2cmos sizing bench (issue #80). SIZING EVIDENCE, not a spec result.",
-         "* Input: ideal complementary 2.5 GHz (first divided clock), vdd-referenced CML levels,",
+         "* Input: ideal complementary 625 MHz word-boundary clock (DR-014, conditional on",
+         "* DR-008 B1; before DR-014 this bench ran at 2.5 GHz), vdd-referenced CML levels,",
          "* 300 mV single-ended (high = vdd, low = vdd-0.3). Load: 20 fF on the CMOS output.",
          "* Circuit body only: klt sim supplies .lib / .control / .end.",
          "Vdd vdd 0 dc 1.2", inline("tx_lvl_cml2cmos"),
