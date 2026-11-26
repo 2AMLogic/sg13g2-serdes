@@ -105,3 +105,19 @@ Baseline is `records/20261123-022802-fedf656-vce/` (no load series resistor). Ch
 - Raw collector peaks, worst per node, all <= 1.32 V: predriver main q1 1.3113 V (ffe1_wcs/wcs/1.320V/-40C), predriver post q1 1.3109 V (ffe0_wcs and ffe1_wcs families, wcs/1.320V/-40C), mux 1.3185 V (tx_mos_mux2to1_cml/ss_wcs/1.320V/-40C). The mux margin is 1.5 mV, thin. Reverse Vbe stays negative or below 0.22 V everywhere (limit 1.0 V).
 - `tx_mos_mux2to1_cml`: 43 pass, 0 fail, 2 error. The two errors are the baseline's missing rising +-30 mV crossings at `ss_wcs/1.080V/-40C` and `ss_wcs/1.080V/27C` (stress values present, crossing absent). The fixed-threshold edge times are a proxy for R7 only, not a measurement of it.
 - The sizing bench's fixed-threshold edge times were not compared in this section.
+
+## Erratum (2026-11-26, PR #270, issue #273)
+
+The maximum reverse Vbe in this run is **0.2357 V** (`vbe_rev_max_drv_post2_p`
+= 0.235666 V at `ffe0_bcs/bcs/1.320V/125C`), below R3's 1.0 V limit.
+The 0.22 V figure in the headroom summary came from the baseline run, whose
+maximum was 0.216057 V.
+
+The open mux collector violations cited below the per-device table belong
+to the baseline. Its mux collector peaked at 1.32470 V. With the 8 ohm load
+return, the peak was **1.31848 V** at `ss_wcs/1.320V/-40C` over 6–10 ns
+with the assumed 0.4 V per-side clock swing. All 45 simulated mux points
+had collector results below 1.32 V, including the two `ss_wcs/1.080V` points
+at -40 and 27 °C where the differential edge crossings were missing. The
+five selected MOS/HBT pairings cover 45 of R3's 135 mux points. The other
+90 points remain unverified.

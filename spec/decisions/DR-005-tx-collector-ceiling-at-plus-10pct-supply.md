@@ -56,4 +56,19 @@ is recorded as the alternative the operator may choose, and nothing here relaxes
 
 ## Note 2026-11-23: operator ruling and chosen load structure (issue #265)
 
-Operator ruling on #249 (2026-11-23): option 1 (keep R3 as written and redesign the over-limit nodes); options 2 to 4 not taken. Implemented in #265 as a series resistor from `vdd` to a common load return in each affected cell: predriver `RS` 10 ohm (both main and post instances), mux `RSm` 8 ohm. Evidence: `sim/tx/records/20261123-211956-ee22e3c-vce/record.md` (every HBT collector <= 1.32 V in every corner; the mux margin is 1.5 mV). Headroom cost, same record: driver tail Vce minimum at 1.08 V 0.1089 V to 0.0959 V, steady pad swing minimum 0.1320 V to 0.1238 V. The Decision text above is unchanged; the status change is the operator's act on merge.
+The operator chose option `a` on #249 to keep R3 as written and redesign the
+over-limit nodes. Issue #265 implements DR-005 option 1. A series resistor
+connects `vdd` to the common load return in each cell. Both predriver instances
+use 10 ohm (`RS`), and the mux uses 8 ohm (`RSm`).
+
+Collector peaks stayed below 1.32 V across the 54 sizing cases, 45 mux cases
+and 45 FFE-enable cases in the [TX stress record](../../sim/tx/records/20261123-211956-ee22e3c-vce/record.md).
+The mux bench used five of R3's 15 independent MOS/HBT process pairings at
+three supplies and three temperatures, covering 45 of 135 points. The other
+90 mux points are unverified. With the assumed 0.4 V per-side clock swing and
+a 6–10 ns observation window, the simulated mux collector peaked at 1.31848 V
+at `ss_wcs/1.320V/-40C`, leaving 1.52 mV to the ceiling.
+
+At 1.08 V, the minimum driver-tail Vce fell from 0.1089 V to 0.0959 V and the
+minimum steady differential pad swing fell from 0.1320 V to 0.1238 V.
+Ratification remains the operator's decision on merge.
