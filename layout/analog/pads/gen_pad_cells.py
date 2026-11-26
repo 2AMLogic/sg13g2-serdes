@@ -25,7 +25,9 @@ from layout_common import parse_subckts, run_klt as run, scrub_host_paths
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 PDK = "ihp-sg13g2"
-PR_GDS = os.path.join(os.environ.get("PDK_ROOT", ""), PDK, "libs.ref/sg13g2_pr/gds/sg13g2_pr.gds")
+PR_GDS = os.path.join(PDK, "libs.ref/sg13g2_pr/gds/sg13g2_pr.gds")
+if os.environ.get("PDK_ROOT"):
+    PR_GDS = os.path.abspath(os.path.join(os.environ["PDK_ROOT"], PR_GDS))
 RSIL_OHM_SQ = 7.0     # nominal rsil sheet resistance used only to size bodies (not verified)
 GAP = 5.0             # um between placed blocks
 

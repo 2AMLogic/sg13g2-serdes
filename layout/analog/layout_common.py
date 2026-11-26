@@ -220,37 +220,59 @@ def run_klt(args, **kw):
 
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+# Consume keys with their colon so only string values are eligible for rewriting.
+_JSON_STRING = re.compile(r'"(?:[^"\\]|\\.)*"(?P<key>\s*:)?')
+# Each match spells one decoded character, including a UTF-16 surrogate pair.
+_JSON_CHAR = re.compile(r'\\u[dD][89a-bA-B]..\\u[dD][c-fC-F]..|\\u....|\\.|.', re.DOTALL)
 
 
 def scrub_host_paths(out, pdk_root=None):
-    """Keep host paths out of the committed record: record-relative / $PDK_ROOT / <repo>.
+    """Rewrite host paths in JSON values, preserving the bytes around each root.
 
-    Rewrites every .json under `out` in place, by plain text substitution so
-    the JSON keeps its formatting and every other record (GDS) is left alone.
-    Roots are substituted most specific first, because each one hides the
-    next: the absolute output dir -> ".", then the PDK root -> "$PDK_ROOT",
-    then the checkout root REPO -> "<repo>". A PDK installed under the
-    checkout therefore reads $PDK_ROOT, never <repo>. pdk_root defaults to
-    $PDK_ROOT. An empty one is no root (as a pattern it would put $PDK_ROOT
-    between every character) and a trailing separator is dropped, since a
-    kept one would fuse the placeholder with the next path component.
+    Prefer the output directory, then the configured PDK, then the checkout.
+    A relative PDK_ROOT is relative to the generator's working directory.
     """
     out = os.path.abspath(out)
-    pdk_root = os.environ.get("PDK_ROOT", "") if pdk_root is None else pdk_root
-    pdk_root = pdk_root.rstrip(os.sep)
-    subs = [(out, "."), (REPO, "<repo>")]
+    if pdk_root is None:
+        pdk_root = os.environ.get("PDK_ROOT")
+    roots = {out: "."}
     if pdk_root:
-        subs.insert(1, (pdk_root, "$PDK_ROOT"))
+        roots.setdefault(os.path.abspath(pdk_root), "$PDK_ROOT")
+    roots.setdefault(REPO, "<repo>")
+
+    # Paths also occur after whitespace in klt diagnostics ("read from /...").
+    boundary = rf"(?={re.escape(os.sep)}|\Z)"
+    prefixes = [re.escape(root) + ("" if root.endswith(os.sep) else boundary) for root in roots]
+    path_root = re.compile(r"(?<!\S)(?:" + "|".join(prefixes) + ")")
+
+    def rewrite_value(token):
+        if token["key"]:
+            return token[0]
+        value = json.loads(token[0])
+        matches = list(path_root.finditer(value))
+        if not matches:
+            return token[0]
+        # Splice at decoded character offsets but retain the original spelling
+        # of escapes everywhere outside the roots, even inside a changed value.
+        chars = _JSON_CHAR.findall(token[0][1:-1])
+        for match in reversed(matches):
+            root = match[0]
+            end = match.end()
+            if root.endswith(os.sep) and end < len(value):
+                end -= 1  # keep the filesystem root's separator before a descendant
+            chars[match.start():end] = [roots[root]]
+        return '"' + "".join(chars) + '"'
+
     for root, _, files in os.walk(out):
         for f in files:
             if f.endswith(".json"):
                 p = os.path.join(root, f)
-                with open(p, newline="") as s:
+                with open(p, encoding="utf-8", newline="") as s:
                     txt = s.read()
-                for a, b in subs:
-                    txt = txt.replace(a, b)
-                with open(p, "w", newline="") as s:
-                    s.write(txt)
+                rewritten = _JSON_STRING.sub(rewrite_value, txt)
+                if rewritten != txt:
+                    with open(p, "w", encoding="utf-8", newline="") as s:
+                        s.write(rewritten)
 
 
 # ---------------------------------------------------------------------------

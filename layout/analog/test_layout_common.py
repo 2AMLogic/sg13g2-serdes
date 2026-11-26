@@ -12,8 +12,10 @@ import ast
 import json
 import os
 import pathlib
+import runpy
 import sys
 import tempfile
+from unittest.mock import patch
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
@@ -159,6 +161,61 @@ def test_trailing_slash_on_the_pdk_root():
     with tempfile.TemporaryDirectory() as tmp:
         req, _ = rewrite(tmp, pdk_root="pdk/")
         assert req["blocks"][1]["cell"]["gds_path"] == "$PDK_ROOT/" + PR_GDS
+
+
+def test_relative_pdk_root():
+    with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {"PDK_ROOT": "."}):
+        # klt reports an absolute source_gds. The pad generator builds its own lib_block.
+        pad = runpy.run_path(str(HERE / "pads/gen_pad_cells.py"))
+        block = pad["lib_block"]("DHp", "diodevdd_2kv", [])
+        record = pathlib.Path(tmp) / "compose.request.json"
+        data = {"dbu_um": 0.001, "note": "v0.9.0", "output": "./pad.gds",
+                "source_gds": str(pathlib.Path.cwd() / PR_GDS), "blocks": [block]}
+        record.write_text(json.dumps(data))
+        lc.scrub_host_paths(tmp)
+        data["source_gds"] = block["cell"]["gds_path"] = "$PDK_ROOT/" + PR_GDS
+        assert json.loads(record.read_text()) == data
+
+
+def test_root_boundaries():
+    with tempfile.TemporaryDirectory() as tmp:
+        repo, pdk, out = (tmp + "/" + name for name in ("checkout", "pdk", "out"))
+        os.mkdir(out)
+        record = pathlib.Path(out) / "paths.json"
+        siblings = [pdk + "-old/cell.gds", out + "-backup/rx.gds", repo + "2/design",
+                    "/unrelated" + pdk + "/cell.gds"]
+        record.write_text(json.dumps([out, pdk, repo, *siblings]))
+        with patch.object(lc, "REPO", repo):
+            lc.scrub_host_paths(out, pdk)
+        assert json.loads(record.read_text()) == [".", "$PDK_ROOT", "<repo>", *siblings]
+
+
+def test_json_escaped_roots_and_diagnostics():
+    with tempfile.TemporaryDirectory() as tmp:
+        pdk = tmp + '/fondería "A"'
+        out = tmp + "/résultats🧪"
+        os.mkdir(out)
+        record = pathlib.Path(out) / "report.json"
+
+        def report(source_root, output_root):
+            data = {pdk: [source_root + "/cell.gds", output_root + "/cell.gds"],
+                    "note": f"read from {source_root}/cell.gds; output {output_root}/cell.gds"}
+            # Exercise both generator-default Unicode escapes and alternate legal
+            # spellings in the path suffix. Keep the original key and CRLF layout.
+            return (json.dumps(data, indent=3).replace("cell.gds", r"\u0063ell.gds")
+                    .replace("/", r"\/").replace("\n", "\r\n").encode())
+
+        record.write_bytes(report(pdk, out))
+        lc.scrub_host_paths(out, pdk)
+        assert record.read_bytes() == report("$PDK_ROOT", ".")
+
+
+def test_filesystem_root_as_pdk():
+    with tempfile.TemporaryDirectory() as tmp:
+        record = pathlib.Path(tmp) / "paths.json"
+        record.write_text(json.dumps([tmp, "/", "/cells/gds", "0.001"]))
+        lc.scrub_host_paths(tmp, "/")
+        assert json.loads(record.read_text()) == [".", "$PDK_ROOT", "$PDK_ROOT/cells/gds", "0.001"]
 
 
 def test_repo_is_the_checkout_root():
