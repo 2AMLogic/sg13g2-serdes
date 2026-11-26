@@ -20,6 +20,7 @@
     "scripts/test-synth-fresh-liberty.sh",
     "scripts/test-synth-missing-yosys.sh",
     "scripts/test-sta-paths-liberty.sh",
+    "scripts/test-analog-lvs-verdict.sh",
     "sim/bench/gen_inventory.py",
     "sim/bench/test_link_bench.py",
     "sim/bench/test_gen_inventory.py",

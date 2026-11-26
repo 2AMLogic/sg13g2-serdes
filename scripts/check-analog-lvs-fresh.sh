@@ -7,7 +7,8 @@
 #
 # For each routed cell (rx lvl_cml2cmos, tx tx_lvl_cml2cmos) the NEWEST
 # generator record layout/analog/<part>/records/*/ is selected first and must
-# carry the cell's evidence (scripts/analog-cell-evidence-lib.sh):
+# carry the cell's evidence (scripts/analog-cell-evidence-lib.sh, the one
+# verdict for statuses, power rule and hash binding -- issue #281):
 #   Exit 0: DRC clean and LVS match, both reports' input hashes name that
 #           record's <cell>.gds (and LVS the standalone reference), power
 #           connectivity not mismatch, engine named, and `klt lvs --check`
@@ -15,8 +16,8 @@
 #   Exit 3: stale -- the newest record lacks the cell's DRC/LVS evidence, or
 #           klt reports the inputs drifted; run scripts/analog-lvs-regen.sh
 #           <part> and commit.
-#   Exit 1: the newest evidence is not a match / not clean / bound to a
-#           different GDS or reference.
+#   Exit 1: the newest evidence is not a match / not clean / power connectivity
+#           mismatch / bound to a different GDS or reference.
 set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # shellcheck source=scripts/klt-lib.sh
@@ -35,21 +36,19 @@ done
 
 check_cell() {  # check_cell <partition> <cell> <reference-netlist>
   local part="$1" cell="$2" ref="$3" rec dir rc=0 power engine
-  analog_cell_verify "$ROOT" "$part" "$cell" "$ref" "check-analog-lvs-fresh" || rc=$?
+  rec="$(latest_record_dir "$ROOT/layout/analog/$part/records")"
+  analog_cell_verify "$ROOT" "$rec" "$cell" "$ref" "check-analog-lvs-fresh" || rc=$?
   case $rc in
     0) ;;
     3) STALE=1; return ;;
     *) FAIL=1; return ;;
   esac
-  rec="$(ls -d "$ROOT/layout/analog/$part/records"/*/ | sort | tail -1)"
-  rec="${rec%/}/$cell"
-  dir="${rec#"$ROOT"/}"
-  power="$(jq -r .power_connectivity.status "$rec/lvs.report.json")"
-  [ "$power" != mismatch ] || { echo "check-analog-lvs-fresh: $dir power_connectivity.status is mismatch" >&2; FAIL=1; return; }
-  engine="$(jq -r .engine "$rec/lvs.report.json")"
+  dir="${rec#"$ROOT"/}/$cell"
+  power="$(jq -r .power_connectivity.status "$ROOT/$dir/lvs.report.json")"
+  engine="$(jq -r .engine "$ROOT/$dir/lvs.report.json")"
   [ -n "$engine" ] && [ "$engine" != null ] || { echo "check-analog-lvs-fresh: $dir names no engine" >&2; FAIL=1; return; }
 
-  (cd "$rec" && "${KLT[@]}" lvs --check lvs.report.json "${RERUN[@]}") >/dev/null 2>&1
+  (cd "$ROOT/$dir" && "${KLT[@]}" lvs --check lvs.report.json "${RERUN[@]}") >/dev/null 2>&1
   case $? in
     0) echo "check-analog-lvs-fresh: OK -- $dir matches its inputs (engine $engine, power $power)" ;;
     3) echo "check-analog-lvs-fresh: STALE -- $dir inputs drifted; run the $part regen script + scripts/analog-lvs-regen.sh $part" >&2; STALE=1 ;;
