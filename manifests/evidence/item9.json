@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 9,
-  "summary": "T1 item 9 (Testbenches shipped): 62/62 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 9 (Testbenches shipped): 64/64 attestation checks passed (klt signoff --attest)",
   "source": "verification/testbench-inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 62,
-    "passed_count": 62,
+    "check_count": 64,
+    "passed_count": 64,
     "checks": [
       {
         "check": "present",
@@ -73,7 +73,7 @@
         "role": "testbench",
         "path": "sim/bench/benches.json",
         "passed": true,
-        "content_hash": "sha256:f9d661062d0cbf9cc4079f449aae04c5a3c914b05b25d5c59ba735fe927f5fcc"
+        "content_hash": "sha256:e2d302920aca95e04ad18e4578a12afc7296e1b8daa0a2f2868c9736937e6b41"
       },
       {
         "check": "present",
@@ -137,6 +137,13 @@
         "path": "sim/rx/latch_regen.request.json",
         "passed": true,
         "content_hash": "sha256:3bc719ae931929102053a5500216c0f554fd5045d9142e22a57f721f9e54fb69"
+      },
+      {
+        "check": "present",
+        "role": "testbench",
+        "path": "sim/rx/lvl_cml2cmos.request.json",
+        "passed": true,
+        "content_hash": "sha256:52c413e39c37ef8ce1dd4e33a5c55f52c5e985e72d84a09bddd1d6691959f8c1"
       },
       {
         "check": "present",
@@ -471,6 +478,21 @@
       {
         "check": "command",
         "role": "cold_start",
+        "testbench": "sim/rx/lvl_cml2cmos.request.json",
+        "argv": [
+          "scripts/run-bench.sh",
+          "rx-mos-lvl-cml2cmos",
+          "--request",
+          "sim/rx/lvl_cml2cmos.request.json"
+        ],
+        "cwd": ".",
+        "exit_status": 0,
+        "passed": true,
+        "local_only": true
+      },
+      {
+        "check": "command",
+        "role": "cold_start",
         "testbench": "sim/rx/pad_ac.request.json",
         "argv": [
           "scripts/run-bench.sh",
@@ -681,7 +703,7 @@
         "path": "verification/testbench-inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:96df56d06c0a07d3753763c97144b85b31d33ca382b7802bacd945493d1b8ca6"
+      "content_hash": "sha256:73e9761232dd5be7a77aaf76cc824635bb36f0c1852dd34ce986570f3bb6337b"
     }
   }
 }

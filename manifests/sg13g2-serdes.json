@@ -8,11 +8,11 @@
     },
     "9": {
       "file": "manifests/evidence/item9.json",
-      "content_hash": "sha256:96df56d06c0a07d3753763c97144b85b31d33ca382b7802bacd945493d1b8ca6"
+      "content_hash": "sha256:73e9761232dd5be7a77aaf76cc824635bb36f0c1852dd34ce986570f3bb6337b"
     },
     "10": {
       "file": "manifests/evidence/item10.json",
-      "content_hash": "sha256:7f40d945721dd980e3e59669f619c7a467b6b08406b43b7134efea223628ca69"
+      "content_hash": "sha256:f268d334869cc2c03830413119ed7ffe5fedd531e9f8ee23cca8740e14e21c06"
     },
     "2.digital": {
       "file": "manifests/evidence/item2.json",

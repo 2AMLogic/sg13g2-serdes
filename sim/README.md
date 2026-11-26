@@ -12,7 +12,7 @@ reproduce steps.
 | `tools/record-dir-race-investigation.md` | issue #220 findings (append-only record, dated errata at the end): the hosted-runner double reservations came from the uutils coreutils 0.10.0 `mkdir` EEXIST rescue, which the python `os.mkdir` primitive `tools/record-dir.sh` delegates to is immune to (#244); the one-shot probe behind its measurements is removed, retrievable at `42fd372`, the revision that produced the full evidence set (the first-reproduction rows were taken at `de832e9`) |
 | `smoke/` | toolchain smoke grid: HBT Gummel at every HBT corner section, MOS inverter DC at `tt/ff/ss/fs/sf`, and a mixed MOS+HBT transient. Placeholder devices, not design values |
 | `smoke/records/<id>/` | append-only run records (reports, `record.md`); never edited after the fact |
-| `rx/` | RX sizing benches (CTLE AC per setting, latch regeneration at 5 GHz, HBT node stress, termination first look). `rx/tools/gen_requests.py` writes the bench bodies and `klt sim` requests; `rx/run_sizing.sh` submits the 27-point HBT PVT grid to the batch fleet and writes `rx/records/<id>/` (append-only). Sizing evidence, not spec results |
+| `rx/` | RX sizing benches (CTLE AC per setting, latch regeneration at 5 GHz, HBT node stress, termination first look). `rx/tools/gen_requests.py` writes the bench bodies and `klt sim` requests; `rx/run_sizing.sh` submits the 27-point HBT PVT grid to the batch fleet and writes `rx/records/<id>/` (append-only); `rx/run_sizing.sh mos` submits the 45-corner MOS set (`lvl_cml2cmos`, latch-driven, issue #241) into `rx/records/<id>-mos/`. Sizing evidence, not spec results |
 | `tx/` | TX sizing decks, requests and append-only records (issue #21); see `tx/README.md` |
 | `bench/` | testbench registry for T1 item 9: `benches.json` (one entry per bench: spec rows, requests, corner set, declared measurements) and `gen_inventory.py`, which derives `verification/testbench-inventory.json` from it. Also the DR-002 behavioural benches (`link_bench.py`, `linkcore.py`, `cdrmodel.py`, smoke test `test_link_bench.py`, and `link_sensitivity.py`, the one-factor-at-a-time CDR dither attribution of DR-009) |
 | `harness/` | fetched by `scripts/setup-env.sh` per `reuse.lock.json` (gitignored, never committed) |
@@ -39,11 +39,15 @@ is a new decision, not an edit of an earlier record.
 ## Testbenches (T1 item 9)
 
 Graded against the PROPOSED draft rows (#2, not ratified) and DR-001 to DR-004; re-grade at ratification.
-Entry point: `scripts/run-bench.sh` (`--list`, `<id>`, `<id> --run`). Default mode is a **check**: the
-request is validated, the corner set expanded and the declared measurements asserted (no PDK, no fleet),
-so it runs from a fresh clone. `--run` submits the full grid with `klt sim --wait-for-capacity 600`
-(batch fleet) after `scripts/setup-env.sh` and `source scripts/env.sh`. Digital benches run the cocotb
-test for real. Every printed figure is simulated, never measured, and no bench result is recorded by
+Use `scripts/run-bench.sh --list` to list the bench IDs. For an analog bench,
+`scripts/run-bench.sh <id>` validates its requests locally, expands the corner set and checks the
+declared measurements. The `rx-mos-*` and `tx-mos-*` checks also validate their `osdi_preload`
+files. Run `scripts/setup-env.sh` to install the pinned IHP PDK and build its OSDI models, then
+run `source scripts/env.sh` to set `PDK_ROOT` and select the pinned klt. For example,
+`scripts/run-bench.sh rx-mos-lvl-cml2cmos` should report 45 corner units after setup.
+With the same environment, `scripts/run-bench.sh <id> --run` submits the full analog grid
+with `klt sim --backend batch --wait-for-capacity 600`. Digital benches run the cocotb test.
+Every printed figure is simulated, never measured, and no bench result is recorded by
 this item (recording is T1 item 5). Analog checks grade with the klt pinned in `layout/toolchain.json`:
 `run-bench.sh` resolves `.venv/bin/klt` by path (installed by `scripts/setup-env.sh`), so the pin holds even
 inside `klt signoff --attest 9`'s sanitized cold-start environment; with no `.venv` it falls back to PATH `klt` (#176).
@@ -58,6 +62,7 @@ inside `klt signoff --attest 9`'s sanitized cold-start environment; with no `.ve
 | `rx-ctle-op` | R3 | same | `rx/ctle_op` |
 | `rx-latch-regen` | R3 R8 (latch record only) | same | `rx/latch_regen` |
 | `rx-term-pad` | R9 (|Zdiff| only) | same | `rx/pad_ac` |
+| `rx-mos-lvl-cml2cmos` | R2 R16 | 5 MOS corners x 3 V x 3 T | `rx/lvl_cml2cmos` |
 | `tx-return-loss` | R6 (SDD22 on a placeholder pad; driver on and off requests) | 27-pt HBT PVT-full per request | `bench/r6_tx_return_loss_{on,off}` |
 | `rx-clk-quality` | R20 (duty, quadrature; RJ is a gap) | 27-pt HBT PVT-full | `bench/r20_clk_quality` |
 | `link-r8-sensitivity` | R8 | 27-pt HBT PVT-full x sampler offset MC | `bench/link_bench.py r8` |

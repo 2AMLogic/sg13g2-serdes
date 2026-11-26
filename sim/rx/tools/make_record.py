@@ -94,7 +94,7 @@ L = [f"# RX sizing record {out.name}", "",
 for name in reports:
     line = [l for l in codes if l.startswith(name)]
     r = reports[name]
-    L += ["", f"### {name}", f"- command: `cd sim/rx && klt sim --format json --wait-for-capacity 900 --report-out records/{out.name}/{name}.report.json {name}.request.json`",
+    L += ["", f"### {name}", f"- command: `cd sim/rx && klt sim --backend batch --format json --wait-for-capacity 900 --report-out records/{out.name}/{name}.report.json {name}.request.json`",
           f"- {line[0] if line else 'no exit code recorded'}"]
     if r is None:
         err = (out / f"{name}.stderr.txt").read_text() if (out / f"{name}.stderr.txt").exists() else ""
@@ -222,7 +222,7 @@ if lr:
         return None if hi is None or lo is None else min(hi, -lo)
 
     L += ["", "## Latch regeneration at 5 GHz (clock buffer + latch, ps)", "",
-          f"Time from the clock edge that closes the sample phase to |q| reaching a fixed level, +-10 mV differential input. "
+          f"Time from the clock edge that closes the sample phase to |q| reaching a fixed level, +-20 mV differential input (+-10 mV per leg, transitions every 200 ps, 400 ps period). "
           f"First-look limit: 100 ps (half period at 5 GHz). Two fixed absolute levels, neither swing-relative:", "",
           f"- **{DEC_V:.2f} V (decision level)** -- the level the behavioural link benches need the sampler to resolve to. "
           f"A corner whose |q| asymptotes below it is recorded `not reached` (`on_unreached: \"null\"`), which is a swing verdict, not a timing one.",

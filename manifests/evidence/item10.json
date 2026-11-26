@@ -3,14 +3,14 @@
   "kind": "generic",
   "status": "pass",
   "t1_item": 10,
-  "summary": "T1 item 10 (Repo hygiene): 27/27 attestation checks passed (klt signoff --attest)",
+  "summary": "T1 item 10 (Repo hygiene): 28/28 attestation checks passed (klt signoff --attest)",
   "source": "manifests/evidence/item10.inventory.json",
   "attestation": {
     "producer": "klt signoff --attest",
     "inventory_schema_version": 1,
     "hash_algorithm": "sha256-raw-bytes",
-    "check_count": 27,
-    "passed_count": 27,
+    "check_count": 28,
+    "passed_count": 28,
     "checks": [
       {
         "check": "present",
@@ -31,7 +31,7 @@
         "role": "hygiene",
         "path": "README.md",
         "passed": true,
-        "content_hash": "sha256:3ac1aa304ded7691f154ae4bd3f7b1ce2ecef416a53983930280a1a001c8889b"
+        "content_hash": "sha256:2e110e4a3109328fe7be6e587c3644e9699a143b453e00724570bdee8ab0043e"
       },
       {
         "check": "present",
@@ -52,7 +52,7 @@
         "role": "hygiene",
         "path": "scripts/check-ci.sh",
         "passed": true,
-        "content_hash": "sha256:0dda2c6ca98f77319aa13e906815513bd7a43be3faaea69b1ca5380c7fb17991"
+        "content_hash": "sha256:cbb84456d1b18396de4110092fbc1f3ef25481df1ecd8536780ae43ba388b1c5"
       },
       {
         "check": "present",
@@ -143,7 +143,7 @@
         "role": "hygiene",
         "path": "sim/bench/gen_inventory.py",
         "passed": true,
-        "content_hash": "sha256:63e07c6f0026b4218b6d0b8b113c3e3c4ded5e62ff0668c2edc36133b94720fa"
+        "content_hash": "sha256:1a21d0a927bdb99e20098fdda7b503e7212dc9f03e0dd6c048af33db71818786"
       },
       {
         "check": "present",
@@ -158,6 +158,13 @@
         "path": "sim/bench/test_link_bench.py",
         "passed": true,
         "content_hash": "sha256:ed12e91b43914f6a479137fb4cc1471b25580a534f3cf440e705b5af1825e812"
+      },
+      {
+        "check": "present",
+        "role": "hygiene",
+        "path": "sim/rx/tools/test_make_record_mos.py",
+        "passed": true,
+        "content_hash": "sha256:ce989c2e526e26cda136ec0a8559ee025d383e5852e409f686ffd2e31a34eb09"
       },
       {
         "check": "present",
@@ -228,7 +235,7 @@
         "path": "manifests/evidence/item10.inventory.json",
         "scope": "repo"
       },
-      "content_hash": "sha256:7f40d945721dd980e3e59669f619c7a467b6b08406b43b7134efea223628ca69"
+      "content_hash": "sha256:f268d334869cc2c03830413119ed7ffe5fedd531e9f8ee23cca8740e14e21c06"
     }
   }
 }

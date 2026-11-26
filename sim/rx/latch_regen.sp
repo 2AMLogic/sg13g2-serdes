@@ -1,8 +1,9 @@
 * Latch + clock-buffer sizing bench (issue #22). Sizing evidence, not a spec result.
 * Ideal 5 GHz clock source (the SG13G2 clock candidates do not meet R20, see
 * spec/clock-requirement.md): common mode 0.8333 vdd, +-150 mV per phase, ideal
-* quadrature and 50 % duty. Data: +-10 mV differential toggling every 200 ps
-* inside the hold phase, common mode 0.8167 vdd (the CTLE output common mode).
+* quadrature and 50 % duty. Opposite data legs swing +-10 mV about 0.8167 vdd
+* (the CTLE output common mode): +-20 mV differential, 40 mV peak to peak.
+* Transitions start every 200 ps inside the hold phase; the period is 400 ps.
 .include ../../design/rx/netlists/latch_cml.spice
 .include ../../design/rx/netlists/clk_buf_quad.spice
 Vdd vdd 0 1.2

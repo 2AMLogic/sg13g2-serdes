@@ -93,6 +93,9 @@ check_harness() {
   echo "harness: sim/bench/test_gen_inventory.py"
   python3 -I sim/bench/test_gen_inventory.py || {
     echo "::error file=sim/bench/test_gen_inventory.py::inventory self-test failed" >&2; return 1; }
+  echo "harness: sim/rx/tools/test_make_record_mos.py"
+  python3 -I sim/rx/tools/test_make_record_mos.py || {
+    echo "::error file=sim/rx/tools/test_make_record_mos.py::RX record rendering failed" >&2; return 1; }
   echo "harness: sim/tools/test-record-dir.sh"
   bash sim/tools/test-record-dir.sh || {
     echo "::error file=sim/tools/test-record-dir.sh::record-dir reservation self-test failed" >&2; return 1; }

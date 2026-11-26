@@ -203,6 +203,30 @@
       "limitations": "Ideal resistors and a placeholder pad capacitance (PDK bondpad is empty); |Zdiff| only, SDD11 is not extracted, resistor corners not applied"
     },
     {
+      "id": "rx-mos-lvl-cml2cmos",
+      "partition": "analog",
+      "rows": [
+        "R2",
+        "R16"
+      ],
+      "requests": [
+        "sim/rx/lvl_cml2cmos.request.json"
+      ],
+      "description": "lvl_cml2cmos driven by the latch it loads in rx_top, at 5 Gb/s per wire: output levels, delay from the latch hold edge, edge times, pulse widths and the converter's own supply current (evidence gate G3, issue #241)",
+      "corner_set": "5 MOS corners (tt/ff/ss/fs/sf, each ganged with an HBT/CAP/RES section as in sim/tx) x 1.08/1.2/1.32 V x -40/27/125 C (PVT-full)",
+      "units_per_request": 45,
+      "required_measurements": [
+        "lvl_out_hi_v",
+        "lvl_out_lo_v",
+        "lvl_tck_lh90_s",
+        "lvl_tck_hl10_s",
+        "lvl_hi_margin_v",
+        "lvl_lo_margin_v",
+        "lvl_idd_avg"
+      ],
+      "limitations": "Schematic netlists with ideal clock and data sources and an assumed 20 fF load. The lvl_cml2cmos layout has clean DRC and matching LVS (layout/analog/rx/records/2026-11-23-9f3e17c). Extracted parasitics and the eventual CMOS deserializer load are absent from this timing run. One instance stands for Xlvl_d0, Xlvl_d180, Xlvl_e90 and Xlvl_e270. The two limits in the request (the output reaching 90 % of vdd rising and 10 % falling within 100 ps of the latch hold edge) are first-look bounds, not spec values: DR-008 item 3 leaves the converter unspecified, so a pass corner is not evidence against any row. The latch's own 1.080 V swing limit is part of the stimulus, since the converter sees the latch output. Event times are absolute `when` crossings combined by the record renderer. Newest record: sim/rx/records/20261123-025944-cd608e7-mos (2/45 corners inside both bounds, errored 0)"
+    },
+    {
       "id": "pad-cap-extracted",
       "partition": "analog",
       "rows": [

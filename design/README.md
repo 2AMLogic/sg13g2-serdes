@@ -35,7 +35,7 @@ files are the source of truth and the generator reproduces them byte for byte.
 
 Known limits of this first pass (none are results):
 
-- Resistors are ideal `res`: the PDK `rsil`/`rppd` models are `r3_cmc` OSDI models, which the host ngspice and the batch fleet cannot load today (`sim/README.md`). Layout (#24) swaps in PDK resistors and re-simulates.
+- The RX schematic uses ideal `res` elements. The PDK `rsil`/`rppd` models use `r3_cmc`, which the batch fleet can load through `osdi_preload`. Substituting PDK resistors and simulating their corners remains layout work (#24). [RX simulation notes](../sim/rx/README.md)
 - The pad capacitance is a placeholder; the PDK `bondpad` model is empty. R9/R18 are graded on extraction, not here.
 - `vcm` and the CTLE control levels are inputs; their bias generation is not in this cell.
 - The clock source is not designed here (`spec/clock-requirement.md`); `clk_buf_quad` passes the source's duty and quadrature error through.

@@ -63,8 +63,10 @@ def build():
         "t1_item": 9,
         "description": (
             "Testbenches against the PROPOSED draft spec rows (#2, not ratified) and DR-001 to DR-004. "
-            "Cold start = scripts/run-bench.sh <id>: analog benches validate the klt sim request and "
-            "expand the declared corner set (no PDK, no fleet); digital benches run the cocotb bench. "
+            "scripts/run-bench.sh <id> validates analog requests and expands their corner sets locally. "
+            "For rx-mos-* and tx-mos-* checks, run scripts/setup-env.sh to install the pinned PDK and "
+            "build the OSDI models listed in osdi_preload, then source scripts/env.sh to set PDK_ROOT. "
+            "Digital benches run the cocotb bench. "
             "The full corner grid is scripts/run-bench.sh <id> --run (klt sim, batch fleet). "
             "No bench output is a measurement. Rows without a bench are listed in unbenched_rows."),
         "testbenches": benches,
